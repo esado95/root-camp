@@ -1,0 +1,242 @@
+{
+  "module": "DHCP",
+  "source": "05_Services-Serveur/DHCP.md",
+  "questions": [
+    {
+      "id": "dhcp-001", "niveau": 1, "type": "qcm",
+      "q": "Que signifie l'acronyme DHCP ?",
+      "choices": ["Dynamic Host Configuration Protocol", "Domain Host Control Protocol", "Dynamic Hypertext Communication Protocol", "Direct Host Connection Protocol"],
+      "answer": 0,
+      "explication": "DHCP = Dynamic Host Configuration Protocol : attribution automatique de la configuration IP aux clients du réseau."
+    },
+    {
+      "id": "dhcp-002", "niveau": 1, "type": "qcm",
+      "q": "Sur quel protocole de transport repose DHCP ?",
+      "choices": ["TCP", "UDP", "ICMP", "ARP"],
+      "answer": 1,
+      "explication": "DHCP fonctionne en UDP : port 67 côté serveur, port 68 côté client. Pas de connexion TCP — le client n'a même pas encore d'adresse IP."
+    },
+    {
+      "id": "dhcp-003", "niveau": 1, "type": "libre",
+      "q": "Quel port UDP le serveur DHCP utilise-t-il pour écouter les requêtes ?",
+      "accept": ["67", "udp 67", "port 67"],
+      "explication": "Serveur = UDP 67, client = UDP 68. Mémo : l'écouteur est le serveur, donc le port le plus bas."
+    },
+    {
+      "id": "dhcp-004", "niveau": 1, "type": "libre",
+      "q": "Quel port UDP le client DHCP utilise-t-il pour recevoir les réponses ?",
+      "accept": ["68", "udp 68", "port 68"],
+      "explication": "Client = UDP 68 (reçoit Offer et ACK), serveur = UDP 67 (reçoit Discover et Request)."
+    },
+    {
+      "id": "dhcp-005", "niveau": 1, "type": "qcm",
+      "q": "Quelle est la durée par défaut d'un bail DHCP sous Windows Server ?",
+      "choices": ["24 heures", "3 jours", "8 jours", "30 jours"],
+      "answer": 2,
+      "explication": "8 jours par défaut. Bail long pour un réseau fixe (bureaux), bail court (1 h – 4 h) pour un Wi-Fi public à forte rotation."
+    },
+    {
+      "id": "dhcp-006", "niveau": 1, "type": "qcm",
+      "q": "Que signifie l'acronyme DORA ?",
+      "choices": ["Discover, Offer, Request, Acknowledgment", "Detect, Obtain, Register, Assign", "Discover, Obtain, Reply, Accept", "Demand, Offer, Receive, Acknowledge"],
+      "answer": 0,
+      "explication": "Les 4 échanges de la négociation DHCP : Discover → Offer → Request → Acknowledgment."
+    },
+    {
+      "id": "dhcp-007", "niveau": 1, "type": "qcm",
+      "q": "Quelle est la plage d'adresses APIPA ?",
+      "choices": ["192.168.0.0/16", "10.0.0.0/8", "169.254.0.0/16", "172.16.0.0/12"],
+      "answer": 2,
+      "explication": "APIPA = 169.254.0.1 à 169.254.255.254, masque /16. Adresses link-local auto-attribuées quand aucun serveur DHCP ne répond."
+    },
+    {
+      "id": "dhcp-008", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque message DORA à son émetteur",
+      "pairs": [["Discover", "Client (broadcast)"], ["Offer", "Serveur (propose une IP)"], ["Request", "Client (accepte l'offre)"], ["ACK", "Serveur (confirme le bail)"]],
+      "explication": "Le client émet Discover et Request (broadcast, il n'a pas d'IP), le serveur répond avec Offer et ACK."
+    },
+    {
+      "id": "dhcp-009", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque option DHCP à son code",
+      "pairs": [["Routeur (passerelle)", "003"], ["Serveur DNS", "006"], ["Nom de domaine", "015"], ["Serveur NTP", "042"]],
+      "explication": "Options DHCP courantes : 003 passerelle, 006 DNS, 015 suffixe DNS, 042 NTP."
+    },
+    {
+      "id": "dhcp-010", "niveau": 1, "type": "qcm",
+      "q": "L'option DHCP 006 transmet aux clients :",
+      "choices": ["La passerelle par défaut", "Le ou les serveurs DNS", "Le serveur de temps NTP", "Le suffixe de domaine"],
+      "answer": 1,
+      "explication": "Option 006 = serveurs DNS. En environnement AD, elle doit pointer vers le serveur DNS du domaine (souvent le DC)."
+    },
+    {
+      "id": "dhcp-011", "niveau": 2, "type": "ordre",
+      "q": "Remettez les étapes de la négociation DHCP dans l'ordre",
+      "steps": ["Discover — le client cherche un serveur DHCP", "Offer — le serveur propose une adresse IP", "Request — le client accepte et demande l'adresse", "ACK — le serveur confirme le bail et la configuration"],
+      "explication": "DORA : Discover, Offer, Request, Acknowledgment. 4 messages UDP entre le client (68) et le serveur (67)."
+    },
+    {
+      "id": "dhcp-012", "niveau": 2, "type": "multi",
+      "q": "Quels messages DORA sont émis par le client ?",
+      "choices": ["Discover", "Offer", "Request", "ACK"],
+      "answer": [0, 2],
+      "explication": "Le client émet Discover et Request. Offer et ACK viennent du serveur."
+    },
+    {
+      "id": "dhcp-013", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi les messages Discover et Request sont-ils envoyés en broadcast ?",
+      "choices": ["Pour aller plus vite qu'en unicast", "Parce que le client n'a pas encore de configuration IP", "Parce que le serveur DHCP l'exige", "Pour traverser les routeurs"],
+      "answer": 1,
+      "explication": "Le client n'a pas encore d'IP : il diffuse vers 255.255.255.255 (MAC FF:FF:FF:FF:FF:FF). Le broadcast ne traverse d'ailleurs PAS les routeurs."
+    },
+    {
+      "id": "dhcp-014", "niveau": 2, "type": "qcm",
+      "q": "À 50 % de la durée du bail, que fait le client DHCP ?",
+      "choices": ["Rien, il attend l'expiration", "Il relance une négociation DORA complète", "Il tente un renouvellement en unicast auprès de son serveur", "Il diffuse un broadcast vers tous les serveurs"],
+      "answer": 2,
+      "explication": "À 50 % : renouvellement unicast auprès du serveur d'origine. À 87,5 % : tentative en broadcast vers n'importe quel serveur. Bail expiré : DORA recommence."
+    },
+    {
+      "id": "dhcp-015", "niveau": 2, "type": "libre",
+      "q": "À quel pourcentage du bail le client tente-t-il un renouvellement en broadcast si son serveur n'a pas répondu ? (nombre)",
+      "accept": ["87,5", "87.5", "87,5%", "87.5%", "87,5 %", "87.5 %"],
+      "explication": "50 % = unicast vers son serveur ; 87,5 % = broadcast vers n'importe quel serveur DHCP ; expiration = retour à DORA."
+    },
+    {
+      "id": "dhcp-016", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi déconseille-t-on le DHCP dynamique pour les serveurs et imprimantes ?",
+      "choices": ["Le DHCP est trop lent pour ces équipements", "Si leur IP change, on perd l'accès au service", "Ces équipements ne supportent pas le DHCP", "Le bail coûte plus cher pour un serveur"],
+      "answer": 1,
+      "explication": "Un service doit être joignable à une adresse stable. Pour ces équipements : IP statique ou réservation DHCP."
+    },
+    {
+      "id": "dhcp-017", "niveau": 2, "type": "qcm",
+      "q": "Quelle est la différence entre une exclusion et une réservation ?",
+      "choices": ["Aucune, ce sont deux noms pour la même chose", "L'exclusion retire des IP de la distribution ; la réservation garantit la même IP à un client via sa MAC", "L'exclusion s'applique aux clients, la réservation aux serveurs", "La réservation retire des IP, l'exclusion les attribue"],
+      "answer": 1,
+      "explication": "Exclusion = plage jamais distribuée (pour les IP fixes). Réservation = le client identifié par sa MAC reçoit toujours la même IP du serveur."
+    },
+    {
+      "id": "dhcp-018", "niveau": 2, "type": "multi",
+      "q": "Que peut attribuer un serveur DHCP à un client ? (plusieurs réponses)",
+      "choices": ["Adresse IP", "Masque de sous-réseau", "Passerelle par défaut", "Adresse MAC", "Serveurs DNS"],
+      "answer": [0, 1, 2, 4],
+      "explication": "IP, masque, passerelle, DNS (+ durée du bail, NTP, etc.). L'adresse MAC est gravée dans la carte réseau — le DHCP ne l'attribue pas."
+    },
+    {
+      "id": "dhcp-019", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi le serveur DHCP doit-il avoir une adresse IP fixe ?",
+      "choices": ["Pour être plus rapide", "Il ne peut pas se configurer lui-même via DHCP", "C'est une obligation légale", "Pour économiser des adresses"],
+      "answer": 1,
+      "explication": "Le serveur qui distribue les adresses ne peut pas dépendre de lui-même pour obtenir la sienne : IP statique obligatoire."
+    },
+    {
+      "id": "dhcp-020", "niveau": 2, "type": "qcm",
+      "q": "Pour un Wi-Fi d'accueil avec beaucoup de passage, quelle durée de bail est adaptée ?",
+      "choices": ["8 jours (défaut)", "30 jours", "1 à 4 heures", "1 an"],
+      "answer": 2,
+      "explication": "Rotation rapide des clients → bail court pour libérer vite les adresses. Réseau de bureaux stable → bail long (8 jours)."
+    },
+    {
+      "id": "dhcp-021", "niveau": 3, "type": "scenario",
+      "context": "Étendue : 192.168.1.1 → 192.168.1.254\nExclusion : 192.168.1.1 → 192.168.1.20",
+      "q": "Quelles adresses le serveur distribue-t-il réellement aux clients ?",
+      "choices": ["192.168.1.1 → 192.168.1.254", "192.168.1.21 → 192.168.1.254", "192.168.1.1 → 192.168.1.20", "Aucune, l'étendue est bloquée"],
+      "answer": 1,
+      "explication": "L'exclusion retire 1–20 de la distribution (réservés aux équipements fixes) : le serveur distribue 21 → 254."
+    },
+    {
+      "id": "dhcp-022", "niveau": 3, "type": "libre",
+      "q": "Quelle commande Windows libère l'adresse IP actuelle du client ?",
+      "accept": ["ipconfig /release", "ipconfig/release"],
+      "explication": "ipconfig /release libère le bail, ipconfig /renew en demande un nouveau, ipconfig /all affiche la configuration complète."
+    },
+    {
+      "id": "dhcp-023", "niveau": 3, "type": "libre",
+      "q": "Quelle commande Windows demande un nouveau bail DHCP ?",
+      "accept": ["ipconfig /renew", "ipconfig/renew"],
+      "explication": "ipconfig /renew relance une demande DHCP. À combiner avec /release pour repartir de zéro."
+    },
+    {
+      "id": "dhcp-024", "niveau": 3, "type": "qcm",
+      "q": "Quelle commande PowerShell affiche les baux actifs d'une étendue ?",
+      "choices": ["Get-DhcpServerv4Lease -ScopeId 192.168.10.0", "Show-DhcpLeases 192.168.10.0", "Get-DhcpBail -Scope 192.168.10.0", "ipconfig /leases"],
+      "answer": 0,
+      "explication": "Get-DhcpServerv4Lease -ScopeId <réseau> liste les baux ; Get-DhcpServerv4Scope affiche l'état des étendues."
+    },
+    {
+      "id": "dhcp-025", "niveau": 3, "type": "qcm",
+      "q": "En environnement Active Directory, vers quoi doit pointer l'option 006 pour que les clients joignent le domaine ?",
+      "choices": ["Vers le DNS public du FAI (ex. 8.8.8.8)", "Vers le serveur DNS du domaine AD", "Vers la passerelle", "Vers le serveur DHCP lui-même"],
+      "answer": 1,
+      "explication": "La résolution des enregistrements SRV du domaine exige le DNS de l'AD. Un DNS public ne connaît pas domaine.lan → échec de jonction."
+    },
+    {
+      "id": "dhcp-026", "niveau": 3, "type": "scenario",
+      "context": "Console DHCP Windows Server : le filtre « Autoriser » est activé, mais la liste est vide.",
+      "q": "Quelle est la conséquence ?",
+      "choices": ["Tous les clients obtiennent une IP normalement", "Plus aucun client n'obtient d'adresse IP", "Seuls les clients du domaine obtiennent une IP", "Le service DHCP refuse de démarrer"],
+      "answer": 1,
+      "explication": "Filtre Autoriser activé = liste blanche stricte : seules les MAC inscrites reçoivent une IP. Liste vide → personne n'est servi."
+    },
+    {
+      "id": "dhcp-027", "niveau": 3, "type": "qcm",
+      "q": "Une adresse MAC figure à la fois dans le filtre Autoriser et dans le filtre Exclure. Que se passe-t-il ?",
+      "choices": ["Autoriser l'emporte : le client obtient une IP", "Exclure (Deny) l'emporte : le client est refusé", "Le serveur choisit au hasard", "Le client obtient une IP APIPA du serveur"],
+      "answer": 1,
+      "explication": "En cas de conflit entre les deux listes, la règle Deny (Exclure) l'emporte toujours."
+    },
+    {
+      "id": "dhcp-028", "niveau": 3, "type": "ordre",
+      "q": "Remettez dans l'ordre la mise en service d'un serveur DHCP en environnement AD",
+      "steps": ["Installer le rôle Serveur DHCP", "Autoriser le serveur dans le domaine AD", "Créer l'étendue (plage, masque, options)", "Activer l'étendue"],
+      "explication": "Rôle → autorisation AD (anti-rogue) → étendue avec exclusions/options → activation. Sans activation, aucune adresse n'est distribuée."
+    },
+    {
+      "id": "dhcp-029", "niveau": 3, "type": "qcm",
+      "q": "Quel mode de failover DHCP garde un serveur passif qui ne prend le relais qu'en cas de panne ?",
+      "choices": ["Équilibrage de charge (Load Balancing)", "Serveur de secours (Hot Standby)", "Round Robin", "Cluster actif-actif"],
+      "answer": 1,
+      "explication": "Hot Standby = primaire actif, secondaire en attente. Load Balancing = les deux distribuent simultanément (ex. 50/50)."
+    },
+    {
+      "id": "dhcp-030", "niveau": 4, "type": "scenario",
+      "context": "ipconfig sur un poste :\nIPv4 : 169.254.23.11\nMasque : 255.255.0.0\nPasserelle : (vide)",
+      "q": "Quelle est la cause la plus probable ?",
+      "choices": ["Le serveur DNS est mal configuré", "Le serveur DHCP est injoignable — le poste s'est auto-attribué une adresse APIPA", "Conflit d'adresse IP avec un autre poste", "Le câble réseau est débranché des deux côtés"],
+      "answer": 1,
+      "explication": "169.254.x.x = APIPA : aucune réponse DHCP reçue. Le lien physique fonctionne (sinon pas d'adresse du tout). Vérifier le service DHCP, l'étendue, le relais ou le VLAN."
+    },
+    {
+      "id": "dhcp-031", "niveau": 4, "type": "scenario",
+      "context": "Un seul serveur DHCP dessert le site. Les clients du sous-réseau A (même segment que le serveur) obtiennent une IP. Les clients du sous-réseau B, derrière un routeur, restent en APIPA.",
+      "q": "Quelle solution mettre en place ?",
+      "choices": ["Augmenter la durée du bail", "Configurer un agent de relais DHCP sur le routeur", "Passer le DHCP en TCP", "Créer une exclusion pour le sous-réseau B"],
+      "answer": 1,
+      "explication": "Les broadcasts DHCP ne traversent pas les routeurs. L'agent de relais intercepte le Discover et le transmet en unicast au serveur."
+    },
+    {
+      "id": "dhcp-032", "niveau": 4, "type": "scenario",
+      "context": "Windows Server intégré au domaine AD : service DHCP démarré, étendue créée et activée — mais aucun bail n'est distribué.",
+      "q": "Quelle cause vérifier en priorité ?",
+      "choices": ["Le serveur n'est pas autorisé dans le domaine AD", "La durée du bail est trop courte", "L'option 003 est manquante", "Le pare-feu bloque le port TCP 67"],
+      "answer": 0,
+      "explication": "En environnement AD, un serveur DHCP non autorisé ne distribue rien (protection anti-DHCP rogue). Console DHCP → clic droit sur le serveur → Autoriser."
+    },
+    {
+      "id": "dhcp-033", "niveau": 4, "type": "scenario",
+      "context": "Une imprimante réseau doit toujours garder la même adresse IP, mais l'administrateur ne veut pas la configurer manuellement.",
+      "q": "Quelle solution est la plus adaptée ?",
+      "choices": ["IP statique saisie sur l'imprimante", "Réservation DHCP basée sur l'adresse MAC", "Exclusion de l'adresse dans l'étendue", "Bail DHCP de 1 an"],
+      "answer": 1,
+      "explication": "La réservation garantit la même IP à la MAC de l'imprimante, tout en gardant la gestion centralisée sur le serveur DHCP."
+    },
+    {
+      "id": "dhcp-034", "niveau": 4, "type": "scenario",
+      "context": "L'administrateur a reconfiguré l'étendue avec une nouvelle plage, mais un client garde son ancienne adresse.",
+      "q": "Pourquoi, et que faire ?",
+      "choices": ["Le client est en panne — le redémarrer physiquement", "Son bail est toujours valide — forcer ipconfig /release puis /renew", "L'étendue doit être supprimée et recréée", "Il faut vider le cache DNS du client"],
+      "answer": 1,
+      "explication": "Tant que le bail est valide, le client garde son adresse. release + renew force une nouvelle négociation DORA sur la nouvelle plage."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "updated": "2026-07-30",
+  "themes": [
+    {
+      "id": "reseau",
+      "name": "Réseaux",
+      "icon": "ti ti-topology-star-3",
+      "color": "#38BDF8",
+      "sub": "OSI · IPv4 · VLAN · routage",
+      "modules": [
+        { "id": "dhcp", "name": "DHCP", "file": "reseau/dhcp.json" },
+        { "id": "adressage", "name": "Adressage IP & CIDR", "file": "reseau/adressage-ip.json" }
+      ]
+    },
+    { "id": "windows", "name": "Windows / AD", "icon": "devicon-windows8-original", "color": "#60A5FA", "sub": "AD · GPO · WDS · DHCP", "modules": [
+      { "id": "ad", "name": "Active Directory", "file": "windows/active-directory.json" }
+    ] },
+    { "id": "linux", "name": "Linux et Bash", "icon": "devicon-linux-plain", "color": "#FBBF24", "sub": "commandes · scripts · services", "modules": [
+      { "id": "linux-base", "name": "Linux — bases & administration", "file": "linux/linux-base.json" }
+    ] },
+    { "id": "securite", "name": "Sécurité", "icon": "ti ti-shield-lock", "color": "#F87171", "sub": "ACL · NAT · DMZ · pare-feu", "modules": [
+      { "id": "nat-pat", "name": "NAT & PAT", "file": "securite/nat-pat.json" }
+    ] },
+    { "id": "supervision", "name": "Supervision", "icon": "ti ti-activity-heartbeat", "color": "#63D471", "sub": "Zabbix · SNMP · journaux", "modules": [] },
+    { "id": "virtualisation", "name": "Virtualisation", "icon": "ti ti-cube-3d-sphere", "color": "#A78BFA", "sub": "hyperviseurs · cluster · SAN", "modules": [] }
+  ]
+}
