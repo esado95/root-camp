@@ -1405,7 +1405,7 @@ function showReview() {
       ${qs.slice(0, 8).map(q => {
         const s = (state.q[q.id] && state.q[q.id].s) || 0;
         return `
-        <div class="level-row" style="cursor:default">
+        <div class="level-row" data-qid="${esc(q.id)}">
           <div class="lvl" style="background:${LEVEL_COLORS[q.niveau]}22; color:${LEVEL_COLORS[q.niveau]}">${q.niveau}</div>
           <div><h3 style="font-size:13px">${esc(q.q)}</h3><p>${esc(q.module)}</p></div>
           <div class="right" style="color:${s >= 1 ? "var(--green)" : "var(--dim)"}">${s >= 1 ? "✓ 1/2" : "0/2"}</div>
@@ -1419,6 +1419,12 @@ function showReview() {
   $("#start-rev").onclick = () => {
     startSession(shuffle(qs).slice(0, SESSION_SIZE), { title: "Révision", color: "var(--amber)", back: () => nav("review"), review: true });
   };
+  document.querySelectorAll(".level-row[data-qid]").forEach(r => {
+    r.onclick = () => {
+      const q = BANK.find(x => x.id === r.dataset.qid);
+      if (q) startSession([q], { title: "Révision ciblée", color: "var(--amber)", back: () => nav("review"), review: true });
+    };
+  });
 }
 
 /* ============ Classement ============ */

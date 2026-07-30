@@ -26,12 +26,19 @@ les cours de la promo sont transformés en **906 questions**, un **terminal simu
 vraies commandes Cisco/Bash/PowerShell, et le **classement de promo** entretient la motivation.
 Chaque question corrigée affiche une explication et sa fiche source — on apprend, on ne devine pas.
 
-<!-- Décommenter quand les captures sont dans assets/screens/
 ## 📸 Aperçu
 
-| Accueil | Terminal simulé | Classement |
-|:---:|:---:|:---:|
-| ![Accueil](assets/screens/accueil.png) | ![Terminal](assets/screens/terminal.png) | ![Classement](assets/screens/classement.png) |
+| Accueil | Révision en cours |
+|:---:|:---:|
+| ![Accueil — 10 thèmes](assets/screens/accueil.png) | ![Pile de révision avec progression](assets/screens/revision.png) |
+
+| Profil & grades | Examens à paliers |
+|:---:|:---:|
+| ![Profil, échelle des grades et badges](assets/screens/profil.png) | ![Les 4 paliers d'examen](assets/screens/examens.png) |
+
+<!-- À ajouter quand les captures seront prêtes :
+| Terminal simulé | Classement |
+| ![Terminal](assets/screens/terminal.png) | ![Classement](assets/screens/classement.png) |
 -->
 
 ## 🗺️ La progression
