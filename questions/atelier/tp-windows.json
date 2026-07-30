@@ -321,6 +321,397 @@
         }
       ],
       "explication": "Quand la jonction échoue alors que le DNS client est correct, il faut penser aux enregistrements SRV manquants : Restart-Service Netlogon force leur réinscription dans la zone DNS, et nltest /dsgetdc: permet de vérifier avant/après que le DC est localisable."
+    },
+    {
+      "id": "tpw-009",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Créez le compte Active Directory de la nouvelle technicienne et activez-le.",
+      "context": "Vous êtes sur le DC SRV-AD (domaine mondomaine.lan).\nMarie Martin rejoint l'équipe : son compte mmartin doit être créé dans l'OU Techniciens.",
+      "steps": [
+        {
+          "q": "Créez le compte mmartin (nom complet « Marie Martin ») dans l'OU Techniciens. Sans mot de passe fourni, il sera créé désactivé.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "New-ADUser -Name \"Marie Martin\" -SamAccountName mmartin -Path \"OU=Techniciens,DC=mondomaine,DC=lan\"",
+            "New-ADUser -Name \"Marie Martin\" -SamAccountName \"mmartin\" -Path \"OU=Techniciens,DC=mondomaine,DC=lan\"",
+            "New-ADUser -Name 'Marie Martin' -SamAccountName mmartin -Path 'OU=Techniciens,DC=mondomaine,DC=lan'"
+          ],
+          "hint": "Le cmdlet de création suit le schéma Verbe-Nom : New- suivi du type d'objet AD. Trois paramètres suffisent ici : -Name, -SamAccountName et -Path (le chemin LDAP de l'OU)."
+        },
+        {
+          "q": "Définissez son mot de passe initial P@ssw0rd1! (jamais en clair : converti en SecureString).",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Set-ADAccountPassword -Identity mmartin -NewPassword (ConvertTo-SecureString \"P@ssw0rd1!\" -AsPlainText -Force) -Reset",
+            "Set-ADAccountPassword -Identity mmartin -Reset -NewPassword (ConvertTo-SecureString \"P@ssw0rd1!\" -AsPlainText -Force)",
+            "Set-ADAccountPassword -Identity mmartin -NewPassword (ConvertTo-SecureString 'P@ssw0rd1!' -AsPlainText -Force) -Reset",
+            "Set-ADAccountPassword mmartin -NewPassword (ConvertTo-SecureString \"P@ssw0rd1!\" -AsPlainText -Force) -Reset"
+          ],
+          "hint": "Set-ADAccountPassword avec -Reset ; le mot de passe passe obligatoirement par ConvertTo-SecureString ... -AsPlainText -Force.",
+          "error": "Set-ADAccountPassword : Impossible de convertir la valeur « P@ssw0rd1! » du type « System.String » en type « System.Security.SecureString »."
+        },
+        {
+          "q": "Activez le compte, resté désactivé à la création.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Enable-ADAccount -Identity mmartin", "Enable-ADAccount mmartin"],
+          "hint": "Un cmdlet au verbe Enable- de la famille ADAccount, ciblé avec -Identity."
+        },
+        {
+          "q": "Vérifiez le compte : la propriété Enabled doit valoir True.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-ADUser -Identity mmartin", "Get-ADUser mmartin"],
+          "output": "DistinguishedName : CN=Marie Martin,OU=Techniciens,DC=mondomaine,DC=lan\nEnabled           : True\nName              : Marie Martin\nObjectClass       : user\nSamAccountName    : mmartin\nUserPrincipalName :",
+          "hint": "Le cmdlet Get- des utilisateurs AD, avec le SamAccountName comme identité."
+        }
+      ],
+      "explication": "New-ADUser crée le compte (désactivé tant qu'aucun mot de passe conforme n'est défini), Set-ADAccountPassword -Reset fixe le mot de passe via ConvertTo-SecureString (jamais de chaîne en clair), Enable-ADAccount active le compte et Get-ADUser confirme Enabled = True."
+    },
+    {
+      "id": "tpw-010",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Mettez en place le groupe global des techniciens selon la stratégie AGDLP.",
+      "context": "Sur SRV-AD (mondomaine.lan), l'OU Groupes existe déjà.\nLes comptes mmartin et jdupont doivent intégrer un nouveau groupe global de sécurité GG_Techniciens.",
+      "steps": [
+        {
+          "q": "Créez le groupe de sécurité GG_Techniciens, d'étendue globale, dans l'OU Groupes.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "New-ADGroup -Name \"GG_Techniciens\" -GroupScope Global -GroupCategory Security -Path \"OU=Groupes,DC=mondomaine,DC=lan\"",
+            "New-ADGroup -Name GG_Techniciens -GroupScope Global -GroupCategory Security -Path \"OU=Groupes,DC=mondomaine,DC=lan\"",
+            "New-ADGroup -Name 'GG_Techniciens' -GroupScope Global -GroupCategory Security -Path 'OU=Groupes,DC=mondomaine,DC=lan'"
+          ],
+          "hint": "New-ADGroup avec trois choix à préciser : le nom, l'étendue (-GroupScope) et la catégorie (-GroupCategory)."
+        },
+        {
+          "q": "Contrôlez la création en listant les groupes dont le nom commence par GG_.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-ADGroup -Filter { Name -like \"GG_*\" }",
+            "Get-ADGroup -Filter {Name -like \"GG_*\"}",
+            "Get-ADGroup -Filter { Name -like 'GG_*' }"
+          ],
+          "output": "DistinguishedName : CN=GG_Techniciens,OU=Groupes,DC=mondomaine,DC=lan\nGroupCategory     : Security\nGroupScope        : Global\nName              : GG_Techniciens\nSamAccountName    : GG_Techniciens",
+          "hint": "Get-ADGroup avec -Filter et l'opérateur -like : le joker * complète le préfixe GG_."
+        },
+        {
+          "q": "Ajoutez les comptes mmartin et jdupont au groupe.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Add-ADGroupMember -Identity GG_Techniciens -Members mmartin,jdupont",
+            "Add-ADGroupMember -Identity GG_Techniciens -Members \"mmartin\",\"jdupont\"",
+            "Add-ADGroupMember -Identity GG_Techniciens -Members jdupont,mmartin",
+            "Add-ADGroupMember GG_Techniciens -Members mmartin,jdupont"
+          ],
+          "hint": "Un cmdlet Add- : le groupe en -Identity, les comptes en -Members séparés par une virgule.",
+          "error": "Add-ADGroupMember : Impossible de trouver un objet avec l'identité « GG_Technicien » sous : « DC=mondomaine,DC=lan »."
+        },
+        {
+          "q": "Vérifiez la liste des membres du groupe.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-ADGroupMember -Identity GG_Techniciens", "Get-ADGroupMember GG_Techniciens"],
+          "output": "distinguishedName : CN=Marie Martin,OU=Techniciens,DC=mondomaine,DC=lan\nname              : Marie Martin\nobjectClass       : user\nSamAccountName    : mmartin\n\nname              : Jean Dupont\nSamAccountName    : jdupont",
+          "hint": "Le pendant Get- du cmdlet d'ajout de membres, sur la même identité de groupe."
+        }
+      ],
+      "explication": "AGDLP : les comptes (A) entrent dans un groupe Global métier (G), lui-même membre d'un groupe Domaine Local (DL) qui porte les permissions (P). New-ADGroup crée le groupe (étendue Global, catégorie Security), Add-ADGroupMember ajoute plusieurs membres d'un coup et Get-ADGroupMember vérifie le résultat."
+    },
+    {
+      "id": "tpw-011",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Remettez en service l'impression sur SRV-FICHIERS : redémarrage du spouleur et démarrage automatique.",
+      "context": "Les utilisateurs signalent des travaux d'impression bloqués sur SRV-FICHIERS.\nLe service concerné est le spouleur d'impression (nom court : Spooler).",
+      "steps": [
+        {
+          "q": "Vérifiez l'état du service Spooler.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-Service Spooler", "Get-Service -Name Spooler"],
+          "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  Spooler            Spouleur d'impression",
+          "hint": "Le cmdlet Get- des services ; le nom court du spouleur est Spooler."
+        },
+        {
+          "q": "Le service tourne mais la file est bloquée : redémarrez-le.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Restart-Service Spooler", "Restart-Service -Name Spooler"],
+          "hint": "Un seul cmdlet enchaîne l'arrêt puis la relance : le verbe Restart-.",
+          "error": "Restart-Service : Impossible de trouver un service correspondant au nom « Spouleur »."
+        },
+        {
+          "q": "Assurez-vous qu'il démarrera automatiquement au prochain redémarrage du serveur.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Set-Service Spooler -StartupType Automatic",
+            "Set-Service -Name Spooler -StartupType Automatic"
+          ],
+          "hint": "Le cmdlet Set- des services, avec le paramètre qui règle le type de démarrage."
+        },
+        {
+          "q": "Vérifiez l'état final du service.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-Service Spooler", "Get-Service -Name Spooler"],
+          "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  Spooler            Spouleur d'impression",
+          "hint": "La même vérification qu'au départ : Status doit afficher Running."
+        }
+      ],
+      "explication": "Le trio Get-Service / Restart-Service / Set-Service couvre l'essentiel de la gestion des services : Get- interroge l'état, Restart- enchaîne Stop puis Start en une commande, et Set-Service -StartupType Automatic garantit le lancement au démarrage (valeurs possibles : Automatic, Manual, Disabled)."
+    },
+    {
+      "id": "tpw-012",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Auditez SRV-FICHIERS avec le pipeline PowerShell : services actifs, processus gourmands et fichiers journaux.",
+      "context": "Avant la maintenance mensuelle de SRV-FICHIERS, vous préparez un état des lieux.\nTout se fait en PowerShell en enchaînant les cmdlets avec le pipeline |.",
+      "steps": [
+        {
+          "q": "Affichez uniquement les services en cours d'exécution (Status égal à Running).",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-Service | Where-Object { $_.Status -eq \"Running\" }",
+            "Get-Service | Where-Object {$_.Status -eq \"Running\"}",
+            "Get-Service | Where-Object { $_.Status -eq 'Running' }",
+            "Get-Service | where { $_.Status -eq \"Running\" }"
+          ],
+          "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  LanmanServer       Serveur\nRunning  Spooler            Spouleur d'impression\nRunning  W32Time            Temps Windows",
+          "hint": "Envoyez Get-Service dans Where-Object : dans le bloc { }, l'objet courant se note $_ et se compare avec -eq."
+        },
+        {
+          "q": "Listez les processus avec leur nom, CPU et Id, triés par consommation CPU décroissante.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-Process | Select-Object Name, CPU, Id | Sort-Object CPU -Descending",
+            "Get-Process | Select-Object Name,CPU,Id | Sort-Object CPU -Descending",
+            "Get-Process | Sort-Object CPU -Descending | Select-Object Name, CPU, Id"
+          ],
+          "output": "Name          CPU     Id\n----          ---     --\nsqlservr      412,52  1988\nsvchost        88,03  1204\nexplorer       35,41  3412\npowershell     12,20  4520",
+          "hint": "Trois maillons dans le pipeline : Get-Process, Select-Object pour les propriétés, Sort-Object avec l'option de tri décroissant."
+        },
+        {
+          "q": "Recherchez récursivement tous les fichiers .log du dossier C:\\Windows.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-ChildItem \"C:\\Windows\" -Recurse -Filter \"*.log\"",
+            "Get-ChildItem C:\\Windows -Recurse -Filter *.log",
+            "Get-ChildItem -Path \"C:\\Windows\" -Recurse -Filter \"*.log\"",
+            "gci C:\\Windows -Recurse -Filter *.log"
+          ],
+          "output": "    Répertoire : C:\\Windows\n\nMode                LastWriteTime         Length Name\n----                -------------         ------ ----\n-a----       30/07/2026     08:11        1048576 WindowsUpdate.log\n-a----       29/07/2026     23:47         524288 setupact.log",
+          "hint": "Le cmdlet qui liste les éléments enfants d'un dossier, avec l'option de récursivité et un filtre sur l'extension."
+        },
+        {
+          "q": "Calculez la consommation CPU cumulée de tous les processus.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-Process | Measure-Object -Property CPU -Sum"],
+          "output": "Count    : 87\nAverage  :\nSum      : 612,45\nMaximum  :\nMinimum  :\nProperty : CPU",
+          "hint": "Le cmdlet qui « mesure » les objets du pipeline : précisez la propriété avec -Property et l'opération -Sum."
+        }
+      ],
+      "explication": "Le pipeline PowerShell transmet des objets, pas du texte : Where-Object filtre sur une propriété ($_ désigne l'objet courant), Select-Object choisit les colonnes, Sort-Object trie (-Descending), Measure-Object agrège (somme, moyenne, compte) et Get-ChildItem (alias gci, dir, ls) explore l'arborescence avec -Recurse et -Filter."
+    },
+    {
+      "id": "tpw-013",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Réservez une adresse pour l'imprimante réseau et excluez la plage des équipements fixes sur le serveur DHCP.",
+      "context": "Sur SRV-DHCP, étendue LAN-Principal (192.168.10.100-200, ScopeId 192.168.10.0).\nL'imprimante PRINT-01 (MAC 00-15-5d-0a-12-77) doit toujours recevoir 192.168.10.150.\nLes adresses 192.168.10.100 à 110 sont dédiées aux équipements fixes : à exclure de la distribution.",
+      "steps": [
+        {
+          "q": "Vérifiez l'étendue existante et son état.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-DhcpServerv4Scope"],
+          "output": "ScopeId         SubnetMask      Name           State    StartRange      EndRange        LeaseDuration\n-------         ----------      ----           -----    ----------      --------        -------------\n192.168.10.0    255.255.255.0   LAN-Principal  Active   192.168.10.100  192.168.10.200  8.00:00:00",
+          "hint": "Le cmdlet Get- de la famille DhcpServer, version v4, côté étendues (Scope)."
+        },
+        {
+          "q": "Créez la réservation de l'imprimante PRINT-01 sur 192.168.10.150.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Add-DhcpServerv4Reservation -ScopeId 192.168.10.0 -IPAddress 192.168.10.150 -ClientId 00-15-5d-0a-12-77 -Name \"PRINT-01\"",
+            "Add-DhcpServerv4Reservation -ScopeId 192.168.10.0 -IPAddress 192.168.10.150 -ClientId \"00-15-5d-0a-12-77\" -Name \"PRINT-01\"",
+            "Add-DhcpServerv4Reservation -ScopeId 192.168.10.0 -IPAddress 192.168.10.150 -ClientId 00-15-5d-0a-12-77 -Name PRINT-01"
+          ],
+          "hint": "Un cmdlet Add- de la famille DhcpServerv4 : la garantie d'IP fixe s'appuie sur l'adresse MAC, passée en -ClientId.",
+          "error": "Add-DhcpServerv4Reservation : L'adresse IP 192.168.20.150 n'appartient pas à la plage de l'étendue 192.168.10.0."
+        },
+        {
+          "q": "Excluez la plage 192.168.10.100 à 192.168.10.110 de la distribution.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Add-DhcpServerv4ExclusionRange -ScopeId 192.168.10.0 -StartRange 192.168.10.100 -EndRange 192.168.10.110"
+          ],
+          "hint": "Même famille de cmdlets : l'objet s'appelle ExclusionRange, avec un début (-StartRange) et une fin (-EndRange)."
+        },
+        {
+          "q": "Vérifiez la réservation créée sur l'étendue.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-DhcpServerv4Reservation -ScopeId 192.168.10.0"],
+          "output": "IPAddress       ScopeId         ClientId             Name        Type\n---------       -------         --------             ----        ----\n192.168.10.150  192.168.10.0    00-15-5d-0a-12-77    PRINT-01    Both",
+          "hint": "Le pendant Get- du cmdlet de réservation, sur la même étendue."
+        },
+        {
+          "q": "Vérifiez la plage d'exclusion.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-DhcpServerv4ExclusionRange -ScopeId 192.168.10.0"],
+          "output": "ScopeId         StartRange        EndRange\n-------         ----------        --------\n192.168.10.0    192.168.10.100    192.168.10.110",
+          "hint": "Le pendant Get- de l'exclusion, toujours avec -ScopeId."
+        }
+      ],
+      "explication": "Une réservation (Add-DhcpServerv4Reservation) lie une IP de l'étendue à une adresse MAC : l'imprimante garde toujours la même adresse sans configuration manuelle. Une exclusion (Add-DhcpServerv4ExclusionRange) retire une plage de la distribution pour les équipements en IP fixe — bonne pratique : exclure en début de plage."
+    },
+    {
+      "id": "tpw-014",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Analysez les journaux d'événements de SRV-FICHIERS après son arrêt inattendu de la nuit.",
+      "context": "SRV-FICHIERS s'est arrêté brutalement cette nuit (coupure électrique suspectée).\nVous cherchez les traces dans les journaux Windows, en PowerShell.",
+      "steps": [
+        {
+          "q": "Affichez les 10 derniers événements du journal Système.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-EventLog -LogName System -Newest 10", "Get-EventLog System -Newest 10"],
+          "output": "Index Time           EntryType    Source                    InstanceID Message\n----- ----           ---------    ------                    ---------- -------\n 9821 juil. 30 06:52 Information  EventLog                        6005 Le service Journal des événements a démarré.\n 9820 juil. 30 06:52 Error        Kernel-Power                      41 Le système a redémarré sans s'arrêter correctement au préalable.\n 9812 juil. 29 23:58 Information  Service Control Manager         7036 Le service Serveur DHCP est entré dans l'état : arrêté.",
+          "hint": "Le cmdlet classique de lecture des journaux : précisez le journal avec -LogName et le nombre d'événements avec -Newest."
+        },
+        {
+          "q": "L'ID 41 (Kernel-Power) confirme l'arrêt brutal. Listez les erreurs du journal Système avec la méthode moderne (Level 2 = Erreur).",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-WinEvent -FilterHashtable @{ LogName = \"System\"; Level = 2 }",
+            "Get-WinEvent -FilterHashtable @{LogName=\"System\";Level=2}",
+            "Get-WinEvent -FilterHashtable @{ LogName = 'System'; Level = 2 }"
+          ],
+          "output": "TimeCreated             Id LevelDisplayName Message\n-----------             -- ---------------- -------\n30/07/2026 06:52:03     41 Erreur           Le système a redémarré sans s'arrêter correctement au préalable.",
+          "hint": "Get-WinEvent avec -FilterHashtable : une table @{ } qui précise LogName et Level."
+        },
+        {
+          "q": "Retrouvez les changements d'état des services (ID 7036) pour voir ce qui s'est relancé au démarrage.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-WinEvent -FilterHashtable @{ LogName = \"System\"; Id = 7036 }",
+            "Get-WinEvent -FilterHashtable @{LogName=\"System\";Id=7036}",
+            "Get-WinEvent -FilterHashtable @{ LogName = 'System'; Id = 7036 }"
+          ],
+          "output": "TimeCreated             Id LevelDisplayName Message\n-----------             -- ---------------- -------\n30/07/2026 06:53:10   7036 Information      Le service Serveur DHCP est entré dans l'état : en cours d'exécution.\n30/07/2026 06:53:08   7036 Information      Le service Spouleur d'impression est entré dans l'état : en cours d'exécution.",
+          "hint": "Même cmdlet, mais le filtre porte cette fois sur l'Id de l'événement."
+        },
+        {
+          "q": "Exportez les 100 derniers événements du journal Application vers C:\\logs.csv (UTF8, sans information de type).",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-WinEvent -LogName \"Application\" -MaxEvents 100 | Export-Csv \"C:\\logs.csv\" -Encoding UTF8 -NoTypeInformation",
+            "Get-WinEvent -LogName Application -MaxEvents 100 | Export-Csv C:\\logs.csv -Encoding UTF8 -NoTypeInformation",
+            "Get-WinEvent -LogName 'Application' -MaxEvents 100 | Export-Csv 'C:\\logs.csv' -Encoding UTF8 -NoTypeInformation"
+          ],
+          "hint": "Un pipeline en deux maillons : Get-WinEvent avec -MaxEvents, puis Export-Csv avec -Encoding UTF8 et -NoTypeInformation.",
+          "error": "Export-Csv : L'accès au chemin d'accès « C:\\logs.csv » est refusé."
+        }
+      ],
+      "explication": "Les ID à connaître : 41 (arrêt brutal Kernel-Power), 6005/6006 (démarrage/arrêt du journal, donc boot/shutdown), 7036 (changement d'état d'un service), 4740 (compte verrouillé). Get-EventLog reste le réflexe rapide, Get-WinEvent -FilterHashtable la méthode moderne (la seule en PowerShell 7), et Export-Csv -Encoding UTF8 préserve les accents."
+    },
+    {
+      "id": "tpw-015",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Diagnostiquez pourquoi les nouveaux postes n'obtiennent plus d'adresse IP et corrigez durablement le problème.",
+      "context": "SRV-DHCP a été redémarré cette nuit après des mises à jour.\nDepuis, les nouveaux postes récupèrent des adresses 169.254.x.x ; les postes dont le bail est encore valide fonctionnent normalement.",
+      "steps": [
+        {
+          "q": "Des adresses 169.254.x.x (APIPA) signifient qu'aucun serveur DHCP ne répond. Sur SRV-DHCP, vérifiez l'état du service.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-Service DHCPServer", "Get-Service -Name DHCPServer"],
+          "output": "Status   Name               DisplayName\n------   ----               -----------\nStopped  DHCPServer         Serveur DHCP",
+          "hint": "Le cmdlet d'interrogation des services ; le rôle DHCP s'appelle DHCPServer."
+        },
+        {
+          "q": "Le service est arrêté. Vérifiez son type de démarrage pour comprendre pourquoi il n'est pas reparti après le redémarrage.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-Service DHCPServer | Select-Object Name, Status, StartType",
+            "Get-Service DHCPServer | Select-Object Name,Status,StartType",
+            "Get-Service -Name DHCPServer | Select-Object Name, Status, StartType"
+          ],
+          "output": "Name       Status  StartType\n----       ------  ---------\nDHCPServer Stopped Manual",
+          "hint": "Envoyez le service dans Select-Object : la propriété StartType révèle le mode de démarrage."
+        },
+        {
+          "q": "StartType Manual : le service ne se relance pas seul au démarrage. Démarrez-le immédiatement.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Start-Service DHCPServer", "Start-Service -Name DHCPServer"],
+          "hint": "Le verbe qui démarre un service, appliqué à DHCPServer.",
+          "error": "Start-Service : Impossible de trouver un service correspondant au nom « DHCP Server »."
+        },
+        {
+          "q": "Repassez le type de démarrage en Automatique pour éviter la récidive au prochain redémarrage.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Set-Service DHCPServer -StartupType Automatic",
+            "Set-Service -Name DHCPServer -StartupType Automatic"
+          ],
+          "hint": "Le cmdlet Set- des services : le paramètre -StartupType accepte Automatic, Manual ou Disabled."
+        },
+        {
+          "q": "Vérifiez que le service est bien en cours d'exécution.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-Service DHCPServer", "Get-Service -Name DHCPServer"],
+          "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  DHCPServer         Serveur DHCP",
+          "hint": "La même commande qu'au début du diagnostic : Status doit maintenant afficher Running."
+        }
+      ],
+      "explication": "Des postes en 169.254.x.x (APIPA) signalent une rupture avec le serveur DHCP. Ici, le service DHCPServer était arrêté et son type de démarrage sur Manual : Start-Service corrige l'immédiat, Set-Service -StartupType Automatic corrige la cause pour les prochains redémarrages. Un bon diagnostic traite toujours les deux."
+    },
+    {
+      "id": "tpw-016",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Diagnostiquez l'impossibilité de connexion de mmartin et rendez-lui l'accès au domaine.",
+      "context": "Marie Martin (mmartin) ne peut plus ouvrir de session : « Le compte est actuellement verrouillé ».\nDe retour de congés, elle a saisi plusieurs fois un ancien mot de passe. Vous êtes sur SRV-AD.",
+      "steps": [
+        {
+          "q": "Recherchez les comptes actuellement verrouillés dans le domaine.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Search-ADAccount -LockedOut", "Search-ADAccount -LockedOut -UsersOnly"],
+          "output": "AccountExpirationDate :\nDistinguishedName     : CN=Marie Martin,OU=Techniciens,DC=mondomaine,DC=lan\nEnabled               : True\nLockedOut             : True\nName                  : Marie Martin\nSamAccountName        : mmartin",
+          "hint": "Un cmdlet de recherche AD (verbe Search-) avec un commutateur dédié aux comptes verrouillés."
+        },
+        {
+          "q": "Confirmez le verrouillage dans le journal Sécurité : l'événement porte l'ID 4740.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-WinEvent -FilterHashtable @{ LogName = \"Security\"; Id = 4740 }",
+            "Get-WinEvent -FilterHashtable @{LogName=\"Security\";Id=4740}",
+            "Get-WinEvent -FilterHashtable @{ LogName = 'Security'; Id = 4740 }"
+          ],
+          "output": "TimeCreated             Id LevelDisplayName Message\n-----------             -- ---------------- -------\n30/07/2026 09:12:44   4740 Information      Un compte d'utilisateur a été verrouillé.\n                                            Compte : mmartin   Poste : CLIENT-W",
+          "hint": "Get-WinEvent avec -FilterHashtable sur le journal Security et l'Id 4740 (compte verrouillé)."
+        },
+        {
+          "q": "Le verrouillage est confirmé et légitime (erreurs de saisie). Déverrouillez le compte.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Unlock-ADAccount -Identity mmartin", "Unlock-ADAccount mmartin"],
+          "hint": "Le verbe qui « déverrouille », famille ADAccount, ciblé avec -Identity.",
+          "error": "Unlock-ADAccount : Impossible de trouver un objet avec l'identité « marie.martin » sous : « DC=mondomaine,DC=lan »."
+        },
+        {
+          "q": "Vérifiez que le compte n'est plus verrouillé (propriété LockedOut).",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": [
+            "Get-ADUser mmartin -Properties LockedOut",
+            "Get-ADUser -Identity mmartin -Properties LockedOut"
+          ],
+          "output": "DistinguishedName : CN=Marie Martin,OU=Techniciens,DC=mondomaine,DC=lan\nEnabled           : True\nLockedOut         : False\nName              : Marie Martin\nSamAccountName    : mmartin",
+          "hint": "Get-ADUser n'affiche pas LockedOut par défaut : demandez la propriété avec -Properties."
+        }
+      ],
+      "explication": "L'événement 4740 du journal Sécurité trace chaque verrouillage (compte et poste d'origine). Search-ADAccount -LockedOut dresse la liste des comptes bloqués, Unlock-ADAccount lève le verrou et Get-ADUser -Properties LockedOut confirme le retour à la normale. Ne pas confondre déverrouiller (verrou de sécurité) et réactiver (Enable-ADAccount, pour un compte désactivé)."
     }
   ]
 }

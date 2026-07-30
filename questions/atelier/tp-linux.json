@@ -362,6 +362,354 @@
         }
       ],
       "explication": "L'erreur 203/EXEC signifie que systemd a lu le fichier .service mais ne peut pas lancer le script de la ligne ExecStart. Checklist : chemin correct (ls -l), droit d'exécution (chmod +x), shebang #!/bin/bash, puis daemon-reload et restart pour valider la réparation."
+    },
+    {
+      "id": "tpl-009",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Installez le serveur web Apache sur srv-web et prouvez qu'il répond",
+      "context": "srv-web (Debian 12) doit héberger l'intranet de la promo.\nVous êtes connecté avec votre compte said (sudo disponible).",
+      "steps": [
+        {
+          "q": "Mettez à jour le cache des paquets",
+          "prompt": "said@srv-web:~$",
+          "accept": ["sudo apt update", "sudo apt-get update"],
+          "output": "Hit:1 http://deb.debian.org/debian bookworm InRelease\nGet:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]\nReading package lists... Done\nBuilding dependency tree... Done\nAll packages are up to date.",
+          "hint": "Réflexe systématique avant toute installation : rafraîchir l'index des dépôts.",
+          "error": "E: Could not open lock file /var/lib/apt/lists/lock - open (13: Permission denied)"
+        },
+        {
+          "q": "Installez le serveur web Apache",
+          "prompt": "said@srv-web:~$",
+          "accept": ["sudo apt install apache2", "sudo apt install apache2 -y", "sudo apt -y install apache2", "sudo apt-get install apache2"],
+          "output": "Reading package lists... Done\nBuilding dependency tree... Done\nThe following NEW packages will be installed:\n  apache2 apache2-bin apache2-data apache2-utils\nSetting up apache2 (2.4.62-1~deb12u1) ...\nCreated symlink /etc/systemd/system/multi-user.target.wants/apache2.service -> /lib/systemd/system/apache2.service.",
+          "hint": "Sous Debian, le paquet du serveur web historique porte le chiffre 2 dans son nom."
+        },
+        {
+          "q": "Vérifiez que le service web tourne",
+          "prompt": "said@srv-web:~$",
+          "accept": ["systemctl status apache2", "sudo systemctl status apache2", "systemctl status apache2.service", "sudo systemctl status apache2.service"],
+          "output": "● apache2.service - The Apache HTTP Server\n     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; preset: enabled)\n     Active: active (running) since Wed 2026-07-30 14:05:11 CEST; 30s ago\n   Main PID: 3121 (apache2)",
+          "hint": "Le contrôleur systemd et l'action qui affiche l'état. Le service porte le même nom que le paquet."
+        },
+        {
+          "q": "Testez la page par défaut depuis le serveur lui-même, sans navigateur",
+          "prompt": "said@srv-web:~$",
+          "accept": ["curl localhost", "curl http://localhost", "curl 127.0.0.1", "curl http://127.0.0.1"],
+          "output": "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" ...>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n  <head>\n    <title>Apache2 Debian Default Page: It works</title>\n...",
+          "hint": "L'outil en ligne de commande qui récupère une URL, pointé sur la boucle locale."
+        }
+      ],
+      "explication": "Installation type d'un serveur web : apt update puis apt install apache2, contrôle du service avec systemctl status, et preuve fonctionnelle avec curl localhost qui renvoie la page par défaut servie depuis /var/www/html."
+    },
+    {
+      "id": "tpl-010",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Reprenez le contrôle d'un processus qui monopolise le CPU",
+      "context": "Sur srv-deb, le script boucle.sh lancé par un stagiaire sature le processeur.\nLes autres services rament. Vous êtes connecté en root.",
+      "steps": [
+        {
+          "q": "Ouvrez le moniteur interactif pour repérer le processus le plus gourmand",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["top"],
+          "output": "top - 14:12:03 up  3:41,  2 users,  load average: 1.98, 1.72, 1.10\nTasks: 103 total,   2 running, 101 sleeping,   0 stopped\n%Cpu(s): 97.8 us,  1.4 sy,  0.0 ni,  0.8 id\n    PID USER      PR  NI    VIRT    RES  %CPU  %MEM     TIME+ COMMAND\n   1847 stagiaire 20   0    9812   3204  97.3   0.1  12:44.06 boucle.sh\n      1 root      20   0  168920  11840   0.3   0.6   0:02.11 systemd",
+          "hint": "Le moniteur temps réel des processus tient en trois lettres. On en sort avec q."
+        },
+        {
+          "q": "Confirmez le PID avec un instantané filtré sur le nom du script",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ps aux | grep boucle", "ps aux | grep boucle.sh", "ps -ef | grep boucle", "ps -ef | grep boucle.sh"],
+          "output": "stagiaire   1847 97.3  0.1   9812  3204 pts/1    R    10:28  12:44 /bin/bash ./boucle.sh\nroot        1903  0.0  0.0   6332  2044 pts/0    S+   14:13   0:00 grep boucle",
+          "hint": "L'instantané des processus (syntaxe BSD aux ou Unix -ef), enchaîné par un pipe vers le filtre de texte."
+        },
+        {
+          "q": "Avant de trancher, baissez sa priorité au minimum pour soulager le CPU",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["renice -n 19 -p 1847", "renice 19 -p 1847", "renice -n 19 1847", "renice 19 1847"],
+          "output": "1847 (process ID) old priority 0, new priority 19",
+          "hint": "La commande qui modifie le nice d'un processus déjà lancé ; 19 est la priorité la plus basse."
+        },
+        {
+          "q": "Le stagiaire confirme : arrêtez le processus proprement",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["kill 1847", "kill -15 1847", "kill -TERM 1847", "kill -SIGTERM 1847"],
+          "hint": "Le signal par défaut (15, SIGTERM) demande poliment au processus de se terminer."
+        },
+        {
+          "q": "Il résiste (toujours visible dans ps) : forcez son arrêt immédiat",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["kill -9 1847", "kill -KILL 1847", "kill -SIGKILL 1847"],
+          "hint": "Le signal 9 ne peut pas être ignoré : c'est l'arme de dernier recours."
+        }
+      ],
+      "explication": "Chaîne classique de gestion des processus : top pour observer en direct, ps aux | grep pour isoler le PID, renice -n 19 pour baisser la priorité sans arrêter, kill (SIGTERM 15) pour une fin propre, et kill -9 (SIGKILL) seulement si le processus ignore la demande."
+    },
+    {
+      "id": "tpl-011",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Formatez et montez le nouveau disque de données de srv-deb",
+      "context": "Un second disque virtuel de 20 Go vient d'être ajouté à srv-deb.\nUn collègue a déjà créé la partition ; à vous de formater en ext4 et de monter sur /mnt/datas.",
+      "steps": [
+        {
+          "q": "Repérez le nouveau disque et sa partition parmi les périphériques bloc",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["lsblk", "fdisk -l"],
+          "output": "NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS\nsda      8:0    0   32G  0 disk\n|-sda1   8:1    0   31G  0 part /\n`-sda2   8:2    0    1G  0 part [SWAP]\nsdb      8:16   0   20G  0 disk\n`-sdb1   8:17   0   20G  0 part",
+          "hint": "La commande qui liste les périphériques bloc en arbre, ou l'outil de partitionnement avec son option de listing."
+        },
+        {
+          "q": "Formatez la nouvelle partition en ext4",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["mkfs.ext4 /dev/sdb1", "mkfs -t ext4 /dev/sdb1"],
+          "output": "mke2fs 1.47.0 (5-Feb-2023)\nCreating filesystem with 5242624 4k blocks and 1310720 inodes\nAllocating group tables: done\nWriting inode tables: done\nCreating journal (32768 blocks): done\nWriting superblocks and filesystem accounting information: done",
+          "hint": "La famille de commandes make filesystem, suffixée par le système de fichiers Linux standard.",
+          "error": "mkfs.ext4: No such file or directory while trying to determine filesystem size"
+        },
+        {
+          "q": "Créez le point de montage /mnt/datas",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["mkdir -p /mnt/datas", "mkdir /mnt/datas"],
+          "hint": "Un point de montage n'est qu'un dossier vide au bon endroit."
+        },
+        {
+          "q": "Montez la partition sur le point de montage",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["mount /dev/sdb1 /mnt/datas", "mount -t ext4 /dev/sdb1 /mnt/datas"],
+          "hint": "La commande de montage : d'abord le périphérique, ensuite le dossier."
+        },
+        {
+          "q": "Vérifiez que la partition est bien montée et son espace disponible",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["df -h", "df -h /mnt/datas", "lsblk"],
+          "output": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        31G  4.2G   25G  15% /\n/dev/sdb1        20G   24K   19G   1% /mnt/datas",
+          "hint": "Disk Free avec l'option qui rend les tailles humainement lisibles."
+        }
+      ],
+      "explication": "Mise en service d'un disque : lsblk (ou fdisk -l) pour identifier /dev/sdb1, mkfs.ext4 pour formater, mkdir puis mount pour le rattacher à l'arborescence, df -h pour contrôler. Attention : mount est temporaire, un montage persistant exige une entrée dans /etc/fstab."
+    },
+    {
+      "id": "tpl-012",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Planifiez la sauvegarde quotidienne à 2h30 avec cron",
+      "context": "Le script /opt/scripts/sauvegarde.sh doit s'exécuter automatiquement chaque nuit à 2h30.\nVous êtes connecté en root sur srv-deb.",
+      "steps": [
+        {
+          "q": "Ouvrez la table cron de root en édition, puis ajoutez la ligne : 30 2 * * * /opt/scripts/sauvegarde.sh",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["crontab -e"],
+          "output": "crontab: installing new crontab",
+          "hint": "La commande de la table cron avec son option d'édition. Ordre des 5 champs : minute, heure, jour du mois, mois, jour de semaine."
+        },
+        {
+          "q": "Relisez la table cron sans l'ouvrir en édition",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["crontab -l"],
+          "output": "30 2 * * * /opt/scripts/sauvegarde.sh",
+          "hint": "Même commande, mais l'option qui liste (l comme list)."
+        },
+        {
+          "q": "Assurez-vous que le démon cron est bien actif",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["systemctl status cron", "systemctl status cron.service"],
+          "output": "● cron.service - Regular background program processing daemon\n     Loaded: loaded (/lib/systemd/system/cron.service; enabled; preset: enabled)\n     Active: active (running) since Wed 2026-07-30 08:01:12 CEST; 6h ago\n   Main PID: 512 (cron)",
+          "hint": "Sans son démon, aucune tâche planifiée ne part. Sur Debian, le service s'appelle simplement cron."
+        },
+        {
+          "q": "Le lendemain, confirmez l'exécution nocturne dans le journal système",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["grep CRON /var/log/syslog", "grep cron /var/log/syslog", "grep -i cron /var/log/syslog", "grep sauvegarde /var/log/syslog"],
+          "output": "Jul 31 02:30:01 srv-deb CRON[2210]: (root) CMD (/opt/scripts/sauvegarde.sh)",
+          "hint": "Cherchez la trace du démon dans /var/log/syslog avec l'outil de filtrage de texte."
+        }
+      ],
+      "explication": "Planification cron : crontab -e pour éditer (syntaxe : minute heure jour mois jour-de-semaine commande, donc 30 2 * * * = tous les jours à 2h30), crontab -l pour relire, systemctl status cron pour valider le démon, et la ligne CRON ... CMD dans /var/log/syslog prouve l'exécution."
+    },
+    {
+      "id": "tpl-013",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Traquez les fichiers volumineux et les erreurs applicatives sur srv-deb",
+      "context": "Avant l'audit mensuel, le formateur demande un état des lieux de /var :\nfichiers de plus de 100 Mo, fichiers modifiés dans l'heure, et volume d'erreurs de l'application.",
+      "steps": [
+        {
+          "q": "Listez les fichiers de plus de 100 Mo présents sous /var",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["find /var -type f -size +100M", "find /var -size +100M -type f", "find /var -size +100M"],
+          "output": "/var/log/app/debug.log\n/var/cache/apt/archives/libreoffice-core_7.4.7-1_amd64.deb",
+          "hint": "L'outil de recherche de fichiers : critère de type f et critère de taille avec le signe + et l'unité M."
+        },
+        {
+          "q": "Listez les fichiers de /var/log modifiés durant les 60 dernières minutes",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["find /var/log -type f -mmin -60", "find /var/log -mmin -60 -type f", "find /var/log -mmin -60"],
+          "output": "/var/log/syslog\n/var/log/auth.log\n/var/log/app/debug.log",
+          "hint": "Même outil, mais le critère porte sur les minutes de modification : m + min, avec un signe moins pour « il y a moins de »."
+        },
+        {
+          "q": "Recherchez récursivement le motif « error » dans tout /var/log/app",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["grep -r error /var/log/app", "grep -r \"error\" /var/log/app", "grep -r 'error' /var/log/app", "grep -ri error /var/log/app", "grep -ri \"error\" /var/log/app"],
+          "output": "/var/log/app/debug.log:2026-07-30 13:58:12 error: database connection timeout\n/var/log/app/debug.log:2026-07-30 13:58:14 error: retrying in 5s\n/var/log/app/worker.log:2026-07-30 12:02:44 error: job 4412 failed\n...",
+          "hint": "L'outil de recherche de texte, avec son option récursive, pointé sur le dossier entier."
+        },
+        {
+          "q": "Comptez le nombre total de lignes d'erreur avec un pipe",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["grep -r error /var/log/app | wc -l", "grep -r \"error\" /var/log/app | wc -l", "grep -r 'error' /var/log/app | wc -l", "grep -ri error /var/log/app | wc -l"],
+          "output": "342",
+          "hint": "Reprenez la commande précédente et envoyez son résultat au compteur de lignes."
+        }
+      ],
+      "explication": "Recherche avancée : find -size +100M pour les gros fichiers, find -mmin -60 pour les modifications récentes (le signe - signifie « il y a moins de »), grep -r pour fouiller récursivement un dossier, et le pipe vers wc -l pour quantifier le résultat."
+    },
+    {
+      "id": "tpl-014",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Appliquez les permissions spéciales au dépôt collaboratif /srv/depot",
+      "context": "/srv/depot (root:stagiaire, droits 770) accueille les rendus de toute la promo.\nObjectif : les fichiers créés doivent hériter du groupe stagiaire, et chacun ne doit pouvoir supprimer que ses propres fichiers.",
+      "steps": [
+        {
+          "q": "Observez d'abord un exemple célèbre de droit spécial : la commande passwd",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ls -l /usr/bin/passwd", "ls -lh /usr/bin/passwd"],
+          "output": "-rwsr-xr-x 1 root root 59976 Feb  6  2024 /usr/bin/passwd",
+          "hint": "Un listing détaillé sur le binaire. Regardez le s à la place du x du propriétaire : c'est le SUID (chmod u+s)."
+        },
+        {
+          "q": "Faites hériter le groupe du dossier à tout fichier créé dans /srv/depot",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["chmod g+s /srv/depot", "chmod 2770 /srv/depot"],
+          "hint": "Le même mécanisme que le SUID, mais côté groupe : s sur le bloc g (octal 2 en tête)."
+        },
+        {
+          "q": "Empêchez chacun de supprimer les fichiers des autres (comme dans /tmp)",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["chmod +t /srv/depot", "chmod o+t /srv/depot", "chmod 3770 /srv/depot"],
+          "hint": "Le bit « collant » qui protège /tmp : symbole t, ou 1 en tête de l'octal (cumulé avec le 2 du SGID : 3770)."
+        },
+        {
+          "q": "Vérifiez le résultat sur le dossier lui-même",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ls -ld /srv/depot", "ls -l /srv"],
+          "output": "drwxrws--T 2 root stagiaire 4096 Jul 30 15:10 /srv/depot",
+          "hint": "Le listing détaillé du dossier lui-même (pas de son contenu) : option d. Cherchez le s du groupe et le T final."
+        }
+      ],
+      "explication": "Trois droits spéciaux : SUID (u+s, octal 4) exécute un binaire avec les droits de son propriétaire (ex. passwd), SGID sur un dossier (g+s, octal 2) fait hériter le groupe aux fichiers créés, et le sticky bit (+t, octal 1) réserve la suppression au propriétaire du fichier, comme dans /tmp. Le T majuscule de drwxrws--T signale un sticky bit sans droit x pour les autres."
+    },
+    {
+      "id": "tpl-015",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Diagnostiquez la panne : srv-deb refuse toute écriture, disque plein",
+      "context": "Depuis ce matin, apt échoue avec « No space left on device » et l'application\nne journalise plus rien. Trouvez le coupable et libérez l'espace sans casser le service.",
+      "steps": [
+        {
+          "q": "Confirmez le symptôme : mesurez l'occupation des systèmes de fichiers",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["df -h", "df"],
+          "output": "Filesystem      Size  Used Avail Use% Mounted on\nudev            958M     0  958M   0% /dev\n/dev/sda1        31G   31G     0 100% /\ntmpfs           197M  4.0K  197M   1% /run/user/0",
+          "hint": "Disk Free : la vue globale par partition, en format lisible pour un humain."
+        },
+        {
+          "q": "Identifiez le dossier le plus lourd parmi les sous-dossiers de /var",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["du -sh /var/*", "du -h --max-depth=1 /var", "du -sh /var/* | sort -h"],
+          "output": "1.1G    /var/cache\n52M     /var/lib\n8.9G    /var/log\n12K     /var/tmp\n780M    /var/www",
+          "hint": "Disk Usage en mode synthèse (s) et lisible (h), avec un joker pour balayer chaque sous-dossier."
+        },
+        {
+          "q": "Descendez d'un niveau : quel sous-dossier de /var/log explose ?",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["du -sh /var/log/*", "du -h --max-depth=1 /var/log", "du -sh /var/log/* | sort -h"],
+          "output": "8.4G    /var/log/app\n124M    /var/log/journal\n18M     /var/log/apt\n9.2M    /var/log/syslog",
+          "hint": "Même commande, un cran plus profond dans l'arborescence."
+        },
+        {
+          "q": "Repérez le fichier fautif dans /var/log/app",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ls -lh /var/log/app", "ls -lhS /var/log/app", "du -ah /var/log/app"],
+          "output": "total 8.4G\n-rw-r--r-- 1 root root 8.4G Jul 30 09:12 debug.log\n-rw-r--r-- 1 root root  12M Jul 30 09:12 worker.log",
+          "hint": "Un listing détaillé en tailles lisibles suffit à désigner le coupable."
+        },
+        {
+          "q": "Videz debug.log sans le supprimer (l'application le garde ouvert)",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["truncate -s 0 /var/log/app/debug.log", "> /var/log/app/debug.log", ": > /var/log/app/debug.log", "echo -n > /var/log/app/debug.log"],
+          "hint": "Supprimer un fichier encore ouvert par un processus ne libère pas l'espace : mettez-le à zéro octet à la place (truncate ou redirection vide)."
+        },
+        {
+          "q": "Vérifiez que l'espace est bien récupéré",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["df -h", "df -h /", "df"],
+          "output": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        31G   23G  6.9G  77% /",
+          "hint": "La même commande qu'au diagnostic initial : le Use% doit avoir chuté."
+        }
+      ],
+      "explication": "Méthode disque plein : df -h confirme la partition saturée, puis du -sh en descendant l'arborescence (/var, /var/log, /var/log/app) isole le coupable. On vide le fichier avec truncate -s 0 (ou > fichier) plutôt que rm : un fichier supprimé mais encore ouvert par un processus continue d'occuper l'espace jusqu'au redémarrage du service."
+    },
+    {
+      "id": "tpl-016",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Diagnostiquez la panne : l'intranet ne répond plus après le redémarrage",
+      "context": "srv-web a redémarré cette nuit pour les mises à jour. Depuis, l'intranet Apache\nest injoignable, alors que tout fonctionnait hier soir. Comprenez, puis corrigez durablement.",
+      "steps": [
+        {
+          "q": "Constatez la panne depuis le serveur : testez le site en local",
+          "prompt": "root@srv-web:~#",
+          "accept": ["curl localhost", "curl http://localhost", "curl 127.0.0.1", "curl http://127.0.0.1"],
+          "output": "curl: (7) Failed to connect to localhost port 80 after 0 ms: Couldn't connect to server",
+          "hint": "L'outil qui récupère une URL en ligne de commande, pointé sur la boucle locale."
+        },
+        {
+          "q": "Vérifiez l'état du service web",
+          "prompt": "root@srv-web:~#",
+          "accept": ["systemctl status apache2", "systemctl status apache2.service"],
+          "output": "○ apache2.service - The Apache HTTP Server\n     Loaded: loaded (/lib/systemd/system/apache2.service; disabled; preset: enabled)\n     Active: inactive (dead)",
+          "hint": "Le contrôleur systemd et son action d'état. Lisez attentivement la ligne Loaded…"
+        },
+        {
+          "q": "Confirmez l'hypothèse : le service est-il inscrit au démarrage ?",
+          "prompt": "root@srv-web:~#",
+          "accept": ["systemctl is-enabled apache2", "systemctl is-enabled apache2.service"],
+          "output": "disabled",
+          "hint": "Une action systemctl interrogative : is-… quelque chose."
+        },
+        {
+          "q": "Remettez le site en ligne immédiatement",
+          "prompt": "root@srv-web:~#",
+          "accept": ["systemctl start apache2", "systemctl start apache2.service"],
+          "hint": "L'action qui démarre le service maintenant, sans toucher à la configuration de boot."
+        },
+        {
+          "q": "Corrigez la cause racine pour que la panne ne revienne pas au prochain reboot",
+          "prompt": "root@srv-web:~#",
+          "accept": ["systemctl enable apache2", "systemctl enable apache2.service", "systemctl enable --now apache2", "systemctl enable --now apache2.service"],
+          "output": "Synchronizing state of apache2.service with SysV service script with /lib/systemd/systemd-sysv-install.\nExecuting: /lib/systemd/systemd-sysv-install enable apache2\nCreated symlink /etc/systemd/system/multi-user.target.wants/apache2.service -> /lib/systemd/system/apache2.service.",
+          "hint": "L'action qui inscrit le service au démarrage — celle dont l'absence explique toute la panne."
+        },
+        {
+          "q": "Validez la réparation complète : le site répond de nouveau en local",
+          "prompt": "root@srv-web:~#",
+          "accept": ["curl localhost", "curl http://localhost", "curl 127.0.0.1", "curl http://127.0.0.1"],
+          "output": "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" ...>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n  <head>\n    <title>Apache2 Debian Default Page: It works</title>\n...",
+          "hint": "Le même test qu'au constat initial : cette fois, du HTML doit s'afficher."
+        }
+      ],
+      "explication": "Un service démarré à la main (systemctl start) mais jamais inscrit au boot (systemctl enable) disparaît au premier redémarrage. Le diagnostic tient dans la ligne Loaded : « disabled » — confirmé par systemctl is-enabled. Correction en deux temps : start pour l'immédiat, enable pour la persistance (ou enable --now pour les deux d'un coup)."
     }
   ]
 }

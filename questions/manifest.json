@@ -104,6 +104,7 @@
       "icon": "ti ti-flask",
       "color": "#2DD4BF",
       "sub": "mini-TP guidés · IOS · Bash · PowerShell",
+      "intro": "Ici, pas de QCM : uniquement des mini-TP en terminal simulé — vous tapez de vraies commandes IOS, Bash et PowerShell. De la pratique pure : l'Atelier démarre directement au niveau 3 (procédures guidées) et culmine au niveau 4 (diagnostics de panne). XP doublés, Tab pour compléter, ↑ pour l'historique.",
       "modules": [
         { "id": "tp-cisco", "name": "TP Cisco IOS", "file": "atelier/tp-cisco.json" },
         { "id": "tp-linux", "name": "TP Linux (Bash)", "file": "atelier/tp-linux.json" },

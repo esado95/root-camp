@@ -544,21 +544,23 @@ function showTheme(theme) {
   setPath(`./quiz --theme ${theme.id}`);
   const unlocked = unlockedLevel(theme.id);
   let rows = "";
+  let precedent = null;
   for (let n = 1; n <= 4; n++) {
     const count = BANK.filter(q => q.theme === theme.id && q.niveau === n).length;
+    if (count === 0) continue;
     const st = themeLevelStats(theme.id, n);
-    const vide = count === 0;
-    const locked = n > unlocked || vide;
+    const locked = n > unlocked;
     const rate = st.a ? Math.round(st.c / st.a * 100) : null;
     rows += `
       <div class="level-row ${locked ? "locked" : ""}" data-lvl="${n}">
-        <div class="lvl" style="background:${LEVEL_COLORS[n]}22; color:${LEVEL_COLORS[n]}">${vide ? "–" : (locked ? '<i class="ti ti-lock"></i>' : n)}</div>
+        <div class="lvl" style="background:${LEVEL_COLORS[n]}22; color:${LEVEL_COLORS[n]}">${locked ? '<i class="ti ti-lock"></i>' : n}</div>
         <div>
           <h3>Niveau ${n} — ${LEVEL_NAMES[n]}</h3>
-          <p>${vide ? "aucune question à ce niveau" : count + " questions" + (locked ? ` · pour débloquer : ≥ ${UNLOCK_MIN_ATTEMPTS} réponses au niveau ${n - 1} avec ${Math.round(UNLOCK_RATE * 100)} % de réussite` : "")}</p>
+          <p>${count + " questions" + (locked ? ` · pour débloquer : ≥ ${UNLOCK_MIN_ATTEMPTS} réponses au niveau ${precedent} avec ${Math.round(UNLOCK_RATE * 100)} % de réussite` : "")}</p>
         </div>
         <div class="right">${rate !== null ? rate + " %<br>" + st.a + " rép." : ""}</div>
       </div>`;
+    precedent = n;
   }
   const modules = theme.modules.map(m => {
     const ms = moduleStats(m.name);
@@ -570,6 +572,7 @@ function showTheme(theme) {
       <button class="btn small" id="back"><i class="ti ti-arrow-left"></i> Thèmes</button>
       <span class="qmeta" style="color:${theme.color}">${esc(theme.name)}</span>
     </div>
+    ${theme.intro ? `<div class="feedback" style="margin:0 0 14px"><i class="ti ti-sparkles" style="color:${theme.color}"></i> ${esc(theme.intro)}</div>` : ""}
     <p class="comment"># choisissez un niveau de difficulté</p>
     <div class="level-list">${rows}</div>
     <p class="section-title"># modules couverts</p>
