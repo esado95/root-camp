@@ -1,0 +1,367 @@
+{
+  "module": "TP Linux (Bash)",
+  "source": "fiches du cours TSSR2601",
+  "questions": [
+    {
+      "id": "tpl-001",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Créez l'utilisateur marc, le groupe stagiaire, et rattachez l'un à l'autre",
+      "context": "Un nouveau stagiaire arrive sur srv-deb (Debian 12).\nVous êtes connecté en root. Le groupe stagiaire n'existe pas encore.",
+      "steps": [
+        {
+          "q": "Créez le groupe stagiaire avec le script haut niveau Debian",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["addgroup stagiaire", "groupadd stagiaire"],
+          "output": "Adding group `stagiaire' (GID 1002) ...\nDone.",
+          "hint": "Le script interactif Debian pour les groupes commence par add…"
+        },
+        {
+          "q": "Créez l'utilisateur marc (home et mot de passe configurés automatiquement)",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["adduser marc"],
+          "output": "Adding user `marc' ...\nAdding new group `marc' (1003) ...\nAdding new user `marc' (1002) with group `marc (1003)' ...\nCreating home directory `/home/marc' ...\nCopying files from `/etc/skel' ...\nNew password:\nRetype new password:\npasswd: password updated successfully",
+          "hint": "Privilégiez le script haut niveau Debian, pas la commande bas niveau qui ne crée ni /home ni mot de passe."
+        },
+        {
+          "q": "Ajoutez marc comme membre du groupe stagiaire",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["gpasswd -a marc stagiaire", "usermod -aG stagiaire marc", "adduser marc stagiaire"],
+          "output": "Adding user marc to group stagiaire",
+          "hint": "La commande dédiée aux membres de groupe commence par gpa… et son option d'ajout est une seule lettre.",
+          "error": "gpasswd: group 'stagiaire' does not exist"
+        },
+        {
+          "q": "Vérifiez l'UID, le GID et les groupes de marc",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["id marc"],
+          "output": "uid=1002(marc) gid=1003(marc) groups=1003(marc),1002(stagiaire)",
+          "hint": "Deux lettres suffisent pour afficher UID, GID et appartenances aux groupes."
+        }
+      ],
+      "explication": "Sous Debian, on privilégie les scripts haut niveau adduser/addgroup qui configurent home et mot de passe, puis gpasswd -a (ou usermod -aG) pour l'appartenance au groupe, et id pour vérifier le résultat."
+    },
+    {
+      "id": "tpl-002",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Préparez le dossier partagé /srv/projets pour le groupe stagiaire",
+      "context": "Le dossier doit appartenir à marc et au groupe stagiaire.\nDroits attendus : rwx pour le propriétaire et le groupe, rien pour les autres.",
+      "steps": [
+        {
+          "q": "Créez le dossier /srv/projets",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["mkdir /srv/projets", "mkdir -p /srv/projets"],
+          "hint": "La commande de création de dossier, avec le chemin absolu."
+        },
+        {
+          "q": "Attribuez le dossier à marc et au groupe stagiaire en une seule commande",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["chown marc:stagiaire /srv/projets", "chown marc:stagiaire /srv/projets/"],
+          "hint": "La commande qui change le propriétaire accepte la syntaxe user:groupe."
+        },
+        {
+          "q": "Appliquez les droits rwxrwx--- en notation octale",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["chmod 770 /srv/projets", "chmod u=rwx,g=rwx,o= /srv/projets"],
+          "hint": "r=4, w=2, x=1 : additionnez pour chaque bloc u/g/o. Ici les « autres » n'ont rien."
+        },
+        {
+          "q": "Vérifiez le résultat avec un listing détaillé",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ls -l /srv", "ls -al /srv", "ls -lh /srv", "ls -ld /srv/projets"],
+          "output": "total 4\ndrwxrwx--- 2 marc stagiaire 4096 Jul 30 10:24 projets",
+          "hint": "L'option détaillée de ls affiche type, droits, propriétaire et groupe."
+        }
+      ],
+      "explication": "Procédure classique : mkdir puis chown user:groupe puis chmod octal (770 = rwx pour u et g, rien pour o), et contrôle avec ls -l où la première colonne doit afficher drwxrwx---."
+    },
+    {
+      "id": "tpl-003",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Faites passer srv-deb du DHCP à l'IP statique 192.168.1.50/24",
+      "context": "srv-deb est en DHCP sur eth0 (bail actuel : 192.168.1.107/24).\nCible : 192.168.1.50/24, passerelle 192.168.1.254, sans redémarrer la machine.\nVous êtes connecté avec votre compte said (sudo disponible).",
+      "steps": [
+        {
+          "q": "Relevez le nom de l'interface et l'IP actuelle",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["ip a", "ip addr", "ip address", "ip addr show", "ip a show"],
+          "output": "2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 08:00:27:53:8a:ba brd ff:ff:ff:ff:ff:ff\n    inet 192.168.1.107/24 brd 192.168.1.255 scope global dynamic eth0\n       valid_lft 85923sec preferred_lft 85923sec",
+          "hint": "La commande moderne commence par ip ; sa sous-commande pour les adresses tient en une lettre."
+        },
+        {
+          "q": "Relevez la passerelle par défaut fournie par le DHCP",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["ip r", "ip route", "ip route show"],
+          "output": "default via 192.168.1.254 dev eth0\n192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.107",
+          "hint": "Même famille de commande, mais la sous-commande concerne les routes. La ligne default = passerelle."
+        },
+        {
+          "q": "Ouvrez le fichier de configuration réseau et remplacez le bloc DHCP par : iface eth0 inet static, address 192.168.1.50/24, gateway 192.168.1.254",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["sudo nano /etc/network/interfaces", "sudo vi /etc/network/interfaces", "sudo vim /etc/network/interfaces"],
+          "hint": "Le fichier de configuration IP de Debian est dans /etc/network/. Pensez à l'élévation de privilèges pour pouvoir enregistrer.",
+          "error": "/etc/network/interfaces: Permission denied"
+        },
+        {
+          "q": "Videz l'ancienne adresse du bail DHCP encore attachée à eth0",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["sudo ip addr flush dev eth0", "sudo ip a flush dev eth0", "sudo ip address flush dev eth0"],
+          "hint": "Sans ce nettoyage, l'ancienne IP peut rester collée à l'interface. Le verbe anglais signifie « vider ».",
+          "error": "RTNETLINK answers: Operation not permitted"
+        },
+        {
+          "q": "Relancez le service réseau pour appliquer la configuration statique",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["sudo systemctl restart networking", "sudo systemctl restart networking.service"],
+          "hint": "Le contrôleur systemd, l'action de redémarrage, et le service qui gère /etc/network/interfaces.",
+          "error": "Failed to restart networking.service: Access denied"
+        },
+        {
+          "q": "Vérifiez que la nouvelle IP statique est bien appliquée",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["ip a", "ip addr", "ip address", "ip a show eth0", "ip addr show eth0"],
+          "output": "2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 08:00:27:53:8a:ba brd ff:ff:ff:ff:ff:ff\n    inet 192.168.1.50/24 brd 192.168.1.255 scope global eth0\n       valid_lft forever preferred_lft forever",
+          "hint": "La même commande qu'au relevé initial : la mention « dynamic » doit avoir disparu."
+        }
+      ],
+      "explication": "Le passage DHCP→statique se fait en cinq temps : relever la config actuelle (ip a, ip r), éditer /etc/network/interfaces, vider le bail avec ip addr flush, relancer networking, puis vérifier. Le bail DHCP encore attaché est le piège classique qui justifie le flush."
+    },
+    {
+      "id": "tpl-004",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Diagnostiquez la panne : plus aucune résolution de nom sur srv-deb",
+      "context": "Depuis le passage en IP statique hier, apt update échoue avec « Temporary failure resolving 'deb.debian.org' »\net les sites web ne répondent plus par leur nom. Diagnostiquez couche par couche, puis corrigez.",
+      "steps": [
+        {
+          "q": "Couche 1 : vérifiez que l'IP statique est bien en place sur eth0",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ip a", "ip addr", "ip address", "ip a show eth0", "ip addr show eth0"],
+          "output": "2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 08:00:27:53:8a:ba brd ff:ff:ff:ff:ff:ff\n    inet 192.168.1.50/24 brd 192.168.1.255 scope global eth0\n       valid_lft forever preferred_lft forever",
+          "hint": "On part toujours du bas : l'adresse IP d'abord."
+        },
+        {
+          "q": "Couche 2 : vérifiez la route par défaut",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ip r", "ip route", "ip route show"],
+          "output": "default via 192.168.1.254 dev eth0 onlink\n192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.50",
+          "hint": "La ligne default doit pointer vers la passerelle. Sous-commande route de la famille ip."
+        },
+        {
+          "q": "Couche 3 : testez la sortie Internet en IP pure (sans DNS)",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ping 8.8.8.8", "ping -c 4 8.8.8.8", "ping -c 3 8.8.8.8", "ping -c 2 8.8.8.8", "ping -c 1 8.8.8.8"],
+          "output": "PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.\n64 bytes from 8.8.8.8: icmp_seq=1 ttl=115 time=11.2 ms\n64 bytes from 8.8.8.8: icmp_seq=2 ttl=115 time=10.8 ms\n--- 8.8.8.8 ping statistics ---\n2 packets transmitted, 2 received, 0% packet loss, time 1002ms",
+          "hint": "Une adresse IP publique connue par cœur permet de tester le routage sans dépendre du DNS."
+        },
+        {
+          "q": "Couche 4 : testez maintenant la résolution DNS avec un nom de domaine",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ping google.com", "ping -c 4 google.com", "ping -c 3 google.com", "ping -c 2 google.com", "ping -c 1 google.com", "ping www.google.com"],
+          "output": "ping: google.com: Temporary failure in name resolution",
+          "hint": "Même test, mais avec un nom au lieu d'une IP. Si l'IP passe et pas le nom, le coupable est identifié."
+        },
+        {
+          "q": "Confirmez le diagnostic : affichez le fichier de configuration DNS",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["cat /etc/resolv.conf", "less /etc/resolv.conf", "more /etc/resolv.conf"],
+          "output": "domain lan\nsearch lan",
+          "hint": "Le fichier des serveurs DNS est dans /etc/. Il devrait contenir au moins une ligne nameserver…"
+        },
+        {
+          "q": "Corrigez : éditez le fichier et ajoutez « nameserver 192.168.1.254 » puis « nameserver 8.8.8.8 »",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["nano /etc/resolv.conf", "vi /etc/resolv.conf", "vim /etc/resolv.conf"],
+          "hint": "Édition directe du fichier constaté vide de nameserver : c'est la méthode qui marche même hors ligne."
+        }
+      ],
+      "explication": "Diagnostic par couches : ip a (IP OK), ip r (route OK), ping 8.8.8.8 (Internet OK) mais ping google.com échoue : c'est donc le DNS. Le passage en statique a laissé /etc/resolv.conf sans nameserver, car dns-nameservers est ignoré sans le paquet resolvconf ; on corrige le fichier à la main."
+    },
+    {
+      "id": "tpl-005",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Installez et activez l'administration à distance SSH sur srv-deb",
+      "context": "srv-deb doit être administrable à distance depuis le poste technicien.\nVous êtes connecté avec votre compte said (sudo disponible).",
+      "steps": [
+        {
+          "q": "Mettez à jour le cache des paquets avant toute installation",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["sudo apt update", "sudo apt-get update"],
+          "output": "Hit:1 http://deb.debian.org/debian bookworm InRelease\nGet:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]\nGet:3 http://security.debian.org/debian-security bookworm-security InRelease [48.0 kB]\nReading package lists... Done\nBuilding dependency tree... Done\nAll packages are up to date.",
+          "hint": "Réflexe systématique avant d'installer : rafraîchir l'index des dépôts.",
+          "error": "E: Could not open lock file /var/lib/apt/lists/lock - open (13: Permission denied)"
+        },
+        {
+          "q": "Installez le serveur SSH",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["sudo apt install openssh-server", "sudo apt install openssh-server -y", "sudo apt -y install openssh-server", "sudo apt-get install openssh-server"],
+          "output": "Reading package lists... Done\nBuilding dependency tree... Done\nThe following NEW packages will be installed:\n  openssh-server openssh-sftp-server\nSetting up openssh-server (1:9.2p1-2+deb12u3) ...\nCreated symlink /etc/systemd/system/sshd.service -> /lib/systemd/system/ssh.service.",
+          "hint": "Le paquet côté serveur s'appelle openssh-… quelque chose."
+        },
+        {
+          "q": "Vérifiez que le service SSH est bien démarré",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["sudo systemctl status ssh", "systemctl status ssh", "sudo systemctl status ssh.service", "systemctl status ssh.service"],
+          "output": "● ssh.service - OpenBSD Secure Shell server\n     Loaded: loaded (/lib/systemd/system/ssh.service; enabled; preset: enabled)\n     Active: active (running) since Wed 2026-07-30 10:32:17 CEST; 40s ago\n   Main PID: 2143 (sshd)",
+          "hint": "Le contrôleur systemd et l'action qui affiche l'état. Sur Debian, le service s'appelle ssh."
+        },
+        {
+          "q": "Assurez-vous que SSH démarrera automatiquement au boot",
+          "prompt": "said@srv-deb:~$",
+          "accept": ["sudo systemctl enable ssh", "sudo systemctl enable ssh.service"],
+          "output": "Synchronizing state of ssh.service with SysV service script with /lib/systemd/systemd-sysv-install.\nExecuting: /lib/systemd/systemd-sysv-install enable ssh",
+          "hint": "L'action systemctl qui inscrit un service au démarrage — le contraire de disable."
+        }
+      ],
+      "explication": "Installation d'un service Debian type : apt update puis apt install openssh-server, contrôle avec systemctl status ssh (Active: active (running)) et persistance au boot avec systemctl enable."
+    },
+    {
+      "id": "tpl-006",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Sauvegardez /etc dans une archive compressée avant intervention",
+      "context": "Avant une grosse modification de configuration, vous archivez tout /etc.\nL'archive backup-etc.tar.gz sera créée dans /root puis testée par extraction dans /tmp.",
+      "steps": [
+        {
+          "q": "Créez l'archive compressée backup-etc.tar.gz contenant tout /etc",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["tar -zcvf backup-etc.tar.gz /etc", "tar -czvf backup-etc.tar.gz /etc", "tar zcvf backup-etc.tar.gz /etc", "tar czvf backup-etc.tar.gz /etc", "tar -zcf backup-etc.tar.gz /etc", "tar -czf backup-etc.tar.gz /etc"],
+          "output": "tar: Removing leading `/' from member names\n/etc/\n/etc/hostname\n/etc/hosts\n/etc/network/\n/etc/network/interfaces\n...",
+          "hint": "tar avec les options : compression gzip (z), création (c), verbeux (v), fichier de sortie (f)."
+        },
+        {
+          "q": "Listez le contenu de l'archive sans l'extraire",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["tar -ztf backup-etc.tar.gz", "tar -tzf backup-etc.tar.gz", "tar ztf backup-etc.tar.gz", "tar -ztvf backup-etc.tar.gz", "tar -tzvf backup-etc.tar.gz"],
+          "output": "etc/\netc/hostname\netc/hosts\netc/network/\netc/network/interfaces\n...",
+          "hint": "Remplacez l'option de création par celle qui liste (t comme table), en gardant z et f."
+        },
+        {
+          "q": "Vérifiez la taille de l'archive en format lisible",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ls -lh backup-etc.tar.gz", "ls -l backup-etc.tar.gz", "ls -lh /root/backup-etc.tar.gz"],
+          "output": "-rw-r--r-- 1 root root 1.8M Jul 30 10:45 backup-etc.tar.gz",
+          "hint": "Listing détaillé avec l'option qui rend la taille humainement lisible."
+        },
+        {
+          "q": "Placez-vous dans /tmp pour tester l'extraction",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["cd /tmp"],
+          "hint": "Changement de dossier avec un chemin absolu."
+        },
+        {
+          "q": "Extrayez l'archive de test ici (elle se trouve dans /root)",
+          "prompt": "root@srv-deb:/tmp#",
+          "accept": ["tar -zxvf /root/backup-etc.tar.gz", "tar -xzvf /root/backup-etc.tar.gz", "tar zxvf /root/backup-etc.tar.gz", "tar xzvf /root/backup-etc.tar.gz", "tar -zxf /root/backup-etc.tar.gz", "tar -xzf /root/backup-etc.tar.gz", "tar -zxvf ~/backup-etc.tar.gz", "tar -xzvf ~/backup-etc.tar.gz"],
+          "output": "etc/\netc/hostname\netc/hosts\netc/network/\netc/network/interfaces\n...",
+          "hint": "Mêmes options que la création, mais x (extraction) remplace c. N'oubliez pas le chemin complet de l'archive."
+        }
+      ],
+      "explication": "Le triptyque tar.gz : -zcvf pour archiver et compresser, -ztf pour lister sans extraire, -zxvf pour extraire. Tester l'extraction dans /tmp valide que la sauvegarde est exploitable avant l'intervention."
+    },
+    {
+      "id": "tpl-007",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Analysez les tentatives de connexion SSH échouées dans les logs",
+      "context": "Le formateur signale des tentatives de connexion suspectes sur srv-deb.\nLes journaux d'authentification se trouvent dans /var/log/auth.log.",
+      "steps": [
+        {
+          "q": "Placez-vous dans le dossier des journaux système",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["cd /var/log"],
+          "hint": "Les logs vivent dans le dossier des données variables du système."
+        },
+        {
+          "q": "Affichez les 20 dernières lignes du journal d'authentification",
+          "prompt": "root@srv-deb:/var/log#",
+          "accept": ["tail -n 20 auth.log", "tail -20 auth.log", "tail -n 20 /var/log/auth.log", "tail -20 /var/log/auth.log"],
+          "output": "Jul 30 09:58:01 srv-deb CRON[1512]: pam_unix(cron:session): session opened for user root\nJul 30 10:01:22 srv-deb sshd[1544]: Failed password for invalid user admin from 203.0.113.44 port 51122 ssh2\nJul 30 10:01:25 srv-deb sshd[1544]: Connection closed by invalid user admin 203.0.113.44 port 51122\nJul 30 10:03:47 srv-deb sshd[1571]: Failed password for root from 203.0.113.44 port 51530 ssh2\nJul 30 10:05:12 srv-deb sshd[1590]: Accepted password for said from 192.168.1.20 port 49812 ssh2",
+          "hint": "La commande qui affiche la fin d'un fichier, avec l'option qui fixe le nombre de lignes."
+        },
+        {
+          "q": "Filtrez uniquement les lignes contenant « Failed password »",
+          "prompt": "root@srv-deb:/var/log#",
+          "accept": ["grep \"Failed password\" auth.log", "grep 'Failed password' auth.log", "grep -i \"failed password\" auth.log", "grep -i 'failed password' auth.log", "grep \"Failed password\" /var/log/auth.log"],
+          "output": "Jul 30 10:01:22 srv-deb sshd[1544]: Failed password for invalid user admin from 203.0.113.44 port 51122 ssh2\nJul 30 10:03:47 srv-deb sshd[1571]: Failed password for root from 203.0.113.44 port 51530 ssh2\nJul 30 10:09:33 srv-deb sshd[1603]: Failed password for root from 203.0.113.44 port 51988 ssh2",
+          "hint": "L'outil de recherche de texte dans un fichier ; le motif contient un espace, pensez aux guillemets."
+        },
+        {
+          "q": "Comptez le nombre total d'échecs de mot de passe",
+          "prompt": "root@srv-deb:/var/log#",
+          "accept": ["grep -c \"Failed password\" auth.log", "grep -c 'Failed password' auth.log", "grep \"Failed password\" auth.log | wc -l", "grep 'Failed password' auth.log | wc -l"],
+          "output": "27",
+          "hint": "grep sait compter tout seul avec une option, ou enchaînez avec un pipe vers le compteur de lignes."
+        },
+        {
+          "q": "Surveillez le journal en temps réel pour observer les nouvelles tentatives",
+          "prompt": "root@srv-deb:/var/log#",
+          "accept": ["tail -f auth.log", "tail -f /var/log/auth.log"],
+          "output": "Jul 30 11:02:11 srv-deb sshd[1650]: Failed password for root from 203.0.113.44 port 52011 ssh2\nJul 30 11:02:14 srv-deb sshd[1650]: Connection closed by authenticating user root 203.0.113.44 port 52011\n^C",
+          "hint": "La même commande que pour la fin du fichier, avec l'option qui « suit » les nouvelles lignes."
+        }
+      ],
+      "explication": "Investigation type dans les logs : tail -n pour l'aperçu récent, grep pour filtrer un motif précis, grep -c (ou | wc -l) pour quantifier, et tail -f pour la surveillance en direct. Ici, l'IP 203.0.113.44 multiplie les échecs : candidat parfait pour un durcissement de sshd_config."
+    },
+    {
+      "id": "tpl-008",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "bash",
+      "q": "Dépannez le service sauvegarde.service qui refuse de démarrer",
+      "context": "Le service maison sauvegarde.service, créé hier, est en échec.\nsystemd affiche un exit-code au démarrage. À vous de trouver la cause et de corriger.",
+      "steps": [
+        {
+          "q": "Constatez la panne : affichez l'état détaillé du service",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["systemctl status sauvegarde.service", "systemctl status sauvegarde"],
+          "output": "× sauvegarde.service - Sauvegarde quotidienne des configurations\n     Loaded: loaded (/etc/systemd/system/sauvegarde.service; enabled; preset: enabled)\n     Active: failed (Result: exit-code) since Wed 2026-07-30 09:12:04 CEST; 6min ago\n    Process: 1421 ExecStart=/opt/scripts/sauvegarde.sh (code=exited, status=203/EXEC)\n\nJul 30 09:12:04 srv-deb systemd[1]: sauvegarde.service: Failed with result 'exit-code'.",
+          "hint": "Le contrôleur systemd et l'action qui montre l'état et les derniers logs du service."
+        },
+        {
+          "q": "L'erreur 203/EXEC pointe vers le script. Vérifiez son existence et ses droits",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["ls -l /opt/scripts/sauvegarde.sh", "ls -lh /opt/scripts/sauvegarde.sh"],
+          "output": "-rw-r--r-- 1 root root 214 Jul 29 17:40 /opt/scripts/sauvegarde.sh",
+          "hint": "Un listing détaillé sur le chemin exact indiqué par la ligne ExecStart. Regardez bien la colonne des droits…"
+        },
+        {
+          "q": "Le script n'est pas exécutable : corrigez ses droits",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["chmod +x /opt/scripts/sauvegarde.sh", "chmod u+x /opt/scripts/sauvegarde.sh", "chmod a+x /opt/scripts/sauvegarde.sh", "chmod 755 /opt/scripts/sauvegarde.sh", "chmod 700 /opt/scripts/sauvegarde.sh"],
+          "hint": "La commande des permissions, en mode symbolique : il manque le droit x."
+        },
+        {
+          "q": "Rechargez la configuration de systemd après la modification",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["systemctl daemon-reload"],
+          "hint": "L'action systemctl qui relit les fichiers d'unités — daemon-quelque-chose."
+        },
+        {
+          "q": "Redémarrez le service réparé",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["systemctl restart sauvegarde.service", "systemctl restart sauvegarde"],
+          "hint": "L'action qui arrête puis relance le service en une seule commande."
+        },
+        {
+          "q": "Vérifiez que le service tourne désormais correctement",
+          "prompt": "root@srv-deb:~#",
+          "accept": ["systemctl status sauvegarde.service", "systemctl status sauvegarde"],
+          "output": "● sauvegarde.service - Sauvegarde quotidienne des configurations\n     Loaded: loaded (/etc/systemd/system/sauvegarde.service; enabled; preset: enabled)\n     Active: active (running) since Wed 2026-07-30 09:20:31 CEST; 4s ago\n   Main PID: 1503 (sauvegarde.sh)",
+          "hint": "La même commande qu'au diagnostic initial : cette fois, cherchez « active (running) »."
+        }
+      ],
+      "explication": "L'erreur 203/EXEC signifie que systemd a lu le fichier .service mais ne peut pas lancer le script de la ligne ExecStart. Checklist : chemin correct (ls -l), droit d'exécution (chmod +x), shebang #!/bin/bash, puis daemon-reload et restart pour valider la réparation."
+    }
+  ]
+}

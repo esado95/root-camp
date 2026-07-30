@@ -1,0 +1,400 @@
+{
+  "module": "TP Cisco IOS",
+  "source": "fiches du cours TSSR2601",
+  "questions": [
+    {
+      "id": "tpc-001",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "ios",
+      "q": "Créez le VLAN 10 « COMPTA » sur le switch et affectez-y le port du poste comptable.",
+      "context": "Vous êtes connecté en console sur le switch, déjà en mode privilégié.\nLe PC du service comptabilité est branché sur le port FastEthernet 0/1.",
+      "steps": [
+        {
+          "q": "Passez en mode de configuration globale.",
+          "prompt": "Switch#",
+          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
+          "hint": "La commande complète est « configure terminal », presque toujours abrégée en deux mots."
+        },
+        {
+          "q": "Créez le VLAN numéro 10.",
+          "prompt": "Switch(config)#",
+          "accept": ["vlan 10"],
+          "hint": "Un seul mot-clé suivi du numéro : la commande crée le VLAN et entre dans son mode de configuration.",
+          "error": "% Invalid input detected at '^' marker."
+        },
+        {
+          "q": "Donnez à ce VLAN le nom COMPTA.",
+          "prompt": "Switch(config-vlan)#",
+          "accept": ["name COMPTA"],
+          "hint": "Depuis le mode config-vlan, un mot-clé de quatre lettres attribue le nom lisible."
+        },
+        {
+          "q": "Entrez dans la configuration du port FastEthernet 0/1.",
+          "prompt": "Switch(config-vlan)#",
+          "accept": ["interface fastEthernet 0/1", "interface fastEthernet0/1", "interface fa0/1", "int fa0/1", "int fa 0/1", "int fastethernet 0/1"],
+          "hint": "Pas besoin de repasser par exit : la commande interface fonctionne depuis n'importe quel sous-mode de configuration."
+        },
+        {
+          "q": "Forcez ce port en mode access.",
+          "prompt": "Switch(config-if)#",
+          "accept": ["switchport mode access", "sw mode access", "swi mode access"],
+          "hint": "La commande commence par switchport mode.",
+          "error": "% Invalid input detected at '^' marker."
+        },
+        {
+          "q": "Rattachez le port au VLAN 10.",
+          "prompt": "Switch(config-if)#",
+          "accept": ["switchport access vlan 10", "sw access vlan 10", "sw acc vlan 10", "switchport acc vlan 10"],
+          "hint": "switchport access, suivi du mot-clé vlan et du numéro."
+        }
+      ],
+      "explication": "Un VLAN se crée dans la base du switch (vlan + name), puis chaque port client est basculé en mode access et rattaché à son VLAN avec switchport access vlan. Vérification possible ensuite avec show vlan brief."
+    },
+    {
+      "id": "tpc-002",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "ios",
+      "q": "Réalisez la configuration initiale du routeur : nom R1 et interface LAN en 192.168.10.254/24.",
+      "context": "Routeur neuf branché en console via MobaXterm (9600 bauds).\nL'interface GigabitEthernet 0/0 est reliée au switch du LAN 192.168.10.0/24.",
+      "steps": [
+        {
+          "q": "Passez du mode utilisateur au mode privilégié.",
+          "prompt": "Router>",
+          "accept": ["enable", "en", "ena"],
+          "hint": "Le chevron > indique le mode utilisateur : une commande de six lettres donne les pleins droits de consultation."
+        },
+        {
+          "q": "Entrez en mode de configuration globale.",
+          "prompt": "Router#",
+          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
+          "hint": "L'abréviation usuelle tient en deux mots de quatre lettres et une lettre."
+        },
+        {
+          "q": "Renommez le routeur en R1.",
+          "prompt": "Router(config)#",
+          "accept": ["hostname R1", "host R1"],
+          "hint": "Le nom d'hôte se définit avec une commande qui change immédiatement l'invite."
+        },
+        {
+          "q": "Entrez dans la configuration de l'interface GigabitEthernet 0/0.",
+          "prompt": "R1(config)#",
+          "accept": ["interface gigabitEthernet 0/0", "interface gigabitEthernet0/0", "interface g0/0", "int g0/0", "int gi0/0", "int gig 0/0", "int g 0/0"],
+          "hint": "La commande interface accepte le nom abrégé du port (g0/0)."
+        },
+        {
+          "q": "Attribuez l'adresse 192.168.10.254 avec un masque /24.",
+          "prompt": "R1(config-if)#",
+          "accept": ["ip address 192.168.10.254 255.255.255.0", "ip add 192.168.10.254 255.255.255.0", "ip addr 192.168.10.254 255.255.255.0"],
+          "hint": "ip address attend l'adresse puis le masque en notation décimale complète.",
+          "error": "% Incomplete command."
+        },
+        {
+          "q": "Activez l'interface.",
+          "prompt": "R1(config-if)#",
+          "accept": ["no shutdown", "no shut", "no sh"],
+          "output": "%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up\n%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up",
+          "hint": "Les interfaces Cisco sont désactivées par défaut : il faut annuler leur état shutdown."
+        }
+      ],
+      "explication": "Séquence de base sur tout équipement Cisco : enable → configure terminal → hostname, puis pour chaque interface ip address + no shutdown, car toutes les interfaces sont administrativement désactivées d'usine."
+    },
+    {
+      "id": "tpc-003",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "ios",
+      "q": "Sécurisez l'accès distant du routeur R1 en SSH version 2.",
+      "context": "R1 est déjà nommé et adressé ; le compte local admin (privilege 15, secret P@ssw0rd) existe déjà.\nVous êtes en mode de configuration globale.",
+      "steps": [
+        {
+          "q": "Définissez le nom de domaine lab.lan, indispensable avant de générer les clés.",
+          "prompt": "R1(config)#",
+          "accept": ["ip domain-name lab.lan", "ip domain name lab.lan"],
+          "hint": "Sans nom de domaine, la génération des clés RSA refuse de se lancer. La commande commence par ip domain."
+        },
+        {
+          "q": "Générez les clés RSA (répondre 2048 à la question posée).",
+          "prompt": "R1(config)#",
+          "accept": ["crypto key generate rsa"],
+          "output": "The name for the keys will be: R1.lab.lan\nChoose the size of the key modulus in the range of 360 to 2048 for your\n  General Purpose Keys. Choosing a key modulus greater than 512 may take\n  a few minutes.\n\nHow many bits in the modulus [512]: 2048\n% Generating 2048 bit RSA keys, keys will be non-exportable...[OK]",
+          "hint": "La commande commence par crypto.",
+          "error": "% Invalid input detected at '^' marker."
+        },
+        {
+          "q": "Forcez l'utilisation de SSH version 2.",
+          "prompt": "R1(config)#",
+          "accept": ["ip ssh version 2"],
+          "hint": "Trois mots-clés et un chiffre : on impose la version du protocole SSH."
+        },
+        {
+          "q": "Entrez dans la configuration des 5 lignes d'accès distant.",
+          "prompt": "R1(config)#",
+          "accept": ["line vty 0 4"],
+          "hint": "Les accès réseau passent par les lignes virtuelles vty, numérotées de 0 à 4."
+        },
+        {
+          "q": "Activez l'authentification sur la base d'utilisateurs locale.",
+          "prompt": "R1(config-line)#",
+          "accept": ["login local"],
+          "hint": "Deux mots : la connexion doit vérifier les comptes créés avec username."
+        },
+        {
+          "q": "N'autorisez que le protocole SSH sur ces lignes.",
+          "prompt": "R1(config-line)#",
+          "accept": ["transport input ssh"],
+          "hint": "La commande transport input limite les protocoles acceptés en entrée (Telnet est ainsi banni)."
+        }
+      ],
+      "explication": "SSH exige un nom de domaine puis des clés RSA (2048 bits) ; on force ensuite la version 2 et on restreint les lignes vty 0 4 au seul SSH avec authentification sur les comptes locaux (login local)."
+    },
+    {
+      "id": "tpc-004",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "ios",
+      "q": "Ajoutez sur R1 une route statique vers le LAN de R2 puis une route par défaut, et vérifiez la table de routage.",
+      "context": "R1 (LAN 192.168.10.0/24) est relié à R2 via le réseau 10.0.0.0/30 : R1 = 10.0.0.1, R2 = 10.0.0.2.\nLe LAN de R2 est 192.168.20.0/24. Vous êtes en mode privilégié sur R1.",
+      "steps": [
+        {
+          "q": "Passez en mode de configuration globale.",
+          "prompt": "R1#",
+          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
+          "hint": "Toujours la même porte d'entrée avant de modifier la configuration."
+        },
+        {
+          "q": "Ajoutez la route statique vers le LAN de R2.",
+          "prompt": "R1(config)#",
+          "accept": ["ip route 192.168.20.0 255.255.255.0 10.0.0.2"],
+          "hint": "ip route attend le réseau de destination, son masque, puis l'adresse du routeur voisin (next-hop).",
+          "error": "% Incomplete command."
+        },
+        {
+          "q": "Ajoutez une route par défaut passant elle aussi par R2.",
+          "prompt": "R1(config)#",
+          "accept": ["ip route 0.0.0.0 0.0.0.0 10.0.0.2"],
+          "hint": "La route par défaut s'écrit avec un réseau et un masque entièrement à zéro."
+        },
+        {
+          "q": "Revenez directement au mode privilégié.",
+          "prompt": "R1(config)#",
+          "accept": ["end"],
+          "hint": "Une commande de trois lettres ramène au mode privilégié depuis n'importe quel sous-mode (exit ne fait que remonter d'un niveau)."
+        },
+        {
+          "q": "Affichez la table de routage pour vérifier vos routes.",
+          "prompt": "R1#",
+          "accept": ["show ip route", "sh ip route", "sh ip ro"],
+          "output": "Codes: C - connected, S - static, * - candidate default\nGateway of last resort is 10.0.0.2 to network 0.0.0.0\n\nC    10.0.0.0/30 is directly connected, GigabitEthernet0/1\nC    192.168.10.0/24 is directly connected, GigabitEthernet0/0\nS    192.168.20.0/24 [1/0] via 10.0.0.2\nS*   0.0.0.0/0 [1/0] via 10.0.0.2",
+          "hint": "Une commande show affiche les routes connectées (C) et statiques (S)."
+        }
+      ],
+      "explication": "Les routes connectées (C) apparaissent seules dès qu'une interface est up ; les réseaux distants exigent des routes statiques (S) saisies avec ip route, et la route par défaut 0.0.0.0/0 (S*) attrape tout le trafic inconnu. show ip route confirme l'ensemble."
+    },
+    {
+      "id": "tpc-005",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "ios",
+      "q": "Configurez R1 comme serveur DHCP pour le LAN 192.168.10.0/24.",
+      "context": "R1 est la passerelle 192.168.10.254 du LAN.\nVous êtes en mode de configuration globale.",
+      "steps": [
+        {
+          "q": "Excluez l'adresse de la passerelle de la distribution DHCP.",
+          "prompt": "R1(config)#",
+          "accept": ["ip dhcp excluded-address 192.168.10.254"],
+          "hint": "Sans exclusion, le pool pourrait distribuer l'adresse du routeur lui-même. La commande commence par ip dhcp excluded."
+        },
+        {
+          "q": "Créez le pool DHCP nommé LAN10.",
+          "prompt": "R1(config)#",
+          "accept": ["ip dhcp pool LAN10"],
+          "hint": "ip dhcp pool suivi du nom crée le pool et entre dans son mode de configuration."
+        },
+        {
+          "q": "Définissez le réseau distribué par ce pool.",
+          "prompt": "R1(dhcp-config)#",
+          "accept": ["network 192.168.10.0 255.255.255.0"],
+          "hint": "Un mot-clé, le réseau, puis le masque complet.",
+          "error": "% Invalid input detected at '^' marker."
+        },
+        {
+          "q": "Annoncez la passerelle par défaut aux clients.",
+          "prompt": "R1(dhcp-config)#",
+          "accept": ["default-router 192.168.10.254"],
+          "hint": "Le mot-clé évoque un « routeur par défaut »."
+        },
+        {
+          "q": "Revenez au mode privilégié.",
+          "prompt": "R1(dhcp-config)#",
+          "accept": ["end"],
+          "hint": "Retour direct au mode privilégié en une commande."
+        },
+        {
+          "q": "Vérifiez qu'un poste a obtenu un bail DHCP.",
+          "prompt": "R1#",
+          "accept": ["show ip dhcp binding", "sh ip dhcp binding"],
+          "output": "IP address       Client-ID/              Lease expiration        Type\n                 Hardware address\n192.168.10.1     0060.2F84.4AB1          --                      Automatic",
+          "hint": "Une commande show liste les associations IP / adresse MAC distribuées."
+        }
+      ],
+      "explication": "Sur le routeur, un serveur DHCP se monte en trois temps : exclure les adresses fixes (ip dhcp excluded-address), créer le pool (network + default-router), puis contrôler les baux distribués avec show ip dhcp binding."
+    },
+    {
+      "id": "tpc-006",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "ios",
+      "q": "Configurez le routage inter-VLAN (router-on-a-stick) pour le VLAN 10 et sauvegardez.",
+      "context": "R1 est relié au switch par un lien trunk sur FastEthernet 0/0.\nLe VLAN 10 (192.168.10.0/24) doit avoir pour passerelle 192.168.10.254.\nVous êtes en mode de configuration globale.",
+      "steps": [
+        {
+          "q": "Créez la sous-interface dédiée au VLAN 10 sur fa0/0.",
+          "prompt": "R1(config)#",
+          "accept": ["interface fastEthernet 0/0.10", "interface fa0/0.10", "int fa0/0.10", "int fa 0/0.10"],
+          "hint": "Une sous-interface se note interface_physique.numéro — par convention on reprend le numéro du VLAN."
+        },
+        {
+          "q": "Associez cette sous-interface aux trames tagguées du VLAN 10.",
+          "prompt": "R1(config-subif)#",
+          "accept": ["encapsulation dot1Q 10", "encapsulation dot1q 10", "encap dot1q 10"],
+          "hint": "Il faut déclarer la norme de taggage 802.1Q suivie du numéro de VLAN. La commande commence par encapsulation.",
+          "error": "% Invalid input detected at '^' marker."
+        },
+        {
+          "q": "Attribuez l'adresse de passerelle du VLAN 10.",
+          "prompt": "R1(config-subif)#",
+          "accept": ["ip address 192.168.10.254 255.255.255.0", "ip add 192.168.10.254 255.255.255.0"],
+          "hint": "Même syntaxe que sur une interface physique : adresse puis masque complet."
+        },
+        {
+          "q": "Activez la sous-interface.",
+          "prompt": "R1(config-subif)#",
+          "accept": ["no shutdown", "no shut", "no sh"],
+          "hint": "Comme toute interface Cisco, elle doit être activée explicitement."
+        },
+        {
+          "q": "Revenez au mode privilégié.",
+          "prompt": "R1(config-subif)#",
+          "accept": ["end"],
+          "hint": "Une seule commande suffit, sans enchaîner les exit."
+        },
+        {
+          "q": "Sauvegardez la configuration en NVRAM.",
+          "prompt": "R1#",
+          "accept": ["write memory", "write", "wr", "copy running-config startup-config", "copy run start"],
+          "output": "Building configuration...\n[OK]",
+          "hint": "Sans cette étape, tout est perdu au redémarrage : running-config doit être copiée vers startup-config."
+        }
+      ],
+      "explication": "En router-on-a-stick, chaque VLAN reçoit une sous-interface (fa0/0.10) tagguée avec encapsulation dot1Q et portant l'adresse de passerelle du VLAN. On termine toujours par une sauvegarde running-config → startup-config (write memory)."
+    },
+    {
+      "id": "tpc-007",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "ios",
+      "q": "Diagnostiquez et corrigez : les postes du LAN n'obtiennent plus d'adresse IP.",
+      "context": "Le pool DHCP LAN10 est correctement configuré sur R1 (passerelle 192.168.10.254 sur G0/0).\nSur les postes, ipconfig /renew échoue et les PC retombent en 169.254.x.x (APIPA).\nVous êtes en console sur R1, en mode privilégié.",
+      "steps": [
+        {
+          "q": "Vérifiez l'état des interfaces du routeur.",
+          "prompt": "R1#",
+          "accept": ["show ip interface brief", "show ip int brief", "sh ip int brief", "sh ip int br"],
+          "output": "Interface              IP-Address      OK? Method Status                Protocol\nGigabitEthernet0/0     192.168.10.254  YES manual administratively down down\nGigabitEthernet0/1     10.0.0.1        YES manual up                    up",
+          "hint": "Une commande show résume l'état et l'adresse de toutes les interfaces en un tableau."
+        },
+        {
+          "q": "G0/0 est « administratively down » : passez en configuration globale pour corriger.",
+          "prompt": "R1#",
+          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
+          "hint": "L'état administratively down se corrige dans la configuration de l'interface."
+        },
+        {
+          "q": "Entrez dans la configuration de l'interface fautive.",
+          "prompt": "R1(config)#",
+          "accept": ["interface gigabitEthernet 0/0", "interface g0/0", "int g0/0", "int gi0/0", "int g 0/0"],
+          "hint": "C'est l'interface LAN, celle qui porte la passerelle 192.168.10.254."
+        },
+        {
+          "q": "Réactivez l'interface.",
+          "prompt": "R1(config-if)#",
+          "accept": ["no shutdown", "no shut", "no sh"],
+          "output": "%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up\n%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up",
+          "hint": "administratively down = interface volontairement coupée ; une commande annule cet état."
+        },
+        {
+          "q": "Revenez au mode privilégié.",
+          "prompt": "R1(config-if)#",
+          "accept": ["end"],
+          "hint": "Retour direct en une commande de trois lettres."
+        },
+        {
+          "q": "Confirmez qu'un poste a de nouveau obtenu un bail DHCP.",
+          "prompt": "R1#",
+          "accept": ["show ip dhcp binding", "sh ip dhcp binding"],
+          "output": "IP address       Client-ID/              Lease expiration        Type\n                 Hardware address\n192.168.10.1     00E0.F7AA.1B02          --                      Automatic",
+          "hint": "La même commande show qui liste les baux distribués par le routeur."
+        }
+      ],
+      "explication": "Un poste en 169.254.x.x n'a joint aucun serveur DHCP : premier réflexe, show ip interface brief. L'état administratively down signale une interface coupée par configuration ; no shutdown la réactive et show ip dhcp binding confirme la reprise des baux."
+    },
+    {
+      "id": "tpc-008",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "ios",
+      "q": "Diagnostiquez et corrigez : les postes du nouveau switch n'atteignent plus les serveurs.",
+      "context": "Un second switch vient d'être ajouté, relié à Sw-Central par le port fa0/24.\nLes PC des VLANs 10 et 11 de ce nouveau switch ne joignent plus rien en dehors du switch.\nVous êtes en mode privilégié sur le nouveau switch.",
+      "steps": [
+        {
+          "q": "Examinez le mode switchport du port d'interconnexion fa0/24.",
+          "prompt": "Switch#",
+          "accept": ["show interfaces fastEthernet 0/24 switchport", "show interfaces fa0/24 switchport", "sh int fa0/24 switchport", "sh int fa0/24 sw"],
+          "output": "Name: Fa0/24\nSwitchport: Enabled\nAdministrative Mode: static access\nOperational Mode: static access\nAccess Mode VLAN: 1 (default)",
+          "hint": "show interfaces … switchport affiche le mode administratif d'un port donné."
+        },
+        {
+          "q": "Le lien inter-switch est resté en mode access : passez en configuration globale.",
+          "prompt": "Switch#",
+          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
+          "hint": "Un port access ne transporte qu'un seul VLAN : il faut reconfigurer le port d'interconnexion."
+        },
+        {
+          "q": "Entrez dans la configuration du port d'interconnexion.",
+          "prompt": "Switch(config)#",
+          "accept": ["interface fastEthernet 0/24", "interface fa0/24", "int fa0/24", "int fa 0/24"],
+          "hint": "C'est le port qui relie ce switch à Sw-Central."
+        },
+        {
+          "q": "Basculez ce port en mode trunk.",
+          "prompt": "Switch(config-if)#",
+          "accept": ["switchport mode trunk", "sw mode trunk", "swi mode trunk"],
+          "output": "%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/24, changed state to down\n%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/24, changed state to up",
+          "hint": "Un lien entre deux switchs doit transporter les trames tagguées de plusieurs VLANs : c'est le rôle du mode trunk.",
+          "error": "% Invalid input detected at '^' marker."
+        },
+        {
+          "q": "Revenez au mode privilégié.",
+          "prompt": "Switch(config-if)#",
+          "accept": ["end"],
+          "hint": "Retour direct au mode privilégié."
+        },
+        {
+          "q": "Vérifiez que le trunk est bien monté.",
+          "prompt": "Switch#",
+          "accept": ["show interfaces trunk", "sh int trunk", "show interface trunk"],
+          "output": "Port        Mode         Encapsulation  Status        Native vlan\nFa0/24      on           802.1q         trunking      1\n\nPort        Vlans allowed on trunk\nFa0/24      1-1005",
+          "hint": "Une commande show dédiée liste les ports en trunking et les VLANs autorisés."
+        }
+      ],
+      "explication": "Un lien inter-switch resté en mode access ne transporte que son VLAN d'accès : les trames tagguées des autres VLANs sont perdues. Le diagnostic passe par show interfaces … switchport, la correction par switchport mode trunk, et le contrôle final par show interfaces trunk."
+    }
+  ]
+}

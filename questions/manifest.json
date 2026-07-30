@@ -1,7 +1,19 @@
 {
-  "version": 2,
+  "version": 3,
   "updated": "2026-07-30",
   "themes": [
+    {
+      "id": "atelier",
+      "name": "Atelier TP",
+      "icon": "ti ti-flask",
+      "color": "#2DD4BF",
+      "sub": "mini-TP guidés · IOS · Bash · PowerShell",
+      "modules": [
+        { "id": "tp-cisco", "name": "TP Cisco IOS", "file": "atelier/tp-cisco.json" },
+        { "id": "tp-linux", "name": "TP Linux (Bash)", "file": "atelier/tp-linux.json" },
+        { "id": "tp-windows", "name": "TP Windows (PowerShell & CMD)", "file": "atelier/tp-windows.json" }
+      ]
+    },
     {
       "id": "reseau",
       "name": "Réseaux",

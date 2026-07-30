@@ -239,11 +239,11 @@ function recordAnswer(q, correct, exam) {
 /* ============ Chargement de la banque ============ */
 
 async function loadBank() {
-  const res = await fetch("questions/manifest.json");
+  const res = await fetch("questions/manifest.json", { cache: "no-cache" });
   MANIFEST = await res.json();
   for (const theme of MANIFEST.themes) {
     for (const mod of theme.modules) {
-      const data = await (await fetch("questions/" + mod.file)).json();
+      const data = await (await fetch("questions/" + mod.file + "?v=" + MANIFEST.version)).json();
       for (const q of data.questions) {
         q.theme = theme.id;
         q.themeName = theme.name;
@@ -407,14 +407,15 @@ function showTheme(theme) {
   for (let n = 1; n <= 4; n++) {
     const count = BANK.filter(q => q.theme === theme.id && q.niveau === n).length;
     const st = themeLevelStats(theme.id, n);
-    const locked = n > unlocked;
+    const vide = count === 0;
+    const locked = n > unlocked || vide;
     const rate = st.a ? Math.round(st.c / st.a * 100) : null;
     rows += `
       <div class="level-row ${locked ? "locked" : ""}" data-lvl="${n}">
-        <div class="lvl" style="background:${LEVEL_COLORS[n]}22; color:${LEVEL_COLORS[n]}">${locked ? '<i class="ti ti-lock"></i>' : n}</div>
+        <div class="lvl" style="background:${LEVEL_COLORS[n]}22; color:${LEVEL_COLORS[n]}">${vide ? "–" : (locked ? '<i class="ti ti-lock"></i>' : n)}</div>
         <div>
           <h3>Niveau ${n} — ${LEVEL_NAMES[n]}</h3>
-          <p>${count} questions${locked ? ` · réussir ${Math.round(UNLOCK_RATE * 100)} % du niveau ${n - 1} pour débloquer` : ""}</p>
+          <p>${vide ? "aucune question à ce niveau" : count + " questions" + (locked ? ` · réussir ${Math.round(UNLOCK_RATE * 100)} % du niveau ${n - 1} pour débloquer` : "")}</p>
         </div>
         <div class="right">${rate !== null ? rate + " %<br>" + st.a + " rép." : ""}</div>
       </div>`;

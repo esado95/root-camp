@@ -1,0 +1,326 @@
+{
+  "module": "TP Windows (PowerShell & CMD)",
+  "source": "fiches du cours TSSR2601",
+  "questions": [
+    {
+      "id": "tpw-001",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "cmd",
+      "q": "Renouvelez le bail DHCP du poste client et vérifiez la nouvelle configuration.",
+      "context": "Poste CLIENT-W (Windows 11) en adressage automatique.\nServeur DHCP : SRV-DHCP (192.168.10.11), étendue 192.168.10.100-200.",
+      "steps": [
+        {
+          "q": "Affichez la configuration IP complète du poste (adresse, bail, serveur DHCP).",
+          "prompt": "C:\\>",
+          "accept": ["ipconfig /all"],
+          "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.105\n   Masque de sous-réseau. . . . . . : 255.255.255.0\n   Bail obtenu. . . . . . . . . . . : mercredi 29 juillet 2026 08:12:04\n   Serveur DHCP . . . . . . . . . . : 192.168.10.11\n   Passerelle par défaut. . . . . . : 192.168.10.254",
+          "hint": "ipconfig seul ne suffit pas : il existe une option qui affiche la configuration complète, bail compris."
+        },
+        {
+          "q": "Libérez le bail DHCP actuel du poste.",
+          "prompt": "C:\\>",
+          "accept": ["ipconfig /release"],
+          "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 0.0.0.0\n   Masque de sous-réseau. . . . . . : 0.0.0.0\n   Passerelle par défaut. . . . . . :",
+          "hint": "Toujours ipconfig, avec l'option qui « relâche » l'adresse louée."
+        },
+        {
+          "q": "Demandez une nouvelle adresse au serveur DHCP (le poste relance le cycle DORA).",
+          "prompt": "C:\\>",
+          "accept": ["ipconfig /renew"],
+          "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.105\n   Masque de sous-réseau. . . . . . : 255.255.255.0\n   Passerelle par défaut. . . . . . : 192.168.10.254",
+          "hint": "L'option ipconfig qui « renouvelle » le bail : Discover, Offer, Request, ACK."
+        },
+        {
+          "q": "Vérifiez les dates du nouveau bail et l'identité du serveur DHCP.",
+          "prompt": "C:\\>",
+          "accept": ["ipconfig /all"],
+          "output": "Carte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.105\n   Bail obtenu. . . . . . . . . . . : jeudi 30 juillet 2026 09:41:17\n   Bail expirant. . . . . . . . . . : vendredi 7 août 2026 09:41:17\n   Serveur DHCP . . . . . . . . . . : 192.168.10.11\n   Serveurs DNS . . . . . . . . . . : 192.168.10.11",
+          "hint": "La même commande qu'à la première étape : comparez les dates de bail."
+        }
+      ],
+      "explication": "Le cycle client DHCP se pilote avec ipconfig : /all pour l'état, /release pour libérer le bail, /renew pour relancer la négociation DORA. Un bail de 8 jours (défaut Windows Server) se lit dans les lignes « Bail obtenu / Bail expirant »."
+    },
+    {
+      "id": "tpw-002",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Contrôlez l'état du service DHCP, les étendues et les baux actifs sur le serveur.",
+      "context": "Vous êtes connecté sur SRV-DHCP (Windows Server 2019, 192.168.10.11).\nÉtendue attendue : LAN-Principal, 192.168.10.100 à 192.168.10.200.",
+      "steps": [
+        {
+          "q": "Vérifiez que le service Serveur DHCP est bien démarré.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-Service DHCPServer", "Get-Service -Name DHCPServer"],
+          "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  DHCPServer         Serveur DHCP",
+          "hint": "Le cmdlet PowerShell qui interroge les services ; le service s'appelle DHCPServer."
+        },
+        {
+          "q": "Listez les étendues IPv4 configurées et vérifiez leur état.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-DhcpServerv4Scope"],
+          "output": "ScopeId         SubnetMask      Name           State    StartRange      EndRange        LeaseDuration\n-------         ----------      ----           -----    ----------      --------        -------------\n192.168.10.0    255.255.255.0   LAN-Principal  Active   192.168.10.100  192.168.10.200  8.00:00:00",
+          "hint": "Un cmdlet Get- de la famille DhcpServer, version v4, qui porte sur les étendues (Scope)."
+        },
+        {
+          "q": "Affichez les baux actifs de l'étendue 192.168.10.0.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-DhcpServerv4Lease -ScopeId 192.168.10.0"],
+          "output": "IPAddress        ScopeId          ClientId             HostName    AddressState   LeaseExpiryTime\n---------        -------          --------             --------    ------------   ---------------\n192.168.10.105   192.168.10.0     00-15-5d-0a-12-3f    CLIENT-W    Active         07/08/2026 09:41:17",
+          "hint": "Même famille de cmdlets, mais côté baux (Lease) ; il faut préciser l'étendue avec -ScopeId.",
+          "error": "Get-DhcpServerv4Lease : Impossible de valider l'argument du paramètre « ScopeId ». Fournissez un identifiant d'étendue valide."
+        }
+      ],
+      "explication": "Côté serveur, tout se vérifie en PowerShell : Get-Service pour le rôle, Get-DhcpServerv4Scope pour l'état des étendues (State doit être Active), Get-DhcpServerv4Lease -ScopeId pour voir quels clients détiennent un bail."
+    },
+    {
+      "id": "tpw-003",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "cmd",
+      "q": "Forcez l'application d'une nouvelle GPO sur le poste et vérifiez sa prise en compte.",
+      "context": "Une GPO « Fond-Ecran-Standard » vient d'être liée à l'OU Postes.\nLe rafraîchissement automatique prend jusqu'à 90 minutes : vous devez l'appliquer tout de suite.",
+      "steps": [
+        {
+          "q": "Forcez immédiatement la mise à jour des stratégies de groupe sur le poste.",
+          "prompt": "C:\\>",
+          "accept": ["gpupdate /force"],
+          "output": "Mise à jour de la stratégie...\n\nLa mise à jour de la stratégie utilisateur s'est terminée sans erreur.\nLa mise à jour de la stratégie ordinateur s'est terminée sans erreur.",
+          "hint": "La commande de mise à jour des GPO, avec l'option qui force la réapplication complète.",
+          "error": "'gpupdat' n'est pas reconnu en tant que commande interne ou externe, un programme exécutable ou un fichier de commandes."
+        },
+        {
+          "q": "Affichez dans la console le résumé des GPO appliquées à ce poste et à l'utilisateur.",
+          "prompt": "C:\\>",
+          "accept": ["gpresult /r"],
+          "output": "DONNÉES UTILISATEUR\n-------------------\n    Objets Stratégie de groupe appliqués\n    -------------------------------------\n        Default Domain Policy\n        Fond-Ecran-Standard",
+          "hint": "La commande de « résultat » des stratégies, avec l'option résumé (une seule lettre)."
+        },
+        {
+          "q": "Générez un rapport HTML complet des stratégies appliquées dans C:\\rapport_gpo.html.",
+          "prompt": "C:\\>",
+          "accept": ["gpresult /h C:\\rapport_gpo.html"],
+          "hint": "Même commande qu'à l'étape précédente, mais l'option change : h comme HTML, suivie du chemin du fichier."
+        }
+      ],
+      "explication": "gpupdate /force réapplique toutes les GPO sans attendre le cycle de 90 minutes, puis gpresult permet de vérifier : /r pour un résumé en console, /h fichier.html pour un rapport complet à ouvrir dans le navigateur."
+    },
+    {
+      "id": "tpw-004",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "cmd",
+      "q": "Vérifiez la résolution ARP locale et le chemin emprunté vers Internet.",
+      "context": "Poste CLIENT-W (192.168.10.105), passerelle 192.168.10.254.\nVous validez la connectivité de niveau 2 et 3 avant la mise en production.",
+      "steps": [
+        {
+          "q": "Testez la connectivité vers la passerelle par défaut.",
+          "prompt": "C:\\>",
+          "accept": ["ping 192.168.10.254"],
+          "output": "Envoi d'une requête 'Ping'  192.168.10.254 avec 32 octets de données :\nRéponse de 192.168.10.254 : octets=32 temps<1ms TTL=255\nRéponse de 192.168.10.254 : octets=32 temps<1ms TTL=255\n\nStatistiques Ping pour 192.168.10.254:\n    Paquets : envoyés = 4, reçus = 4, perdus = 0 (perte 0%)",
+          "hint": "Le test de connectivité le plus classique, vers l'adresse de la passerelle."
+        },
+        {
+          "q": "Affichez la table ARP pour vérifier la correspondance IP/MAC de la passerelle.",
+          "prompt": "C:\\>",
+          "accept": ["arp -a"],
+          "output": "Interface : 192.168.10.105 --- 0x6\n  Adresse Internet      Adresse physique      Type\n  192.168.10.11         00-15-5d-0a-12-01     dynamique\n  192.168.10.254        00-15-5d-0a-12-fe     dynamique\n  192.168.10.255        ff-ff-ff-ff-ff-ff     statique",
+          "hint": "La commande porte le nom du protocole de résolution IP vers MAC, avec l'option qui affiche tout."
+        },
+        {
+          "q": "Tracez le chemin emprunté saut par saut jusqu'à 8.8.8.8.",
+          "prompt": "C:\\>",
+          "accept": ["tracert 8.8.8.8"],
+          "output": "Détermination de l'itinéraire vers 8.8.8.8 avec un maximum de 30 sauts.\n\n  1    <1 ms    <1 ms    <1 ms  192.168.10.254\n  2    12 ms    11 ms    12 ms  80.10.235.1\n  3    18 ms    17 ms    18 ms  dns.google [8.8.8.8]\n\nItinéraire déterminé.",
+          "hint": "L'équivalent Windows de traceroute : le nom est contracté en 7 lettres."
+        },
+        {
+          "q": "Affichez la table de routage locale pour confirmer la route par défaut.",
+          "prompt": "C:\\>",
+          "accept": ["route print"],
+          "output": "Itinéraires actifs :\nDestination réseau    Masque réseau     Adr. passerelle    Adr. interface   Métrique\n          0.0.0.0          0.0.0.0     192.168.10.254    192.168.10.105       25",
+          "hint": "La commande route, suivie de l'action qui « imprime » la table."
+        }
+      ],
+      "explication": "ping valide la joignabilité, arp -a montre la résolution IP/MAC apprise dynamiquement, tracert liste les routeurs traversés saut par saut et route print confirme que la route par défaut (0.0.0.0) pointe vers la bonne passerelle."
+    },
+    {
+      "id": "tpw-005",
+      "niveau": 3,
+      "type": "tp",
+      "shell": "cmd",
+      "q": "Préparez le nouveau disque de la VM avec diskpart : partition, formatage et lettre.",
+      "context": "Un second disque virtuel de 20 Go vient d'être ajouté à la VM CLIENT-W.\nIl doit devenir le lecteur D: formaté en NTFS.",
+      "steps": [
+        {
+          "q": "Lancez l'outil de partitionnement en ligne de commande.",
+          "prompt": "C:\\>",
+          "accept": ["diskpart"],
+          "output": "Microsoft DiskPart version 10.0.22621.1\n\nCopyright (C) Microsoft Corporation.\nSur l'ordinateur : CLIENT-W",
+          "hint": "L'outil CLI de gestion des partitions, en un seul mot."
+        },
+        {
+          "q": "Listez les disques pour repérer le nouveau disque de 20 Go.",
+          "prompt": "DISKPART>",
+          "accept": ["list disk"],
+          "output": "  N° disque  Statut         Taille    Libre     Dyn  GPT\n  ---------  -------------  --------  --------  ---  ---\n  Disque 0   En ligne         60 G o       0 o\n  Disque 1   En ligne         20 G o      20 G o",
+          "hint": "On « liste » les disques : deux mots anglais."
+        },
+        {
+          "q": "Sélectionnez le disque 1 pour travailler dessus.",
+          "prompt": "DISKPART>",
+          "accept": ["select disk 1", "sel disk 1"],
+          "output": "Le disque 1 est maintenant le disque sélectionné.",
+          "hint": "Dans diskpart, on sélectionne toujours l'objet avant d'agir dessus.",
+          "error": "Le disque spécifié n'existe pas.\nAucun disque sélectionné."
+        },
+        {
+          "q": "Créez une partition principale occupant tout le disque.",
+          "prompt": "DISKPART>",
+          "accept": ["create partition primary", "create part primary"],
+          "output": "DiskPart a réussi à créer la partition spécifiée.",
+          "hint": "Trois mots : l'action de création, l'objet partition, et son type principal (en anglais)."
+        },
+        {
+          "q": "Formatez la partition en NTFS en formatage rapide.",
+          "prompt": "DISKPART>",
+          "accept": ["format fs=ntfs quick"],
+          "output": "  100 pour cent effectués\n\nDiskPart a formaté le volume avec succès.",
+          "hint": "La commande format, en précisant le système de fichiers avec fs= et le mot-clé du mode rapide."
+        },
+        {
+          "q": "Attribuez la lettre D à la nouvelle partition.",
+          "prompt": "DISKPART>",
+          "accept": ["assign letter=D"],
+          "output": "DiskPart a correctement assigné la lettre de lecteur ou le point de montage.",
+          "hint": "On « assigne » une lettre : la syntaxe est letter=X."
+        }
+      ],
+      "explication": "Dans diskpart, la logique est toujours : lister, sélectionner, puis agir (list disk, select disk, create partition primary, format fs=ntfs quick, assign letter=D). Attention : clean effacerait tout le disque. On quitte ensuite avec exit."
+    },
+    {
+      "id": "tpw-006",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "cmd",
+      "q": "Diagnostiquez pourquoi l'intranet est injoignable depuis ce poste et corrigez le problème.",
+      "context": "Le serveur srv-web a changé d'adresse IP hier (192.168.10.20 → 192.168.10.30).\nDepuis ce poste, l'intranet ne répond plus, alors qu'il fonctionne depuis les autres postes.",
+      "steps": [
+        {
+          "q": "Testez la connectivité vers srv-web et observez l'adresse IP utilisée.",
+          "prompt": "C:\\>",
+          "accept": ["ping srv-web", "ping srv-web.mondomaine.lan"],
+          "output": "Envoi d'une requête 'ping' sur srv-web.mondomaine.lan [192.168.10.20] avec 32 octets de données :\nDélai d'attente de la demande dépassé.\nDélai d'attente de la demande dépassé.\n\nStatistiques Ping pour 192.168.10.20:\n    Paquets : envoyés = 4, reçus = 0, perdus = 4 (perte 100%)",
+          "hint": "Un simple test de connectivité vers le nom du serveur : regardez bien quelle IP est résolue."
+        },
+        {
+          "q": "Interrogez directement le serveur DNS pour connaître l'adresse actuelle de srv-web.mondomaine.lan.",
+          "prompt": "C:\\>",
+          "accept": ["nslookup srv-web.mondomaine.lan", "nslookup srv-web"],
+          "output": "Serveur :   srv-ad.mondomaine.lan\nAddress:  192.168.10.11\n\nNom :    srv-web.mondomaine.lan\nAddress:  192.168.10.30",
+          "hint": "L'outil de résolution DNS qui interroge le serveur sans passer par le cache local du poste."
+        },
+        {
+          "q": "Le serveur DNS renvoie la bonne IP : le poste utilise donc un cache périmé. Videz le cache DNS local.",
+          "prompt": "C:\\>",
+          "accept": ["ipconfig /flushdns"],
+          "output": "Configuration IP de Windows\n\nLe cache de résolution DNS a été vidé.",
+          "hint": "Une option d'ipconfig : « flush » le cache DNS."
+        },
+        {
+          "q": "Vérifiez que le poste résout désormais la nouvelle adresse et que srv-web répond.",
+          "prompt": "C:\\>",
+          "accept": ["ping srv-web", "ping srv-web.mondomaine.lan"],
+          "output": "Envoi d'une requête 'ping' sur srv-web.mondomaine.lan [192.168.10.30] avec 32 octets de données :\nRéponse de 192.168.10.30 : octets=32 temps<1ms TTL=128\nRéponse de 192.168.10.30 : octets=32 temps<1ms TTL=128\n\nStatistiques Ping pour 192.168.10.30:\n    Paquets : envoyés = 4, reçus = 4, perdus = 0 (perte 0%)",
+          "hint": "Le même test qu'au départ : l'IP résolue doit avoir changé."
+        }
+      ],
+      "explication": "Symptôme classique de cache DNS périmé : ping résout l'ancienne IP alors que nslookup (qui interroge directement le serveur) renvoie la nouvelle. ipconfig /flushdns vide le cache local et rétablit la résolution correcte."
+    },
+    {
+      "id": "tpw-007",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "cmd",
+      "q": "Diagnostiquez la perte totale d'accès réseau du poste CLIENT-W et rétablissez sa configuration.",
+      "context": "Ce matin, CLIENT-W n'accède plus à aucune ressource : ni partages, ni intranet, ni Internet.\nLe poste est en adressage automatique (DHCP). Le câble est branché et la carte est active.",
+      "steps": [
+        {
+          "q": "Examinez la configuration IP complète du poste pour identifier l'anomalie.",
+          "prompt": "C:\\>",
+          "accept": ["ipconfig /all"],
+          "output": "Carte Ethernet Ethernet0 :\n   Configuration automatique activée. . : Oui\n   Adresse IPv4 d'autoconfiguration . . : 169.254.37.12\n   Masque de sous-réseau. . . . . . . . : 255.255.0.0\n   Passerelle par défaut. . . . . . . . :\n   Serveur DHCP . . . . . . . . . . . . :",
+          "hint": "La commande de diagnostic IP complète. Une adresse en 169.254.x.x doit vous alerter."
+        },
+        {
+          "q": "L'adresse 169.254.x.x est une APIPA : le serveur DHCP n'a pas répondu. Confirmez qu'il est injoignable en le pinguant (192.168.10.11).",
+          "prompt": "C:\\>",
+          "accept": ["ping 192.168.10.11"],
+          "output": "Envoi d'une requête 'Ping'  192.168.10.11 avec 32 octets de données :\nPING : échec de la transmission. Échec général.\nPING : échec de la transmission. Échec général.\n\nStatistiques Ping pour 192.168.10.11:\n    Paquets : envoyés = 4, reçus = 0, perdus = 4 (perte 100%)",
+          "hint": "Un test de connectivité vers l'adresse du serveur DHCP : avec une APIPA, il ne peut pas aboutir."
+        },
+        {
+          "q": "L'administrateur serveur confirme que l'étendue DHCP avait été désactivée et vient de la réactiver. Libérez l'adresse APIPA actuelle.",
+          "prompt": "C:\\>",
+          "accept": ["ipconfig /release"],
+          "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 0.0.0.0\n   Masque de sous-réseau. . . . . . : 0.0.0.0",
+          "hint": "L'option d'ipconfig qui libère la configuration actuelle."
+        },
+        {
+          "q": "Relancez une demande d'adresse auprès du serveur DHCP.",
+          "prompt": "C:\\>",
+          "accept": ["ipconfig /renew"],
+          "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.112\n   Masque de sous-réseau. . . . . . : 255.255.255.0\n   Passerelle par défaut. . . . . . : 192.168.10.254",
+          "hint": "L'option d'ipconfig qui relance le cycle DORA."
+        },
+        {
+          "q": "Vérifiez que le poste a bien reçu sa configuration du serveur DHCP (bail, DNS, passerelle).",
+          "prompt": "C:\\>",
+          "accept": ["ipconfig /all"],
+          "output": "Carte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.112\n   Bail obtenu. . . . . . . . . . . : jeudi 30 juillet 2026 10:05:33\n   Bail expirant. . . . . . . . . . : vendredi 7 août 2026 10:05:33\n   Serveur DHCP . . . . . . . . . . : 192.168.10.11\n   Serveurs DNS . . . . . . . . . . : 192.168.10.11\n   Passerelle par défaut. . . . . . : 192.168.10.254",
+          "hint": "La commande de la première étape : cette fois, les lignes Serveur DHCP et Bail doivent être renseignées."
+        }
+      ],
+      "explication": "Une adresse 169.254.x.x (APIPA) est le signe absolu d'une rupture de communication avec le serveur DHCP : le poste s'est auto-attribué une adresse locale de liaison, sans passerelle. Une fois la cause corrigée côté serveur (étendue réactivée), ipconfig /release puis /renew rétablissent un bail normal."
+    },
+    {
+      "id": "tpw-008",
+      "niveau": 4,
+      "type": "tp",
+      "shell": "powershell",
+      "q": "Diagnostiquez l'échec de jonction au domaine mondomaine.lan et corrigez le problème sur le DC.",
+      "context": "Un technicien ne parvient pas à joindre un nouveau poste au domaine : « domaine introuvable ».\nLe DNS du client pointe pourtant bien vers le DC (192.168.10.11). Vous intervenez sur le DC SRV-AD.",
+      "steps": [
+        {
+          "q": "Vérifiez que le service AD DS (NTDS) est démarré sur le contrôleur de domaine.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Get-Service NTDS", "Get-Service -Name NTDS"],
+          "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  NTDS               Services de domaine Active Directory",
+          "hint": "Le cmdlet qui interroge un service ; celui de l'annuaire s'appelle NTDS."
+        },
+        {
+          "q": "Testez la localisation d'un contrôleur de domaine pour mondomaine.lan.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["nltest /dsgetdc:mondomaine.lan"],
+          "output": "Obtention du nom du contrôleur de domaine a échoué : État = 1355 0x54b\nERROR_NO_SUCH_DOMAIN",
+          "hint": "L'outil nltest, avec l'option /dsgetdc: suivie du nom du domaine."
+        },
+        {
+          "q": "L'erreur 1355 indique que les enregistrements SRV du domaine sont absents du DNS. Redémarrez le service qui les inscrit.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["Restart-Service Netlogon", "Restart-Service -Name Netlogon"],
+          "hint": "Un cmdlet Restart- ; le service qui enregistre les SRV du domaine dans le DNS s'appelle Netlogon."
+        },
+        {
+          "q": "Vérifiez que le contrôleur de domaine est maintenant localisable.",
+          "prompt": "PS C:\\Users\\admin>",
+          "accept": ["nltest /dsgetdc:mondomaine.lan"],
+          "output": "           Contrôleur de domaine : \\\\SRV-AD.mondomaine.lan\n                      Adresse : \\\\192.168.10.11\n            Nom de domaine : mondomaine.lan\n            Indicateurs : PDC GC DS LDAP KDC\nLa commande s'est terminée correctement.",
+          "hint": "Le même test qu'à l'étape 2 : il doit maintenant renvoyer le nom et l'adresse du DC."
+        }
+      ],
+      "explication": "Quand la jonction échoue alors que le DNS client est correct, il faut penser aux enregistrements SRV manquants : Restart-Service Netlogon force leur réinscription dans la zone DNS, et nltest /dsgetdc: permet de vérifier avant/après que le DC est localisable."
+    }
+  ]
+}

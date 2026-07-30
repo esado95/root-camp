@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent / "questions"
-TYPES = {"qcm", "multi", "assoc", "ordre", "libre", "scenario", "terminal"}
+TYPES = {"qcm", "multi", "assoc", "ordre", "libre", "scenario", "terminal", "tp"}
 
 errors = []
 warnings = []
