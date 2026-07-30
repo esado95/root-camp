@@ -28,9 +28,9 @@ Chaque question corrigée affiche une explication et sa fiche source — on appr
 
 ## 📸 Aperçu
 
-| Accueil | Profil | Classement | Examens | Révision |
-|:---:|:---:|:---:|:---:|:---:|
-| ![Accueil — 10 thèmes](assets/screens/accueil.png) | ![Profil, grades et badges](assets/screens/profil.png) | ![Classement en temps réel](assets/screens/classement.png) | ![Les 4 paliers d'examen](assets/screens/examens.png) | ![Pile de révision](assets/screens/revision.png) |
+| Bienvenue | Accueil | Profil | Classement | Examens | Révision |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| ![Écran de bienvenue](assets/screens/bienvenue.png) | ![Accueil — 10 thèmes](assets/screens/accueil.png) | ![Profil, grades et badges](assets/screens/profil.png) | ![Classement en temps réel](assets/screens/classement.png) | ![Les 4 paliers d'examen](assets/screens/examens.png) | ![Pile de révision](assets/screens/revision.png) |
 
 <!-- À ajouter : | Terminal simulé | ![Terminal](assets/screens/terminal.png) | -->
 
