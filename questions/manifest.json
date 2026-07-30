@@ -1,17 +1,15 @@
 {
-  "version": 3,
+  "version": 4,
   "updated": "2026-07-30",
   "themes": [
     {
-      "id": "atelier",
-      "name": "Atelier TP",
-      "icon": "ti ti-flask",
-      "color": "#2DD4BF",
-      "sub": "mini-TP guidés · IOS · Bash · PowerShell",
+      "id": "materiel",
+      "name": "Matériel",
+      "icon": "ti ti-cpu",
+      "color": "#FB923C",
+      "sub": "CPU · RAM · RAID · assemblage",
       "modules": [
-        { "id": "tp-cisco", "name": "TP Cisco IOS", "file": "atelier/tp-cisco.json" },
-        { "id": "tp-linux", "name": "TP Linux (Bash)", "file": "atelier/tp-linux.json" },
-        { "id": "tp-windows", "name": "TP Windows (PowerShell & CMD)", "file": "atelier/tp-windows.json" }
+        { "id": "hardware", "name": "Matériel & RAID", "file": "materiel/materiel-raid.json" }
       ]
     },
     {
@@ -58,6 +56,17 @@
       ]
     },
     {
+      "id": "virtualisation",
+      "name": "Virtualisation",
+      "icon": "ti ti-cube-3d-sphere",
+      "color": "#A78BFA",
+      "sub": "hyperviseurs · cluster · SAN",
+      "modules": [
+        { "id": "hyperv", "name": "Hyper-V & clusters", "file": "virtualisation/hyper-v-clusters.json" },
+        { "id": "proxmox", "name": "Proxmox & Ceph (projet)", "file": "virtualisation/proxmox-ceph.json" }
+      ]
+    },
+    {
       "id": "securite",
       "name": "Sécurité",
       "icon": "ti ti-shield-lock",
@@ -80,27 +89,6 @@
       ]
     },
     {
-      "id": "virtualisation",
-      "name": "Virtualisation",
-      "icon": "ti ti-cube-3d-sphere",
-      "color": "#A78BFA",
-      "sub": "hyperviseurs · cluster · SAN",
-      "modules": [
-        { "id": "hyperv", "name": "Hyper-V & clusters", "file": "virtualisation/hyper-v-clusters.json" },
-        { "id": "proxmox", "name": "Proxmox & Ceph (projet)", "file": "virtualisation/proxmox-ceph.json" }
-      ]
-    },
-    {
-      "id": "materiel",
-      "name": "Matériel",
-      "icon": "ti ti-cpu",
-      "color": "#FB923C",
-      "sub": "CPU · RAM · RAID · assemblage",
-      "modules": [
-        { "id": "hardware", "name": "Matériel & RAID", "file": "materiel/materiel-raid.json" }
-      ]
-    },
-    {
       "id": "scripts",
       "name": "Scripts",
       "icon": "ti ti-code",
@@ -108,6 +96,18 @@
       "sub": "PowerShell · Python",
       "modules": [
         { "id": "powershell-python", "name": "PowerShell & Python", "file": "scripts/powershell-python.json" }
+      ]
+    },
+    {
+      "id": "atelier",
+      "name": "Atelier TP",
+      "icon": "ti ti-flask",
+      "color": "#2DD4BF",
+      "sub": "mini-TP guidés · IOS · Bash · PowerShell",
+      "modules": [
+        { "id": "tp-cisco", "name": "TP Cisco IOS", "file": "atelier/tp-cisco.json" },
+        { "id": "tp-linux", "name": "TP Linux (Bash)", "file": "atelier/tp-linux.json" },
+        { "id": "tp-windows", "name": "TP Windows (PowerShell & CMD)", "file": "atelier/tp-windows.json" }
       ]
     },
     {
