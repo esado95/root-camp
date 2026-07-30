@@ -214,6 +214,9 @@ function updateNavPill(force) {
 /* ============ Enregistrement d'une réponse ============ */
 
 function recordAnswer(q, correct, exam) {
+  const gradeAvant = gradeIndex();
+  const nivAvant = unlockedLevel(q.theme);
+  const palierAvant = plusHautPalier();
   const st = state.q[q.id] || (state.q[q.id] = { a: 0, c: 0, s: 0 });
   st.a++;
   if (correct) { st.c++; st.s++; } else st.s = 0;
@@ -233,6 +236,13 @@ function recordAnswer(q, correct, exam) {
     state.cnt.streak = 0;
     if (!state.review.includes(q.id)) state.review.push(q.id);
   }
+
+  const nivApres = unlockedLevel(q.theme);
+  if (nivApres > nivAvant) toastOuDiffere(`<i class="ti ti-lock-open"></i> Niveau ${nivApres} débloqué — <b>${esc(q.themeName)}</b>`);
+  const palierApres = plusHautPalier();
+  if (palierApres > palierAvant) toastOuDiffere(`<i class="ti ti-trophy"></i> Examen palier ${palierApres} débloqué !`);
+  const gradeApres = gradeIndex();
+  if (gradeApres > gradeAvant) toastOuDiffere(`<i class="ti ti-chevrons-up"></i> Nouveau grade : <b>${esc(GRADES[gradeApres].name)}</b>`);
 
   const h = new Date().getHours();
   if (h >= 0 && h < 5) state.cnt.night = true;
@@ -274,6 +284,23 @@ async function loadBank() {
 /* ============ Écrans ============ */
 
 let navToken = 0;
+let currentPage = "home";
+let bootDone = false;
+
+function resetScroll() {
+  const m = document.querySelector("main");
+  if (m) m.scrollTop = 0;
+}
+
+function toastOuDiffere(html) {
+  if (session && session.exam) pendingToasts.push(html);
+  else toast(html);
+}
+
+function plusHautPalier() {
+  for (let p = 4; p >= 1; p--) if (palierAccess(p).ok) return p;
+  return 0;
+}
 
 function updateOnlineBadge() {
   const el = document.getElementById("online-badge");
@@ -286,6 +313,8 @@ function updateOnlineBadge() {
 
 function nav(page) {
   navToken++;
+  currentPage = page;
+  resetScroll();
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.nav === page));
   if (page === "home") showHome();
   else if (page === "exam") showExamIntro();
@@ -532,6 +561,7 @@ function endTimer() { if (session && session.timer) { clearInterval(session.time
 
 function renderQuestion() {
   endTimer();
+  resetScroll();
   if (!session || session.idx >= session.qs.length) return showResult();
   const q = session.qs[session.idx];
   setPath(session.exam ? "./quiz --examen" : `./quiz --session`);
@@ -564,6 +594,15 @@ function renderQuestion() {
 
   screen.innerHTML = head + body + `<div id="fb"></div>`;
   $("#quit").onclick = () => {
+    if (session.exam && !session.done && !session.quitArm) {
+      session.quitArm = true;
+      $("#quit").innerHTML = '<i class="ti ti-alert-triangle"></i> Confirmer l\'abandon ?';
+      setTimeout(() => {
+        const b = $("#quit");
+        if (b && session && session.quitArm) { session.quitArm = false; b.innerHTML = '<i class="ti ti-x"></i> Quitter'; }
+      }, 2500);
+      return;
+    }
     endTimer();
     if (session.nextTimer) clearTimeout(session.nextTimer);
     pendingToasts.forEach(toast);
@@ -579,7 +618,7 @@ function renderQuestion() {
       const left = Math.max(0, session.deadline - Date.now());
       const m = Math.floor(left / 60000), s = Math.floor(left % 60000 / 1000);
       $("#timer").textContent = `⏱ ${m}:${String(s).padStart(2, "0")}`;
-      if (left <= 0) { endTimer(); showResult(true); }
+      if (left <= 0) { endTimer(); showResult(session.answered.length < session.qs.length); }
     };
     tick();
     session.timer = setInterval(tick, 1000);
@@ -592,6 +631,15 @@ function renderQuestion() {
   else if (q.type === "libre") renderLibre(q);
   else if (q.type === "terminal") renderTerminal(q);
   else if (q.type === "tp") renderTP(q);
+  if (q.type === "terminal" || q.type === "tp") {
+    const term = screen.querySelector(".term");
+    if (term) term.addEventListener("click", () => {
+      const sel = window.getSelection();
+      if (sel && sel.toString()) return;
+      const inp = term.querySelector(".term-input:not(:disabled)");
+      if (inp) inp.focus();
+    });
+  }
   shieldClicks();
 }
 
@@ -610,6 +658,7 @@ function shieldClicks() {
 /* Réponses au clavier : 1-9 ou A-E sélectionnent une proposition,
    Entrée déclenche « suivant » ou « valider ». Inactif dans les champs de saisie. */
 document.addEventListener("keydown", e => {
+  if (e.repeat) return;
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
   if (!session || Date.now() - lastShield < 250) return;
   if (e.key === "Enter") {
@@ -666,6 +715,12 @@ function renderMulti(q) {
     box.appendChild(b);
   });
   $("#validate").onclick = () => {
+    if (!picked.size) {
+      const v = $("#validate");
+      v.textContent = "Cochez au moins une réponse";
+      setTimeout(() => { const b = $("#validate"); if (b) b.textContent = "Valider"; }, 1500);
+      return;
+    }
     const good = new Set(q.answer);
     const correct = picked.size === good.size && [...picked].every(x => good.has(x));
     [...box.children].forEach(x => x.disabled = true);
@@ -751,6 +806,8 @@ function renderLibre(q) {
     input.disabled = true;
     if (!session.exam) input.style.borderColor = correct ? "var(--green)" : "var(--red)";
     $("#validate").remove();
+    const skl = document.getElementById("skip");
+    if (skl) skl.remove();
     if (!correct && !session.exam) {
       const fb = $("#fb");
       fb.insertAdjacentHTML("afterbegin",
@@ -759,7 +816,17 @@ function renderLibre(q) {
     finishQuestion(q, correct);
   };
   $("#validate").onclick = submit;
-  input.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+  input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.repeat) submit(); });
+  if (session.exam) {
+    $("#fb").insertAdjacentHTML("beforeend",
+      `<button class="btn small" id="skip" style="margin-top:10px; color:var(--dim)">Passer — la question comptera fausse</button>`);
+    $("#skip").onclick = () => {
+      input.disabled = true;
+      const v = $("#validate"); if (v) v.remove();
+      $("#skip").remove();
+      finishQuestion(q, false);
+    };
+  }
 }
 
 function renderTerminal(q) {
@@ -789,6 +856,8 @@ function renderTerminal(q) {
     if (!normalize(val)) return;
     input.disabled = true;
     inputLine.remove();
+    const skt = document.getElementById("skip");
+    if (skt) skt.remove();
     addLine(promptTxt + " " + val);
     const correct = q.accept.map(normalize).includes(normalize(val));
     if (session.exam) {
@@ -803,6 +872,16 @@ function renderTerminal(q) {
     }
     finishQuestion(q, correct);
   });
+  if (session.exam) {
+    $("#fb").insertAdjacentHTML("beforeend",
+      `<button class="btn small" id="skip" style="margin-top:10px; color:var(--dim)">Passer — la question comptera fausse</button>`);
+    $("#skip").onclick = () => {
+      input.disabled = true;
+      addLine("# question passée", "cmt");
+      $("#skip").remove();
+      finishQuestion(q, false);
+    };
+  }
 }
 
 function renderTP(q) {
@@ -913,12 +992,8 @@ function finishQuestion(q, correct) {
     </button>`);
   const nextBtn = $("#next");
   nextBtn.onclick = () => { session.idx++; renderQuestion(); };
-  if (q.type === "terminal" || q.type === "tp") {
-    nextBtn.disabled = true;
-    setTimeout(() => { nextBtn.disabled = false; }, 400);
-  } else {
-    nextBtn.focus();
-  }
+  nextBtn.disabled = true;
+  setTimeout(() => { nextBtn.disabled = false; }, 400);
 }
 
 function showResult(timeout) {
@@ -926,6 +1001,7 @@ function showResult(timeout) {
   session.done = true;
   if (session.nextTimer) { clearTimeout(session.nextTimer); session.nextTimer = null; }
   endTimer();
+  resetScroll();
   const total = session.qs.length;
   const answered = session.ok + session.wrong.length;
   const pct = total ? Math.round(session.ok / total * 100) : 0;
@@ -942,7 +1018,7 @@ function showResult(timeout) {
     checkBadges();
     save();
     updateNavPill(true);
-    pendingToasts.forEach(toast);
+    pendingToasts.forEach((h, i) => setTimeout(() => toast(h), i * 900));
     pendingToasts = [];
   }
 
@@ -990,7 +1066,7 @@ function showResult(timeout) {
   shieldClicks();
   $("#res-back").onclick = () => { const b = session.back; session = null; b(); };
   $("#res-again").onclick = () => {
-    const opts = { title: session.title, color: session.color, back: session.back, exam: session.exam, palier: session.palier };
+    const opts = { title: session.title, color: session.color, back: session.back, exam: session.exam, palier: session.palier, review: session.review };
     const qs = session.exam ? drawExam(session.palier) : shuffle(session.qs);
     session = null;
     startSession(qs, opts);
@@ -1271,14 +1347,18 @@ function showProfile() {
     </button>`;
   if (me) {
     $("#logout").onclick = async () => {
+      const b = $("#logout");
+      b.disabled = true;
+      const tk = navToken;
       await onlineSignOut();
       updateOnlineBadge();
-      nav("profile");
+      if (tk === navToken) nav("profile");
     };
   } else if ($("#signup")) {
     let authBusy = false;
     const doAuth = async signup => {
       if (authBusy) return;
+      const tk = navToken;
       const p = $("#auth-pseudo").value.trim();
       const pass = $("#auth-pass").value;
       const msg = $("#auth-msg");
@@ -1291,10 +1371,14 @@ function showProfile() {
       const err = signup ? await onlineSignUp(p, pass) : await onlineSignIn(p, pass);
       if (err) {
         authBusy = false;
-        $("#signup").disabled = false;
-        $("#signin").disabled = false;
-        msg.style.color = "var(--red)";
-        msg.textContent = err;
+        const bs = $("#signup"), bc = $("#signin");
+        if (bs) bs.disabled = false;
+        if (bc) bc.disabled = false;
+        if (msg && document.contains(msg)) {
+          msg.style.color = "var(--red)";
+          msg.textContent = err + (!signup && err.includes("incorrect")
+            ? " Nouveau sur Root Camp ? Utilisez « Créer mon compte »." : "");
+        }
         return;
       }
       const lecture = await onlineFetchState();
@@ -1313,17 +1397,20 @@ function showProfile() {
       }
       updateNavPill();
       updateOnlineBadge();
-      nav("profile");
+      if (tk === navToken) nav("profile");
     };
     $("#signup").onclick = () => doAuth(true);
     $("#signin").onclick = () => doAuth(false);
-    $("#auth-pass").addEventListener("keydown", e => { if (e.key === "Enter") doAuth(false); });
+    $("#auth-pseudo").addEventListener("keydown", e => { if (e.key === "Enter") $("#auth-pass").focus(); });
+    $("#auth-pass").addEventListener("keydown", e => { if (e.key === "Enter" && !e.repeat) doAuth(false); });
   }
 
   let resetArmed = false;
+  let resetArmedAt = 0;
   $("#reset").onclick = async () => {
     if (!resetArmed) {
       resetArmed = true;
+      resetArmedAt = Date.now();
       $("#reset").innerHTML = '<i class="ti ti-alert-triangle"></i> Cliquez à nouveau pour tout effacer';
       setTimeout(() => {
         resetArmed = false;
@@ -1332,6 +1419,7 @@ function showProfile() {
       }, 3000);
       return;
     }
+    if (Date.now() - resetArmedAt < 400) return;
     const gen = (state.gen || 0) + 1;
     const owner = state.owner;
     state = defaultState();
@@ -1347,14 +1435,25 @@ function showProfile() {
 
 /* ============ Démarrage ============ */
 
+let examAbandonArm = 0;
 document.querySelectorAll(".nav button").forEach(b => {
   b.onclick = () => {
+    if (session && session.exam && !session.done) {
+      const now = Date.now();
+      if (now - examAbandonArm > 2500) {
+        examAbandonArm = now;
+        toast('<i class="ti ti-alert-triangle"></i> Examen en cours — cliquez à nouveau pour l\'abandonner');
+        return;
+      }
+    }
+    examAbandonArm = 0;
     if (session) {
       endTimer();
       if (session.nextTimer) clearTimeout(session.nextTimer);
       session = null;
       pendingToasts.forEach(toast);
       pendingToasts = [];
+      updateNavPill();
     }
     nav(b.dataset.nav);
   };
@@ -1377,6 +1476,12 @@ document.querySelectorAll(".nav button").forEach(b => {
             }
             state.owner = onlineUser.id;
             persist();
+            if (bootDone && !session) {
+              updateNavPill();
+              updateOnlineBadge();
+              toast('<i class="ti ti-cloud-download"></i> Progression synchronisée depuis le cloud');
+              nav(currentPage);
+            }
           }
         }
       }
@@ -1392,6 +1497,7 @@ document.querySelectorAll(".nav button").forEach(b => {
     updateNavPill();
     if (!state.accueilVu && state.cnt.total === 0) showBienvenue();
     else nav("home");
+    bootDone = true;
   } catch (err) {
     screen.innerHTML = `<p class="loading" style="color:var(--red)"># erreur de chargement : ${esc(err.message)}<br># ouvrez le site via un serveur web (http), pas en fichier local.</p>`;
   }
