@@ -36,10 +36,11 @@ Chaque question corrigée affiche une explication et sa fiche source — on appr
 |:---:|:---:|
 | ![Profil, échelle des grades et badges](assets/screens/profil.png) | ![Les 4 paliers d'examen](assets/screens/examens.png) |
 
-<!-- À ajouter quand les captures seront prêtes :
-| Terminal simulé | Classement |
-| ![Terminal](assets/screens/terminal.png) | ![Classement](assets/screens/classement.png) |
--->
+| Classement de la promo |
+|:---:|
+| ![Classement en temps réel](assets/screens/classement.png) |
+
+<!-- À ajouter : | Terminal simulé | ![Terminal](assets/screens/terminal.png) | -->
 
 ## 🗺️ La progression
 
