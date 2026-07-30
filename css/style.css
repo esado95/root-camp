@@ -38,6 +38,10 @@ body {
   border: 1px solid var(--line);
   border-radius: 14px;
   align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 32px);
+  min-height: calc(100dvh - 32px);
 }
 
 .titlebar {
@@ -58,7 +62,7 @@ body {
 @keyframes blink { 50% { opacity: 0; } }
 .online { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--green); white-space: nowrap; }
 
-main { padding: 20px 22px; min-height: 420px; }
+main { padding: 20px 22px; min-height: 420px; flex: 1 1 auto; }
 .loading { font-family: var(--mono); font-size: 13px; color: var(--dim); }
 
 h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
