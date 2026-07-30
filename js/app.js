@@ -836,8 +836,14 @@ function finishQuestion(q, correct) {
     <button class="btn accent" id="next" style="margin-top:12px">
       ${last ? "Voir le résultat" : "Question suivante"} <i class="ti ti-arrow-right"></i>
     </button>`);
-  $("#next").onclick = () => { session.idx++; renderQuestion(); };
-  $("#next").focus();
+  const nextBtn = $("#next");
+  nextBtn.onclick = () => { session.idx++; renderQuestion(); };
+  if (q.type === "terminal" || q.type === "tp") {
+    nextBtn.disabled = true;
+    setTimeout(() => { nextBtn.disabled = false; }, 400);
+  } else {
+    nextBtn.focus();
+  }
 }
 
 function showResult(timeout) {
