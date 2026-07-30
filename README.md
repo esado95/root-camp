@@ -30,7 +30,7 @@ Chaque question corrigée affiche une explication et sa fiche source — on appr
 
 | Bienvenue | Accueil | Profil | Classement | Examens | Révision |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![Écran de bienvenue](assets/screens/bienvenue.png) | ![Accueil — 10 thèmes](assets/screens/accueil.png) | ![Profil, grades et badges](assets/screens/profil.png) | ![Classement en temps réel](assets/screens/classement.png) | ![Les 4 paliers d'examen](assets/screens/examens.png) | ![Pile de révision](assets/screens/revision.png) |
+| <img src="assets/screens/bienvenue.png" width="130" alt="Écran de bienvenue"> | <img src="assets/screens/accueil.png" width="130" alt="Accueil — 10 thèmes"> | <img src="assets/screens/profil.png" width="130" alt="Profil, grades et badges"> | <img src="assets/screens/classement.png" width="130" alt="Classement en temps réel"> | <img src="assets/screens/examens.png" width="130" alt="Les 4 paliers d'examen"> | <img src="assets/screens/revision.png" width="130" alt="Pile de révision"> |
 
 <!-- À ajouter : | Terminal simulé | ![Terminal](assets/screens/terminal.png) | -->
 
