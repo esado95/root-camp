@@ -320,7 +320,7 @@
       "id": "sup-025",
       "niveau": 4,
       "type": "scenario",
-      "context": "Depuis le serveur Zabbix (Linux) :\n# ping 172.16.9.20\n64 bytes from 172.16.9.20 ... (réponses OK)\n# snmpwalk -v3 -l authPriv -u superv ... 172.16.9.20\nTimeout: No Response from 172.16.9.20\nLes identifiants SNMPv3 ont été vérifiés et sont corrects.",
+      "context": "Depuis le serveur Zabbix (Linux) :\n# ping 172.16.40.20\n64 bytes from 172.16.40.20 ... (réponses OK)\n# snmpwalk -v3 -l authPriv -u superv ... 172.16.40.20\nTimeout: No Response from 172.16.40.20\nLes identifiants SNMPv3 ont été vérifiés et sont corrects.",
       "q": "Le ping répond mais la requête SNMP expire. Quelle est la cause la plus probable ?",
       "choices": [
         "Les passphrases SNMPv3 sont incorrectes",
@@ -335,7 +335,7 @@
       "id": "sup-026",
       "niveau": 4,
       "type": "scenario",
-      "context": "Un onduleur est configuré pour envoyer ses traps SNMP vers le serveur de supervision (172.16.9.10). Lors d'un test de coupure secteur, aucun événement n'apparaît côté supervision.\nSur le serveur, le service de réception des traps est bien démarré.",
+      "context": "Un onduleur est configuré pour envoyer ses traps SNMP vers le serveur de supervision (172.16.40.10). Lors d'un test de coupure secteur, aucun événement n'apparaît côté supervision.\nSur le serveur, le service de réception des traps est bien démarré.",
       "q": "Quel point vérifier en priorité ?",
       "choices": [
         "Que le port UDP 162 est ouvert en entrée sur le serveur de supervision et sur les pare-feu intermédiaires",

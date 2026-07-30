@@ -34,7 +34,7 @@
       "q": "Vous êtes perdu dans l'arborescence. Tapez la commande qui affiche le chemin du répertoire courant.",
       "prompt": "tech@srv-deb:~/travaux/tp3$",
       "accept": ["pwd"],
-      "output": "/home/said/travaux/tp3",
+      "output": "/home/tech/travaux/tp3",
       "explication": "pwd = print working directory. Pour naviguer : cd, pour lister : ls."
     },
     {
@@ -48,7 +48,7 @@
       "q": "Que désigne le symbole « ~ » dans un chemin ?",
       "choices": ["La racine du système", "Le dossier parent", "Le dossier personnel de l'utilisateur", "Un fichier temporaire"],
       "answer": 2,
-      "explication": "~ = home de l'utilisateur courant (ex. /home/said). « .. » = dossier parent, « . » = dossier courant."
+      "explication": "~ = home de l'utilisateur courant (ex. /home/tech). « .. » = dossier parent, « . » = dossier courant."
     },
     {
       "id": "lin-008", "niveau": 2, "type": "qcm",
@@ -101,8 +101,8 @@
       "id": "lin-015", "niveau": 3, "type": "terminal",
       "q": "Ajoutez l'utilisateur « tech » au groupe sudo.",
       "prompt": "root@srv-deb:~#",
-      "accept": ["usermod -aG sudo tech", "usermod -a -G sudo tech", "gpasswd -a said sudo"],
-      "explication": "usermod -aG sudo tech (-a = ajouter sans écraser les autres groupes). gpasswd -a said sudo fonctionne aussi ; « id tech » permet de vérifier."
+      "accept": ["usermod -aG sudo tech", "usermod -a -G sudo tech", "gpasswd -a tech sudo"],
+      "explication": "usermod -aG sudo tech (-a = ajouter sans écraser les autres groupes). gpasswd -a tech sudo fonctionne aussi ; « id tech » permet de vérifier."
     },
     {
       "id": "lin-016", "niveau": 3, "type": "qcm",

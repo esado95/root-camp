@@ -286,7 +286,7 @@
           "q": "Affichez les 20 dernières lignes du journal d'authentification",
           "prompt": "root@srv-deb:/var/log#",
           "accept": ["tail -n 20 auth.log", "tail -20 auth.log", "tail -n 20 /var/log/auth.log", "tail -20 /var/log/auth.log"],
-          "output": "Jul 30 09:58:01 srv-deb CRON[1512]: pam_unix(cron:session): session opened for user root\nJul 30 10:01:22 srv-deb sshd[1544]: Failed password for invalid user admin from 203.0.113.44 port 51122 ssh2\nJul 30 10:01:25 srv-deb sshd[1544]: Connection closed by invalid user admin 203.0.113.44 port 51122\nJul 30 10:03:47 srv-deb sshd[1571]: Failed password for root from 203.0.113.44 port 51530 ssh2\nJul 30 10:05:12 srv-deb sshd[1590]: Accepted password for said from 192.168.1.20 port 49812 ssh2",
+          "output": "Jul 30 09:58:01 srv-deb CRON[1512]: pam_unix(cron:session): session opened for user root\nJul 30 10:01:22 srv-deb sshd[1544]: Failed password for invalid user admin from 203.0.113.44 port 51122 ssh2\nJul 30 10:01:25 srv-deb sshd[1544]: Connection closed by invalid user admin 203.0.113.44 port 51122\nJul 30 10:03:47 srv-deb sshd[1571]: Failed password for root from 203.0.113.44 port 51530 ssh2\nJul 30 10:05:12 srv-deb sshd[1590]: Accepted password for tech from 192.168.1.20 port 49812 ssh2",
           "hint": "La commande qui affiche la fin d'un fichier, avec l'option qui fixe le nombre de lignes."
         },
         {
