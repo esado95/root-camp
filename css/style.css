@@ -28,7 +28,7 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: 16px 8px 90px;
+  padding: 16px 8px;
 }
 
 .frame {
@@ -37,7 +37,6 @@ body {
   background: var(--frame);
   border: 1px solid var(--line);
   border-radius: 14px;
-  overflow: hidden;
   align-self: flex-start;
 }
 
@@ -48,6 +47,7 @@ body {
   background: var(--panel);
   padding: 10px 16px;
   border-bottom: 1px solid var(--line);
+  border-radius: 14px 14px 0 0;
 }
 .dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
 .dot.red { background: #E24B4A; }
@@ -255,6 +255,9 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
 
 .nav {
   display: flex; border-top: 1px solid var(--line); background: var(--panel);
+  position: sticky; bottom: 0; z-index: 10;
+  border-radius: 0 0 14px 14px;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 .nav button {
   flex: 1; background: none; border: none; color: var(--dim); cursor: pointer;
