@@ -181,16 +181,21 @@ function toast(html) {
   setTimeout(() => el.remove(), 4000);
 }
 
+let pendingToasts = [];
+
 function checkBadges() {
   for (const b of BADGES) {
     if (!state.badges.includes(b.id) && b.test(state)) {
       state.badges.push(b.id);
-      toast(`<i class="ti ${b.icon}"></i> Badge débloqué : <b>${esc(b.name)}</b>`);
+      const html = `<i class="ti ${b.icon}"></i> Badge débloqué : <b>${esc(b.name)}</b>`;
+      if (session && session.exam) pendingToasts.push(html);
+      else toast(html);
     }
   }
 }
 
-function updateNavPill() {
+function updateNavPill(force) {
+  if (!force && session && session.exam) return;
   const pill = $("#rev-count");
   if (state.review.length) { pill.hidden = false; pill.textContent = state.review.length; }
   else pill.hidden = true;
@@ -529,8 +534,12 @@ function renderQCM(q) {
     b.onclick = () => {
       const correct = i === q.answer;
       [...box.children].forEach(x => x.disabled = true);
-      [...box.children].forEach((x, k) => { if (order[k] === q.answer) x.classList.add("good"); });
-      if (!correct) b.classList.add("bad");
+      if (session.exam) {
+        b.classList.add("picked");
+      } else {
+        [...box.children].forEach((x, k) => { if (order[k] === q.answer) x.classList.add("good"); });
+        if (!correct) b.classList.add("bad");
+      }
       finishQuestion(q, correct);
     };
     box.appendChild(b);
@@ -555,10 +564,12 @@ function renderMulti(q) {
     const good = new Set(q.answer);
     const correct = picked.size === good.size && [...picked].every(x => good.has(x));
     [...box.children].forEach(x => x.disabled = true);
-    [...box.children].forEach((x, k) => {
-      if (good.has(order[k])) x.classList.add("good");
-      else if (picked.has(order[k])) x.classList.add("bad");
-    });
+    if (!session.exam) {
+      [...box.children].forEach((x, k) => {
+        if (good.has(order[k])) x.classList.add("good");
+        else if (picked.has(order[k])) x.classList.add("bad");
+      });
+    }
     $("#validate").remove();
     finishQuestion(q, correct);
   };
@@ -633,7 +644,7 @@ function renderLibre(q) {
     if (!val) return;
     const correct = q.accept.map(normalize).includes(val);
     input.disabled = true;
-    input.style.borderColor = correct ? "var(--green)" : "var(--red)";
+    if (!session.exam) input.style.borderColor = correct ? "var(--green)" : "var(--red)";
     $("#validate").remove();
     if (!correct && !session.exam) {
       const fb = $("#fb");
@@ -675,15 +686,15 @@ function renderTerminal(q) {
     inputLine.remove();
     addLine(promptTxt + " " + val);
     const correct = q.accept.map(normalize).includes(normalize(val));
-    if (correct) {
+    if (session.exam) {
+      addLine("# réponse enregistrée", "cmt");
+    } else if (correct) {
       if (q.output) q.output.split("\n").forEach(l => addLine(l, "out"));
       addLine("# commande acceptée ✓", "ok");
     } else {
       addLine(q.error || "'" + val.trim() + "' : commande incorrecte ou incomplète", "ko");
-      if (!session.exam) {
-        addLine("# commande attendue : " + q.accept[0], "cmt");
-        if (q.output) q.output.split("\n").forEach(l => addLine(l, "out"));
-      }
+      addLine("# commande attendue : " + q.accept[0], "cmt");
+      if (q.output) q.output.split("\n").forEach(l => addLine(l, "out"));
     }
     finishQuestion(q, correct);
   });
@@ -783,8 +794,11 @@ function showResult(timeout) {
   if (session.exam) {
     state.cnt.exams++;
     if (pct > state.cnt.examBest) state.cnt.examBest = pct;
-    checkBadges();
     save();
+    updateNavPill(true);
+    checkBadges();
+    pendingToasts.forEach(toast);
+    pendingToasts = [];
   }
 
   let wrongList = "";
