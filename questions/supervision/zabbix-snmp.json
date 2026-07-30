@@ -1,6 +1,6 @@
 {
   "module": "Zabbix & SNMP",
-  "source": "Supervision.md + SNMPv3_Windows10_Zabbix.md",
+  "source": "Supervision.md",
   "questions": [
     {
       "id": "sup-001",
@@ -59,7 +59,7 @@
         "Le protocole de transport des messages SNMP",
         "La base de données qui décrit les objets supervisables et leurs OID",
         "Le mot de passe partagé entre le manager et l'agent",
-        "Le service Windows qui répond aux requêtes SNMP"
+        "La liste des équipements déclarés dans Zabbix"
       ],
       "answer": 1,
       "explication": "La MIB sert de dictionnaire commun : elle décrit les objets et leurs OID, ce qui permet au manager et à l'agent d'interpréter les données de la même façon."
@@ -95,18 +95,14 @@
     {
       "id": "sup-008",
       "niveau": 1,
-      "type": "assoc",
-      "q": "Associez chaque mode SNMPv3 à son niveau de sécurité.",
-      "pairs": [
-        ["noAuthNoPriv", "Ni authentification ni chiffrement : sécurité faible"],
-        ["authNoPriv", "Authentification sans chiffrement : sécurité moyenne"],
-        ["authPriv", "Authentification et chiffrement : sécurité élevée"]
-      ],
-      "explication": "SNMPv3 se décline en trois niveaux selon que l'on active l'authentification et le chiffrement ; authPriv est le mode recommandé en production."
+      "type": "libre",
+      "q": "Quelle version de SNMP faut-il utiliser pour bénéficier de l'authentification, du chiffrement et du contrôle d'intégrité ?",
+      "accept": ["snmpv3", "v3", "snmp v3", "3", "version 3"],
+      "explication": "SNMPv3 est la version la plus sécurisée : elle ajoute l'authentification, le chiffrement et l'intégrité, et elle est recommandée en production."
     },
     {
       "id": "sup-009",
-      "niveau": 1,
+      "niveau": 2,
       "type": "qcm",
       "q": "Comment SNMPv1 et SNMPv2c contrôlent-ils l'accès aux données d'un agent ?",
       "choices": [
@@ -120,28 +116,18 @@
     },
     {
       "id": "sup-010",
-      "niveau": 1,
-      "type": "libre",
-      "q": "Quelle version de SNMP faut-il utiliser pour bénéficier de l'authentification, du chiffrement et du contrôle d'intégrité ?",
-      "accept": ["snmpv3", "v3", "snmp v3", "3", "version 3"],
-      "explication": "SNMPv3 est la version la plus sécurisée : elle ajoute l'authentification, le chiffrement et l'intégrité, et elle est recommandée en production."
+      "niveau": 2,
+      "type": "assoc",
+      "q": "Associez chaque mode SNMPv3 à son niveau de sécurité.",
+      "pairs": [
+        ["noAuthNoPriv", "Ni authentification ni chiffrement : sécurité faible"],
+        ["authNoPriv", "Authentification sans chiffrement : sécurité moyenne"],
+        ["authPriv", "Authentification et chiffrement : sécurité élevée"]
+      ],
+      "explication": "SNMPv3 se décline en trois niveaux selon que l'on active l'authentification et le chiffrement ; authPriv est le mode recommandé en production."
     },
     {
       "id": "sup-011",
-      "niveau": 1,
-      "type": "qcm",
-      "q": "Dans Net-SNMP, à quels algorithmes correspondent exactement les mots-clés SHA et AES ?",
-      "choices": [
-        "SHA-256 et AES-256",
-        "SHA-1 et AES-128",
-        "SHA-512 et AES-192",
-        "MD5 et DES"
-      ],
-      "answer": 1,
-      "explication": "Côté Net-SNMP, SHA désigne SHA-1 et AES désigne AES-128 : il faut le savoir pour choisir SHA1 et AES128 dans l'interface Zabbix."
-    },
-    {
-      "id": "sup-012",
       "niveau": 2,
       "type": "qcm",
       "q": "Pourquoi dit-on que superviser un SI ne consiste pas seulement à constater les pannes ?",
@@ -155,7 +141,7 @@
       "explication": "La supervision vise à garder une longueur d'avance : détecter vite, anticiper les problèmes, assurer la disponibilité et améliorer les performances du SI."
     },
     {
-      "id": "sup-013",
+      "id": "sup-012",
       "niveau": 2,
       "type": "multi",
       "q": "Quelles affirmations décrivent la supervision active ? (plusieurs réponses)",
@@ -170,7 +156,7 @@
       "explication": "En supervision active, c'est le superviseur qui pose les questions (ping, HTTP, vérification de service) ; la remontée spontanée d'alertes (logs, traps) relève de la supervision passive."
     },
     {
-      "id": "sup-014",
+      "id": "sup-013",
       "niveau": 2,
       "type": "qcm",
       "q": "Pourquoi les traps SNMP relèvent-ils de la supervision passive ?",
@@ -184,77 +170,7 @@
       "explication": "Passive = les équipements remontent les infos (logs, traps, alertes système) ; cette approche réactive dépend de la configuration des équipements. Les traps arrivent sur UDP 162."
     },
     {
-      "id": "sup-015",
-      "niveau": 2,
-      "type": "qcm",
-      "q": "Pourquoi le service « SNMP » natif de Windows 10 ne convient-il pas pour une remontée SNMPv3 vers Zabbix ?",
-      "choices": [
-        "Il n'écoute que sur le port UDP 162",
-        "Il se limite aux versions v1 et v2c et ignore le modèle de sécurité USM de la v3",
-        "Il est réservé aux éditions Server de Windows",
-        "Il ne prend en charge que l'IPv6"
-      ],
-      "answer": 1,
-      "explication": "Le service SNMP natif de Windows ne fait pas de v3 : pour un utilisateur USM avec authentification et chiffrement, il faut un agent tiers comme Net-SNMP (snmpd.exe)."
-    },
-    {
-      "id": "sup-016",
-      "niveau": 2,
-      "type": "qcm",
-      "q": "Pourquoi faut-il un build Net-SNMP compilé avec OpenSSL pour une configuration SNMPv3 en authPriv ?",
-      "choices": [
-        "OpenSSL est nécessaire pour ouvrir le port UDP 161",
-        "L'authentification SHA et le chiffrement DES/AES reposent sur cette bibliothèque de chiffrement",
-        "OpenSSL fournit l'interface graphique de configuration de l'agent",
-        "Sans OpenSSL, l'agent ne peut pas être enregistré comme service Windows"
-      ],
-      "answer": 1,
-      "explication": "Un build « nossl » ne sait faire que MD5 sans aucun chiffrement, donc authNoPriv au mieux ; SHA et AES exigent le build compilé avec OpenSSL."
-    },
-    {
-      "id": "sup-017",
-      "niveau": 2,
-      "type": "qcm",
-      "q": "Que se passe-t-il si l'on choisit une passphrase SNMPv3 de moins de 8 caractères sous Net-SNMP ?",
-      "choices": [
-        "Elle est acceptée mais tronquée à 8 caractères",
-        "snmpd refuse de créer l'utilisateur",
-        "Elle est automatiquement complétée par des zéros",
-        "L'agent bascule en mode noAuthNoPriv"
-      ],
-      "answer": 1,
-      "explication": "Les passphrases d'authentification et de chiffrement doivent faire au moins 8 caractères, sinon snmpd refuse de créer l'utilisateur : c'est une cause classique d'échec."
-    },
-    {
-      "id": "sup-018",
-      "niveau": 2,
-      "type": "qcm",
-      "q": "Que devient la ligne createUser de snmpd.conf au premier démarrage de l'agent Net-SNMP ?",
-      "choices": [
-        "Elle est relue à chaque démarrage pour recréer l'utilisateur",
-        "Elle est consommée : les clés dérivées des passphrases sont écrites en usmUser dans le fichier de persistance",
-        "Elle est envoyée au serveur Zabbix pour synchroniser les identifiants",
-        "Elle est chiffrée sur place dans snmpd.conf"
-      ],
-      "answer": 1,
-      "explication": "Au premier démarrage, snmpd dérive les clés localisées (hash des passphrases) et stocke un équivalent usmUser dans le fichier de persistance ; la ligne en clair est alors consommée."
-    },
-    {
-      "id": "sup-019",
-      "niveau": 2,
-      "type": "qcm",
-      "q": "Une fois l'utilisateur SNMPv3 créé et testé, pourquoi est-il recommandé de supprimer la ligne createUser de snmpd.conf ?",
-      "choices": [
-        "Pour accélérer le démarrage de l'agent",
-        "Pour ne pas laisser les mots de passe en clair sur le disque, l'utilisateur restant conservé dans le fichier de persistance",
-        "Parce que deux directives createUser feraient planter l'agent",
-        "Pour désactiver le compte une fois les tests terminés"
-      ],
-      "answer": 1,
-      "explication": "L'utilisateur survit grâce au fichier de persistance : on peut donc retirer la ligne createUser pour ne pas laisser les passphrases en clair dans snmpd.conf."
-    },
-    {
-      "id": "sup-020",
+      "id": "sup-014",
       "niveau": 2,
       "type": "multi",
       "q": "Quelles fonctionnalités de sécurité SNMPv3 apporte-t-il par rapport aux versions 1 et 2c ? (plusieurs réponses)",
@@ -269,205 +185,181 @@
       "explication": "SNMPv3 apporte trois garanties : authentification, chiffrement (confidentialité) et intégrité des données, ce qui le rend adapté aux environnements de production."
     },
     {
-      "id": "sup-021",
+      "id": "sup-015",
       "niveau": 2,
       "type": "qcm",
-      "q": "Avant de configurer l'hôte dans l'interface Zabbix, pourquoi lancer un snmpwalk depuis le serveur Zabbix vers la machine Windows ?",
+      "q": "Quelle est la différence entre une requête SNMP GET et un trap SNMP ?",
       "choices": [
-        "Parce que Zabbix ne peut pas interroger un hôte sans snmpwalk préalable",
-        "Pour distinguer immédiatement un problème réseau ou pare-feu d'un problème de configuration Zabbix",
-        "Pour créer automatiquement les items dans Zabbix",
-        "Pour mettre en cache les OID côté serveur"
+        "Le GET est envoyé par l'agent, le trap par le manager",
+        "Le GET est une interrogation du manager vers l'agent (UDP 161), le trap une alerte spontanée de l'agent vers le manager (UDP 162)",
+        "Le GET sert à modifier une valeur, le trap à la lire",
+        "Le GET utilise TCP alors que le trap utilise UDP"
       ],
       "answer": 1,
-      "explication": "Tester la traversée réseau en ligne de commande isole tout de suite un souci de firewall ou de filtrage : si le snmpwalk répond, il ne reste qu'à recopier les mêmes paramètres dans l'interface."
+      "explication": "GET illustre la supervision active (le manager interroge, port 161) tandis que le trap illustre la supervision passive (l'équipement signale de lui-même, port 162)."
+    },
+    {
+      "id": "sup-016",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Dans une architecture Zabbix, à quoi sert un proxy Zabbix ?",
+      "choices": [
+        "À remplacer le serveur Zabbix en cas de panne",
+        "À collecter les données d'un site distant pour le compte du serveur, en limitant les flux à travers le WAN",
+        "À héberger l'interface web de Zabbix",
+        "À convertir les traps SNMP en requêtes HTTP"
+      ],
+      "answer": 1,
+      "explication": "Le proxy collecte localement les données (agents, SNMP) d'un site distant puis les transmet au serveur Zabbix central, ce qui allège et fiabilise la supervision multi-sites."
+    },
+    {
+      "id": "sup-017",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Remettez dans l'ordre les étapes du mécanisme d'alerting, de la mesure jusqu'à l'administrateur prévenu.",
+      "steps": [
+        "Collecte des mesures sur les équipements supervisés",
+        "Détection d'un incident : seuil dépassé ou service indisponible",
+        "Génération de l'alerte avec son niveau de gravité",
+        "Notification des administrateurs (envoi d'un mail)"
+      ],
+      "explication": "L'alerting transforme une mesure anormale en action concrète : détection de l'incident, génération de l'alerte, puis notification des administrateurs."
+    },
+    {
+      "id": "sup-018",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Quel mode SNMPv3 est recommandé pour superviser des équipements en production, et pourquoi ?",
+      "choices": [
+        "noAuthNoPriv, car il est plus performant",
+        "authNoPriv, car le chiffrement est inutile sur un réseau local",
+        "authPriv, car il combine authentification et chiffrement des échanges",
+        "authPriv, car il permet de se passer de mot de passe"
+      ],
+      "answer": 2,
+      "explication": "authPriv active à la fois l'authentification et le chiffrement : c'est le niveau de sécurité élevé, adapté aux environnements professionnels."
+    },
+    {
+      "id": "sup-019",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Dans Zabbix, quel mécanisme déclenche l'envoi d'un e-mail aux administrateurs lorsqu'un trigger passe à l'état « Problème » ?",
+      "choices": [
+        "Un item",
+        "Une action, qui exécute une opération de notification",
+        "Un template",
+        "Une macro"
+      ],
+      "answer": 1,
+      "explication": "L'item collecte la donnée, le trigger détecte l'anomalie, et c'est l'action qui réagit à l'événement en notifiant les administrateurs (mail, script...)."
+    },
+    {
+      "id": "sup-020",
+      "niveau": 3,
+      "type": "assoc",
+      "q": "Associez chaque objet Zabbix à son rôle.",
+      "pairs": [
+        ["Item", "Donnée élémentaire collectée sur un hôte (ex : charge CPU)"],
+        ["Trigger", "Expression qui évalue les données et passe à l'état Problème quand un seuil est franchi"],
+        ["Action", "Réaction automatique à un événement, comme l'envoi d'une notification"]
+      ],
+      "explication": "La chaîne Zabbix suit la logique de l'alerting : l'item mesure, le trigger détecte l'incident, l'action notifie."
+    },
+    {
+      "id": "sup-021",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Un équipement ne prend en charge que SNMP v2c. Quelle bonne pratique appliquer pour limiter les risques ?",
+      "choices": [
+        "Conserver les communautés par défaut public et private pour rester compatible",
+        "Remplacer les communautés par défaut et restreindre les requêtes SNMP aux seules adresses IP des serveurs de supervision",
+        "Désactiver complètement la supervision de cet équipement",
+        "Faire transiter les requêtes SNMP par le port TCP 443"
+      ],
+      "answer": 1,
+      "explication": "Les communautés v2c circulant en clair, on limite l'exposition : communautés non triviales, accès en lecture seule et filtrage par adresse IP source."
     },
     {
       "id": "sup-022",
       "niveau": 3,
-      "type": "ordre",
-      "q": "Remettez dans l'ordre, selon la procédure recommandée, les grandes étapes pour faire remonter un poste Windows 10 en SNMPv3 vers Zabbix.",
-      "steps": [
-        "Arrêter et désactiver le service SNMP natif de Windows pour libérer le port 161",
-        "Installer Net-SNMP (build OpenSSL) et enregistrer snmpd comme service",
-        "Déclarer l'utilisateur v3 dans snmpd.conf (createUser + rouser) puis démarrer le service",
-        "Ouvrir le pare-feu Windows en entrée sur UDP 161",
-        "Tester avec snmpwalk en local puis depuis le serveur Zabbix avant de configurer l'hôte"
-      ],
-      "explication": "On libère d'abord le port 161, on installe et configure l'agent, on ouvre le pare-feu, puis on valide la chaîne par paliers (local, puis distant) avant l'interface Zabbix."
+      "type": "libre",
+      "q": "Comment s'appelle le mode SNMPv3 qui active à la fois l'authentification et le chiffrement ?",
+      "accept": ["authpriv", "authPriv", "auth priv", "auth-priv"],
+      "explication": "authPriv (authentification + privacy) est le mode au niveau de sécurité élevé, recommandé en production ; authNoPriv authentifie sans chiffrer, noAuthNoPriv ne protège rien."
     },
     {
       "id": "sup-023",
       "niveau": 3,
-      "type": "libre",
-      "q": "Quelle directive de snmpd.conf permet de déclarer un utilisateur SNMPv3 avec ses passphrases d'authentification et de chiffrement ?",
-      "accept": ["createuser", "createUser"],
-      "explication": "La syntaxe est : createUser <utilisateur> SHA \"passAuth\" AES \"passPriv\". Il faut ensuite une directive rouser pour autoriser cet utilisateur en lecture."
+      "type": "qcm",
+      "q": "Lors de la création d'un utilisateur SNMPv3, quelle règle standard s'applique aux passphrases d'authentification et de chiffrement ?",
+      "choices": [
+        "Elles doivent comporter au moins 8 caractères",
+        "Elles doivent obligatoirement être identiques entre elles",
+        "Elles sont limitées à 8 caractères maximum",
+        "Elles ne peuvent contenir que des chiffres"
+      ],
+      "answer": 0,
+      "explication": "Le standard SNMPv3 impose un minimum de 8 caractères par passphrase ; en pratique on choisit des passphrases longues et différentes pour l'authentification et le chiffrement."
     },
     {
       "id": "sup-024",
-      "niveau": 3,
-      "type": "qcm",
-      "q": "Dans snmpd.conf, que signifie la ligne « rouser zabbixv3 priv » ?",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Un commutateur est configuré en SNMPv3 : utilisateur « superv », mode authPriv, authentification SHA, chiffrement AES.\nDans Zabbix, l'interface SNMP de l'hôte est déclarée ainsi :\n  Security name : superv\n  Security level : authNoPriv\n  Authentication protocol : SHA\nZabbix n'affiche aucune donnée pour cet hôte.",
+      "q": "Quelle est la cause la plus probable de l'absence de données ?",
       "choices": [
-        "L'utilisateur zabbixv3 a un accès en écriture avec chiffrement",
-        "L'utilisateur zabbixv3 a un accès en lecture seule et doit se connecter en authPriv (authentification + chiffrement)",
-        "L'utilisateur zabbixv3 est prioritaire sur les autres utilisateurs SNMP",
-        "L'utilisateur zabbixv3 peut se connecter sans authentification"
+        "Le port UDP 162 n'est pas ouvert sur le commutateur",
+        "Le niveau de sécurité déclaré dans Zabbix (authNoPriv) ne correspond pas à celui exigé par l'équipement (authPriv) : il faut passer en authPriv et renseigner le protocole et la passphrase de chiffrement",
+        "SNMPv3 n'est pas utilisable avec des commutateurs",
+        "L'utilisateur superv doit aussi être créé dans la base de données Zabbix"
       ],
       "answer": 1,
-      "explication": "rouser accorde un droit de lecture seule ; le mot-clé priv exige en plus le niveau authPriv, donc authentification et chiffrement obligatoires."
+      "explication": "Manager et agent doivent utiliser exactement les mêmes paramètres SNMPv3 : ici l'équipement exige authentification ET chiffrement, alors que Zabbix ne tente que l'authentification."
     },
     {
       "id": "sup-025",
-      "niveau": 3,
-      "type": "terminal",
-      "q": "Vous êtes en invite de commandes administrateur, dans le dossier bin de Net-SNMP. Enregistrez snmpd comme service Windows.",
-      "prompt": "C:\\usr\\bin>",
-      "accept": ["snmpd.exe -register", "snmpd -register", ".\\snmpd.exe -register", ".\\snmpd -register"],
-      "explication": "snmpd.exe -register crée le service (visible dans services.msc sous « Net-SNMP agent ») ; snmpd.exe -unregister le retire."
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Depuis le serveur Zabbix (Linux) :\n# ping 172.16.9.20\n64 bytes from 172.16.9.20 ... (réponses OK)\n# snmpwalk -v3 -l authPriv -u superv ... 172.16.9.20\nTimeout: No Response from 172.16.9.20\nLes identifiants SNMPv3 ont été vérifiés et sont corrects.",
+      "q": "Le ping répond mais la requête SNMP expire. Quelle est la cause la plus probable ?",
+      "choices": [
+        "Les passphrases SNMPv3 sont incorrectes",
+        "Le flux UDP 161 est bloqué par un pare-feu ou une ACL, ou l'agent SNMP de l'équipement n'est pas actif",
+        "Le serveur Zabbix ne prend pas en charge SNMPv3",
+        "Le port UDP 162 est fermé sur le serveur Zabbix"
+      ],
+      "answer": 1,
+      "explication": "De mauvais identifiants provoqueraient une erreur d'authentification, pas un timeout : si l'ICMP passe mais pas SNMP, c'est le flux UDP 161 qui est filtré ou l'agent qui ne répond pas."
     },
     {
       "id": "sup-026",
-      "niveau": 3,
-      "type": "qcm",
-      "q": "Dans la commande « snmpwalk -v3 -l authPriv -u zabbixv3 -a SHA -A \"...\" -x AES -X \"...\" localhost 1.3.6.1.2.1.1 », à quoi sert l'option -X ?",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Un onduleur est configuré pour envoyer ses traps SNMP vers le serveur de supervision (172.16.9.10). Lors d'un test de coupure secteur, aucun événement n'apparaît côté supervision.\nSur le serveur, le service de réception des traps est bien démarré.",
+      "q": "Quel point vérifier en priorité ?",
       "choices": [
-        "Elle indique le protocole d'authentification",
-        "Elle fournit la passphrase de chiffrement (privacy)",
-        "Elle fournit la passphrase d'authentification",
-        "Elle exporte le résultat au format XML"
+        "Que le port UDP 162 est ouvert en entrée sur le serveur de supervision et sur les pare-feu intermédiaires",
+        "Que le serveur interroge l'onduleur plus souvent avec des requêtes GET",
+        "Que la MIB de l'onduleur a bien été copiée sur l'onduleur lui-même",
+        "Que le port UDP 161 est ouvert en sortie sur le serveur"
       ],
-      "answer": 1,
-      "explication": "Les options vont par paires : -a/-A pour le protocole et la passphrase d'authentification, -x/-X pour le protocole et la passphrase de chiffrement."
+      "answer": 0,
+      "explication": "Les traps sont un flux spontané de l'équipement vers le superviseur sur UDP 162 : supervision passive oblige, la chaîne dépend de la configuration de l'équipement et du filtrage réseau jusqu'au récepteur."
     },
     {
       "id": "sup-027",
-      "niveau": 3,
-      "type": "assoc",
-      "q": "Associez chaque branche MIB aux informations qu'elle expose sur un poste Windows supervisé via Net-SNMP.",
-      "pairs": [
-        ["1.3.6.1.2.1.1 (system)", "Uptime, description et contact de la machine"],
-        ["1.3.6.1.2.1.2 (IF-MIB)", "Interfaces réseau et trafic entrant/sortant"],
-        ["1.3.6.1.2.1.25 (HOST-RESOURCES-MIB)", "Stockage, RAM, charge CPU et processus"]
-      ],
-      "explication": "Ces trois branches standard couvrent l'essentiel : la branche system (dont sysUpTime en 1.3.6.1.2.1.1.3.0), l'IF-MIB pour le réseau et la HOST-RESOURCES-MIB pour les ressources machine."
-    },
-    {
-      "id": "sup-028",
-      "niveau": 3,
-      "type": "qcm",
-      "q": "Quelle commande PowerShell autorise les requêtes SNMP entrantes dans le pare-feu Windows ?",
-      "choices": [
-        "New-NetFirewallRule -Direction Inbound -Protocol UDP -LocalPort 161 -Action Allow",
-        "New-NetFirewallRule -Direction Outbound -Protocol TCP -LocalPort 161 -Action Allow",
-        "Set-NetFirewallProfile -Enabled False",
-        "New-NetFirewallRule -Direction Inbound -Protocol UDP -LocalPort 162 -Action Allow"
-      ],
-      "answer": 0,
-      "explication": "Le flux à autoriser est l'UDP 161 en entrée (requêtes du serveur Zabbix vers l'agent) ; on peut restreindre proprement avec -RemoteAddress à la seule IP du serveur Zabbix."
-    },
-    {
-      "id": "sup-029",
-      "niveau": 3,
-      "type": "qcm",
-      "q": "L'agent Net-SNMP est configuré avec « createUser zabbixv3 SHA ... AES ... ». Quels protocoles faut-il sélectionner dans l'interface SNMPv3 de l'hôte Zabbix ?",
-      "choices": [
-        "Authentication protocol : MD5 — Privacy protocol : DES",
-        "Authentication protocol : SHA1 — Privacy protocol : AES128",
-        "Authentication protocol : SHA256 — Privacy protocol : AES256",
-        "Authentication protocol : SHA1 — Privacy protocol : DES"
-      ],
-      "answer": 1,
-      "explication": "SHA de Net-SNMP correspond à SHA1 côté Zabbix et AES à AES128 ; une incohérence de mapping est la cause n°1 des données qui ne remontent pas. Zabbix permet aussi de stocker ces valeurs dans des macros {$SNMPV3_...}."
-    },
-    {
-      "id": "sup-030",
-      "niveau": 3,
-      "type": "qcm",
-      "q": "Pour un repli temporaire en SNMPv2c le temps de valider la chaîne Zabbix, quelle configuration minimale suffit dans snmpd.conf ?",
-      "choices": [
-        "createUser public MD5",
-        "rocommunity public <IP_du_serveur_Zabbix>",
-        "rouser public priv",
-        "trapcommunity public"
-      ],
-      "answer": 1,
-      "explication": "En v2c, une communauté en lecture seule (rocommunity) restreinte à l'IP du serveur suffit ; mais sans authentification ni chiffrement, c'est à réserver au test ou au labo."
-    },
-    {
-      "id": "sup-031",
       "niveau": 4,
       "type": "scenario",
-      "context": "Sur le poste Windows :\nC:\\usr\\bin> snmpwalk -v3 -l authPriv -u zabbixv3 -a SHA -A \"...\" -x AES -X \"...\" localhost 1.3.6.1.2.1.1\nSNMPv2-MIB::sysDescr.0 = STRING: Windows 10 ...\n\nSur le serveur Zabbix :\n# snmpwalk -v3 -l authPriv -u zabbixv3 -a SHA -A \"...\" -x AES -X \"...\" 192.168.1.50 1.3.6.1.2.1.1\nTimeout: No Response from 192.168.1.50",
-      "q": "Le test local répond mais le même snmpwalk depuis le serveur Zabbix expire. Quelle est la cause la plus probable ?",
+      "context": "Un client possède 40 équipements réseau (switchs, routeurs) sur lesquels aucun agent Zabbix ne peut être installé. Il souhaite :\n1. détecter en quelques minutes qu'un équipement ne répond plus ;\n2. être averti immédiatement quand un port critique tombe, sans attendre le prochain cycle d'interrogation.",
+      "q": "Quelle combinaison répond aux deux besoins ?",
       "choices": [
-        "Les passphrases sont incorrectes",
-        "Le pare-feu Windows bloque l'UDP 161 entrant (ou un filtrage réseau intermédiaire)",
-        "Le build Net-SNMP ne supporte pas OpenSSL",
-        "L'utilisateur SNMPv3 n'a pas été créé"
+        "Supervision active uniquement, en interrogeant les équipements en HTTP",
+        "Interrogation SNMP régulière (supervision active, UDP 161) pour l'état global, complétée par l'envoi de traps SNMP (supervision passive, UDP 162) pour les événements immédiats",
+        "Installation d'un agent Zabbix sur chaque équipement",
+        "Supervision passive uniquement, en attendant les traps des équipements"
       ],
       "answer": 1,
-      "explication": "Si l'agent répond en local, la configuration v3 est bonne : un timeout uniquement à distance pointe vers le pare-feu Windows (règle UDP 161 entrante manquante) ou un filtrage entre les deux machines."
-    },
-    {
-      "id": "sup-032",
-      "niveau": 4,
-      "type": "scenario",
-      "context": "PS C:\\> Get-Service SNMP, 'Net-SNMP agent'\nStatus    Name             DisplayName\nRunning   SNMP             Service SNMP\nStopped   Net-SNMP agent   Net-SNMP agent\n\nLe démarrage du service « Net-SNMP agent » échoue systématiquement.",
-      "q": "Pourquoi le service Net-SNMP refuse-t-il de démarrer sur ce poste ?",
-      "choices": [
-        "Le fichier snmpd.conf contient trop de directives",
-        "Le port UDP 161 est déjà occupé par le service SNMP natif de Windows : snmpd ne peut pas s'y lier",
-        "Le pare-feu Windows bloque le démarrage des services tiers",
-        "L'utilisateur SNMPv3 n'a pas encore été déclaré"
-      ],
-      "answer": 1,
-      "explication": "Deux agents ne peuvent pas écouter sur le même port : il faut arrêter le service SNMP natif et le passer en démarrage désactivé avant de lancer snmpd."
-    },
-    {
-      "id": "sup-033",
-      "niveau": 4,
-      "type": "scenario",
-      "context": "C:\\usr\\bin> snmpwalk -v3 -l authPriv -u zabbixv3 -a SHA -A \"Pass123\" -x AES -X \"PrivPass_Chg456\" localhost 1.3.6.1.2.1.1\nsnmpwalk: Authentication failure (incorrect password, community or key)",
-      "q": "Ce test local échoue en « Authentication failure ». Quelles pistes vérifier en priorité ?",
-      "choices": [
-        "La règle de pare-feu UDP 161 et le routage vers le serveur Zabbix",
-        "La longueur des passphrases (minimum 8 caractères), le protocole d'authentification déclaré et le support OpenSSL du build",
-        "Le conflit de port avec le service SNMP natif de Windows",
-        "L'existence de l'OID 1.3.6.1.2.1.1 dans la MIB"
-      ],
-      "answer": 1,
-      "explication": "Une Authentication failure en local vient des identifiants v3 : passphrase trop courte (ici « Pass123 » fait 7 caractères), mauvais protocole, ou build sans OpenSSL incapable de faire du SHA/AES. Le pare-feu, lui, provoquerait un timeout."
-    },
-    {
-      "id": "sup-034",
-      "niveau": 4,
-      "type": "scenario",
-      "q": "Vous modifiez la passphrase dans la ligne createUser de snmpd.conf puis redémarrez le service Net-SNMP, mais l'ancienne passphrase fonctionne toujours et la nouvelle est refusée. Que se passe-t-il ?",
-      "choices": [
-        "Zabbix met en cache l'ancienne passphrase pendant 24 heures",
-        "Le fichier de persistance conserve l'ancien utilisateur usmUser : il faut arrêter le service, purger le snmpd.conf du dossier persist, puis redémarrer",
-        "Windows restaure automatiquement snmpd.conf à chaque redémarrage",
-        "La passphrase d'un utilisateur SNMPv3 ne peut jamais être modifiée"
-      ],
-      "answer": 1,
-      "explication": "La ligne createUser n'est lue qu'à la création : ensuite l'utilisateur vit dans le fichier de persistance (ex. C:\\usr\\snmp\\persist\\snmpd.conf), qu'il faut purger service arrêté pour repartir sur les nouvelles clés."
-    },
-    {
-      "id": "sup-035",
-      "niveau": 4,
-      "type": "scenario",
-      "context": "C:\\usr\\bin> snmpwalk -v3 -l authPriv -u zabbixv3 -a SHA -A \"AuthPass_Chg123\" -x AES -X \"PrivPass_Chg456\" localhost 1.3.6.1.2.1.1\nsnmpwalk: Unknown authentication protocol (SHA)\n\nLe poste utilise des binaires Net-SNMP 5.9.1 récupérés en zip, compilés sans OpenSSL (« nossl »).",
-      "q": "Avec ce build « nossl », quel niveau de sécurité SNMPv3 maximal peut-on atteindre ?",
-      "choices": [
-        "authPriv avec SHA et AES",
-        "authNoPriv avec MD5 uniquement",
-        "noAuthNoPriv uniquement",
-        "authPriv avec MD5 et DES"
-      ],
-      "answer": 1,
-      "explication": "Sans OpenSSL, seul MD5 est disponible pour l'authentification et aucun chiffrement n'est possible : on plafonne à authNoPriv. Pour une vraie configuration authPriv SHA/AES, il faut installer le build OpenSSL officiel."
+      "explication": "Le polling actif détecte la panne d'un équipement même muet, et les traps signalent instantanément un événement sans attendre le cycle suivant : les deux approches sont complémentaires."
     }
   ]
 }

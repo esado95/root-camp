@@ -320,15 +320,15 @@
       "id": "diag-027",
       "niveau": 3,
       "type": "qcm",
-      "q": "Comment l'adresse IP 172.16.9.53 s'écrit-elle en hexadécimal ?",
+      "q": "Comment l'adresse IP 172.16.40.53 s'écrit-elle en hexadécimal ?",
       "choices": [
-        "AC.10.09.35",
-        "AC.10.09.FE",
-        "AC.16.09.53",
-        "B2.10.09.35"
+        "AC.10.28.35",
+        "AC.10.28.FE",
+        "AC.16.40.53",
+        "B2.10.28.35"
       ],
       "answer": 0,
-      "explication": "172 = AC, 16 = 10, 9 = 09 et 53 = 35 en hexadécimal ; AC.10.09.FE correspondrait à 172.16.9.254, la passerelle."
+      "explication": "172 = AC, 16 = 10, 40 = 28 et 53 = 35 en hexadécimal ; AC.10.28.FE correspondrait à 172.16.40.254, la passerelle."
     },
     {
       "id": "diag-028",
@@ -348,7 +348,7 @@
       "id": "diag-029",
       "niveau": 3,
       "type": "qcm",
-      "q": "Dans le codage DNS du nom www.adrar-formation.com, quel octet précède « adrar-formation » et pourquoi ?",
+      "q": "Dans le codage DNS du nom www.exemple-reseaux.com, quel octet précède « exemple-reseaux » et pourquoi ?",
       "choices": [
         "00, pour marquer le début du nom",
         "0f, car chaque label est précédé de sa longueur (15 caractères)",
@@ -389,17 +389,17 @@
       "id": "diag-032",
       "niveau": 3,
       "type": "terminal",
-      "prompt": "said@srv-deb:~$",
+      "prompt": "tech@srv-deb:~$",
       "q": "Affichez la configuration IP des interfaces réseau de ce serveur Linux (équivalent de la commande ipconfig de Windows).",
       "accept": ["ip a", "ip addr", "ip address", "ip addr show", "ip address show"],
-      "output": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 00:0c:29:4f:8a:1b brd ff:ff:ff:ff:ff:ff\n    inet 172.16.9.162/24 brd 172.16.9.255 scope global ens33\n       valid_lft forever preferred_lft forever",
+      "output": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 00:0c:29:4f:8a:1b brd ff:ff:ff:ff:ff:ff\n    inet 172.16.40.162/24 brd 172.16.40.255 scope global ens33\n       valid_lft forever preferred_lft forever",
       "explication": "Sous Linux, ip a remplace ipconfig ; de même, tracert devient traceroute."
     },
     {
       "id": "diag-033",
       "niveau": 4,
       "type": "scenario",
-      "context": "C:\\> tracert 203.0.113.10\n  1     1 ms    <1 ms    <1 ms  172.16.9.254\n  2     2 ms     2 ms     1 ms  46.255.202.186\n  3    25 ms    25 ms    26 ms  po11-75.er02.mar02.jaguar-network.net\n  4     *        *        *     Délai d'attente de la demande dépassé.\n  5     *        *        *     Délai d'attente de la demande dépassé.\n  6     *        *        *     Délai d'attente de la demande dépassé.",
+      "context": "C:\\> tracert 203.0.113.10\n  1     1 ms    <1 ms    <1 ms  172.16.40.254\n  2     2 ms     2 ms     1 ms  198.51.100.1\n  3    25 ms    25 ms    26 ms  core1.transit.exemple.net\n  4     *        *        *     Délai d'attente de la demande dépassé.\n  5     *        *        *     Délai d'attente de la demande dépassé.\n  6     *        *        *     Délai d'attente de la demande dépassé.",
       "q": "Comment interpréter ce résultat de tracert ?",
       "choices": [
         "Simple filtrage ICMP sur le saut 4 : la suite du chemin est fonctionnelle",
@@ -414,7 +414,7 @@
       "id": "diag-034",
       "niveau": 4,
       "type": "scenario",
-      "context": "Capture Wireshark pendant « ping 172.16.9.254 » :\nNo.  Source             Destination        Protocole  Info\n1    00:15:5d:09:52:2a  ff:ff:ff:ff:ff:ff  ARP        Who has 172.16.9.254? Tell 172.16.9.53\n2    00:15:5d:09:52:2a  ff:ff:ff:ff:ff:ff  ARP        Who has 172.16.9.254? Tell 172.16.9.53\n3    00:15:5d:09:52:2a  ff:ff:ff:ff:ff:ff  ARP        Who has 172.16.9.254? Tell 172.16.9.53\n(aucune autre trame — le ping affiche « Impossible de joindre l'hôte »)",
+      "context": "Capture Wireshark pendant « ping 172.16.40.254 » :\nNo.  Source             Destination        Protocole  Info\n1    00:15:5d:09:52:2a  ff:ff:ff:ff:ff:ff  ARP        Who has 172.16.40.254? Tell 172.16.40.53\n2    00:15:5d:09:52:2a  ff:ff:ff:ff:ff:ff  ARP        Who has 172.16.40.254? Tell 172.16.40.53\n3    00:15:5d:09:52:2a  ff:ff:ff:ff:ff:ff  ARP        Who has 172.16.40.254? Tell 172.16.40.53\n(aucune autre trame — le ping affiche « Impossible de joindre l'hôte »)",
       "q": "Que révèle cette capture ?",
       "choices": [
         "Le pare-feu de la passerelle bloque l'ICMP entrant",
@@ -459,7 +459,7 @@
       "id": "diag-037",
       "niveau": 4,
       "type": "scenario",
-      "context": "C:\\> tracert siege.entreprise.fr\n  1     1 ms     1 ms     1 ms   172.16.9.254\n  2     3 ms     2 ms     3 ms   46.255.202.186\n  3    24 ms    25 ms    24 ms   be1.er03.mar01.example.net\n  4   182 ms   175 ms   190 ms   217.0.0.14\n  5   185 ms   178 ms   188 ms   siege.entreprise.fr [203.0.113.20]",
+      "context": "C:\\> tracert siege.entreprise.fr\n  1     1 ms     1 ms     1 ms   172.16.40.254\n  2     3 ms     2 ms     3 ms   198.51.100.1\n  3    24 ms    25 ms    24 ms   be1.er03.mar01.example.net\n  4   182 ms   175 ms   190 ms   217.0.0.14\n  5   185 ms   178 ms   188 ms   siege.entreprise.fr [203.0.113.20]",
       "q": "La cible répond, mais les utilisateurs se plaignent de lenteurs. Que montre ce tracert ?",
       "choices": [
         "Une perte de paquets sur le saut 2",

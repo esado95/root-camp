@@ -32,7 +32,7 @@
     {
       "id": "lin-005", "niveau": 1, "type": "terminal",
       "q": "Vous êtes perdu dans l'arborescence. Tapez la commande qui affiche le chemin du répertoire courant.",
-      "prompt": "said@srv-deb:~/travaux/tp3$",
+      "prompt": "tech@srv-deb:~/travaux/tp3$",
       "accept": ["pwd"],
       "output": "/home/said/travaux/tp3",
       "explication": "pwd = print working directory. Pour naviguer : cd, pour lister : ls."
@@ -99,10 +99,10 @@
     },
     {
       "id": "lin-015", "niveau": 3, "type": "terminal",
-      "q": "Ajoutez l'utilisateur « said » au groupe sudo.",
+      "q": "Ajoutez l'utilisateur « tech » au groupe sudo.",
       "prompt": "root@srv-deb:~#",
-      "accept": ["usermod -aG sudo said", "usermod -a -G sudo said", "gpasswd -a said sudo"],
-      "explication": "usermod -aG sudo said (-a = ajouter sans écraser les autres groupes). gpasswd -a said sudo fonctionne aussi ; « id said » permet de vérifier."
+      "accept": ["usermod -aG sudo tech", "usermod -a -G sudo tech", "gpasswd -a said sudo"],
+      "explication": "usermod -aG sudo tech (-a = ajouter sans écraser les autres groupes). gpasswd -a said sudo fonctionne aussi ; « id tech » permet de vérifier."
     },
     {
       "id": "lin-016", "niveau": 3, "type": "qcm",

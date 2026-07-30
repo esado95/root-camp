@@ -84,46 +84,46 @@
       "type": "tp",
       "shell": "bash",
       "q": "Faites passer srv-deb du DHCP à l'IP statique 192.168.1.50/24",
-      "context": "srv-deb est en DHCP sur eth0 (bail actuel : 192.168.1.107/24).\nCible : 192.168.1.50/24, passerelle 192.168.1.254, sans redémarrer la machine.\nVous êtes connecté avec votre compte said (sudo disponible).",
+      "context": "srv-deb est en DHCP sur eth0 (bail actuel : 192.168.1.107/24).\nCible : 192.168.1.50/24, passerelle 192.168.1.254, sans redémarrer la machine.\nVous êtes connecté avec votre compte tech (sudo disponible).",
       "steps": [
         {
           "q": "Relevez le nom de l'interface et l'IP actuelle",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["ip a", "ip addr", "ip address", "ip addr show", "ip a show"],
           "output": "2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 08:00:27:53:8a:ba brd ff:ff:ff:ff:ff:ff\n    inet 192.168.1.107/24 brd 192.168.1.255 scope global dynamic eth0\n       valid_lft 85923sec preferred_lft 85923sec",
           "hint": "La commande moderne commence par ip ; sa sous-commande pour les adresses tient en une lettre."
         },
         {
           "q": "Relevez la passerelle par défaut fournie par le DHCP",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["ip r", "ip route", "ip route show"],
           "output": "default via 192.168.1.254 dev eth0\n192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.107",
           "hint": "Même famille de commande, mais la sous-commande concerne les routes. La ligne default = passerelle."
         },
         {
           "q": "Ouvrez le fichier de configuration réseau et remplacez le bloc DHCP par : iface eth0 inet static, address 192.168.1.50/24, gateway 192.168.1.254",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["sudo nano /etc/network/interfaces", "sudo vi /etc/network/interfaces", "sudo vim /etc/network/interfaces"],
           "hint": "Le fichier de configuration IP de Debian est dans /etc/network/. Pensez à l'élévation de privilèges pour pouvoir enregistrer.",
           "error": "/etc/network/interfaces: Permission denied"
         },
         {
           "q": "Videz l'ancienne adresse du bail DHCP encore attachée à eth0",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["sudo ip addr flush dev eth0", "sudo ip a flush dev eth0", "sudo ip address flush dev eth0"],
           "hint": "Sans ce nettoyage, l'ancienne IP peut rester collée à l'interface. Le verbe anglais signifie « vider ».",
           "error": "RTNETLINK answers: Operation not permitted"
         },
         {
           "q": "Relancez le service réseau pour appliquer la configuration statique",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["sudo systemctl restart networking", "sudo systemctl restart networking.service"],
           "hint": "Le contrôleur systemd, l'action de redémarrage, et le service qui gère /etc/network/interfaces.",
           "error": "Failed to restart networking.service: Access denied"
         },
         {
           "q": "Vérifiez que la nouvelle IP statique est bien appliquée",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["ip a", "ip addr", "ip address", "ip a show eth0", "ip addr show eth0"],
           "output": "2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 08:00:27:53:8a:ba brd ff:ff:ff:ff:ff:ff\n    inet 192.168.1.50/24 brd 192.168.1.255 scope global eth0\n       valid_lft forever preferred_lft forever",
           "hint": "La même commande qu'au relevé initial : la mention « dynamic » doit avoir disparu."
@@ -189,11 +189,11 @@
       "type": "tp",
       "shell": "bash",
       "q": "Installez et activez l'administration à distance SSH sur srv-deb",
-      "context": "srv-deb doit être administrable à distance depuis le poste technicien.\nVous êtes connecté avec votre compte said (sudo disponible).",
+      "context": "srv-deb doit être administrable à distance depuis le poste technicien.\nVous êtes connecté avec votre compte tech (sudo disponible).",
       "steps": [
         {
           "q": "Mettez à jour le cache des paquets avant toute installation",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["sudo apt update", "sudo apt-get update"],
           "output": "Hit:1 http://deb.debian.org/debian bookworm InRelease\nGet:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]\nGet:3 http://security.debian.org/debian-security bookworm-security InRelease [48.0 kB]\nReading package lists... Done\nBuilding dependency tree... Done\nAll packages are up to date.",
           "hint": "Réflexe systématique avant d'installer : rafraîchir l'index des dépôts.",
@@ -201,21 +201,21 @@
         },
         {
           "q": "Installez le serveur SSH",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["sudo apt install openssh-server", "sudo apt install openssh-server -y", "sudo apt -y install openssh-server", "sudo apt-get install openssh-server"],
           "output": "Reading package lists... Done\nBuilding dependency tree... Done\nThe following NEW packages will be installed:\n  openssh-server openssh-sftp-server\nSetting up openssh-server (1:9.2p1-2+deb12u3) ...\nCreated symlink /etc/systemd/system/sshd.service -> /lib/systemd/system/ssh.service.",
           "hint": "Le paquet côté serveur s'appelle openssh-… quelque chose."
         },
         {
           "q": "Vérifiez que le service SSH est bien démarré",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["sudo systemctl status ssh", "systemctl status ssh", "sudo systemctl status ssh.service", "systemctl status ssh.service"],
           "output": "● ssh.service - OpenBSD Secure Shell server\n     Loaded: loaded (/lib/systemd/system/ssh.service; enabled; preset: enabled)\n     Active: active (running) since Wed 2026-07-30 10:32:17 CEST; 40s ago\n   Main PID: 2143 (sshd)",
           "hint": "Le contrôleur systemd et l'action qui affiche l'état. Sur Debian, le service s'appelle ssh."
         },
         {
           "q": "Assurez-vous que SSH démarrera automatiquement au boot",
-          "prompt": "said@srv-deb:~$",
+          "prompt": "tech@srv-deb:~$",
           "accept": ["sudo systemctl enable ssh", "sudo systemctl enable ssh.service"],
           "output": "Synchronizing state of ssh.service with SysV service script with /lib/systemd/systemd-sysv-install.\nExecuting: /lib/systemd/systemd-sysv-install enable ssh",
           "hint": "L'action systemctl qui inscrit un service au démarrage — le contraire de disable."
@@ -369,11 +369,11 @@
       "type": "tp",
       "shell": "bash",
       "q": "Installez le serveur web Apache sur srv-web et prouvez qu'il répond",
-      "context": "srv-web (Debian 12) doit héberger l'intranet de la promo.\nVous êtes connecté avec votre compte said (sudo disponible).",
+      "context": "srv-web (Debian 12) doit héberger l'intranet de la promo.\nVous êtes connecté avec votre compte tech (sudo disponible).",
       "steps": [
         {
           "q": "Mettez à jour le cache des paquets",
-          "prompt": "said@srv-web:~$",
+          "prompt": "tech@srv-web:~$",
           "accept": ["sudo apt update", "sudo apt-get update"],
           "output": "Hit:1 http://deb.debian.org/debian bookworm InRelease\nGet:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]\nReading package lists... Done\nBuilding dependency tree... Done\nAll packages are up to date.",
           "hint": "Réflexe systématique avant toute installation : rafraîchir l'index des dépôts.",
@@ -381,21 +381,21 @@
         },
         {
           "q": "Installez le serveur web Apache",
-          "prompt": "said@srv-web:~$",
+          "prompt": "tech@srv-web:~$",
           "accept": ["sudo apt install apache2", "sudo apt install apache2 -y", "sudo apt -y install apache2", "sudo apt-get install apache2"],
           "output": "Reading package lists... Done\nBuilding dependency tree... Done\nThe following NEW packages will be installed:\n  apache2 apache2-bin apache2-data apache2-utils\nSetting up apache2 (2.4.62-1~deb12u1) ...\nCreated symlink /etc/systemd/system/multi-user.target.wants/apache2.service -> /lib/systemd/system/apache2.service.",
           "hint": "Sous Debian, le paquet du serveur web historique porte le chiffre 2 dans son nom."
         },
         {
           "q": "Vérifiez que le service web tourne",
-          "prompt": "said@srv-web:~$",
+          "prompt": "tech@srv-web:~$",
           "accept": ["systemctl status apache2", "sudo systemctl status apache2", "systemctl status apache2.service", "sudo systemctl status apache2.service"],
           "output": "● apache2.service - The Apache HTTP Server\n     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; preset: enabled)\n     Active: active (running) since Wed 2026-07-30 14:05:11 CEST; 30s ago\n   Main PID: 3121 (apache2)",
           "hint": "Le contrôleur systemd et l'action qui affiche l'état. Le service porte le même nom que le paquet."
         },
         {
           "q": "Testez la page par défaut depuis le serveur lui-même, sans navigateur",
-          "prompt": "said@srv-web:~$",
+          "prompt": "tech@srv-web:~$",
           "accept": ["curl localhost", "curl http://localhost", "curl 127.0.0.1", "curl http://127.0.0.1"],
           "output": "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" ...>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n  <head>\n    <title>Apache2 Debian Default Page: It works</title>\n...",
           "hint": "L'outil en ligne de commande qui récupère une URL, pointé sur la boucle locale."

@@ -106,11 +106,11 @@
     },
     {
       "id": "ad-016", "niveau": 3, "type": "scenario",
-      "context": "Un poste Windows n'arrive pas à rejoindre le domaine adrar.local. Son DNS est configuré sur 8.8.8.8.",
+      "context": "Un poste Windows n'arrive pas à rejoindre le domaine entreprise.local. Son DNS est configuré sur 8.8.8.8.",
       "q": "Que faut-il corriger ?",
       "choices": ["Mettre le poste dans le même VLAN que le serveur", "Pointer le DNS du poste vers le serveur DNS du domaine (le DC)", "Désactiver le pare-feu Windows", "Changer le nom du poste"],
       "answer": 1,
-      "explication": "Le DNS public ne connaît pas adrar.local ni ses enregistrements SRV. Le poste doit interroger le DNS du domaine pour trouver le DC."
+      "explication": "Le DNS public ne connaît pas entreprise.local ni ses enregistrements SRV. Le poste doit interroger le DNS du domaine pour trouver le DC."
     },
     {
       "id": "ad-017", "niveau": 3, "type": "qcm",
@@ -121,10 +121,10 @@
     },
     {
       "id": "ad-018", "niveau": 3, "type": "qcm",
-      "q": "toulouse.adrar.local par rapport à adrar.local est :",
+      "q": "lyon.entreprise.local par rapport à entreprise.local est :",
       "choices": ["Une forêt distincte", "Un domaine enfant, lié au parent par une relation d'approbation", "Un alias DNS", "Un site AD"],
       "answer": 1,
-      "explication": "Même arbre : adrar.local est le domaine parent, toulouse.adrar.local le domaine enfant, avec une relation de confiance automatique."
+      "explication": "Même arbre : entreprise.local est le domaine parent, lyon.entreprise.local le domaine enfant, avec une relation de confiance automatique."
     },
     {
       "id": "ad-019", "niveau": 4, "type": "scenario",

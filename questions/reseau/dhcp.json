@@ -157,7 +157,7 @@
       "q": "L'adresse a été libérée. Tapez maintenant la commande qui demande un nouveau bail DHCP.",
       "prompt": "PS C:\\Users\\client>",
       "accept": ["ipconfig /renew", "ipconfig/renew", "ipconfig -renew"],
-      "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Suffixe DNS propre à la connexion. . . : adrar.lan\n   Adresse IPv4. . . . . . . . . . . . . : 192.168.10.112\n   Masque de sous-réseau. . . . . . . . : 255.255.255.0\n   Passerelle par défaut. . . . . . . . : 192.168.10.254",
+      "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Suffixe DNS propre à la connexion. . . : entreprise.lan\n   Adresse IPv4. . . . . . . . . . . . . : 192.168.10.112\n   Masque de sous-réseau. . . . . . . . : 255.255.255.0\n   Passerelle par défaut. . . . . . . . : 192.168.10.254",
       "explication": "ipconfig /renew relance une négociation DORA : le poste récupère une adresse de l'étendue avec ses options (masque, passerelle, DNS)."
     },
     {

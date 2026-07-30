@@ -200,8 +200,8 @@
     },
     {
       "id": "lweb-027", "niveau": 3, "type": "qcm",
-      "q": "Comment réserver un site Apache 2.4 à la seule IP cliente 172.16.9.150 ?",
-      "choices": ["Placer Require ip 172.16.9.150 dans un bloc <Directory> pointant sur le même chemin que le DocumentRoot", "Écrire Require ip 172.16.9.150 directement sous ServerName, en vrac dans le VirtualHost", "Déclarer <VirtualHost 172.16.9.150:80> dans le fichier du site", "Ajouter l'IP du client dans le fichier /etc/hosts du serveur"],
+      "q": "Comment réserver un site Apache 2.4 à la seule IP cliente 172.16.40.150 ?",
+      "choices": ["Placer Require ip 172.16.40.150 dans un bloc <Directory> pointant sur le même chemin que le DocumentRoot", "Écrire Require ip 172.16.40.150 directement sous ServerName, en vrac dans le VirtualHost", "Déclarer <VirtualHost 172.16.40.150:80> dans le fichier du site", "Ajouter l'IP du client dans le fichier /etc/hosts du serveur"],
       "answer": 0,
       "explication": "Les directives d'accès (Require) doivent être dans un <Directory>, sinon Apache refuse de démarrer. L'IP dans <VirtualHost> désigne une IP du serveur, pas celle du client ; tout client non autorisé reçoit un 403."
     },
@@ -271,9 +271,9 @@
     },
     {
       "id": "lweb-036", "niveau": 4, "type": "scenario",
-      "context": "sites-enabled contient :\n  default.conf  : <VirtualHost 172.16.9.151:80>\n  intranet.conf : <VirtualHost *:80> avec ServerName intranet.exemple1.lan\nLe client résout bien intranet.exemple1.lan en 172.16.9.151,\nmais il obtient toujours la page du site default.",
+      "context": "sites-enabled contient :\n  default.conf  : <VirtualHost 172.16.40.151:80>\n  intranet.conf : <VirtualHost *:80> avec ServerName intranet.exemple1.lan\nLe client résout bien intranet.exemple1.lan en 172.16.40.151,\nmais il obtient toujours la page du site default.",
       "q": "Pourquoi le client tombe-t-il sur le site default alors que le VirtualHost intranet est activé et que le nom est bien résolu ?",
-      "choices": ["Une écoute sur IP explicite (172.16.9.151:80) est prioritaire sur le joker *:80 : le vhost default capture tout le trafic vers cette IP avant même la comparaison des ServerName", "Le fichier intranet.conf n'a pas été activé avec a2ensite", "Le ServerName est mal orthographié dans intranet.conf", "Le port 80 ne peut être utilisé que par un seul VirtualHost"],
+      "choices": ["Une écoute sur IP explicite (172.16.40.151:80) est prioritaire sur le joker *:80 : le vhost default capture tout le trafic vers cette IP avant même la comparaison des ServerName", "Le fichier intranet.conf n'a pas été activé avec a2ensite", "Le ServerName est mal orthographié dans intranet.conf", "Le port 80 ne peut être utilisé que par un seul VirtualHost"],
       "answer": 0,
       "explication": "Apache regroupe d'abord les VirtualHosts par adresse d'écoute, et IP:port bat *:port : les sites en *:80 deviennent invisibles pour cette IP. Solution : uniformiser tous les vhosts en *:80 pour qu'ils soient comparés par nom."
     },

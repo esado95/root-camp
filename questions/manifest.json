@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "updated": "2026-07-30",
   "themes": [
     {
@@ -63,7 +63,7 @@
       "sub": "hyperviseurs · cluster · SAN",
       "modules": [
         { "id": "hyperv", "name": "Hyper-V & clusters", "file": "virtualisation/hyper-v-clusters.json" },
-        { "id": "proxmox", "name": "Proxmox & Ceph (projet)", "file": "virtualisation/proxmox-ceph.json" }
+        { "id": "proxmox", "name": "Infrastructure — études de cas", "file": "virtualisation/proxmox-ceph.json" }
       ]
     },
     {

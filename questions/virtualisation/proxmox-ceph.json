@@ -1,207 +1,194 @@
 {
-  "module": "Proxmox & Ceph (projet)",
-  "source": "Infra-Reseau-Ceph-Proxmox.md",
+  "module": "Infrastructure — études de cas",
+  "source": "concepts de virtualisation et stockage distribué (cas anonymisés)",
   "questions": [
     {
-      "id": "prx-001", "niveau": 1, "type": "qcm",
-      "q": "Dans un cluster Proxmox/Ceph à 3 nœuds, qu'est-ce qu'une topologie « full mesh » pour le réseau de stockage ?",
-      "choices": ["Chaque host est relié directement aux deux autres par des liens point à point, sans switch dédié", "Tous les hosts sont reliés à un switch central unique", "Chaque host est relié à une paire de switchs de stockage redondants", "Les hosts communiquent via le réseau LAN des utilisateurs"],
-      "answer": 0,
-      "explication": "En full mesh, chaque nœud dispose d'un lien direct vers chacun des autres : le trafic Ceph ne traverse aucun switch, ce qui économise du matériel."
-    },
-    {
-      "id": "prx-002", "niveau": 1, "type": "qcm",
-      "q": "Quel est le rôle de Corosync dans un cluster Proxmox ?",
-      "choices": ["Assurer le quorum et la communication entre les nœuds du cluster", "Répliquer les données entre les OSD Ceph", "Fournir l'interface web de management", "Agréger plusieurs liens réseau en un bond"],
-      "answer": 0,
-      "explication": "Corosync est la couche de communication du cluster Proxmox : c'est lui qui maintient le quorum, c'est-à-dire la majorité de nœuds nécessaire pour que le cluster reste opérationnel."
-    },
-    {
-      "id": "prx-003", "niveau": 1, "type": "libre",
-      "q": "Dans le plan de VLANs proposé, quel numéro de VLAN est dédié au management Proxmox (accès GUI, SSH) ?",
-      "accept": ["20", "vlan 20", "vlan20"],
-      "explication": "Le VLAN 20 porte le management Proxmox (interface web et SSH), séparé du VLAN 10 qui porte le trafic des VMs et des utilisateurs."
-    },
-    {
-      "id": "prx-004", "niveau": 1, "type": "libre",
-      "q": "Dans la topologie avec switchs de stockage dédiés, quel numéro de VLAN isole le trafic Ceph du LAN utilisateurs ?",
-      "accept": ["30", "vlan 30", "vlan30"],
-      "explication": "Le VLAN 30 est réservé au stockage : il transporte les trafics Ceph public et Ceph cluster, isolés des incidents du LAN."
-    },
-    {
-      "id": "prx-005", "niveau": 1, "type": "qcm",
-      "q": "Quelle norme IEEE définit l'agrégation de liens LACP utilisée pour les bonds des hosts Proxmox ?",
-      "choices": ["802.3ad", "802.1Q", "802.1X", "802.11ac"],
-      "answer": 0,
-      "explication": "LACP est standardisé par IEEE 802.3ad ; 802.1Q concerne le tagging des VLANs et 802.1X l'authentification des ports réseau."
-    },
-    {
-      "id": "prx-006", "niveau": 1, "type": "assoc",
-      "q": "Associez chaque VLAN de l'infrastructure à son usage.",
-      "pairs": [["VLAN 10", "Trafic des VMs et des utilisateurs"], ["VLAN 20", "Management Proxmox (GUI, SSH)"], ["VLAN 30", "Réseau de stockage Ceph"]],
-      "explication": "La segmentation en VLANs sépare les usages : production utilisateurs (10), administration (20) et stockage (30), chacun pouvant être filtré et priorisé indépendamment."
-    },
-    {
-      "id": "prx-007", "niveau": 1, "type": "qcm",
-      "q": "Quel débit est prévu pour les ports dédiés au trafic Ceph sur chaque host ?",
-      "choices": ["1 GbE", "10 GbE, voire 25 GbE", "100 Mb/s", "40 GbE obligatoirement"],
+      "id": "cas-001", "niveau": 2, "type": "scenario",
+      "context": "Une PME de 40 salariés fait tourner ses services (fichiers, comptabilité, intranet) sur cinq serveurs physiques vieillissants, chacun utilisé à moins de 15 % de sa capacité. Le contrat de maintenance matérielle arrive à échéance et la direction demande un plan de modernisation.",
+      "q": "Quelle est la meilleure orientation technique ?",
+      "choices": ["Remplacer les cinq serveurs à l'identique pour conserver l'architecture existante", "Consolider les services sur deux hôtes de virtualisation dimensionnés en conséquence", "Migrer immédiatement tous les services vers le cloud public sans étude préalable", "Ajouter de la RAM et des disques aux serveurs actuels pour prolonger leur durée de vie"],
       "answer": 1,
-      "explication": "La réplication et le recovery Ceph sont très gourmands en bande passante : 10 GbE au minimum, 25 GbE si possible. Les ports LAN/management, eux, restent en 2x 1 GbE."
+      "explication": "Avec des taux d'utilisation aussi faibles, la virtualisation consolide les charges sur peu d'hôtes : moins de matériel à maintenir, sauvegardes et évolutions facilitées. Racheter cinq serveurs ou prolonger l'existant fige le gaspillage, et une bascule cloud précipitée expose à des surprises de coûts et de compatibilité."
     },
     {
-      "id": "prx-008", "niveau": 1, "type": "qcm",
-      "q": "Dans le full mesh, quel sous-réseau est attribué au lien direct entre PVE1 et PVE3 ?",
-      "choices": ["10.10.12.0/30", "10.10.13.0/30", "10.10.23.0/30", "172.16.30.0/24"],
+      "id": "cas-002", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi recommande-t-on un nombre impair de nœuds (3, 5...) dans un cluster de virtualisation ?",
+      "choices": ["Pour qu'une majorité stricte puisse toujours se dégager lors d'un vote de quorum et éviter le split-brain", "Parce que les licences des hyperviseurs se vendent par lots de trois", "Pour répartir la charge processeur plus équitablement entre les machines virtuelles", "Parce qu'un nombre pair de nœuds empêche la migration à chaud"],
+      "answer": 0,
+      "explication": "Le quorum exige une majorité stricte : avec un nombre impair de votes, aucune partition du cluster ne peut se retrouver à égalité. La répartition de charge et la migration à chaud, elles, fonctionnent quel que soit le nombre de nœuds."
+    },
+    {
+      "id": "cas-003", "niveau": 2, "type": "scenario",
+      "context": "Dans un cabinet comptable, le prestataire propose de faire transiter le trafic de stockage entre les hôtes de virtualisation par le même switch que les postes des utilisateurs, « pour économiser un équipement ».",
+      "q": "Quelle est la meilleure réponse à cette proposition ?",
+      "choices": ["Accepter : le trafic de stockage est léger et passera inaperçu", "Accepter, mais uniquement si le switch est administrable", "Refuser : le trafic de stockage doit être isolé de celui des utilisateurs, sur un réseau ou un VLAN dédié et correctement dimensionné", "Refuser et exiger que les postes utilisateurs passent en Wi-Fi pour désengorger le switch"],
+      "answer": 2,
+      "explication": "Le stockage est vital pour toutes les VMs : une saturation ou une tempête de broadcast côté utilisateurs dégraderait l'ensemble de la production. Un switch administrable ne suffit pas si les flux partagent la même bande passante, et déplacer les utilisateurs en Wi-Fi ne règle rien."
+    },
+    {
+      "id": "cas-004", "niveau": 2, "type": "scenario",
+      "context": "Une agence de communication protège ses machines virtuelles uniquement par des snapshots pris chaque soir et conservés sur le même stockage que les VMs. L'administrateur estime être « couvert en cas de problème ».",
+      "q": "Quel est le principal défaut de cette stratégie ?",
+      "choices": ["Les snapshots consomment trop de processeur pour être pris quotidiennement", "Un snapshot n'est pas une sauvegarde : si le stockage qui l'héberge est perdu ou chiffré, les snapshots disparaissent avec les données", "Les snapshots ne peuvent capturer que des VMs éteintes", "Il faudrait prendre les snapshots le matin plutôt que le soir"],
       "answer": 1,
-      "explication": "La convention reprend les numéros des nœuds : 10.10.13.0/30 relie PVE1 et PVE3, 10.10.12.0/30 relie PVE1 et PVE2, 10.10.23.0/30 relie PVE2 et PVE3."
+      "explication": "Un snapshot dépend du stockage d'origine : une panne, un incendie ou un ransomware l'emportent avec les données. Une vraie sauvegarde est une copie indépendante, idéalement selon la règle 3-2-1 : trois copies, deux supports différents, une hors site."
     },
     {
-      "id": "prx-009", "niveau": 1, "type": "qcm",
-      "q": "Dans la topologie switchée, les deux switchs de stockage sont configurés en stack ou en MLAG. Qu'est-ce que cela apporte ?",
-      "choices": ["Vus du host, les deux switchs se comportent comme un seul équipement logique pour le LACP", "Cela double automatiquement le débit de chaque lien physique", "Cela dispense d'utiliser un VLAN dédié au stockage", "Cela convertit les ports 1 GbE en ports 10 GbE"],
+      "id": "cas-005", "niveau": 2, "type": "scenario",
+      "context": "Dans une mairie, l'un des trois hôtes du cluster de virtualisation (avec stockage partagé) doit recevoir un remplacement de barrettes mémoire. Il héberge l'état civil et la messagerie, utilisés en continu aux heures d'ouverture.",
+      "q": "Comment réaliser cette maintenance avec le moins d'impact possible ?",
+      "choices": ["Éteindre les VMs le temps de l'intervention et prévenir les agents par mail", "Attendre la prochaine fermeture annuelle de la mairie", "Cloner les VMs sur un poste de travail puissant le temps de l'intervention", "Migrer à chaud les VMs vers les deux autres hôtes, intervenir, puis les redistribuer"],
+      "answer": 3,
+      "explication": "La migration à chaud déplace les VMs sans interruption de service : c'est exactement son cas d'usage, rendu possible par le stockage partagé. Éteindre ou reporter pénalise les utilisateurs inutilement, et un poste de travail n'est pas un hôte de secours fiable."
+    },
+    {
+      "id": "cas-006", "niveau": 2, "type": "qcm",
+      "q": "Dans un stockage distribué configuré avec une réplication de taille 3, comment les données d'un objet sont-elles stockées ?",
+      "choices": ["En trois exemplaires complets, répartis sur trois nœuds différents et écrits de façon synchrone", "Sur un seul nœud, avec deux index de secours sur les autres", "Découpées en trois fragments dont il faut réunir les trois pour lire", "Sur le nœud principal, puis recopiées vers les autres une fois par nuit"],
       "answer": 0,
-      "explication": "Le stack ou le MLAG permet de monter un bond LACP à cheval sur deux switchs physiques : la panne d'un switch entier ne casse pas l'agrégat."
+      "explication": "La réplication de taille 3 écrit trois copies complètes sur trois nœuds distincts au moment de l'écriture : la panne d'un nœud ne fait perdre aucune donnée. Ce n'est ni du découpage façon RAID 0, ni une copie différée."
     },
     {
-      "id": "prx-010", "niveau": 2, "type": "qcm",
-      "q": "Pourquoi utilise-t-on des sous-réseaux en /30 pour les liens du full mesh ?",
-      "choices": ["Un lien point à point ne relie que 2 équipements, et un /30 offre exactement 2 adresses utilisables", "Le /30 est imposé par le protocole Ceph", "Le /30 chiffre le trafic entre les nœuds", "Le /30 permet le broadcast entre les 3 nœuds"],
+      "id": "cas-007", "niveau": 3, "type": "scenario",
+      "context": "Un petit hébergeur exploite un cluster de deux nœuds. À chaque redémarrage de l'un des deux serveurs, l'ensemble du cluster se fige et refuse de démarrer des VMs tant que le second n'est pas revenu.",
+      "q": "Quelle est la meilleure solution durable ?",
+      "choices": ["Désactiver définitivement le mécanisme de quorum pour que chaque nœud décide seul", "Ajouter un troisième vote au cluster : un troisième nœud complet, ou un petit serveur témoin jouant le rôle d'arbitre", "Programmer les redémarrages uniquement la nuit", "Doubler la RAM des deux nœuds pour qu'ils tiennent la charge seuls"],
+      "answer": 1,
+      "explication": "Avec deux votes, la perte d'un nœud fait tomber la majorité : le cluster se fige volontairement pour éviter le split-brain. Un troisième vote (nœud ou simple témoin d'arbitrage) rétablit une majorité possible ; désactiver le quorum expose à la corruption des données, et l'heure du redémarrage ne change rien au problème."
+    },
+    {
+      "id": "cas-008", "niveau": 3, "type": "scenario",
+      "context": "Une PME de 40 salariés conçoit son futur cluster de trois hyperviseurs. Deux options de stockage sont sur la table : un NAS d'entrée de gamme unique partagé entre les hôtes, ou un stockage distribué répliqué directement sur les disques des trois nœuds.",
+      "q": "Quel argument doit peser le plus dans la décision ?",
+      "choices": ["Le NAS unique constitue un point de défaillance unique : sa panne arrête toutes les VMs malgré les trois hyperviseurs redondants", "Le stockage distribué est toujours moins cher qu'un NAS", "Le NAS est préférable car il est toujours plus rapide qu'un stockage distribué", "Les deux options se valent dès lors que des sauvegardes existent"],
       "answer": 0,
-      "explication": "Un /30 contient exactement 2 adresses hôtes : c'est le masque classique des liens point à point, sans gaspillage d'adresses."
+      "explication": "Trois hyperviseurs redondants ne servent à rien si toutes les données reposent sur un seul boîtier : le NAS devient le SPOF de l'infrastructure. Le stockage distribué répliqué survit à la panne d'un nœud complet ; les sauvegardes protègent les données mais pas la continuité de service."
     },
     {
-      "id": "prx-011", "niveau": 2, "type": "qcm",
-      "q": "Pourquoi dédier un VLAN au trafic de stockage Ceph plutôt que de le faire circuler sur le LAN des utilisateurs ?",
-      "choices": ["Pour isoler le trafic Ceph des incidents du LAN, comme une tempête de broadcast ou une saturation", "Parce que Ceph ne fonctionne pas dans un VLAN taggé", "Pour économiser des adresses IP", "Pour éviter d'acheter des switchs supplémentaires"],
+      "id": "cas-009", "niveau": 3, "type": "scenario",
+      "context": "Pour gagner de l'espace disque, l'administrateur d'un petit hébergeur envisage d'abaisser la réplication de son stockage distribué de trois copies à deux.",
+      "q": "Pourquoi cette économie est-elle déconseillée en production ?",
+      "choices": ["Avec deux copies, une panne de disque survenant pendant la maintenance d'un autre nœud peut ne laisser qu'une copie, voire aucune : le risque de perte de données devient réel", "Deux copies ralentissent les écritures par rapport à trois", "La réplication à deux copies est incompatible avec les clusters de trois nœuds", "Le passage de trois à deux copies impose de reformater tous les disques"],
       "answer": 0,
-      "explication": "Le stockage est vital pour toutes les VMs : l'isoler dans son propre VLAN (et sur des switchs dédiés) le protège des tempêtes de broadcast et de la saturation côté LAN."
+      "explication": "La troisième copie protège pendant les situations dégradées : maintenance d'un nœud plus panne simultanée d'un disque, ou panne pendant une reconstruction. C'est pourquoi la taille 3 est la recommandation générale en production ; passer à 2 revient à parier qu'aucune double panne n'arrivera jamais."
     },
     {
-      "id": "prx-012", "niveau": 2, "type": "assoc",
-      "q": "Associez chaque réseau ou service du cluster à sa fonction.",
-      "pairs": [["Ceph public", "Accès des clients et hyperviseurs au pool de stockage"], ["Ceph cluster", "Réplication et recovery entre les OSD"], ["Corosync", "Quorum et communication du cluster Proxmox"]],
-      "explication": "Ceph distingue le réseau public (accès aux données) du réseau cluster (trafic interne de réplication) ; Corosync est indépendant de Ceph et gère le quorum Proxmox."
+      "id": "cas-010", "niveau": 3, "type": "scenario",
+      "context": "Une mairie sauvegarde chaque nuit ses machines virtuelles... vers un volume hébergé sur le même cluster de stockage que la production. L'audit annuel de sécurité pointe cette pratique.",
+      "q": "Quelle évolution corrige le problème soulevé par l'audit ?",
+      "choices": ["Chiffrer les sauvegardes existantes sans les déplacer", "Doubler la fréquence des sauvegardes sur le même volume", "Diriger les sauvegardes vers un équipement distinct, idéalement dans un autre local, avec une copie hors site", "Remplacer les sauvegardes par des snapshots horaires"],
+      "answer": 2,
+      "explication": "Une sauvegarde stockée sur l'infrastructure qu'elle protège disparaît avec elle en cas de sinistre majeur : panne du cluster, incendie, ransomware. La règle 3-2-1 impose un support distinct et une copie hors site ; chiffrer ou multiplier des copies au même endroit ne change rien au risque."
     },
     {
-      "id": "prx-013", "niveau": 2, "type": "qcm",
-      "q": "À quoi sert l'anneau Corosync secondaire (ring1) configuré sur le Bond0 LAN ?",
-      "choices": ["Servir de chemin de secours pour le quorum si le réseau de stockage devient indisponible", "Doubler en permanence le débit de Corosync", "Accélérer la réplication des données Ceph", "Donner aux utilisateurs un accès de secours aux VMs"],
+      "id": "cas-011", "niveau": 3, "type": "scenario",
+      "context": "Dans une entreprise de transport, la direction veut réduire la facture électrique. Un technicien propose d'éteindre chaque nuit deux des trois nœuds du cluster de virtualisation, « puisque la charge nocturne est faible ».",
+      "q": "Pourquoi faut-il refuser cette proposition ?",
+      "choices": ["Les serveurs consomment davantage au démarrage qu'en fonctionnement continu", "Avec un seul nœud allumé sur trois, le cluster perd sa majorité : les services se figent précisément pour éviter une divergence des données", "L'extinction nocturne use prématurément les alimentations", "La proposition est valable, à condition d'éteindre les nœuds dans le bon ordre"],
+      "answer": 1,
+      "explication": "Un cluster de trois nœuds exige au moins deux votes actifs pour conserver le quorum : un nœud isolé se met en sécurité et bloque les VMs. Pour économiser l'énergie, on joue sur la consolidation des VMs ou les fonctions d'économie des processeurs, jamais sur le quorum."
+    },
+    {
+      "id": "cas-012", "niveau": 3, "type": "scenario",
+      "context": "Un cabinet d'avocats dimensionne son cluster de trois hyperviseurs à haute disponibilité. L'intégrateur propose des serveurs calculés pour que la totalité des VMs occupe 90 % de la RAM cumulée des trois machines.",
+      "q": "Quel est le défaut de ce dimensionnement ?",
+      "choices": ["Il ne laisse aucune réserve pour absorber la panne d'un nœud : les VMs du serveur défaillant ne pourront pas redémarrer sur les deux autres", "90 % d'occupation mémoire empêche l'installation des mises à jour", "La RAM doit toujours être égale à la capacité de stockage", "Il aurait fallu raisonner uniquement sur le processeur, la RAM n'ayant pas d'importance"],
       "answer": 0,
-      "explication": "Corosync supporte plusieurs anneaux : si l'anneau primaire (porté par le mesh ou le VLAN storage) tombe, le quorum survit grâce au ring1 qui passe par le LAN."
+      "explication": "En haute disponibilité, on dimensionne en N-1 : les nœuds restants doivent pouvoir porter toute la charge pendant la panne ou la maintenance de l'un d'eux. À 90 % d'occupation sur trois nœuds, la perte d'un serveur laisse ses VMs sans ressources pour redémarrer ailleurs."
     },
     {
-      "id": "prx-014", "niveau": 2, "type": "qcm",
-      "q": "Pourquoi la topologie full mesh ne convient-elle plus au-delà de 3 à 4 nœuds ?",
-      "choices": ["Le nombre de liens directs (et de ports dédiés) par host augmente à chaque nœud ajouté", "Ceph est limité à 3 OSD au maximum", "Corosync refuse plus de 4 nœuds", "Les adresses en /30 sont épuisées au-delà de 4 nœuds"],
-      "answer": 0,
-      "explication": "En mesh complet, chaque nouveau nœud exige un lien direct vers chacun des autres : le nombre de ports et de câbles nécessaires explose rapidement."
+      "id": "cas-013", "niveau": 3, "type": "scenario",
+      "context": "Chez un hébergeur, les VMs deviennent très lentes à chaque reconstruction du stockage distribué après un remplacement de disque. Le diagnostic montre que les liens réseau de 1 Gb/s des nœuds, partagés entre production et stockage, sont saturés.",
+      "q": "Quelle amélioration traite la cause du problème ?",
+      "choices": ["Programmer les remplacements de disques uniquement le week-end", "Réduire la réplication pour diminuer le volume de données à reconstruire", "Ajouter des VMs de cache sur chaque nœud", "Doter chaque nœud de liens dédiés au stockage, dimensionnés en 10 Gb/s ou plus"],
+      "answer": 3,
+      "explication": "Le trafic de réplication et de reconstruction est massif : il exige un réseau dédié et rapide (10 Gb/s et plus), séparé de la production. Les pannes de disques ne se planifient pas, et réduire la réplication échange un problème de performance contre un risque de perte de données."
     },
     {
-      "id": "prx-015", "niveau": 2, "type": "qcm",
-      "q": "Quel est le principal avantage de la topologie à switchs de stockage dédiés par rapport au full mesh ?",
-      "choices": ["Elle passe à l'échelle au-delà de 3 nœuds : ajouter un host se résume à le brancher sur les switchs existants", "Elle supprime le besoin de bonds LACP", "Elle coûte moins cher en matériel", "Elle supprime le besoin de VLANs"],
-      "answer": 0,
-      "explication": "Avec des switchs dédiés, l'ajout d'un nœud ne demande aucun recâblage des hosts existants, contrairement au mesh. En contrepartie, il faut acheter 2 switchs supplémentaires."
-    },
-    {
-      "id": "prx-016", "niveau": 2, "type": "qcm",
-      "q": "Dans la topologie switchée, pourquoi brancher chacun des deux liens du bond storage sur un switch différent ?",
-      "choices": ["Pour obtenir une redondance de switch, et pas seulement une redondance de câble", "Pour doubler le nombre de VLANs disponibles", "Parce que le LACP ne fonctionne pas avec deux liens sur le même switch", "Pour séparer le trafic Ceph public du trafic Ceph cluster"],
-      "answer": 0,
-      "explication": "Deux liens sur le même switch ne protègent que d'une panne de câble ou de port. Répartis sur deux switchs en stack/MLAG, ils survivent aussi à la panne d'un switch complet."
-    },
-    {
-      "id": "prx-017", "niveau": 2, "type": "multi",
-      "q": "Quels trafics sont portés par le réseau de stockage (liens mesh ou VLAN 30) ? (plusieurs réponses)",
-      "choices": ["Ceph public (accès au pool)", "Ceph cluster (réplication et recovery)", "Anneau Corosync primaire", "Trafic des VMs vers les utilisateurs", "Accès à l'interface web Proxmox"],
+      "id": "cas-014", "niveau": 3, "type": "multi",
+      "q": "Dans la salle serveur d'une PME, quelles mesures réduisent réellement les points de défaillance uniques (SPOF) ? (plusieurs réponses)",
+      "choices": ["Une double alimentation par serveur, raccordée à deux sources électriques protégées par onduleur", "Deux switchs avec, pour chaque serveur, des liens agrégés répartis sur les deux équipements", "La réplication du stockage sur plusieurs nœuds", "Le regroupement des disques en RAID 0 pour gagner en performance", "L'augmentation de la RAM des serveurs"],
       "answer": [0, 1, 2],
-      "explication": "Le réseau de stockage porte les deux réseaux Ceph ainsi que l'anneau primaire du quorum ; le trafic utilisateurs (VLAN 10) et le management (VLAN 20) restent sur le LAN."
+      "explication": "Un SPOF s'élimine en doublant l'élément concerné : alimentation, chemin réseau, copies des données. Le RAID 0 fait l'inverse (une seule panne de disque détruit le volume) et la RAM améliore la performance, pas la disponibilité."
     },
     {
-      "id": "prx-018", "niveau": 2, "type": "multi",
-      "q": "Quelles affirmations sur le coût matériel de la topologie full mesh sont exactes ? (plusieurs réponses)",
-      "choices": ["Elle économise les 2 switchs dédiés au stockage", "Elle consomme 2 ports 10 GbE dédiés par host, en plus des ports LAN", "Elle nécessite des switchs compatibles MLAG", "Elle supprime le besoin de switchs LAN"],
-      "answer": [0, 1],
-      "explication": "Le mesh évite l'achat de switchs storage mais mobilise 2 ports rapides sur chaque host ; les switchs LAN restent indispensables pour les VMs et le management."
+      "id": "cas-015", "niveau": 3, "type": "qcm",
+      "q": "Un service informatique réplique ses VMs en continu vers un second site et considère que « la sauvegarde est donc assurée ». Quelle est la limite de ce raisonnement ?",
+      "choices": ["La réplication propage aussi les erreurs : une suppression accidentelle, une corruption ou un chiffrement se retrouvent quasi instantanément sur la copie", "La réplication ne fonctionne qu'entre sites distants de moins d'un kilomètre", "La réplication est toujours plus lente qu'une sauvegarde", "Le raisonnement est correct : réplication et sauvegarde sont synonymes"],
+      "answer": 0,
+      "explication": "La réplication vise la continuité (reprendre vite sur la copie), la sauvegarde vise la réversibilité (revenir à un état antérieur sain). Sans historique de sauvegardes indépendant, une donnée corrompue puis répliquée est perdue des deux côtés."
     },
     {
-      "id": "prx-019", "niveau": 3, "type": "qcm",
-      "q": "Combien d'adresses IP utilisables offre un sous-réseau en /30 ?",
-      "choices": ["1", "2", "4", "6"],
+      "id": "cas-016", "niveau": 3, "type": "scenario",
+      "context": "Une agence d'architectes monte un cluster de trois nœuds avec stockage distribué et hésite : relier les nœuds en maillage direct (chaque serveur câblé aux deux autres, sans switch de stockage) ou investir dans une paire de switchs dédiés. Le plan de croissance prévoit six nœuds d'ici trois ans.",
+      "q": "Quelle décision est la plus cohérente avec ce plan de croissance ?",
+      "choices": ["Le maillage direct, qui restera le plus simple quelle que soit la taille du cluster", "La paire de switchs dédiés : le maillage direct ne passe pas à l'échelle, chaque nœud supplémentaire exigeant un lien direct vers tous les autres", "Aucun réseau de stockage : le réseau local existant suffira", "Un seul switch de stockage haut de gamme, moins cher que deux"],
       "answer": 1,
-      "explication": "Un /30 contient 4 adresses, dont on retire l'adresse de réseau et l'adresse de broadcast : il reste 2 adresses hôtes, l'idéal pour un lien point à point."
+      "explication": "Le maillage direct est économique à trois nœuds, mais le nombre de liens explose ensuite : à six nœuds, il faudrait cinq ports rapides par serveur. Avec des switchs dédiés redondants, ajouter un nœud se résume à le brancher ; un switch unique, lui, réintroduirait un SPOF."
     },
     {
-      "id": "prx-020", "niveau": 3, "type": "qcm",
-      "q": "Combien de sous-réseaux point à point faut-il prévoir pour un full mesh de 3 nœuds ?",
-      "choices": ["2", "3", "6", "9"],
+      "id": "cas-017", "niveau": 4, "type": "scenario",
+      "context": "Chez un petit hébergeur, l'un des trois nœuds du cluster (stockage répliqué en trois copies) tombe en panne de carte mère. La pièce n'arrivera que dans cinq jours. Le cluster fonctionne : les VMs ont redémarré sur les deux nœuds restants.",
+      "q": "Quelle conduite tenir pendant ces cinq jours ?",
+      "choices": ["Réduire la réplication à deux copies pour libérer de l'espace disque", "Éteindre le cluster par précaution jusqu'à la réparation", "Considérer l'incident comme clos puisque les VMs fonctionnent", "Maintenir le cluster en l'état, vérifier les sauvegardes et geler toute intervention sur les deux nœuds restants jusqu'au retour du troisième"],
+      "answer": 3,
+      "explication": "Le cluster tient, mais il a épuisé sa tolérance de panne : un second incident serait fatal au quorum comme aux données. La priorité est de réduire le risque — sauvegardes vérifiées, aucune maintenance — en attendant le retour à la normale ; modifier la réplication en pleine situation dégradée ajouterait du risque au lieu d'en retirer."
+    },
+    {
+      "id": "cas-018", "niveau": 4, "type": "scenario",
+      "context": "Un ransomware frappe une PME dans la nuit : les VMs sont chiffrées, la réplication continue vers la baie secondaire a propagé les données chiffrées en quelques minutes, et l'attaquant a supprimé les snapshots depuis la console d'administration compromise.",
+      "q": "Quelle mesure, si elle avait existé, aurait permis une reprise ?",
+      "choices": ["Une réplication vers une troisième baie, encore plus rapide", "Des sauvegardes régulières conservées hors ligne ou sur un stockage immuable, hors d'atteinte des consoles d'administration", "Des snapshots pris toutes les heures au lieu de toutes les nuits", "Un antivirus installé dans chaque VM, sans autre changement"],
       "answer": 1,
-      "explication": "Chaque paire de nœuds possède son propre lien : 3 paires possibles avec 3 nœuds, donc 3 sous-réseaux /30 distincts."
+      "explication": "Réplication et snapshots dépendent de l'infrastructure compromise : l'attaquant qui en prend le contrôle les détruit ou les corrompt. Seule une copie hors d'atteinte — hors ligne ou immuable — garantit un point de restauration sain ; l'antivirus relève de la prévention, il ne restaure rien."
     },
     {
-      "id": "prx-021", "niveau": 3, "type": "qcm",
-      "q": "Si l'on étendait le full mesh à 4 nœuds, combien de liens point à point faudrait-il au total ?",
-      "choices": ["4", "6", "8", "12"],
+      "id": "cas-019", "niveau": 4, "type": "scenario",
+      "context": "La direction d'une clinique fixe ses objectifs de reprise pour le dossier patient : au maximum 15 minutes de données perdues (RPO) et 4 heures d'interruption (RTO). Le budget permet d'équiper un second site à quelques kilomètres.",
+      "q": "Quelle architecture répond à ces objectifs ?",
+      "choices": ["Une sauvegarde complète hebdomadaire sur bandes stockées dans un coffre", "Des snapshots locaux toutes les 15 minutes, conservés sur la baie de production", "Une réplication à intervalle court vers le site secondaire, complétée par des sauvegardes quotidiennes indépendantes", "Du RAID 6 sur la baie principale, qui tolère déjà deux pannes de disques"],
+      "answer": 2,
+      "explication": "Seule une réplication rapprochée vers un second site tient un RPO de 15 minutes tout en permettant de redémarrer ailleurs dans le RTO de 4 heures ; les sauvegardes indépendantes restent indispensables contre la corruption. Bandes hebdomadaires (RPO d'une semaine), snapshots locaux (perdus avec la baie) et RAID (simple tolérance disque) ne tiennent pas ces objectifs."
+    },
+    {
+      "id": "cas-020", "niveau": 4, "type": "scenario",
+      "context": "À la suite d'une coupure électrique dans le local technique d'une société de services, deux des trois nœuds du cluster de virtualisation s'éteignent. Le troisième, branché sur un autre circuit, reste allumé... mais toutes les VMs sont figées et impossibles à redémarrer.",
+      "q": "Comment expliquer ce comportement ?",
+      "choices": ["Le nœud survivant est en surchauffe et se protège", "Les VMs figées attendaient la fin d'une sauvegarde", "Le stockage du nœud survivant est trop lent pour porter toutes les VMs", "Seul un nœud sur trois est actif : sans majorité, le cluster se verrouille volontairement pour éviter une divergence des données (split-brain)"],
+      "answer": 3,
+      "explication": "Un nœud isolé ne peut pas savoir si les autres sont morts ou simplement injoignables : sans majorité, il refuse d'agir seul, car deux versions divergentes des mêmes données seraient pires qu'une interruption. C'est un mécanisme de protection, pas une panne supplémentaire."
+    },
+    {
+      "id": "cas-021", "niveau": 4, "type": "scenario",
+      "context": "Pour gagner du temps, le technicien d'une ESN prévoit d'appliquer les mises à jour de l'hyperviseur sur les trois nœuds du cluster en même temps, un dimanche matin, redémarrages compris.",
+      "q": "Quelle démarche faut-il lui opposer ?",
+      "choices": ["Mettre à jour un nœud à la fois : migrer ses VMs à chaud, le mettre à jour, attendre son retour complet et la resynchronisation du stockage avant de passer au suivant", "Faire les trois nœuds en même temps, mais un samedi, jour de plus faible activité", "Ne jamais mettre à jour un cluster en production", "Mettre à jour deux nœuds simultanément et garder le troisième pour la semaine suivante"],
+      "answer": 0,
+      "explication": "Redémarrer les trois nœuds ensemble détruit temporairement le quorum et le stockage répliqué : interruption totale garantie, quel que soit le jour. La mise à jour glissante, nœud par nœud avec migration à chaud et resynchronisation entre chaque, maintient le service ; même deux nœuds simultanés feraient perdre la majorité."
+    },
+    {
+      "id": "cas-022", "niveau": 4, "type": "scenario",
+      "context": "Un cabinet comptable exploite un cluster de quatre nœuds répartis sur deux salles (deux nœuds par salle). La fibre reliant les deux salles est sectionnée par des travaux : les quatre serveurs fonctionnent, mais l'ensemble du cluster se fige.",
+      "q": "Quelle évolution rend l'architecture résiliente à ce scénario ?",
+      "choices": ["Passer à six nœuds, trois par salle", "Ajouter un vote d'arbitrage dans un troisième emplacement (petit serveur témoin), pour qu'une salle puisse conserver la majorité", "Désactiver le quorum pendant les périodes de travaux", "Regrouper les quatre nœuds dans la même salle pour supprimer la dépendance à la fibre"],
       "answer": 1,
-      "explication": "Un mesh complet compte n(n-1)/2 liens, soit 6 pour 4 nœuds — et déjà 3 ports dédiés par host. C'est ce qui limite cette topologie à 3-4 nœuds."
+      "explication": "Coupé en deux moitiés égales (2-2), aucun côté n'a la majorité et le cluster entier se fige. Un témoin dans un troisième emplacement donne un vote décisif à l'une des salles ; six nœuds en 3-3 reproduiraient l'égalité, et tout regrouper dans une salle créerait un SPOF bien pire en cas de sinistre."
     },
     {
-      "id": "prx-022", "niveau": 3, "type": "ordre",
-      "q": "Remettez dans l'ordre les événements lorsque le lien direct PVE1-PVE2 tombe dans la topologie full mesh.",
-      "steps": ["Le lien direct entre PVE1 et PVE2 tombe", "Le routage dynamique (OSPF via FRR) détecte la perte et recalcule les routes", "Le trafic entre PVE1 et PVE2 est réacheminé via PVE3", "Le cluster continue de fonctionner sans interruption de service"],
-      "explication": "Grâce au routage dynamique, la perte d'un seul lien mesh n'a pas d'impact : le troisième nœud sert de chemin de transit."
+      "id": "cas-023", "niveau": 4, "type": "scenario",
+      "context": "Chez un hébergeur, le remplacement d'un disque déclenche une reconstruction du stockage distribué. Pendant toute sa durée, les clients se plaignent de VMs quasi inutilisables. L'analyse montre que le trafic de reconstruction circule sur le même réseau que les accès disques des VMs.",
+      "q": "Quelle évolution d'architecture évite que le problème ne se reproduise ?",
+      "choices": ["Interdire les reconstructions en journée", "Remplacer les disques par des modèles réputés ne jamais tomber en panne", "Séparer les flux : un réseau pour les accès des VMs au stockage, un réseau distinct et dimensionné pour la réplication et la reconstruction entre nœuds", "Réduire le nombre de VMs par nœud"],
+      "answer": 2,
+      "explication": "Les stockages distribués distinguent le réseau « public » (accès des clients au stockage) du réseau « cluster » (réplication, reconstruction) : en les séparant, la reconstruction n'étouffe plus la production. Retarder une reconstruction prolonge la période sans redondance complète, c'est l'inverse du but recherché."
     },
     {
-      "id": "prx-023", "niveau": 3, "type": "qcm",
-      "q": "Quelle est la configuration réseau complète d'un host en topologie full mesh ?",
-      "choices": ["2 ports 10 GbE pour le mesh + 2 ports 1 GbE en bond LACP vers les switchs LAN", "4 ports 10 GbE, tous reliés aux switchs LAN", "2 ports 1 GbE pour le mesh + 2 ports 10 GbE pour le LAN", "Un seul port 10 GbE partagé entre stockage et LAN"],
-      "answer": 0,
-      "explication": "Chaque host consacre un port 10 GbE à chacun des deux autres nœuds, et garde un bond de 2x 1 GbE réparti sur les deux switchs LAN pour les VMs et le management."
-    },
-    {
-      "id": "prx-024", "niveau": 3, "type": "libre",
-      "q": "Quel protocole de routage dynamique, mis en œuvre via FRR, est proposé pour réacheminer le trafic entre les nœuds du mesh ?",
-      "accept": ["ospf", "ospfv2", "ospf v2"],
-      "explication": "OSPF, déployé via la suite FRR sur chaque nœud, recalcule automatiquement les routes en cas de perte d'un lien direct ; l'alternative citée est la configuration unicast de Corosync."
-    },
-    {
-      "id": "prx-025", "niveau": 3, "type": "qcm",
-      "q": "Selon le plan d'adressage de la topologie switchée, quelle adresse IP est cohérente pour le bond storage (VLAN 30) d'un host ?",
-      "choices": ["172.16.30.11/24", "192.168.10.11/24", "10.10.12.1/30", "172.16.9.11/24"],
-      "answer": 0,
-      "explication": "Le VLAN 30 utilise 172.16.30.0/24 (réseaux Ceph public et cluster fusionnés) ; 192.168.10.0/24 correspond au LAN, et les /30 en 10.10.x.x appartiennent à la variante full mesh."
-    },
-    {
-      "id": "prx-026", "niveau": 4, "type": "scenario",
-      "context": "Cluster full mesh de 3 nœuds Proxmox/Ceph.\nSuite à une panne électrique, PVE2 et PVE3 sont hors tension.\nSeul PVE1 est encore démarré.",
-      "q": "Quelle est la conséquence pour le cluster ?",
-      "choices": ["Le cluster perd le quorum Corosync ET le quorum Ceph : les services sont bloqués", "PVE1 continue seul à faire tourner toutes les VMs normalement", "Seul le stockage Ceph est impacté, les VMs continuent de fonctionner", "Le cluster bascule automatiquement en mode standalone sans aucun impact"],
-      "answer": 0,
-      "explication": "La tolérance de panne est de 1 nœud sur 3 : avec un seul nœud restant, ni Corosync ni Ceph n'ont la majorité, et le cluster se fige pour éviter un split-brain."
-    },
-    {
-      "id": "prx-027", "niveau": 4, "type": "scenario",
-      "context": "Full mesh de 3 nœuds. Sur PVE1 :\n- l'interface eth2 (lien direct vers PVE2) est DOWN\n- ceph -s affiche HEALTH_OK, tous les OSD sont up\n- un traceroute vers PVE2 montre que le trafic passe désormais par PVE3",
-      "q": "Pourquoi le cluster ne subit-il aucun impact malgré la coupure du lien direct ?",
-      "choices": ["Le routage dynamique (OSPF via FRR) a réacheminé le trafic PVE1-PVE2 via PVE3", "Ceph n'utilise pas le réseau mesh pour ses données", "Le cache de Ceph masque temporairement la panne", "PVE2 est en réalité éteint mais Ceph ne l'a pas encore détecté"],
-      "answer": 0,
-      "explication": "C'est précisément l'intérêt du routage dynamique dans le mesh : la perte d'un lien unique est absorbée en faisant transiter le trafic par le troisième nœud, sans impact sur Ceph."
-    },
-    {
-      "id": "prx-028", "niveau": 4, "type": "scenario",
-      "context": "Topologie avec switchs de stockage dédiés.\nUne tempête de broadcast sature complètement les switchs LAN : les utilisateurs n'accèdent plus aux VMs.",
-      "q": "Quel est l'impact sur le stockage Ceph ?",
-      "choices": ["Aucun : le trafic Ceph circule sur le VLAN 30, porté par des switchs dédiés isolés du LAN", "Ceph passe automatiquement en lecture seule", "Les OSD tombent les uns après les autres", "Le quorum Corosync est immédiatement perdu"],
-      "answer": 0,
-      "explication": "C'est tout l'intérêt de la séparation physique et logique du stockage : la saturation du LAN n'atteint pas les switchs storage, et l'anneau Corosync primaire, porté par le VLAN 30, maintient le quorum."
-    },
-    {
-      "id": "prx-029", "niveau": 4, "type": "scenario",
-      "context": "Topologie switchée : chaque host a son bond1 storage réparti sur les switchs Storage A et Storage B (stack/MLAG).\nLe switch Storage A tombe en panne.",
-      "q": "Que se passe-t-il pour le trafic Ceph ?",
-      "choices": ["Le bond LACP continue sur le lien vers Storage B : pas d'interruption, mais la bande passante est réduite de moitié", "Tout le trafic Ceph est interrompu jusqu'au remplacement du switch", "Les hosts basculent automatiquement le trafic Ceph sur le LAN", "Le cluster perd le quorum Ceph"],
-      "answer": 0,
-      "explication": "Grâce au stack/MLAG, le bond survit à la perte d'un switch entier : chaque host conserve un lien actif vers Storage B, au prix d'un débit divisé par deux."
+      "id": "cas-024", "niveau": 4, "type": "scenario",
+      "context": "Une PME prévoit 6 To de données utiles sur son futur stockage distribué de trois nœuds, répliqué en trois copies. Le commercial propose 8 To de capacité brute totale, « largement suffisants ».",
+      "q": "Quelle capacité brute totale faut-il réellement viser ?",
+      "choices": ["8 To conviennent : la réplication compresse les données", "12 To : deux copies suffisent dans le calcul", "18 To tout juste : la marge est inutile", "De l'ordre de 22 à 24 To : trois copies de 6 To, plus une marge pour la croissance et pour ne jamais frôler la saturation"],
+      "answer": 3,
+      "explication": "Trois copies de 6 To occupent déjà 18 To bruts, auxquels il faut ajouter une réserve : un stockage distribué proche de la saturation ne peut plus rééquilibrer ni reconstruire après une panne (on évite de dépasser environ 80 % de remplissage). Les 8 To proposés ne couvrent même pas une seule réplication complète."
     }
   ]
 }
