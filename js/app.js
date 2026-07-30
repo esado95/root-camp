@@ -550,9 +550,18 @@ function renderQuestion() {
   else if (q.type === "libre") renderLibre(q);
   else if (q.type === "terminal") renderTerminal(q);
   else if (q.type === "tp") renderTP(q);
+  shieldClicks();
 }
 
 function letters(i) { return String.fromCharCode(65 + i); }
+
+/* Bouclier anti double-clic : après chaque rendu d'écran interactif, les clics
+   sont ignorés 250 ms — le « rebond » d'un double-clic ne peut plus répondre
+   à la question suivante par accident. */
+function shieldClicks() {
+  screen.style.pointerEvents = "none";
+  setTimeout(() => { screen.style.pointerEvents = ""; }, 250);
+}
 
 function renderQCM(q) {
   const box = $("#answers");
@@ -912,6 +921,7 @@ function showResult(timeout) {
       </div>
       ${wrongList}
     </div>`;
+  shieldClicks();
   $("#res-back").onclick = () => { const b = session.back; session = null; b(); };
   $("#res-again").onclick = () => {
     const opts = { title: session.title, color: session.color, back: session.back, exam: session.exam, palier: session.palier };
