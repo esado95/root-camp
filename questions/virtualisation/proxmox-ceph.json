@@ -1,0 +1,207 @@
+{
+  "module": "Proxmox & Ceph (projet)",
+  "source": "Infra-Reseau-Ceph-Proxmox.md",
+  "questions": [
+    {
+      "id": "prx-001", "niveau": 1, "type": "qcm",
+      "q": "Dans un cluster Proxmox/Ceph à 3 nœuds, qu'est-ce qu'une topologie « full mesh » pour le réseau de stockage ?",
+      "choices": ["Chaque host est relié directement aux deux autres par des liens point à point, sans switch dédié", "Tous les hosts sont reliés à un switch central unique", "Chaque host est relié à une paire de switchs de stockage redondants", "Les hosts communiquent via le réseau LAN des utilisateurs"],
+      "answer": 0,
+      "explication": "En full mesh, chaque nœud dispose d'un lien direct vers chacun des autres : le trafic Ceph ne traverse aucun switch, ce qui économise du matériel."
+    },
+    {
+      "id": "prx-002", "niveau": 1, "type": "qcm",
+      "q": "Quel est le rôle de Corosync dans un cluster Proxmox ?",
+      "choices": ["Assurer le quorum et la communication entre les nœuds du cluster", "Répliquer les données entre les OSD Ceph", "Fournir l'interface web de management", "Agréger plusieurs liens réseau en un bond"],
+      "answer": 0,
+      "explication": "Corosync est la couche de communication du cluster Proxmox : c'est lui qui maintient le quorum, c'est-à-dire la majorité de nœuds nécessaire pour que le cluster reste opérationnel."
+    },
+    {
+      "id": "prx-003", "niveau": 1, "type": "libre",
+      "q": "Dans le plan de VLANs proposé, quel numéro de VLAN est dédié au management Proxmox (accès GUI, SSH) ?",
+      "accept": ["20", "vlan 20", "vlan20"],
+      "explication": "Le VLAN 20 porte le management Proxmox (interface web et SSH), séparé du VLAN 10 qui porte le trafic des VMs et des utilisateurs."
+    },
+    {
+      "id": "prx-004", "niveau": 1, "type": "libre",
+      "q": "Dans la topologie avec switchs de stockage dédiés, quel numéro de VLAN isole le trafic Ceph du LAN utilisateurs ?",
+      "accept": ["30", "vlan 30", "vlan30"],
+      "explication": "Le VLAN 30 est réservé au stockage : il transporte les trafics Ceph public et Ceph cluster, isolés des incidents du LAN."
+    },
+    {
+      "id": "prx-005", "niveau": 1, "type": "qcm",
+      "q": "Quelle norme IEEE définit l'agrégation de liens LACP utilisée pour les bonds des hosts Proxmox ?",
+      "choices": ["802.3ad", "802.1Q", "802.1X", "802.11ac"],
+      "answer": 0,
+      "explication": "LACP est standardisé par IEEE 802.3ad ; 802.1Q concerne le tagging des VLANs et 802.1X l'authentification des ports réseau."
+    },
+    {
+      "id": "prx-006", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque VLAN de l'infrastructure à son usage.",
+      "pairs": [["VLAN 10", "Trafic des VMs et des utilisateurs"], ["VLAN 20", "Management Proxmox (GUI, SSH)"], ["VLAN 30", "Réseau de stockage Ceph"]],
+      "explication": "La segmentation en VLANs sépare les usages : production utilisateurs (10), administration (20) et stockage (30), chacun pouvant être filtré et priorisé indépendamment."
+    },
+    {
+      "id": "prx-007", "niveau": 1, "type": "qcm",
+      "q": "Quel débit est prévu pour les ports dédiés au trafic Ceph sur chaque host ?",
+      "choices": ["1 GbE", "10 GbE, voire 25 GbE", "100 Mb/s", "40 GbE obligatoirement"],
+      "answer": 1,
+      "explication": "La réplication et le recovery Ceph sont très gourmands en bande passante : 10 GbE au minimum, 25 GbE si possible. Les ports LAN/management, eux, restent en 2x 1 GbE."
+    },
+    {
+      "id": "prx-008", "niveau": 1, "type": "qcm",
+      "q": "Dans le full mesh, quel sous-réseau est attribué au lien direct entre PVE1 et PVE3 ?",
+      "choices": ["10.10.12.0/30", "10.10.13.0/30", "10.10.23.0/30", "172.16.30.0/24"],
+      "answer": 1,
+      "explication": "La convention reprend les numéros des nœuds : 10.10.13.0/30 relie PVE1 et PVE3, 10.10.12.0/30 relie PVE1 et PVE2, 10.10.23.0/30 relie PVE2 et PVE3."
+    },
+    {
+      "id": "prx-009", "niveau": 1, "type": "qcm",
+      "q": "Dans la topologie switchée, les deux switchs de stockage sont configurés en stack ou en MLAG. Qu'est-ce que cela apporte ?",
+      "choices": ["Vus du host, les deux switchs se comportent comme un seul équipement logique pour le LACP", "Cela double automatiquement le débit de chaque lien physique", "Cela dispense d'utiliser un VLAN dédié au stockage", "Cela convertit les ports 1 GbE en ports 10 GbE"],
+      "answer": 0,
+      "explication": "Le stack ou le MLAG permet de monter un bond LACP à cheval sur deux switchs physiques : la panne d'un switch entier ne casse pas l'agrégat."
+    },
+    {
+      "id": "prx-010", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi utilise-t-on des sous-réseaux en /30 pour les liens du full mesh ?",
+      "choices": ["Un lien point à point ne relie que 2 équipements, et un /30 offre exactement 2 adresses utilisables", "Le /30 est imposé par le protocole Ceph", "Le /30 chiffre le trafic entre les nœuds", "Le /30 permet le broadcast entre les 3 nœuds"],
+      "answer": 0,
+      "explication": "Un /30 contient exactement 2 adresses hôtes : c'est le masque classique des liens point à point, sans gaspillage d'adresses."
+    },
+    {
+      "id": "prx-011", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi dédier un VLAN au trafic de stockage Ceph plutôt que de le faire circuler sur le LAN des utilisateurs ?",
+      "choices": ["Pour isoler le trafic Ceph des incidents du LAN, comme une tempête de broadcast ou une saturation", "Parce que Ceph ne fonctionne pas dans un VLAN taggé", "Pour économiser des adresses IP", "Pour éviter d'acheter des switchs supplémentaires"],
+      "answer": 0,
+      "explication": "Le stockage est vital pour toutes les VMs : l'isoler dans son propre VLAN (et sur des switchs dédiés) le protège des tempêtes de broadcast et de la saturation côté LAN."
+    },
+    {
+      "id": "prx-012", "niveau": 2, "type": "assoc",
+      "q": "Associez chaque réseau ou service du cluster à sa fonction.",
+      "pairs": [["Ceph public", "Accès des clients et hyperviseurs au pool de stockage"], ["Ceph cluster", "Réplication et recovery entre les OSD"], ["Corosync", "Quorum et communication du cluster Proxmox"]],
+      "explication": "Ceph distingue le réseau public (accès aux données) du réseau cluster (trafic interne de réplication) ; Corosync est indépendant de Ceph et gère le quorum Proxmox."
+    },
+    {
+      "id": "prx-013", "niveau": 2, "type": "qcm",
+      "q": "À quoi sert l'anneau Corosync secondaire (ring1) configuré sur le Bond0 LAN ?",
+      "choices": ["Servir de chemin de secours pour le quorum si le réseau de stockage devient indisponible", "Doubler en permanence le débit de Corosync", "Accélérer la réplication des données Ceph", "Donner aux utilisateurs un accès de secours aux VMs"],
+      "answer": 0,
+      "explication": "Corosync supporte plusieurs anneaux : si l'anneau primaire (porté par le mesh ou le VLAN storage) tombe, le quorum survit grâce au ring1 qui passe par le LAN."
+    },
+    {
+      "id": "prx-014", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi la topologie full mesh ne convient-elle plus au-delà de 3 à 4 nœuds ?",
+      "choices": ["Le nombre de liens directs (et de ports dédiés) par host augmente à chaque nœud ajouté", "Ceph est limité à 3 OSD au maximum", "Corosync refuse plus de 4 nœuds", "Les adresses en /30 sont épuisées au-delà de 4 nœuds"],
+      "answer": 0,
+      "explication": "En mesh complet, chaque nouveau nœud exige un lien direct vers chacun des autres : le nombre de ports et de câbles nécessaires explose rapidement."
+    },
+    {
+      "id": "prx-015", "niveau": 2, "type": "qcm",
+      "q": "Quel est le principal avantage de la topologie à switchs de stockage dédiés par rapport au full mesh ?",
+      "choices": ["Elle passe à l'échelle au-delà de 3 nœuds : ajouter un host se résume à le brancher sur les switchs existants", "Elle supprime le besoin de bonds LACP", "Elle coûte moins cher en matériel", "Elle supprime le besoin de VLANs"],
+      "answer": 0,
+      "explication": "Avec des switchs dédiés, l'ajout d'un nœud ne demande aucun recâblage des hosts existants, contrairement au mesh. En contrepartie, il faut acheter 2 switchs supplémentaires."
+    },
+    {
+      "id": "prx-016", "niveau": 2, "type": "qcm",
+      "q": "Dans la topologie switchée, pourquoi brancher chacun des deux liens du bond storage sur un switch différent ?",
+      "choices": ["Pour obtenir une redondance de switch, et pas seulement une redondance de câble", "Pour doubler le nombre de VLANs disponibles", "Parce que le LACP ne fonctionne pas avec deux liens sur le même switch", "Pour séparer le trafic Ceph public du trafic Ceph cluster"],
+      "answer": 0,
+      "explication": "Deux liens sur le même switch ne protègent que d'une panne de câble ou de port. Répartis sur deux switchs en stack/MLAG, ils survivent aussi à la panne d'un switch complet."
+    },
+    {
+      "id": "prx-017", "niveau": 2, "type": "multi",
+      "q": "Quels trafics sont portés par le réseau de stockage (liens mesh ou VLAN 30) ? (plusieurs réponses)",
+      "choices": ["Ceph public (accès au pool)", "Ceph cluster (réplication et recovery)", "Anneau Corosync primaire", "Trafic des VMs vers les utilisateurs", "Accès à l'interface web Proxmox"],
+      "answer": [0, 1, 2],
+      "explication": "Le réseau de stockage porte les deux réseaux Ceph ainsi que l'anneau primaire du quorum ; le trafic utilisateurs (VLAN 10) et le management (VLAN 20) restent sur le LAN."
+    },
+    {
+      "id": "prx-018", "niveau": 2, "type": "multi",
+      "q": "Quelles affirmations sur le coût matériel de la topologie full mesh sont exactes ? (plusieurs réponses)",
+      "choices": ["Elle économise les 2 switchs dédiés au stockage", "Elle consomme 2 ports 10 GbE dédiés par host, en plus des ports LAN", "Elle nécessite des switchs compatibles MLAG", "Elle supprime le besoin de switchs LAN"],
+      "answer": [0, 1],
+      "explication": "Le mesh évite l'achat de switchs storage mais mobilise 2 ports rapides sur chaque host ; les switchs LAN restent indispensables pour les VMs et le management."
+    },
+    {
+      "id": "prx-019", "niveau": 3, "type": "qcm",
+      "q": "Combien d'adresses IP utilisables offre un sous-réseau en /30 ?",
+      "choices": ["1", "2", "4", "6"],
+      "answer": 1,
+      "explication": "Un /30 contient 4 adresses, dont on retire l'adresse de réseau et l'adresse de broadcast : il reste 2 adresses hôtes, l'idéal pour un lien point à point."
+    },
+    {
+      "id": "prx-020", "niveau": 3, "type": "qcm",
+      "q": "Combien de sous-réseaux point à point faut-il prévoir pour un full mesh de 3 nœuds ?",
+      "choices": ["2", "3", "6", "9"],
+      "answer": 1,
+      "explication": "Chaque paire de nœuds possède son propre lien : 3 paires possibles avec 3 nœuds, donc 3 sous-réseaux /30 distincts."
+    },
+    {
+      "id": "prx-021", "niveau": 3, "type": "qcm",
+      "q": "Si l'on étendait le full mesh à 4 nœuds, combien de liens point à point faudrait-il au total ?",
+      "choices": ["4", "6", "8", "12"],
+      "answer": 1,
+      "explication": "Un mesh complet compte n(n-1)/2 liens, soit 6 pour 4 nœuds — et déjà 3 ports dédiés par host. C'est ce qui limite cette topologie à 3-4 nœuds."
+    },
+    {
+      "id": "prx-022", "niveau": 3, "type": "ordre",
+      "q": "Remettez dans l'ordre les événements lorsque le lien direct PVE1-PVE2 tombe dans la topologie full mesh.",
+      "steps": ["Le lien direct entre PVE1 et PVE2 tombe", "Le routage dynamique (OSPF via FRR) détecte la perte et recalcule les routes", "Le trafic entre PVE1 et PVE2 est réacheminé via PVE3", "Le cluster continue de fonctionner sans interruption de service"],
+      "explication": "Grâce au routage dynamique, la perte d'un seul lien mesh n'a pas d'impact : le troisième nœud sert de chemin de transit."
+    },
+    {
+      "id": "prx-023", "niveau": 3, "type": "qcm",
+      "q": "Quelle est la configuration réseau complète d'un host en topologie full mesh ?",
+      "choices": ["2 ports 10 GbE pour le mesh + 2 ports 1 GbE en bond LACP vers les switchs LAN", "4 ports 10 GbE, tous reliés aux switchs LAN", "2 ports 1 GbE pour le mesh + 2 ports 10 GbE pour le LAN", "Un seul port 10 GbE partagé entre stockage et LAN"],
+      "answer": 0,
+      "explication": "Chaque host consacre un port 10 GbE à chacun des deux autres nœuds, et garde un bond de 2x 1 GbE réparti sur les deux switchs LAN pour les VMs et le management."
+    },
+    {
+      "id": "prx-024", "niveau": 3, "type": "libre",
+      "q": "Quel protocole de routage dynamique, mis en œuvre via FRR, est proposé pour réacheminer le trafic entre les nœuds du mesh ?",
+      "accept": ["ospf", "ospfv2", "ospf v2"],
+      "explication": "OSPF, déployé via la suite FRR sur chaque nœud, recalcule automatiquement les routes en cas de perte d'un lien direct ; l'alternative citée est la configuration unicast de Corosync."
+    },
+    {
+      "id": "prx-025", "niveau": 3, "type": "qcm",
+      "q": "Selon le plan d'adressage de la topologie switchée, quelle adresse IP est cohérente pour le bond storage (VLAN 30) d'un host ?",
+      "choices": ["172.16.30.11/24", "192.168.10.11/24", "10.10.12.1/30", "172.16.9.11/24"],
+      "answer": 0,
+      "explication": "Le VLAN 30 utilise 172.16.30.0/24 (réseaux Ceph public et cluster fusionnés) ; 192.168.10.0/24 correspond au LAN, et les /30 en 10.10.x.x appartiennent à la variante full mesh."
+    },
+    {
+      "id": "prx-026", "niveau": 4, "type": "scenario",
+      "context": "Cluster full mesh de 3 nœuds Proxmox/Ceph.\nSuite à une panne électrique, PVE2 et PVE3 sont hors tension.\nSeul PVE1 est encore démarré.",
+      "q": "Quelle est la conséquence pour le cluster ?",
+      "choices": ["Le cluster perd le quorum Corosync ET le quorum Ceph : les services sont bloqués", "PVE1 continue seul à faire tourner toutes les VMs normalement", "Seul le stockage Ceph est impacté, les VMs continuent de fonctionner", "Le cluster bascule automatiquement en mode standalone sans aucun impact"],
+      "answer": 0,
+      "explication": "La tolérance de panne est de 1 nœud sur 3 : avec un seul nœud restant, ni Corosync ni Ceph n'ont la majorité, et le cluster se fige pour éviter un split-brain."
+    },
+    {
+      "id": "prx-027", "niveau": 4, "type": "scenario",
+      "context": "Full mesh de 3 nœuds. Sur PVE1 :\n- l'interface eth2 (lien direct vers PVE2) est DOWN\n- ceph -s affiche HEALTH_OK, tous les OSD sont up\n- un traceroute vers PVE2 montre que le trafic passe désormais par PVE3",
+      "q": "Pourquoi le cluster ne subit-il aucun impact malgré la coupure du lien direct ?",
+      "choices": ["Le routage dynamique (OSPF via FRR) a réacheminé le trafic PVE1-PVE2 via PVE3", "Ceph n'utilise pas le réseau mesh pour ses données", "Le cache de Ceph masque temporairement la panne", "PVE2 est en réalité éteint mais Ceph ne l'a pas encore détecté"],
+      "answer": 0,
+      "explication": "C'est précisément l'intérêt du routage dynamique dans le mesh : la perte d'un lien unique est absorbée en faisant transiter le trafic par le troisième nœud, sans impact sur Ceph."
+    },
+    {
+      "id": "prx-028", "niveau": 4, "type": "scenario",
+      "context": "Topologie avec switchs de stockage dédiés.\nUne tempête de broadcast sature complètement les switchs LAN : les utilisateurs n'accèdent plus aux VMs.",
+      "q": "Quel est l'impact sur le stockage Ceph ?",
+      "choices": ["Aucun : le trafic Ceph circule sur le VLAN 30, porté par des switchs dédiés isolés du LAN", "Ceph passe automatiquement en lecture seule", "Les OSD tombent les uns après les autres", "Le quorum Corosync est immédiatement perdu"],
+      "answer": 0,
+      "explication": "C'est tout l'intérêt de la séparation physique et logique du stockage : la saturation du LAN n'atteint pas les switchs storage, et l'anneau Corosync primaire, porté par le VLAN 30, maintient le quorum."
+    },
+    {
+      "id": "prx-029", "niveau": 4, "type": "scenario",
+      "context": "Topologie switchée : chaque host a son bond1 storage réparti sur les switchs Storage A et Storage B (stack/MLAG).\nLe switch Storage A tombe en panne.",
+      "q": "Que se passe-t-il pour le trafic Ceph ?",
+      "choices": ["Le bond LACP continue sur le lien vers Storage B : pas d'interruption, mais la bande passante est réduite de moitié", "Tout le trafic Ceph est interrompu jusqu'au remplacement du switch", "Les hosts basculent automatiquement le trafic Ceph sur le LAN", "Le cluster perd le quorum Ceph"],
+      "answer": 0,
+      "explication": "Grâce au stack/MLAG, le bond survit à la perte d'un switch entier : chaque host conserve un lien actif vers Storage B, au prix d'un débit divisé par deux."
+    }
+  ]
+}

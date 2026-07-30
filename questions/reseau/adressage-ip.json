@@ -113,7 +113,7 @@
     {
       "id": "adr-017", "niveau": 3, "type": "libre",
       "q": "Quelle est l'adresse réseau (IDSR) de 192.168.51.22/24 ?",
-      "accept": ["192.168.51.0"],
+      "accept": ["192.168.51.0", "192.168.51.0/24"],
       "explication": "AND logique entre IP et masque : les bits hôte passent à 0 → 192.168.51.0. Broadcast : 192.168.51.255."
     },
     {

@@ -1,0 +1,328 @@
+{
+  "module": "Linux — administration & LPIC-1",
+  "source": "Linux-Administration.md + Commandes-Linux-LPIC1.md",
+  "questions": [
+    {
+      "id": "ladm-001", "niveau": 1, "type": "libre",
+      "q": "Sur quel port TCP le service SSH écoute-t-il par défaut ?",
+      "accept": ["22", "port 22"],
+      "explication": "SSH utilise le port 22 par défaut ; on le change souvent (ex. 2222) dans /etc/ssh/sshd_config pour échapper aux scans automatiques."
+    },
+    {
+      "id": "ladm-002", "niveau": 1, "type": "qcm",
+      "q": "Quel fichier faut-il modifier pour configurer le daemon SSH côté serveur ?",
+      "choices": ["/etc/ssh/ssh_config", "/etc/ssh/sshd_config", "~/.ssh/config", "/etc/ssh/authorized_keys"],
+      "answer": 1,
+      "explication": "sshd_config (avec le d de daemon) configure le serveur ; ssh_config et ~/.ssh/config concernent le client."
+    },
+    {
+      "id": "ladm-003", "niveau": 1, "type": "qcm",
+      "q": "Après un ssh-keygen -t rsa, quel fichier constitue la clé privée à conserver précieusement sur le client ?",
+      "choices": ["id_rsa", "id_rsa.pub", "authorized_keys", "known_hosts"],
+      "answer": 0,
+      "explication": "id_rsa est la clé privée : elle ne quitte jamais le client. Seule id_rsa.pub (clé publique) est transmise au serveur."
+    },
+    {
+      "id": "ladm-004", "niveau": 2, "type": "qcm",
+      "q": "Lors de la génération d'une paire de clés SSH, à quoi sert la passphrase demandée ?",
+      "choices": ["À chiffrer la clé privée stockée localement sur le client", "À remplacer le mot de passe du compte sur le serveur", "À signer la clé publique avant son envoi", "À protéger le fichier sshd_config contre les modifications"],
+      "answer": 0,
+      "explication": "La passphrase chiffre la clé privée sur le disque du client : même volée, la clé reste inutilisable sans elle."
+    },
+    {
+      "id": "ladm-005", "niveau": 2, "type": "qcm",
+      "q": "Quel est l'objectif de la directive « PasswordAuthentication no » dans sshd_config ?",
+      "choices": ["Imposer l'authentification par clé et neutraliser les attaques par force brute sur les mots de passe", "Interdire la connexion directe du compte root", "Limiter le nombre de tentatives de connexion à trois", "Forcer le chiffrement des mots de passe côté serveur"],
+      "answer": 0,
+      "explication": "Sans authentification par mot de passe, seuls les détenteurs d'une clé privée autorisée peuvent se connecter : le brute-force devient inopérant."
+    },
+    {
+      "id": "ladm-006", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi remplace-t-on souvent le port SSH par défaut par un autre (ex. Port 2222) ?",
+      "choices": ["Pour échapper aux robots qui scannent en masse le port 22", "Parce que le port 22 est réservé aux connexions locales", "Pour accélérer la négociation du chiffrement", "Parce que les pare-feu bloquent toujours le port 22"],
+      "answer": 0,
+      "explication": "Changer le port n'est pas une protection absolue, mais élimine l'essentiel des tentatives automatisées qui visent systématiquement le port 22."
+    },
+    {
+      "id": "ladm-007", "niveau": 2, "type": "qcm",
+      "q": "Après avoir modifié /etc/ssh/sshd_config et redémarré le service, quelle précaution l'administrateur doit-il prendre ?",
+      "choices": ["Tester la connexion dans un nouveau terminal avant de fermer la session active", "Fermer immédiatement toutes les sessions pour appliquer la configuration", "Redémarrer entièrement le serveur", "Supprimer le fichier known_hosts des clients"],
+      "answer": 0,
+      "explication": "En cas d'erreur de configuration, la session encore ouverte reste le seul moyen de corriger le fichier sans se retrouver enfermé dehors."
+    },
+    {
+      "id": "ladm-008", "niveau": 3, "type": "multi",
+      "q": "Quelles directives de sshd_config contribuent à durcir la sécurité du serveur ? (plusieurs réponses)",
+      "choices": ["PermitRootLogin no", "MaxAuthTries 3", "X11Forwarding yes", "PasswordAuthentication no", "Port 22"],
+      "answer": [0, 1, 3],
+      "explication": "Interdire root, limiter les tentatives et imposer la clé réduisent la surface d'attaque ; X11Forwarding doit au contraire être désactivé sur un serveur, et conserver le port 22 n'apporte rien."
+    },
+    {
+      "id": "ladm-009", "niveau": 3, "type": "ordre",
+      "q": "Remettez dans l'ordre la mise en place d'une authentification SSH par clé, du client vers le serveur.",
+      "steps": ["Générer la paire de clés sur le client : ssh-keygen -t rsa -b 2048", "Copier la clé publique vers le serveur : ssh-copy-id [login]@[ip]", "Tester la connexion par clé : ssh [login]@[ip]", "Désactiver PasswordAuthentication dans sshd_config et redémarrer le service"],
+      "explication": "On ne désactive le mot de passe qu'en dernier, une fois la connexion par clé vérifiée ; -b 4096 est conseillé pour une connexion via Internet."
+    },
+    {
+      "id": "ladm-010", "niveau": 3, "type": "terminal",
+      "prompt": "said@srv-deb:~$",
+      "q": "Votre paire de clés SSH est déjà générée. Envoyez votre clé publique vers le compte robin du serveur 192.168.1.90 pour activer la connexion par clé.",
+      "accept": ["ssh-copy-id robin@192.168.1.90", "ssh-copy-id -i ~/.ssh/id_rsa.pub robin@192.168.1.90", "ssh-copy-id -i ~/.ssh/id_rsa.pub -p 22 robin@192.168.1.90", "ssh-copy-id -p 22 robin@192.168.1.90"],
+      "output": "/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: \"/home/said/.ssh/id_rsa.pub\"\n/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed\n/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys\nrobin@192.168.1.90's password: \n\nNumber of key(s) added: 1\n\nNow try logging into the machine, with:   \"ssh 'robin@192.168.1.90'\"\nand check to make sure that only the key(s) you wanted were added.",
+      "explication": "ssh-copy-id insère la clé publique dans le fichier ~/.ssh/authorized_keys de l'utilisateur distant ; l'option -i permet de préciser la clé à envoyer."
+    },
+    {
+      "id": "ladm-011", "niveau": 4, "type": "scenario",
+      "context": "Sur le serveur : PasswordAuthentication no.\nL'utilisateur robin se connecte par clé sans problème.\nLe nouvel utilisateur sam obtient : Permission denied (publickey).",
+      "q": "Quelle est la cause la plus probable du refus pour sam ?",
+      "choices": ["Sa clé publique n'a pas été copiée dans son propre fichier ~/.ssh/authorized_keys : la configuration des clés est propre à chaque utilisateur", "Le service SSH doit être redémarré à chaque nouvel utilisateur", "Le serveur n'accepte qu'une seule clé à la fois", "sam doit régénérer la clé de robin sur son poste"],
+      "answer": 0,
+      "explication": "authorized_keys se trouve dans le répertoire personnel de chaque utilisateur : un ssh-copy-id doit aussi être effectué pour sam."
+    },
+    {
+      "id": "ladm-012", "niveau": 4, "type": "scenario",
+      "context": "L'administrateur remplace « Port 22 » par « Port 2222 » dans /etc/ssh/sshd_config.\nDepuis un poste distant :\nssh -p 2222 admin@srv → Connection refused\nssh -p 22 admin@srv → connexion réussie",
+      "q": "Pourquoi le serveur écoute-t-il toujours sur le port 22 ?",
+      "choices": ["Le service n'a pas été redémarré : sudo systemctl restart ssh est nécessaire pour appliquer la modification", "Le port 2222 doit d'abord être déclaré dans /etc/hosts", "La directive Port ne peut être changée qu'après régénération des clés du serveur", "Le client doit vider son fichier known_hosts"],
+      "answer": 0,
+      "explication": "Le daemon sshd ne relit sa configuration qu'au redémarrage du service : toute modification de sshd_config reste sans effet jusque-là."
+    },
+    {
+      "id": "ladm-013", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque dépôt ou composant Debian 12 à son rôle dans sources.list.",
+      "pairs": [["bookworm", "dépôt principal officiel"], ["bookworm-security", "mises à jour de sécurité"], ["main", "paquets libres approuvés par Debian"], ["non-free-firmware", "micrologiciels non libres"]],
+      "explication": "Chaque ligne de sources.list suit la syntaxe « deb URL DISTRIBUTION COMPOSANTS » ; bookworm-updates fournit en plus les mises à jour intermédiaires."
+    },
+    {
+      "id": "ladm-014", "niveau": 2, "type": "qcm",
+      "q": "Quelle est la différence entre apt update et apt upgrade ?",
+      "choices": ["update rafraîchit le cache des dépôts, upgrade met à jour les paquets installés", "update met à jour les paquets, upgrade change de version de Debian", "Les deux commandes sont strictement équivalentes", "update installe uniquement les mises à jour de sécurité"],
+      "answer": 0,
+      "explication": "apt update ne télécharge que l'index des paquets disponibles : c'est le préalable indispensable avant toute installation ou mise à jour."
+    },
+    {
+      "id": "ladm-015", "niveau": 2, "type": "qcm",
+      "q": "À quoi sert la commande apt autoremove ?",
+      "choices": ["Supprimer les dépendances devenues orphelines après des désinstallations", "Désinstaller un paquet avec ses fichiers de configuration", "Vider le cache des paquets téléchargés", "Retirer les dépôts non officiels de sources.list"],
+      "answer": 0,
+      "explication": "Les paquets installés automatiquement comme dépendances deviennent inutiles quand le paquet principal disparaît ; autoremove les nettoie. La suppression d'un paquet avec sa configuration relève de purge."
+    },
+    {
+      "id": "ladm-016", "niveau": 3, "type": "qcm",
+      "q": "Quelle commande indique à quel paquet Debian appartient le fichier /bin/ls ?",
+      "choices": ["dpkg -S /bin/ls", "dpkg -L /bin/ls", "dpkg -I /bin/ls", "apt-cache show /bin/ls"],
+      "answer": 0,
+      "explication": "dpkg -S (search) retrouve le paquet propriétaire d'un fichier installé ; dpkg -L fait l'inverse en listant les fichiers d'un paquet. Pour chercher aussi dans les paquets non installés : apt-file search."
+    },
+    {
+      "id": "ladm-017", "niveau": 3, "type": "qcm",
+      "q": "Sous une distribution Red Hat, quelle commande affiche les informations d'un fichier .rpm non encore installé ?",
+      "choices": ["rpm -qip paquet.rpm", "rpm -qi paquet", "rpm -qa paquet.rpm", "yum info --installed paquet"],
+      "answer": 0,
+      "explication": "Le p ajouté aux options de requête (-qip, -qlp...) cible un fichier .rpm local au lieu de la base des paquets installés ; rpm -qi n'interroge que les paquets déjà installés."
+    },
+    {
+      "id": "ladm-018", "niveau": 2, "type": "qcm",
+      "q": "Dans l'écosystème systemd, que distinguent les suffixes -d et ctl (ex. journald / journalctl) ?",
+      "choices": ["-d désigne le démon qui tourne en arrière-plan, ctl la commande qui le pilote depuis le terminal", "-d désigne les outils Debian, ctl les outils universels", "-d désigne les services désactivés, ctl les services actifs", "Aucune différence : ce sont deux conventions équivalentes"],
+      "answer": 0,
+      "explication": "Le démon (systemd, systemd-journald) est le moteur invisible ; le contrôleur (systemctl, journalctl) est sa télécommande. Exception historique : systemd-sysctl se pilote avec sysctl."
+    },
+    {
+      "id": "ladm-019", "niveau": 1, "type": "qcm",
+      "q": "Que fait exactement la commande systemctl enable ssh ?",
+      "choices": ["Elle programme le lancement automatique du service au démarrage, sans le démarrer immédiatement", "Elle démarre immédiatement le service", "Elle recharge la configuration du service", "Elle affiche l'état détaillé du service"],
+      "answer": 0,
+      "explication": "enable agit sur le démarrage au boot ; pour lancer le service tout de suite, il faut aussi systemctl start."
+    },
+    {
+      "id": "ladm-020", "niveau": 3, "type": "qcm",
+      "q": "Quelle commande systemd bascule immédiatement le système dans l'équivalent du runlevel 3 (multi-utilisateur en mode texte) ?",
+      "choices": ["systemctl isolate multi-user.target", "systemctl isolate graphical.target", "systemctl set-default rescue.target", "telinit 5"],
+      "answer": 0,
+      "explication": "isolate change de cible immédiatement ; multi-user.target correspond au runlevel 3 et graphical.target au runlevel 5. set-default ne joue qu'au prochain démarrage."
+    },
+    {
+      "id": "ladm-021", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque runlevel SysVinit à sa signification.",
+      "pairs": [["0", "arrêt du système"], ["1", "mode mono-utilisateur (maintenance)"], ["5", "multi-utilisateur graphique"], ["6", "redémarrage"]],
+      "explication": "Le runlevel 3 correspond au mode multi-utilisateur en texte ; sous SysVinit, on change de niveau avec telinit."
+    },
+    {
+      "id": "ladm-022", "niveau": 3, "type": "terminal",
+      "prompt": "root@srv-deb:~#",
+      "q": "Vous venez de modifier le fichier /etc/systemd/system/montest.service. Forcez systemd à relire les fichiers d'unités.",
+      "accept": ["systemctl daemon-reload", "sudo systemctl daemon-reload"],
+      "explication": "daemon-reload recharge les définitions d'unités sans rien afficher ; il faut ensuite relancer le service concerné avec systemctl restart montest.service."
+    },
+    {
+      "id": "ladm-023", "niveau": 4, "type": "scenario",
+      "context": "sudo systemctl status montest.service\n● montest.service - Script de test\n   Active: failed (Result: exit-code)\n   Process: 1234 ExecStart=/opt/scripts/montest.sh (code=exited, status=203/EXEC)",
+      "q": "Quelle est la cause la plus probable de cette erreur 203/EXEC ?",
+      "choices": ["Le script n'est pas exécutable (chmod +x manquant) ou son shebang #!/bin/bash est absent", "Le fichier .service comporte une erreur de syntaxe et n'a pas été lu", "Un autre service utilise déjà le même port", "La commande daemon-reload a corrompu l'unité"],
+      "answer": 0,
+      "explication": "203/EXEC signifie que systemd a bien lu l'unité mais n'arrive pas à exécuter la ligne ExecStart : vérifier le chemin du script, ses droits d'exécution et son shebang."
+    },
+    {
+      "id": "ladm-024", "niveau": 1, "type": "qcm",
+      "q": "Quelle distinction fondamentale fait-on entre tar et gzip ?",
+      "choices": ["tar réunit plusieurs fichiers en un seul (archivage), gzip réduit la taille d'un fichier (compression)", "tar compresse et gzip archive", "tar ne gère que les répertoires, gzip que les fichiers", "gzip est simplement la version moderne de tar"],
+      "answer": 0,
+      "explication": "Les deux se combinent dans le format standard .tar.gz : tar assemble, gzip compresse. zcat permet même de lire un .gz sans le décompresser."
+    },
+    {
+      "id": "ladm-025", "niveau": 3, "type": "qcm",
+      "q": "Quelle commande crée l'archive compressée sauvegarde.tar.gz à partir du dossier /home/projets ?",
+      "choices": ["tar -zcvf sauvegarde.tar.gz /home/projets", "tar -zxvf sauvegarde.tar.gz /home/projets", "tar -ztf sauvegarde.tar.gz /home/projets", "gzip -r sauvegarde.tar.gz /home/projets"],
+      "answer": 0,
+      "explication": "-c crée, -z compresse en gzip, -v détaille, -f nomme le fichier. À l'inverse, -zxvf extrait et -ztf liste le contenu sans extraire."
+    },
+    {
+      "id": "ladm-026", "niveau": 1, "type": "qcm",
+      "q": "Quel protocole SAMBA met-il en œuvre pour offrir un partage de fichiers compatible Windows ?",
+      "choices": ["SMB", "NFS", "FTP", "SFTP"],
+      "answer": 0,
+      "explication": "SAMBA implémente le protocole SMB de Microsoft ; sa configuration se fait dans /etc/samba/smb.conf et s'applique avec systemctl restart smbd."
+    },
+    {
+      "id": "ladm-027", "niveau": 2, "type": "qcm",
+      "q": "Dans smb.conf, que signifie la ligne « valid users = @stagiaire » ?",
+      "choices": ["Seuls les membres du groupe stagiaire peuvent accéder au partage", "Seul l'utilisateur nommé stagiaire peut accéder au partage", "Le partage est visible de tous sauf du groupe stagiaire", "Le groupe stagiaire n'a qu'un accès en lecture seule"],
+      "answer": 0,
+      "explication": "Le préfixe @ désigne un groupe Unix ; sans lui, valid users attendrait des noms d'utilisateurs individuels."
+    },
+    {
+      "id": "ladm-028", "niveau": 4, "type": "scenario",
+      "context": "Le compte Unix groot existe et appartient au groupe autorisé dans valid users.\nDepuis Windows, la connexion au partage échoue systématiquement : mot de passe refusé.",
+      "q": "Quelle est la cause la plus probable ?",
+      "choices": ["groot n'a pas été ajouté à la base de mots de passe SAMBA avec smbpasswd -a groot", "Le fichier smb.conf doit être copié sur le poste Windows", "Le compte Unix doit être recréé avec une option spéciale SAMBA", "Le service SSH n'est pas démarré sur le serveur"],
+      "answer": 0,
+      "explication": "SAMBA gère sa propre base de mots de passe, distincte des comptes Unix : chaque utilisateur doit y être explicitement ajouté avec smbpasswd -a."
+    },
+    {
+      "id": "ladm-029", "niveau": 3, "type": "ordre",
+      "q": "Remettez dans l'ordre les étapes d'ajout d'un nouveau disque de données sous Linux.",
+      "steps": ["Repérer le disque : sudo fdisk -l (ex. /dev/sdb)", "Partitionner : sudo fdisk /dev/sdb (table GPT, nouvelle partition, écriture)", "Formater la partition : sudo mkfs.ext4 /dev/sdb1", "Monter : sudo mkdir -p /mnt/datas puis sudo mount /dev/sdb1 /mnt/datas", "Rendre le montage persistant en ajoutant une entrée dans /etc/fstab"],
+      "explication": "L'ordre est immuable : impossible de formater avant de partitionner ou de monter avant de formater ; df -h permet de vérifier le montage."
+    },
+    {
+      "id": "ladm-030", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque commande interactive de fdisk à son action.",
+      "pairs": [["n", "créer une nouvelle partition"], ["p", "afficher la table des partitions"], ["t", "changer le type de partition (ex. 82 pour swap)"], ["w", "écrire les changements et quitter"]],
+      "explication": "q quitte au contraire sans enregistrer et g crée une table GPT ; gdisk est l'équivalent dédié aux disques GPT."
+    },
+    {
+      "id": "ladm-031", "niveau": 4, "type": "scenario",
+      "context": "Hier : sudo mount /dev/sdb1 /mnt/datas → les fichiers étaient accessibles.\nCe matin, après un redémarrage du serveur, /mnt/datas est vide.",
+      "q": "Que s'est-il passé ?",
+      "choices": ["Le montage effectué avec mount est temporaire : sans entrée dans /etc/fstab, il disparaît au redémarrage", "Le disque a été reformaté automatiquement au démarrage", "Le noyau a renommé le point de montage", "systemd vide le contenu de /mnt à chaque démarrage"],
+      "answer": 0,
+      "explication": "mount n'agit que pour la session en cours ; le montage persistant exige une ligne dans /etc/fstab (périphérique ou UUID, point de montage, type, options, dump, pass)."
+    },
+    {
+      "id": "ladm-032", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi ne faut-il jamais exécuter fsck sur un système de fichiers monté ?",
+      "choices": ["Les écritures simultanées pendant la réparation risqueraient d'aggraver la corruption du système de fichiers", "fsck ne détecte aucune erreur sur un volume monté", "fsck ne fonctionne que sur les partitions FAT32", "fsck remonterait la partition en lecture seule de façon définitive"],
+      "answer": 0,
+      "explication": "On répare un volume démonté (ou depuis un système live). Pour ext4 : e2fsck -p ; pour XFS : xfs_repair (option -n pour un simple diagnostic sans modification)."
+    },
+    {
+      "id": "ladm-033", "niveau": 4, "type": "scenario",
+      "context": "sudo umount /mnt/data\numount: /mnt/data: target is busy.",
+      "q": "Quelle commande permet d'identifier le processus qui empêche le démontage ?",
+      "choices": ["lsof /mnt/data", "df -h /mnt/data", "fsck /mnt/data", "mount -a"],
+      "answer": 0,
+      "explication": "lsof liste les fichiers ouverts : appliqué au point de montage, il révèle le processus qui garde la main sur le volume."
+    },
+    {
+      "id": "ladm-034", "niveau": 3, "type": "qcm",
+      "q": "Quelles commandes faut-il enchaîner pour formater puis activer une partition d'échange sur /dev/sdb2 ?",
+      "choices": ["mkswap /dev/sdb2 puis swapon /dev/sdb2", "mkfs.swap /dev/sdb2 puis mount /dev/sdb2", "fdisk --swap /dev/sdb2 puis swapon", "dd if=/dev/zero of=/dev/sdb2 puis mount -t swap"],
+      "answer": 0,
+      "explication": "mkswap prépare la partition et swapon l'active. Un fichier peut aussi servir de swap : dd pour le créer, puis mkswap et swapon."
+    },
+    {
+      "id": "ladm-035", "niveau": 2, "type": "multi",
+      "q": "Quelles affirmations sont vraies au sujet des liens symboliques créés avec ln -s ? (plusieurs réponses)",
+      "choices": ["Ils peuvent traverser les partitions", "Ils peuvent pointer vers des répertoires", "Ils deviennent orphelins (cassés) si la cible est supprimée", "Ils partagent le même inode que la cible", "Ils ne fonctionnent que sur la même partition"],
+      "answer": [0, 1, 2],
+      "explication": "Un lien symbolique n'est qu'un raccourci vers un chemin. Ce sont les liens physiques (ln sans -s) qui partagent l'inode de la cible, restent limités à une même partition et ne s'appliquent pas aux répertoires."
+    },
+    {
+      "id": "ladm-036", "niveau": 3, "type": "qcm",
+      "q": "Avec un umask de 022, quelles permissions reçoit un fichier nouvellement créé ?",
+      "choices": ["644 (rw-r--r--)", "755 (rwxr-xr-x)", "666 (rw-rw-rw-)", "600 (rw-------)"],
+      "answer": 0,
+      "explication": "Le umask se soustrait aux permissions maximales : 666 - 022 = 644 pour les fichiers, 777 - 022 = 755 pour les répertoires."
+    },
+    {
+      "id": "ladm-037", "niveau": 3, "type": "assoc",
+      "q": "Associez chaque droit spécial à son effet.",
+      "pairs": [["SUID (chmod 4755)", "le programme s'exécute avec les droits du propriétaire du fichier"], ["SGID sur un répertoire (chmod 2775)", "les fichiers créés héritent du groupe du répertoire"], ["Sticky bit (chmod 1777)", "seul le propriétaire d'un fichier peut le supprimer du répertoire"]],
+      "explication": "Le sticky bit protège les répertoires partagés comme /tmp ; en notation symbolique, on utilise u+s, g+s et +t."
+    },
+    {
+      "id": "ladm-038", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque signal envoyé par kill à son effet.",
+      "pairs": [["SIGTERM (15)", "demande au processus de se terminer proprement (signal par défaut)"], ["SIGKILL (9)", "tue le processus immédiatement, sans nettoyage possible"], ["SIGHUP (1)", "demande au processus de recharger sa configuration"]],
+      "explication": "kill agit par PID, tandis que pkill et killall visent un nom de processus ; on ne recourt à SIGKILL qu'en dernier ressort."
+    },
+    {
+      "id": "ladm-039", "niveau": 2, "type": "qcm",
+      "q": "Quel est l'intérêt de lancer une commande avec « nohup commande & » ?",
+      "choices": ["Le processus survit à la déconnexion du terminal et sa sortie est enregistrée dans nohup.out", "Le processus obtient la priorité CPU maximale", "Le processus est relancé automatiquement s'il se termine en erreur", "Le processus devient un service systemd permanent"],
+      "answer": 0,
+      "explication": "nohup détache le processus du terminal : idéal pour un traitement long lancé via SSH que la fermeture de session ne doit pas interrompre."
+    },
+    {
+      "id": "ladm-040", "niveau": 1, "type": "qcm",
+      "q": "Que représentent les trois nombres du « load average » affichés par uptime ?",
+      "choices": ["La charge moyenne du système sur 1, 5 et 15 minutes", "La mémoire utilisée il y a 1, 5 et 15 minutes", "Le nombre d'utilisateurs connectés sur trois périodes", "Les températures CPU minimale, moyenne et maximale"],
+      "answer": 0,
+      "explication": "Comparer les trois valeurs donne la tendance : une charge à 1 minute supérieure à celle à 15 minutes signale une montée en charge récente."
+    },
+    {
+      "id": "ladm-041", "niveau": 1, "type": "qcm",
+      "q": "Quelle est la plage des valeurs nice, et qui peut attribuer une valeur négative ?",
+      "choices": ["De -20 (priorité la plus haute) à +19 (la plus basse) ; seul root peut donner une valeur négative", "De 0 à 139 ; tout utilisateur peut choisir librement", "De -10 à +10 ; le propriétaire du processus décide", "De 1 à 99 ; seul root peut modifier la valeur"],
+      "answer": 0,
+      "explication": "nice -n 15 commande lance un processus en priorité réduite ; renice -n -5 -p PID modifie un processus déjà lancé (valeur négative réservée à root)."
+    },
+    {
+      "id": "ladm-042", "niveau": 1, "type": "qcm",
+      "q": "Quelle commande liste les modules du noyau actuellement chargés ?",
+      "choices": ["lsmod", "modinfo", "modprobe -r", "lspci -k"],
+      "answer": 0,
+      "explication": "lsmod affiche les modules chargés et leurs dépendances ; modprobe charge ou décharge (-r) un module, modinfo le décrit et lspci -k montre le pilote utilisé par un périphérique PCI."
+    },
+    {
+      "id": "ladm-043", "niveau": 2, "type": "qcm",
+      "q": "Quelle commande affiche les journaux systemd du démarrage précédent ?",
+      "choices": ["journalctl -b -1", "journalctl -b 0", "dmesg --clear", "journalctl --list-boots"],
+      "answer": 0,
+      "explication": "-b 0 cible le boot actuel et -b -1 le précédent ; --list-boots énumère les démarrages connus, tandis que dmesg lit le tampon de messages du noyau (kernel ring buffer)."
+    },
+    {
+      "id": "ladm-044", "niveau": 3, "type": "qcm",
+      "q": "Quelle commande supprime tous les fichiers .tmp de /var modifiés il y a plus de 7 jours ?",
+      "choices": ["find /var -name \"*.tmp\" -mtime +7 -delete", "find /var -name \"*.tmp\" -newer 7 -rm", "locate /var/*.tmp | rm -mtime 7", "grep -r \"*.tmp\" /var --delete"],
+      "answer": 0,
+      "explication": "find combine des critères (-name, -mtime +7 signifiant « plus de 7 jours ») et des actions (-delete, ou -exec commande {} \\;)."
+    },
+    {
+      "id": "ladm-045", "niveau": 2, "type": "qcm",
+      "q": "Sous GRUB 2, quel fichier l'administrateur doit-il éditer pour modifier la configuration du chargeur de démarrage ?",
+      "choices": ["/etc/default/grub, puis régénérer la configuration avec update-grub", "/boot/grub/grub.cfg directement", "/boot/grub/menu.lst", "/etc/grub.d/grub.conf"],
+      "answer": 0,
+      "explication": "grub.cfg est généré automatiquement et ne doit pas être modifié à la main : on édite /etc/default/grub (GRUB_DEFAULT, GRUB_TIMEOUT...) puis on lance update-grub ou grub-mkconfig -o /boot/grub/grub.cfg."
+    },
+    {
+      "id": "ladm-046", "niveau": 4, "type": "scenario",
+      "context": "Une application ne peut plus écrire : « No space left on device ».\ndf -h /var → Utilisation : 62%\ndf -i /var → IUse% : 100%",
+      "q": "Comment expliquer ce paradoxe ?",
+      "choices": ["La table des inodes est saturée : plus aucun fichier ne peut être créé malgré l'espace libre restant", "df -h se trompe : le disque est en réalité plein", "La partition est passée en lecture seule", "Le quota de l'utilisateur est dépassé sur /var"],
+      "answer": 0,
+      "explication": "Chaque fichier consomme un inode : une multitude de petits fichiers peut épuiser la table des inodes (visible avec df -i) bien avant l'espace disque."
+    }
+  ]
+}

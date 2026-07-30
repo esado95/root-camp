@@ -1,0 +1,468 @@
+{
+  "module": "Modèle OSI, ARP & composants",
+  "source": "Modele-OSI.md + ARP-Adresse-MAC.md + Composants-Reseau.md",
+  "questions": [
+    {
+      "id": "osi-001",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Combien de couches compte le modèle OSI ?",
+      "choices": ["4", "5", "6", "7"],
+      "answer": 3,
+      "explication": "Le modèle OSI compte 7 couches, de la couche 1 (Physique) à la couche 7 (Application). Créé dans les années 70, il n'a pas changé depuis sa création."
+    },
+    {
+      "id": "osi-002",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez chaque couche du modèle OSI à son rôle.",
+      "pairs": [
+        ["Physique", "Transmettre les bits bruts sur le support"],
+        ["Transport", "Assurer un transport fiable de bout en bout"],
+        ["Session", "Établir, gérer et terminer les sessions"],
+        ["Présentation", "Traduire, chiffrer et compresser les données"]
+      ],
+      "explication": "Chaque couche a un rôle précis : la 1 transmet les bits, la 4 fiabilise le transport (TCP/UDP), la 5 gère tout ce qui est lié au compte utilisateur sur l'application, la 6 met en forme les données."
+    },
+    {
+      "id": "osi-003",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez chaque protocole ou technologie à sa couche OSI.",
+      "pairs": [
+        ["HTTP", "Couche 7 — Application"],
+        ["TCP", "Couche 4 — Transport"],
+        ["IP", "Couche 3 — Réseau"],
+        ["Ethernet", "Couche 2 — Liaison de données"]
+      ],
+      "explication": "HTTP, FTP et DNS sont des services de la couche Application ; TCP/UDP et les ports relèvent du Transport ; IP du Réseau ; Ethernet et les adresses MAC de la Liaison de données."
+    },
+    {
+      "id": "osi-004",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quel est le format d'une adresse MAC ?",
+      "choices": [
+        "4 octets en notation décimale pointée",
+        "6 octets en hexadécimal, par exemple AA:BB:CC:DD:EE:FF",
+        "32 bits en binaire",
+        "8 octets en hexadécimal séparés par des points"
+      ],
+      "answer": 1,
+      "explication": "Une adresse MAC s'écrit sur 6 octets en hexadécimal (XX:XX:XX:YY:YY:YY) : c'est l'adresse physique de la carte réseau, utilisée à la couche 2."
+    },
+    {
+      "id": "osi-005",
+      "niveau": 1,
+      "type": "libre",
+      "q": "Quelle adresse MAC de destination est utilisée pour diffuser une trame en broadcast (par exemple un ARP Request) ?",
+      "accept": ["FF:FF:FF:FF:FF:FF", "FF-FF-FF-FF-FF-FF", "FFFFFFFFFFFF", "FF FF FF FF FF FF"],
+      "explication": "FF:FF:FF:FF:FF:FF est l'adresse MAC de broadcast : la trame est reçue et traitée par toutes les machines du réseau local."
+    },
+    {
+      "id": "osi-006",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Dans une adresse MAC, que représentent les 3 premiers octets (l'OUI) ?",
+      "choices": [
+        "Le numéro de série unique de la carte",
+        "L'identifiant du fabricant de la carte réseau",
+        "L'identifiant du réseau local",
+        "La version du protocole Ethernet"
+      ],
+      "answer": 1,
+      "explication": "L'OUI (Organizationally Unique Identifier) identifie le fabricant, qui achète une plage d'adresses MAC ; les 3 derniers octets identifient la carte elle-même."
+    },
+    {
+      "id": "osi-007",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "À quoi correspond le moyen mnémotechnique « Ah Pas Si Tard Le Soir Papa » ?",
+      "choices": [
+        "Aux 7 couches OSI énoncées de la couche 1 vers la couche 7",
+        "Aux 7 couches OSI énoncées de la couche 7 vers la couche 1",
+        "Aux 4 couches du modèle TCP/IP",
+        "Aux étapes de la résolution ARP"
+      ],
+      "answer": 1,
+      "explication": "Cette phrase permet de retenir les couches en partant du haut : de la couche 7 (Application) vers la couche 1 (Physique)."
+    },
+    {
+      "id": "osi-008",
+      "niveau": 1,
+      "type": "multi",
+      "q": "Quelles affirmations sur la fibre optique sont exactes ? (plusieurs réponses)",
+      "choices": [
+        "Elle est très fragile, car constituée d'un fil de verre",
+        "Elle est utilisée pour les câbles sous-marins",
+        "En multimode, un prisme permet de séparer les différents channels",
+        "Elle transporte les données sous forme de signaux électriques",
+        "Elle doit être torsadée pour éviter les interférences"
+      ],
+      "answer": [0, 1, 2],
+      "explication": "La fibre transporte de la lumière (et non de l'électricité) dans un fil de verre fragile ; elle équipe notamment les câbles sous-marins, et un prisme sépare les channels du flux multimode."
+    },
+    {
+      "id": "osi-009",
+      "niveau": 1,
+      "type": "ordre",
+      "q": "Classez ces étendues réseau de la plus petite à la plus grande.",
+      "steps": [
+        "PAN (Personal Area Network)",
+        "LAN (Local Area Network)",
+        "MAN (Metropolitan Area Network)",
+        "WAN (Wide Area Network)",
+        "GAN (Global Area Network)"
+      ],
+      "explication": "Du plus petit au plus grand : BAN, PAN, LAN, MAN, WAN puis GAN — ce dernier correspondant à Internet."
+    },
+    {
+      "id": "osi-010",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quel organisme gère le GAN (Internet) et détermine les AS (Autonomous Systems) ?",
+      "choices": ["IEEE", "ICANN", "IANA", "IETF"],
+      "answer": 2,
+      "explication": "L'IANA gère Internet à l'échelle mondiale et détermine un AS (Autonomous System) par pays."
+    },
+    {
+      "id": "osi-011",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez chaque PDU (unité de données) à sa couche OSI.",
+      "pairs": [
+        ["Segment", "Couche 4 — Transport"],
+        ["Paquet", "Couche 3 — Réseau"],
+        ["Trame", "Couche 2 — Liaison de données"],
+        ["Bits", "Couche 1 — Physique"]
+      ],
+      "explication": "En descendant les couches, la donnée prend un nom différent à chaque niveau : segment (4), paquet (3), trame (2), puis bits (1) transmis sur le support."
+    },
+    {
+      "id": "osi-012",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi un ARP Request est-il envoyé en broadcast et non en unicast ?",
+      "choices": [
+        "Parce que le broadcast est plus rapide que l'unicast",
+        "Parce que l'émetteur ne connaît pas encore l'adresse MAC du destinataire",
+        "Parce que le switch bloque les trames unicast inconnues",
+        "Parce que le routeur doit relayer la requête"
+      ],
+      "answer": 1,
+      "explication": "L'émetteur connaît l'IP mais pas la MAC : il interroge donc toutes les machines du réseau local, et seule celle qui possède l'IP répond."
+    },
+    {
+      "id": "osi-013",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quel est le rôle du protocole ARP ?",
+      "choices": [
+        "Attribuer automatiquement une adresse IP à une machine",
+        "Traduire un nom de domaine en adresse IP",
+        "Faire la correspondance entre une adresse IP et une adresse MAC sur le réseau local",
+        "Chiffrer les échanges entre deux machines"
+      ],
+      "answer": 2,
+      "explication": "ARP (Address Resolution Protocol) fait le lien entre l'adresse logique (IP, couche 3) et l'adresse physique (MAC, couche 2). L'attribution d'IP relève de DHCP, la résolution de noms de DNS."
+    },
+    {
+      "id": "osi-014",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi les fils internes d'un câble Ethernet sont-ils torsadés ?",
+      "choices": [
+        "Pour augmenter le débit du câble",
+        "Pour limiter les interférences",
+        "Pour faciliter le sertissage du connecteur RJ45",
+        "Pour permettre l'alimentation électrique des équipements"
+      ],
+      "answer": 1,
+      "explication": "Le torsadage des paires réduit les interférences électromagnétiques entre les fils et avec l'environnement."
+    },
+    {
+      "id": "osi-015",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quelle affirmation sur les bandes Wi-Fi est correcte ?",
+      "choices": [
+        "Le 5 GHz offre plus de débit mais moins de portée que le 2,4 GHz",
+        "Le 2,4 GHz offre à la fois plus de débit et plus de portée",
+        "Le 5 GHz offre plus de portée que le 2,4 GHz",
+        "Les deux bandes offrent le même débit et la même portée"
+      ],
+      "answer": 0,
+      "explication": "Règle générale, valable aussi pour le mobile (xG) : plus le débit monte, plus la portée diminue. Le 2,4 GHz porte plus loin mais débite moins."
+    },
+    {
+      "id": "osi-016",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quelle est la différence essentielle entre TCP et UDP à la couche Transport ?",
+      "choices": [
+        "TCP contrôle le transfert (fiable), UDP envoie sans contrôle (rapide)",
+        "UDP contrôle le transfert, TCP est plus rapide",
+        "TCP fonctionne uniquement en local, UDP uniquement sur Internet",
+        "UDP chiffre les données, contrairement à TCP"
+      ],
+      "answer": 0,
+      "explication": "TCP assure un contrôle du transfert (fiabilité, accusés de réception) tandis qu'UDP envoie sans contrôle, ce qui le rend plus rapide mais non fiable."
+    },
+    {
+      "id": "osi-017",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Une machine change d'adresse IP. Quel problème la table ARP des autres machines peut-elle provoquer ?",
+      "choices": [
+        "Elle bloque définitivement la nouvelle adresse IP",
+        "Elle peut contenir des correspondances périmées et créer des conflits réseau",
+        "Elle force le renouvellement du bail DHCP de toutes les machines",
+        "Elle désactive la carte réseau concernée"
+      ],
+      "answer": 1,
+      "explication": "La table ARP est un cache : tant que l'ancienne correspondance IP/MAC n'est pas expirée ou purgée, les machines risquent d'envoyer leurs trames vers la mauvaise cible."
+    },
+    {
+      "id": "osi-018",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quelle est la différence entre un schéma physique et un schéma logique ?",
+      "choices": [
+        "Le physique représente les câbles et boîtiers réels, le logique les adresses IP et les flux de données",
+        "Le physique représente les adresses IP, le logique les câbles",
+        "Ce sont deux noms pour le même document",
+        "Le schéma logique ne concerne que les réseaux sans fil"
+      ],
+      "answer": 0,
+      "explication": "Le schéma physique montre le matériel réel (câbles, boîtiers, emplacements) ; le schéma logique montre l'adressage IP, les sous-réseaux et les flux de données."
+    },
+    {
+      "id": "osi-019",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Qu'appelle-t-on l'encapsulation dans le modèle OSI ?",
+      "choices": [
+        "La compression des données réalisée par la couche Présentation",
+        "L'ajout par chaque couche de ses propres en-têtes lors de la descente de la couche 7 vers la couche 1",
+        "Le chiffrement des trames par le switch",
+        "La mise en cache des correspondances IP/MAC"
+      ],
+      "answer": 1,
+      "explication": "À l'émission, la donnée descend les couches et chacune ajoute ses informations (en-têtes) ; le destinataire effectue l'opération inverse, la désencapsulation."
+    },
+    {
+      "id": "osi-020",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quelle est la différence fondamentale entre un hub et un switch ?",
+      "choices": [
+        "Le hub répète le signal sur tous les ports, le switch commute la trame vers le seul port du destinataire",
+        "Le switch répète sur tous les ports, le hub filtre par adresse MAC",
+        "Le hub travaille en couche 3, le switch en couche 1",
+        "Il n'y a aucune différence fonctionnelle entre les deux"
+      ],
+      "answer": 0,
+      "explication": "Le hub (couche 1) régénère le signal vers tous les ports sans distinction ; le switch (couche 2) lit l'adresse MAC de destination et n'envoie la trame qu'au port concerné."
+    },
+    {
+      "id": "osi-021",
+      "niveau": 2,
+      "type": "multi",
+      "q": "Parmi ces équipements, lesquels sont des périphériques intermédiaires ? (plusieurs réponses)",
+      "choices": ["Routeur", "Imprimante IP", "Switch", "Pare-feu", "Téléphone IP"],
+      "answer": [0, 2, 3],
+      "explication": "Les périphériques intermédiaires acheminent les données : routeur, switch, pare-feu (matériel ou virtuel comme pfSense). Les périphériques finaux (PC, imprimante IP, téléphone IP) sont les sources et destinations."
+    },
+    {
+      "id": "osi-022",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi est-ce Orange qui gère l'AS (Autonomous System) français ?",
+      "choices": [
+        "Parce que l'État le lui impose par la loi",
+        "Parce qu'Orange a payé les premières installations du réseau",
+        "Parce qu'Orange possède le plus grand nombre de clients",
+        "Parce que l'IANA désigne un opérateur différent chaque année"
+      ],
+      "answer": 1,
+      "explication": "L'IANA détermine un AS par pays : c'est l'opérateur qui a financé les premières installations qui le gère, et ne pas payer l'AS pénalise le débit."
+    },
+    {
+      "id": "osi-023",
+      "niveau": 3,
+      "type": "terminal",
+      "prompt": "PS C:\\Users\\admin>",
+      "q": "Affichez la table ARP de la machine Windows.",
+      "accept": ["arp -a", "arp /a", "arp -g"],
+      "output": "Interface : 192.168.1.10 --- 0x4\n  Adresse Internet      Adresse physique      Type\n  192.168.1.1           50-6f-0c-23-a1-b4     dynamique\n  192.168.1.20          aa-bb-cc-11-22-33     dynamique\n  192.168.1.255         ff-ff-ff-ff-ff-ff     statique\n  224.0.0.22            01-00-5e-00-00-16     statique",
+      "explication": "arp -a (ou arp -g) affiche le cache ARP local, c'est-à-dire les correspondances IP/MAC connues de la machine."
+    },
+    {
+      "id": "osi-024",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Dans l'adresse MAC 3C:97:0E:1A:2B:3C, quelle partie identifie le fabricant ?",
+      "choices": ["3C:97:0E", "1A:2B:3C", "3C uniquement", "0E:1A:2B"],
+      "answer": 0,
+      "explication": "Les 3 premiers octets forment l'OUI, l'identifiant du fabricant ; les 3 derniers octets identifient la carte réseau elle-même."
+    },
+    {
+      "id": "osi-025",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Remettez dans l'ordre les étapes de la résolution ARP lorsque la machine A veut joindre 192.168.1.20.",
+      "steps": [
+        "A veut joindre 192.168.1.20 mais ne connaît pas son adresse MAC",
+        "A envoie un ARP Request en broadcast (FF:FF:FF:FF:FF:FF)",
+        "La machine qui possède cette IP répond avec son adresse MAC (ARP Reply)",
+        "A enregistre la correspondance dans sa table ARP"
+      ],
+      "explication": "L'ARP Request part en broadcast car la MAC est inconnue ; la réponse fournit la MAC, aussitôt mise en cache dans la table ARP pour les prochains échanges."
+    },
+    {
+      "id": "osi-026",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "À l'émission, remettez dans l'ordre les PDU produits au fil de l'encapsulation.",
+      "steps": [
+        "Donnée (couches 7 à 5)",
+        "Segment (couche 4)",
+        "Paquet (couche 3)",
+        "Trame (couche 2)",
+        "Bits (couche 1)"
+      ],
+      "explication": "La donnée descend les couches et change de nom à chaque encapsulation : segment, paquet, trame, puis bits transmis sur le support physique."
+    },
+    {
+      "id": "osi-027",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "On remplace un hub par un switch 12 ports. Combien de domaines de collision obtient-on ?",
+      "choices": ["1", "2", "12", "24"],
+      "answer": 2,
+      "explication": "Chaque port d'un switch constitue son propre domaine de collision, soit 12 ici, alors qu'un hub ne forme qu'un seul domaine partagé par tous les ports."
+    },
+    {
+      "id": "osi-028",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Après le changement d'adresse IP d'un serveur, un poste Windows conserve une entrée ARP périmée. Quelle action corrige le problème immédiatement ?",
+      "choices": [
+        "Vider le cache ARP du poste (arp -d)",
+        "Renouveler le bail DHCP du poste (ipconfig /renew)",
+        "Redémarrer le switch",
+        "Changer l'adresse MAC du poste"
+      ],
+      "answer": 0,
+      "explication": "L'entrée périmée se trouve dans le cache ARP local du poste : la supprimer force une nouvelle résolution ARP avec la bonne correspondance."
+    },
+    {
+      "id": "osi-029",
+      "niveau": 3,
+      "type": "libre",
+      "q": "À quelle couche OSI (numéro) appartiennent les ports TCP et UDP ?",
+      "accept": ["4", "couche 4", "transport", "couche transport"],
+      "explication": "Les ports relèvent de la couche 4 (Transport), aux côtés de TCP et UDP."
+    },
+    {
+      "id": "osi-030",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Un PC connaît l'adresse IP d'un serveur situé sur le même réseau local et veut lui envoyer une trame. Que consulte-t-il en premier ?",
+      "choices": [
+        "Sa table ARP, pour trouver la MAC correspondant à cette IP",
+        "Sa table de routage, pour trouver la passerelle",
+        "Le serveur DNS, pour résoudre le nom du serveur",
+        "Le serveur DHCP, pour obtenir une nouvelle adresse"
+      ],
+      "answer": 0,
+      "explication": "Pour construire la trame (couche 2), il faut la MAC de destination : le PC consulte d'abord son cache ARP et n'émet un ARP Request que si l'entrée manque."
+    },
+    {
+      "id": "osi-031",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Sur quelle information un switch se base-t-il pour commuter une trame vers le bon port ?",
+      "choices": [
+        "L'adresse IP de destination",
+        "L'adresse MAC de destination",
+        "Le port TCP de destination",
+        "Le nom d'hôte du destinataire"
+      ],
+      "answer": 1,
+      "explication": "Le switch opère en couche 2 : il lit l'adresse MAC de destination de la trame et la compare à sa table d'adresses MAC pour choisir le port de sortie."
+    },
+    {
+      "id": "osi-032",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "C:\\> arp -a\nInterface : 192.168.1.10 --- 0x4\n  Adresse Internet      Adresse physique      Type\n  192.168.1.20          aa-bb-cc-11-22-33     dynamique\n\nMAC de la nouvelle carte du serveur : aa-bb-cc-99-88-77",
+      "q": "La carte réseau du serveur 192.168.1.20 vient d'être remplacée (même adresse IP). Le poste 192.168.1.10 ne le joint plus, alors que les autres machines répondent. Quelle est la cause la plus probable ?",
+      "choices": [
+        "Le serveur n'a plus d'adresse IP",
+        "La table ARP du poste associe encore l'IP du serveur à l'ancienne adresse MAC",
+        "Le switch est en panne",
+        "Le câble réseau du poste est débranché"
+      ],
+      "answer": 1,
+      "explication": "Le cache ARP contient une correspondance périmée : les trames partent vers l'ancienne MAC qui n'existe plus. Purger le cache (arp -d) force une nouvelle résolution."
+    },
+    {
+      "id": "osi-033",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Trame capturée :\nDestination : FF:FF:FF:FF:FF:FF\nSource      : 08:00:27:4D:11:AB\nARP — Who has 192.168.1.20? Tell 192.168.1.10",
+      "q": "Une capture réseau montre la trame ci-dessus. Que se passe-t-il ?",
+      "choices": [
+        "La machine 192.168.1.10 diffuse un ARP Request pour obtenir la MAC de 192.168.1.20",
+        "La machine 192.168.1.20 répond à une requête ARP",
+        "Une tempête de broadcast est en cours sur le réseau",
+        "Un serveur DHCP propose une adresse à un client"
+      ],
+      "answer": 0,
+      "explication": "La destination FF:FF:FF:FF:FF:FF et la question « Who has… Tell… » caractérisent un ARP Request : 192.168.1.10 cherche la MAC associée à 192.168.1.20."
+    },
+    {
+      "id": "osi-034",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Sur un ancien réseau, chaque trame émise par un poste est reçue par tous les autres, et les collisions se multiplient dès que plusieurs postes émettent en même temps. Quel équipement central est en cause, et par quoi le remplacer ?",
+      "choices": [
+        "Un hub, à remplacer par un switch",
+        "Un switch, à remplacer par un routeur",
+        "Un routeur, à remplacer par un pare-feu",
+        "Un switch, à remplacer par un hub"
+      ],
+      "answer": 0,
+      "explication": "Le hub répète tout le trafic sur tous les ports et forme un unique domaine de collision ; un switch commute par adresse MAC et isole chaque port dans son propre domaine."
+    },
+    {
+      "id": "osi-035",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Après un réaménagement de baie, un lien fibre optique ne monte plus. Le technicien constate que le câble a été plié à angle droit pour longer un montant. Quelle est l'explication la plus probable ?",
+      "choices": [
+        "La fibre, constituée d'un fil de verre très fragile, a été endommagée par le pliage",
+        "La fibre s'est démagnétisée",
+        "Le pliage a créé des interférences électromagnétiques",
+        "La fibre doit être torsadée pour fonctionner"
+      ],
+      "answer": 0,
+      "explication": "La fibre est un fil de verre très fragile : un pliage serré casse ou dégrade le cœur optique. Les interférences électromagnétiques ne concernent pas un signal lumineux."
+    },
+    {
+      "id": "osi-036",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Un stagiaire relie deux switchs récents avec un câble droit et s'étonne que le lien fonctionne : son cours indiquait qu'il fallait un câble croisé entre équipements de même type. Pourquoi cela fonctionne-t-il ?",
+      "choices": [
+        "Depuis les années 2000, les ports s'adaptent automatiquement grâce à l'auto MDI-X",
+        "Les switchs récents n'utilisent plus les fils de cuivre du câble",
+        "Le câble droit devient croisé avec l'usure",
+        "L'un des deux switchs est forcément défectueux"
+      ],
+      "answer": 0,
+      "explication": "L'auto MDI-X, généralisé depuis les années 2000, détecte et croise automatiquement les paires : le choix entre câble droit et croisé n'a plus d'importance."
+    }
+  ]
+}

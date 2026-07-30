@@ -1,0 +1,299 @@
+{
+  "module": "Matériel & RAID",
+  "source": "Assemblage-PC.md + Composants-PC.md + CPU-Processeur.md + RAID.md + RAM-Memoire.md",
+  "questions": [
+    {
+      "id": "hw-001", "niveau": 1, "type": "qcm",
+      "q": "Combien de disques au minimum faut-il pour construire un RAID 5 ?",
+      "choices": ["2", "3", "4", "5"],
+      "answer": 1,
+      "explication": "Le RAID 5 répartit les données et une parité tournante sur au moins 3 disques ; avec seulement 2 disques, on ne peut faire que du RAID 0 ou du RAID 1."
+    },
+    {
+      "id": "hw-002", "niveau": 1, "type": "qcm",
+      "q": "Combien de pannes de disque un RAID 0 peut-il tolérer sans perte de données ?",
+      "choices": ["Aucune", "Une", "Deux", "Autant que de disques moins un"],
+      "answer": 0,
+      "explication": "Le RAID 0 (striping) répartit les données sans aucune redondance : la perte d'un seul disque détruit la totalité du volume. On le réserve à l'OS ou aux données temporaires."
+    },
+    {
+      "id": "hw-003", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque niveau RAID à la technique qu'il utilise.",
+      "pairs": [
+        ["RAID 0", "Striping sans redondance"],
+        ["RAID 1", "Mirroring (copie identique sur 2 disques)"],
+        ["RAID 5", "Parité distribuée tournante"],
+        ["RAID 6", "Double parité P et Q"]
+      ],
+      "explication": "Connaître la technique de chaque niveau permet d'en déduire la tolérance aux pannes et la capacité utile : 0 panne pour le RAID 0, 1 pour les RAID 1 et 5, 2 pour le RAID 6."
+    },
+    {
+      "id": "hw-004", "niveau": 1, "type": "qcm",
+      "q": "Quel type de mémoire conserve son contenu après l'extinction de la machine ?",
+      "choices": ["La RAM", "La ROM", "Le cache du processeur", "La mémoire DDR5"],
+      "answer": 1,
+      "explication": "La ROM est non volatile et en lecture seule : elle héberge par exemple la puce BIOS ou un firmware. La RAM, elle, se vide à chaque extinction."
+    },
+    {
+      "id": "hw-005", "niveau": 1, "type": "libre",
+      "q": "Quel format de barrette de mémoire vive équipe les PC portables ?",
+      "accept": ["SODIMM", "SO-DIMM", "SO DIMM"],
+      "explication": "La barrette SODIMM est environ deux fois plus petite que la DIMM des PC fixes ; les formats SIMM et RIMM sont obsolètes."
+    },
+    {
+      "id": "hw-006", "niveau": 1, "type": "qcm",
+      "q": "Que désigne le nombre dans le nom d'un socket, par exemple « Socket 423 » ?",
+      "choices": ["La fréquence maximale supportée en MHz", "Le nombre de broches", "L'année de commercialisation", "La puissance dissipée en watts"],
+      "answer": 1,
+      "explication": "La numérotation d'un socket correspond à son nombre de broches : le Socket 423 en possède 423. CPU et carte mère doivent impérativement partager le même socket."
+    },
+    {
+      "id": "hw-007", "niveau": 1, "type": "ordre",
+      "q": "Classez les certifications 80 Plus de la moins efficace à la plus efficace.",
+      "steps": ["Bronze", "Silver", "Gold", "Platinum", "Titanium"],
+      "explication": "La certification 80 Plus mesure le rendement énergétique d'une alimentation à 20 %, 50 % et 100 % de charge : plus le palier est élevé, moins l'alimentation gaspille d'énergie."
+    },
+    {
+      "id": "hw-008", "niveau": 1, "type": "libre",
+      "q": "Comment s'appelle la solution de RAID logiciel intégrée aux chipsets Intel ?",
+      "accept": ["Intel Rapid Storage", "Rapid Storage", "Intel Rapid Storage Technology", "IRST", "Intel RST", "RST"],
+      "explication": "Intel Rapid Storage permet de créer un RAID logiciel sans carte contrôleur dédiée, directement via le chipset de la carte mère."
+    },
+    {
+      "id": "hw-009", "niveau": 1, "type": "qcm",
+      "q": "Parmi ces technologies de mémoire vive, laquelle est la plus récente ?",
+      "choices": ["SDRAM", "RDRAM", "DDR4", "DDR5"],
+      "answer": 3,
+      "explication": "L'évolution technologique suit l'ordre FPM, EDO, SDRAM, RDRAM, puis DDR jusqu'à DDR5, le standard le plus récent."
+    },
+    {
+      "id": "hw-010", "niveau": 1, "type": "qcm",
+      "q": "Dans quelle catégorie de form factor classe-t-on un Mini PC de type NUC ?",
+      "choices": ["Tour", "Intégré", "Portable", "Serveur rack"],
+      "answer": 1,
+      "explication": "La catégorie « intégré » regroupe les All-in-One, les Mini PC/NUC et les Barebones ; la catégorie « tour » regroupe les Desktop et les SFF."
+    },
+    {
+      "id": "hw-011", "niveau": 1, "type": "qcm",
+      "q": "Qu'est-ce que le FSB (Front Side Bus) ?",
+      "choices": ["La vitesse de référence du système", "La mémoire cache intégrée au processeur", "Le connecteur d'alimentation de la carte mère", "Le bus réservé à la carte graphique"],
+      "answer": 0,
+      "explication": "Le FSB sert de fréquence de référence : la fréquence réelle du CPU s'obtient en le multipliant par le coefficient multiplicateur."
+    },
+    {
+      "id": "hw-012", "niveau": 1, "type": "qcm",
+      "q": "Combien de types de RAM différents (DDR3, DDR4, DDR5) une même carte mère peut-elle accepter ?",
+      "choices": ["Un seul", "Deux au maximum", "Tous, grâce aux détrompeurs", "Cela dépend de la version du BIOS"],
+      "answer": 0,
+      "explication": "Une carte mère est conçue pour un seul type de DDR : les barrettes d'une autre génération sont incompatibles physiquement et électriquement."
+    },
+    {
+      "id": "hw-013", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi dit-on qu'un RAID n'est pas une sauvegarde ?",
+      "choices": ["Parce que le RAID est trop lent pour sauvegarder", "Parce qu'une suppression ou une corruption est immédiatement répliquée sur tous les disques du RAID", "Parce que le RAID ne fonctionne qu'avec des SSD", "Parce que les données d'un RAID sont chiffrées"],
+      "answer": 1,
+      "explication": "Le RAID protège uniquement contre la panne matérielle d'un disque : erreur humaine, virus ou sinistre touchent toutes les copies en même temps, d'où la nécessité d'une vraie sauvegarde."
+    },
+    {
+      "id": "hw-014", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi le RAID 01 est-il déconseillé par rapport au RAID 10 ?",
+      "choices": ["Il est plus lent en lecture", "À ressources égales, il tolère moins de pannes", "Il exige davantage de disques", "Il est incompatible avec les disques SATA"],
+      "answer": 1,
+      "explication": "Le RAID 01 (mirroring puis striping) ne tolère qu'une seule panne, alors que le RAID 10 en tolère deux si elles ne touchent pas le même miroir, avec le même nombre de disques."
+    },
+    {
+      "id": "hw-015", "niveau": 2, "type": "multi",
+      "q": "Quelles sont les bonnes pratiques lors de la mise en place d'un RAID ? (plusieurs réponses)",
+      "choices": ["Acheter des disques de fournisseurs ou de lots de fabrication différents", "Considérer le RAID comme une sauvegarde suffisante", "Garder à l'esprit que le risque de panne augmente pendant la reconstruction", "Utiliser du RAID 0 pour les données critiques", "Compléter le RAID par une véritable sauvegarde"],
+      "answer": [0, 2, 4],
+      "explication": "Des disques issus d'un même lot risquent des pannes corrélées, et plus il y a de disques, plus une défaillance pendant la longue phase de reconstruction est probable."
+    },
+    {
+      "id": "hw-016", "niveau": 2, "type": "qcm",
+      "q": "Où se trouve le Northbridge sur les architectures modernes ?",
+      "choices": ["Sur une puce dédiée près du socket", "Intégré dans le CPU", "Fusionné avec le Southbridge sur une puce unique", "Sur la carte graphique"],
+      "answer": 1,
+      "explication": "Depuis Intel 2e génération et AMD Ryzen, les fonctions du Northbridge, dont le contrôleur mémoire, sont intégrées directement au processeur."
+    },
+    {
+      "id": "hw-017", "niveau": 2, "type": "multi",
+      "q": "Quels éléments sont traditionnellement gérés par le Southbridge ? (plusieurs réponses)",
+      "choices": ["Les ports SATA", "La RAM", "Les ports USB", "La carte graphique", "Le BIOS et l'audio"],
+      "answer": [0, 2, 4],
+      "explication": "Le Southbridge, le pont « lent », gère les périphériques : SATA, USB, audio et BIOS. Le Northbridge, rapide, gère la RAM, le GPU et les échanges avec le CPU."
+    },
+    {
+      "id": "hw-018", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi la finesse de gravure des processeurs (7 nm, 5 nm...) atteint-elle une limite physique ?",
+      "choices": ["Le silicium devient trop coûteux", "Une gravure trop fine provoque des sauts d'électrons entre les circuits", "Aucune usine ne sait graver en dessous de 7 nm", "La chaleur dégagée devient nulle sous 5 nm"],
+      "answer": 1,
+      "explication": "En dessous d'une certaine finesse, les électrons risquent de « sauter » d'un circuit à l'autre, rendant le processeur peu fiable : c'est une limite physique, pas industrielle."
+    },
+    {
+      "id": "hw-019", "niveau": 2, "type": "qcm",
+      "q": "Un processeur est annoncé « 6 cœurs / 12 threads ». Qu'est-ce que cela signifie ?",
+      "choices": ["12 cœurs physiques bridés à 6", "6 cœurs physiques présentés comme 12 cœurs logiques grâce à l'Hyper-Threading", "6 cœurs pour le système et 6 pour les applications", "12 cœurs physiques dont 6 basse consommation"],
+      "answer": 1,
+      "explication": "L'Hyper-Threading double généralement chaque cœur physique en deux cœurs logiques ; il est surtout utile sur les serveurs traitant de nombreuses petites instructions."
+    },
+    {
+      "id": "hw-020", "niveau": 2, "type": "qcm",
+      "q": "Quel est l'intérêt principal de l'underclocking d'un processeur ?",
+      "choices": ["Gagner quelques pourcents de performances", "Réduire fortement la température et allonger la durée de vie, au prix de quelques pourcents de performances", "Libérer de la mémoire vive", "Débloquer des cœurs supplémentaires"],
+      "answer": 1,
+      "explication": "Réduire le coefficient multiplicateur ne coûte que quelques pourcents de performances mais fait gagner plusieurs dizaines de degrés, ce qui prolonge la durée de vie du CPU."
+    },
+    {
+      "id": "hw-021", "niveau": 2, "type": "qcm",
+      "q": "Quel est le principal atout de l'architecture ARM face au x86 ?",
+      "choices": ["Des fréquences plus élevées", "Un excellent rapport performance/watt", "Une compatibilité native avec tous les logiciels Windows", "Une mémoire cache plus grande"],
+      "answer": 1,
+      "explication": "ARM offre une performance par watt excellente, ce qui explique sa domination sur smartphones et tablettes et sa progression croissante sur les serveurs."
+    },
+    {
+      "id": "hw-022", "niveau": 2, "type": "qcm",
+      "q": "En RAID 1, comment un gain de performance en lecture est-il parfois possible ?",
+      "choices": ["Grâce à la compression des données", "Certaines cartes RAID lisent en parallèle sur les deux disques du miroir", "Le second disque sert de mémoire cache", "Ce n'est jamais possible en RAID 1"],
+      "answer": 1,
+      "explication": "Le RAID 1 vise avant tout la sécurité (écriture simultanée sur les deux disques), mais certaines cartes RAID répartissent les lectures entre les deux copies identiques."
+    },
+    {
+      "id": "hw-023", "niveau": 2, "type": "assoc",
+      "q": "Associez chaque gamme de processeur à son positionnement.",
+      "pairs": [
+        ["Xeon", "Serveur professionnel Intel (jusqu'à 86 cœurs)"],
+        ["Epyc", "Serveur professionnel AMD (jusqu'à 192 cœurs)"],
+        ["Threadripper", "Station de travail très haut de gamme"],
+        ["Ryzen gamme « 3D »", "Gros cache soudé, très performant en jeu"]
+      ],
+      "explication": "Côté grand public, Core i5 et Ryzen 5 forment le milieu de gamme (6c/12t), tandis que Celeron et Pentium sont l'entrée de gamme Intel à éviter."
+    },
+    {
+      "id": "hw-024", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi les processeurs Intel de 13e et 14e génération (versions PC fixe) sont-ils à éviter ?",
+      "choices": ["Ils ne supportent pas Windows 11", "Conception défaillante et consommation excessive, avec un risque de dégradation matérielle", "Ils sont limités à 4 cœurs", "Leur socket n'est plus fabriqué"],
+      "answer": 1,
+      "explication": "Ces générations souffrent d'une conception défaillante et d'une consommation excessive qui peuvent aller jusqu'à endommager irrémédiablement le processeur sur les versions desktop."
+    },
+    {
+      "id": "hw-025", "niveau": 3, "type": "qcm",
+      "q": "Une configuration consomme environ 420 W. Quelle puissance d'alimentation recommander en appliquant la règle « consommation + 150 W de marge + 20 % de buffer » ?",
+      "choices": ["450 W", "500 W", "600 W", "850 W"],
+      "answer": 2,
+      "explication": "420 W + 150 W de marge + environ 42 W de buffer donnent à peu près 600 W : l'alimentation travaille ainsi dans sa plage de rendement optimale."
+    },
+    {
+      "id": "hw-026", "niveau": 3, "type": "qcm",
+      "q": "Avec un FSB à 800 MHz et un coefficient multiplicateur de 3,75, quelle est la fréquence du processeur ?",
+      "choices": ["2,13 GHz", "3 GHz", "3,75 GHz", "800 MHz"],
+      "answer": 1,
+      "explication": "Fréquence CPU = FSB × coefficient multiplicateur, soit 800 MHz × 3,75 = 3 000 MHz = 3 GHz."
+    },
+    {
+      "id": "hw-027", "niveau": 3, "type": "qcm",
+      "q": "Un RAID 5 est composé de 4 disques de 2 To. Quelle est la capacité utile du volume ?",
+      "choices": ["8 To", "6 To", "4 To", "2 To"],
+      "answer": 1,
+      "explication": "En RAID 5, la capacité utile vaut N-1 disques : l'équivalent d'un disque est consommé par la parité distribuée, soit (4-1) × 2 = 6 To."
+    },
+    {
+      "id": "hw-028", "niveau": 3, "type": "qcm",
+      "q": "Un RAID 6 est composé de 6 disques de 4 To. Quelle est la capacité utile du volume ?",
+      "choices": ["24 To", "20 To", "16 To", "12 To"],
+      "answer": 2,
+      "explication": "En RAID 6, la capacité utile vaut N-2 : les deux parités distinctes P et Q consomment l'équivalent de deux disques, soit (6-2) × 4 = 16 To."
+    },
+    {
+      "id": "hw-029", "niveau": 3, "type": "qcm",
+      "q": "Un RAID 10 est composé de 4 disques de 2 To. Quelle est la capacité utile du volume ?",
+      "choices": ["8 To", "6 To", "4 To", "2 To"],
+      "answer": 2,
+      "explication": "Le mirroring du RAID 10 divise la capacité brute par deux : 50 % de 8 To = 4 To."
+    },
+    {
+      "id": "hw-030", "niveau": 3, "type": "libre",
+      "q": "Dans un RAID 5, le disque B est perdu. Pour un bit donné, le disque A contient 1 et la parité contient 0. Quelle est la valeur du bit reconstruit de B ?",
+      "accept": ["1"],
+      "explication": "La reconstruction s'effectue bit à bit par XOR : A XOR Parité = B, soit 1 XOR 0 = 1."
+    },
+    {
+      "id": "hw-031", "niveau": 3, "type": "ordre",
+      "q": "Remettez dans l'ordre logique les étapes de sélection des composants lors du montage d'un PC.",
+      "steps": [
+        "Choisir le CPU (il détermine le socket)",
+        "Choisir la carte mère (même socket, liste QVL, BIOS à jour)",
+        "Choisir la RAM (type DDR et fréquence supportés par la carte mère)",
+        "Choisir le GPU (PCI Express, selon usage et résolution)",
+        "Choisir l'alimentation (calcul de puissance)"
+      ],
+      "explication": "Le CPU impose le socket, la carte mère impose ensuite le type de RAM ; le stockage (SATA ou NVMe selon la carte mère) vient en dernier."
+    },
+    {
+      "id": "hw-032", "niveau": 3, "type": "libre",
+      "q": "Un CPU possède 8 cœurs physiques avec Hyper-Threading (×2). Combien de threads le système d'exploitation voit-il ?",
+      "accept": ["16", "16 threads"],
+      "explication": "Chaque cœur physique est doublé en deux cœurs logiques : 8 × 2 = 16 threads, la configuration typique d'un Core i7 ou d'un Ryzen 7 (8c/16t)."
+    },
+    {
+      "id": "hw-033", "niveau": 3, "type": "qcm",
+      "q": "Comment overclocke-t-on classiquement un processeur ?",
+      "choices": ["En ajoutant de la mémoire vive", "En augmentant le coefficient multiplicateur dans l'UEFI", "En changeant le socket de la carte mère", "En désactivant l'Hyper-Threading"],
+      "answer": 1,
+      "explication": "L'overclocking consiste à augmenter le coefficient multiplicateur dans l'UEFI, la fréquence étant le produit FSB × coefficient ; la contrepartie est une chaleur accrue."
+    },
+    {
+      "id": "hw-034", "niveau": 3, "type": "qcm",
+      "q": "Vous disposez de 4 disques et vous cherchez à la fois de bonnes performances et de la redondance. Quel niveau de RAID choisir ?",
+      "choices": ["RAID 0", "RAID 1", "RAID 10", "RAID 01"],
+      "answer": 2,
+      "explication": "Le RAID 10 combine la rapidité du striping et la redondance du mirroring ; à ressources égales, le RAID 01 tolère moins de pannes et le RAID 0 n'offre aucune sécurité."
+    },
+    {
+      "id": "hw-035", "niveau": 4, "type": "scenario",
+      "context": "Serveur de fichiers — état du contrôleur RAID :\nRAID 5 (4 disques de 4 To)\nDisque 2 : FAILED (remplacé, reconstruction en cours : 43 %)\nDisque 4 : FAILED\nVolume : OFFLINE",
+      "q": "Un second disque vient de tomber en panne pendant la reconstruction de ce RAID 5. Quelle est la situation ?",
+      "choices": ["Les données sont intactes, la reconstruction se poursuit grâce à la parité", "Les données du volume sont perdues : le RAID 5 ne tolère qu'une seule panne", "Seules les données du disque 4 sont perdues", "Le contrôleur bascule automatiquement le volume en RAID 6"],
+      "answer": 1,
+      "explication": "Le RAID 5 ne tolère qu'une panne simultanée ; c'est précisément pendant la longue phase de reconstruction que le risque d'une seconde défaillance est le plus élevé."
+    },
+    {
+      "id": "hw-036", "niveau": 4, "type": "scenario",
+      "context": "Montage d'un PC neuf :\n- Carte mère achetée il y a 18 mois (socket identique à celui du CPU)\n- CPU sorti le mois dernier\n- Symptôme : les ventilateurs tournent mais aucun affichage, pas de POST",
+      "q": "Quelle est la cause la plus probable de cette absence de démarrage ?",
+      "choices": ["Le CPU n'est pas compatible avec le socket", "Le BIOS de la carte mère est antérieur au CPU et doit être mis à jour", "L'alimentation est trop puissante pour la carte mère", "Le câble d'écran est branché sur le mauvais port"],
+      "answer": 1,
+      "explication": "Même avec le bon socket, un CPU plus récent que le BIOS n'est pas reconnu : il faut vérifier la liste QVL du constructeur et mettre à jour le BIOS avant d'installer le processeur."
+    },
+    {
+      "id": "hw-037", "niveau": 4, "type": "scenario",
+      "q": "Un utilisateur a supprimé par erreur un dossier important sur un serveur en RAID 1. Il demande si l'on peut récupérer le dossier depuis le « second disque ». Que lui répondre ?",
+      "choices": ["Oui, le miroir conserve l'ancienne version pendant 24 heures", "Non : l'écriture étant simultanée sur les deux disques, la suppression a aussi été répliquée", "Oui, à condition de casser le miroir avant tout redémarrage", "Non, sauf si le RAID est matériel"],
+      "answer": 1,
+      "explication": "Le RAID 1 réplique instantanément toutes les opérations, suppressions comprises : seule une véritable sauvegarde permet de récupérer le dossier — un RAID n'est pas une sauvegarde."
+    },
+    {
+      "id": "hw-038", "niveau": 4, "type": "scenario",
+      "context": "PC de bureau :\n- RAM DDR4 3200 MHz overclockée à 3800 MHz dans l'UEFI\n- Symptômes : écrans bleus aléatoires et redémarrages intempestifs sous charge",
+      "q": "Quelle est l'action corrective la plus pertinente ?",
+      "choices": ["Remplacer l'alimentation", "Repasser la RAM à sa fréquence native dans l'UEFI", "Ajouter deux barrettes supplémentaires", "Mettre à jour le pilote de la carte graphique"],
+      "answer": 1,
+      "explication": "Les fabricants testent les puces et les vendent à leur fréquence optimale native : l'overclocking de la RAM force des timings instables, d'où les plantages aléatoires."
+    },
+    {
+      "id": "hw-039", "niveau": 4, "type": "scenario",
+      "context": "RAID 10 composé de 4 disques :\nMiroir 1 : disque A + disque B\nMiroir 2 : disque C + disque D\nPannes signalées : disque A et disque B",
+      "q": "Deux disques sont en panne sur ce RAID 10. Quelle est la conséquence ?",
+      "choices": ["Aucune perte : le RAID 10 tolère toujours deux pannes", "Perte des données : les deux disques en panne appartiennent au même miroir", "Perte de la moitié des données seulement", "Le volume passe simplement en lecture seule"],
+      "answer": 1,
+      "explication": "Le RAID 10 ne tolère deux pannes que si elles touchent des miroirs différents ; ici le miroir 1 est entièrement détruit, donc le volume RAID 10 est irrécupérable."
+    },
+    {
+      "id": "hw-040", "niveau": 4, "type": "scenario",
+      "context": "Configuration :\n- Consommation estimée des composants : 420 W\n- Alimentation installée : 450 W\n- Symptôme : arrêts brutaux du PC lors des sessions de jeu (GPU à pleine charge)",
+      "q": "Quelle est la cause la plus probable de ces arrêts ?",
+      "choices": ["La RAM est trop lente pour le GPU", "L'alimentation est sous-dimensionnée : la règle de calcul recommande environ 600 W pour cette configuration", "Le processeur est underclocké", "Le disque système est trop lent"],
+      "answer": 1,
+      "explication": "La règle « consommation + 150 W de marge + 20 % de buffer » donne environ 600 W : avec 450 W, l'alimentation sature dès que la charge monte et le PC s'éteint brutalement."
+    }
+  ]
+}

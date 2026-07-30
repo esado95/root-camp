@@ -30,9 +30,11 @@
       "explication": "On travaille avec un utilisateur standard et on élève ses privilèges ponctuellement avec sudo — traçabilité et sécurité."
     },
     {
-      "id": "lin-005", "niveau": 1, "type": "libre",
-      "q": "Quelle commande affiche le chemin du répertoire courant ?",
+      "id": "lin-005", "niveau": 1, "type": "terminal",
+      "q": "Vous êtes perdu dans l'arborescence. Tapez la commande qui affiche le chemin du répertoire courant.",
+      "prompt": "said@srv-deb:~/travaux/tp3$",
       "accept": ["pwd"],
+      "output": "/home/said/travaux/tp3",
       "explication": "pwd = print working directory. Pour naviguer : cd, pour lister : ls."
     },
     {
@@ -92,14 +94,15 @@
     {
       "id": "lin-014", "niveau": 3, "type": "libre",
       "q": "Quelle valeur octale donne les droits rwxr-xr-x ?",
-      "accept": ["755"],
+      "accept": ["755", "0755"],
       "explication": "rwx=7 (propriétaire), r-x=5 (groupe), r-x=5 (autres) → chmod 755. Classique pour un script exécutable."
     },
     {
-      "id": "lin-015", "niveau": 3, "type": "libre",
-      "q": "Quelle commande ajoute l'utilisateur « said » au groupe sudo ?",
-      "accept": ["usermod -ag sudo said", "usermod -a -g sudo said", "sudo usermod -ag sudo said", "gpasswd -a said sudo", "sudo gpasswd -a said sudo"],
-      "explication": "usermod -aG sudo said (-a = ajouter sans écraser les autres groupes). gpasswd -a said sudo fonctionne aussi."
+      "id": "lin-015", "niveau": 3, "type": "terminal",
+      "q": "Ajoutez l'utilisateur « said » au groupe sudo.",
+      "prompt": "root@srv-deb:~#",
+      "accept": ["usermod -aG sudo said", "usermod -a -G sudo said", "gpasswd -a said sudo"],
+      "explication": "usermod -aG sudo said (-a = ajouter sans écraser les autres groupes). gpasswd -a said sudo fonctionne aussi ; « id said » permet de vérifier."
     },
     {
       "id": "lin-016", "niveau": 3, "type": "qcm",

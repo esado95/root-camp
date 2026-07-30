@@ -1,0 +1,306 @@
+{
+  "module": "VLAN & segmentation",
+  "source": "VLAN.md + Segmentation-Reseau.md",
+  "questions": [
+    {
+      "id": "vlan-001",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "À quelle couche du modèle OSI un VLAN segmente-t-il le réseau ?",
+      "choices": ["Couche 1 (physique)", "Couche 2 (liaison de données)", "Couche 3 (réseau)", "Couche 4 (transport)"],
+      "answer": 1,
+      "explication": "Le VLAN segmente logiquement le réseau au niveau de la couche 2, généralement sur un switch : c'est le tag ajouté à la trame qui isole les flux, sans toucher à l'adressage IP."
+    },
+    {
+      "id": "vlan-002",
+      "niveau": 1,
+      "type": "libre",
+      "q": "Quelle norme IEEE définit le taggage des trames VLAN sur un lien trunk ?",
+      "accept": ["802.1Q", "802.1q", "dot1q", "dot1Q", "IEEE 802.1Q"],
+      "explication": "La norme 802.1Q (dot1Q) insère un tag dans la trame Ethernet pour indiquer à quel VLAN elle appartient lorsqu'elle traverse un trunk."
+    },
+    {
+      "id": "vlan-003",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Qu'est-ce qu'un VLAN ?",
+      "choices": ["Un sous-réseau IP calculé avec la méthode VLSM", "Une segmentation logique d'un réseau physique, réalisée sur un switch", "Un réseau sans fil virtualisé", "Un tunnel chiffré entre deux sites distants"],
+      "answer": 1,
+      "explication": "Un VLAN (réseau local virtuel) découpe logiquement un même réseau physique en plusieurs réseaux isolés, identifiés par des tags, sans multiplier les équipements."
+    },
+    {
+      "id": "vlan-004",
+      "niveau": 1,
+      "type": "multi",
+      "q": "Quels avantages les VLANs apportent-ils ? (plusieurs réponses)",
+      "choices": ["Ils réduisent la taille des domaines de diffusion (broadcast)", "Ils permettent de déplacer logiquement un utilisateur sans modifier le câblage physique", "Ils augmentent automatiquement le débit de chaque port", "Ils isolent les flux entre départements et renforcent la sécurité", "Ils suppriment le besoin d'adresses IP dans le LAN"],
+      "answer": [0, 1, 3],
+      "explication": "Les VLANs limitent les broadcasts à leur propre segment, facilitent la gestion (déplacement logique des postes) et isolent les flux par service ; ils n'augmentent pas le débit physique et ne remplacent pas l'adressage IP."
+    },
+    {
+      "id": "vlan-005",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Sur un switch, à quoi sert un port configuré en mode access ?",
+      "choices": ["Transporter les trames de plusieurs VLANs entre deux switchs", "Donner à ce port l'accès exclusif à un seul VLAN, typiquement pour un poste client", "Router le trafic entre les VLANs", "Recevoir uniquement le trafic non tagué du trunk"],
+      "answer": 1,
+      "explication": "Un port access appartient à un seul VLAN et transmet des trames non taguées : c'est le mode utilisé pour les équipements terminaux (PC, serveur, imprimante)."
+    },
+    {
+      "id": "vlan-006",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quel est le rôle d'un port en mode trunk ?",
+      "choices": ["Connecter un PC à son VLAN d'appartenance", "Faire transiter les trames de plusieurs VLANs entre deux équipements réseau (switch-switch ou switch-routeur)", "Bloquer tout le trafic broadcast", "Attribuer une adresse IP de gestion au switch"],
+      "answer": 1,
+      "explication": "Le trunk est le canal d'interconnexion entre équipements intermédiaires : grâce au taggage 802.1Q, il transporte le trafic de plusieurs VLANs sur un seul lien physique."
+    },
+    {
+      "id": "vlan-007",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez chaque type de VLAN à son rôle.",
+      "pairs": [
+        ["VLAN de données", "Transporte le trafic utilisateur standard"],
+        ["VLAN voix", "Dédié à la téléphonie IP, souvent avec de la QoS"],
+        ["VLAN natif", "Reçoit le trafic non tagué sur les liens trunk"]
+      ],
+      "explication": "Chaque type de VLAN a une fonction précise : données pour les utilisateurs, voix pour la téléphonie IP, natif pour le trafic qui circule sans tag sur les trunks."
+    },
+    {
+      "id": "vlan-008",
+      "niveau": 1,
+      "type": "terminal",
+      "prompt": "Switch#",
+      "q": "Affichez la liste synthétique des VLANs du switch et les ports qui leur sont associés.",
+      "accept": ["show vlan brief", "sh vlan brief", "show vlan br", "sh vlan br"],
+      "output": "VLAN Name                             Status    Ports\n---- -------------------------------- --------- -------------------------------\n1    default                          active    Fa0/1, Fa0/2, Fa0/3, Fa0/5\n10   vlan_commercial                  active    Fa0/6, Fa0/7\n11   vlan_assistance                  active    Fa0/8\n12   vlan_visiteur                    active    Fa0/9\n51   vlan_server                      active    Fa0/10\n99   vlan_admin                       active    Fa0/4\n1002 fddi-default                     act/unsup\n1003 token-ring-default               act/unsup\n1004 fddinet-default                  act/unsup\n1005 trnet-default                    act/unsup",
+      "explication": "show vlan brief est la commande de vérification de référence après la création des VLANs : elle liste chaque VLAN, son nom et ses ports."
+    },
+    {
+      "id": "vlan-009",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Qu'est-ce qu'une SVI (Switch Virtual Interface) ?",
+      "choices": ["Une interface physique réservée à l'administration", "Une interface virtuelle associée à un VLAN, qui permet notamment de donner une adresse IP de gestion au switch", "Un port trunk dédié au VLAN natif", "Le port console série du switch"],
+      "answer": 1,
+      "explication": "La SVI (ex. interface vlan 99) est une interface virtuelle rattachée à un VLAN : elle donne au switch une présence IP, par exemple pour l'administrer en SSH."
+    },
+    {
+      "id": "vlan-010",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi recommande-t-on d'éviter d'utiliser le VLAN 1 (VLAN par défaut) pour le trafic de production ?",
+      "choices": ["Il est limité en débit par construction", "Il existe par défaut sur tous les switchs et récupère le trafic non tagué, ce qui en fait le VLAN le plus vulnérable", "Il ne transporte pas le broadcast", "Il est réservé à la téléphonie IP"],
+      "answer": 1,
+      "explication": "Le VLAN 1 est présent d'office sur tous les switchs et sert de VLAN natif par défaut : un attaquant peut l'exploiter, d'où la bonne pratique de ne pas y placer de trafic utile."
+    },
+    {
+      "id": "vlan-011",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi les VLANs améliorent-ils les performances globales du réseau ?",
+      "choices": ["Ils compressent les trames Ethernet", "Les broadcasts (ARP, DHCP...) restent confinés dans leur VLAN, ce qui réduit le trafic subi par l'ensemble du réseau", "Ils doublent le débit des liens trunk", "Ils mettent le trafic en cache sur le switch"],
+      "answer": 1,
+      "explication": "Chaque VLAN forme un domaine de diffusion distinct : les requêtes qui polluent le réseau (ARP, DHCP...) ne sortent pas de leur VLAN, ce qui allège le trafic global."
+    },
+    {
+      "id": "vlan-012",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Deux switchs hébergent chacun les VLANs 10 et 20. Pourquoi le lien qui les relie doit-il être en mode trunk ?",
+      "choices": ["Un lien access est physiquement plus lent", "Le tag 802.1Q conservé sur le trunk permet au switch de destination de remettre chaque trame dans le bon VLAN", "Le mode trunk chiffre le trafic entre les switchs", "Les switchs ne peuvent pas se détecter autrement"],
+      "answer": 1,
+      "explication": "Sans tag, le switch distant ne saurait pas à quel VLAN appartient chaque trame : le trunk transporte plusieurs VLANs en les identifiant grâce au taggage 802.1Q."
+    },
+    {
+      "id": "vlan-013",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Sur un lien trunk 802.1Q, quel trafic circule sans tag ?",
+      "choices": ["Le trafic du VLAN voix", "Le trafic du VLAN natif", "Tout le trafic broadcast", "Le trafic de management SSH"],
+      "answer": 1,
+      "explication": "Par convention 802.1Q, les trames du VLAN natif traversent le trunk sans tag ; toute trame non taguée reçue sur le trunk est affectée à ce VLAN."
+    },
+    {
+      "id": "vlan-014",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quelle différence y a-t-il entre le routage inter-VLAN sur un switch de niveau 3 et la méthode router-on-a-stick ?",
+      "choices": ["Le switch L3 route directement entre ses SVI, alors que le router-on-a-stick fait transiter tous les VLANs par un lien trunk vers un routeur externe", "Le router-on-a-stick est toujours plus performant car le routeur est dédié", "Le switch L3 exige une sous-interface physique par VLAN", "Il n'y a aucune différence de fonctionnement"],
+      "answer": 0,
+      "explication": "Le switch de niveau 3 route en interne entre ses interfaces virtuelles SVI (après activation de ip routing), ce qui évite le goulot d'étranglement du lien trunk unique vers un routeur externe."
+    },
+    {
+      "id": "vlan-015",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "À quoi sert la commande ip helper-address sur une interface ou une sous-interface ?",
+      "choices": ["Attribuer une adresse IP de secours à l'interface", "Intercepter les broadcasts UDP (dont le DHCP) et les retransmettre en unicast vers le serveur indiqué", "Créer une interface virtuelle SVI", "Activer la traduction d'adresses NAT"],
+      "answer": 1,
+      "explication": "Les broadcasts DHCP ne franchissent pas les VLANs : ip helper-address relaie ces requêtes en unicast vers le serveur DHCP situé dans un autre VLAN."
+    },
+    {
+      "id": "vlan-016",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi la commande spanning-tree portfast ne doit-elle être utilisée que sur des ports reliés à des hôtes finaux (PC, serveur, téléphone) ?",
+      "choices": ["Elle désactive complètement le port", "Elle saute les phases d'écoute et d'apprentissage du Spanning-Tree : appliquée sur un lien vers un autre switch, elle pourrait laisser s'installer une boucle", "Elle limite la vitesse du port à 10 Mbit/s", "Elle empêche le taggage 802.1Q"],
+      "answer": 1,
+      "explication": "Portfast fait monter le port immédiatement sans attendre la convergence Spanning-Tree ; c'est sans danger vers un hôte final, mais risqué entre switchs où une boucle peut se former."
+    },
+    {
+      "id": "vlan-017",
+      "niveau": 2,
+      "type": "multi",
+      "q": "Quels types de trafic restent confinés dans leur VLAN d'origine ? (plusieurs réponses)",
+      "choices": ["Les requêtes ARP", "Les DHCP Discover diffusés en broadcast", "Le trafic unicast routé vers un autre VLAN via une passerelle", "Les trames de broadcast en général", "Les paquets à destination d'Internet passant par la passerelle"],
+      "answer": [0, 1, 3],
+      "explication": "Un VLAN constitue un domaine de diffusion : tout ce qui est broadcast (ARP, DHCP Discover...) y reste enfermé, alors que le trafic passé à une passerelle de niveau 3 peut être routé ailleurs."
+    },
+    {
+      "id": "vlan-018",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quel est l'intérêt de la commande switchport trunk allowed vlan 10,20 sur un lien trunk ?",
+      "choices": ["Renommer les VLANs 10 et 20", "Restreindre le trunk aux seuls VLANs nécessaires, par sécurité et pour éviter de propager du trafic inutile", "Créer les VLANs 10 et 20 dans la base du switch", "Repasser le port en mode access"],
+      "answer": 1,
+      "explication": "Par défaut un trunk laisse passer tous les VLANs ; limiter la liste aux VLANs réellement utilisés réduit la surface d'attaque et le trafic superflu sur le lien."
+    },
+    {
+      "id": "vlan-019",
+      "niveau": 3,
+      "type": "terminal",
+      "prompt": "Switch(config-if)#",
+      "q": "Vous êtes sur le port d'accès qui dessert un poste client : assignez-le de façon statique au VLAN 20.",
+      "accept": ["switchport access vlan 20", "sw access vlan 20", "swi access vlan 20", "sw acc vlan 20"],
+      "explication": "En mode configuration d'interface, switchport access vlan 20 rattache le port au VLAN 20 ; on la combine avec switchport mode access. La commande ne renvoie rien si elle est acceptée."
+    },
+    {
+      "id": "vlan-020",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Quelle commande force un port de switch en mode trunk ?",
+      "choices": ["switchport trunk enable", "switchport mode trunk", "interface trunk", "encapsulation dot1Q"],
+      "answer": 1,
+      "explication": "switchport mode trunk force le port en trunk avec taggage 802.1Q ; encapsulation dot1Q s'utilise sur les sous-interfaces d'un routeur, pas sur un port de switch."
+    },
+    {
+      "id": "vlan-021",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Remettez dans l'ordre la configuration d'une sous-interface de routeur pour le VLAN 10 (méthode router-on-a-stick).",
+      "steps": ["interface fa0/0.10", "encapsulation dot1Q 10", "ip address 192.168.10.254 255.255.255.0", "no shutdown"],
+      "explication": "On entre d'abord dans la sous-interface, puis on déclare l'encapsulation 802.1Q avec le bon numéro de VLAN avant de poser l'adresse IP ; l'IOS refuse l'IP tant que l'encapsulation n'est pas définie."
+    },
+    {
+      "id": "vlan-022",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Quelle commande est indispensable pour activer le routage entre les SVI d'un switch de niveau 3 ?",
+      "choices": ["ip routing", "ip route 0.0.0.0 0.0.0.0", "routing enable", "switchport mode routed"],
+      "answer": 0,
+      "explication": "ip routing active la table de routage du switch et le transforme en équipement de niveau 3 ; sans elle, les SVI ne routent pas entre les VLANs."
+    },
+    {
+      "id": "vlan-023",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Que fait la commande no switchport sur un port d'un switch de niveau 3 ?",
+      "choices": ["Elle désactive administrativement le port", "Elle transforme le port en port routé de niveau 3, capable de recevoir directement une adresse IP", "Elle retire le port de son VLAN sans autre effet", "Elle passe le port en mode trunk"],
+      "answer": 1,
+      "explication": "no switchport désactive les fonctions de commutation (niveau 2) du port : il se comporte alors comme une interface de routeur, utile pour un lien point à point vers un firewall ou un routeur."
+    },
+    {
+      "id": "vlan-024",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Sur un routeur, que signifie la commande encapsulation dot1Q 10 appliquée à la sous-interface fa0/0.10 ?",
+      "choices": ["Elle chiffre le trafic du VLAN 10", "La sous-interface traitera les trames taguées avec le VLAN 10 selon la norme 802.1Q", "Elle crée le VLAN 10 sur le switch distant", "Elle limite le débit alloué au VLAN 10"],
+      "answer": 1,
+      "explication": "Chaque sous-interface du router-on-a-stick est associée à un VLAN précis : encapsulation dot1Q 10 lui fait prendre en charge les trames portant le tag 10 arrivant par le trunk."
+    },
+    {
+      "id": "vlan-025",
+      "niveau": 3,
+      "type": "terminal",
+      "prompt": "Switch#",
+      "q": "Vérifiez les liens trunk actifs du switch et les VLANs qui y sont autorisés.",
+      "accept": ["show interfaces trunk", "sh interfaces trunk", "show interface trunk", "sh interface trunk", "sh int trunk", "show int trunk"],
+      "output": "Port        Mode         Encapsulation  Status        Native vlan\nFa0/24      on           802.1q         trunking      1\n\nPort        Vlans allowed on trunk\nFa0/24      10,11,12,51,99\n\nPort        Vlans allowed and active in management domain\nFa0/24      10,11,12,51,99\n\nPort        Vlans in spanning tree forwarding state and not pruned\nFa0/24      10,11,12,51,99",
+      "explication": "show interfaces trunk affiche les ports en trunk, leur encapsulation, le VLAN natif et la liste des VLANs autorisés : c'est le premier réflexe de diagnostic d'un trunk."
+    },
+    {
+      "id": "vlan-026",
+      "niveau": 3,
+      "type": "assoc",
+      "q": "Associez chaque commande de vérification à ce qu'elle permet de contrôler.",
+      "pairs": [
+        ["show vlan brief", "La liste des VLANs et leurs ports associés"],
+        ["show interfaces trunk", "Les trunks actifs et les VLANs autorisés"],
+        ["show ip interface brief", "L'état et l'adresse IP de chaque interface"],
+        ["show mac address-table interface fa0/4", "Les adresses MAC apprises sur un port donné"]
+      ],
+      "explication": "Chaque étape de configuration VLAN a sa commande de contrôle : VLANs créés, trunks montés, interfaces IP actives et équipements réellement connectés sur un port."
+    },
+    {
+      "id": "vlan-027",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Un téléphone IP est branché sur le port fa0/11 et un PC est connecté derrière le téléphone. Quelles commandes affectent les bons VLANs à ce port ?",
+      "choices": ["switchport access vlan 40 pour le PC et switchport voice vlan 60 pour le téléphone", "switchport mode trunk avec allowed vlan 40,60", "Deux ports physiques distincts sont obligatoires", "switchport access vlan 40,60 sur la même ligne"],
+      "answer": 0,
+      "explication": "Un port d'accès mixte transporte le VLAN data du PC (switchport access vlan) et le VLAN voix du téléphone (switchport voice vlan) sans passer le port en trunk."
+    },
+    {
+      "id": "vlan-028",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "PC1 (VLAN 10, 192.168.10.5/24) ne parvient pas à joindre PC2 (VLAN 20, 192.168.20.5/24).\nPC1 ping 192.168.10.7 (même VLAN) : succès.\nPC1 ping 192.168.20.5 : échec.\nLe réseau ne contient qu'un seul switch de niveau 2, correctement configuré.",
+      "q": "Quelle est la cause la plus probable de l'échec ?",
+      "choices": ["Le câble entre PC1 et le switch est défectueux", "Il manque un équipement de niveau 3 (routeur ou switch L3) pour assurer le routage entre les deux VLANs", "Le VLAN 20 n'a pas été créé sur le switch", "Le masque de sous-réseau de PC1 est incorrect"],
+      "answer": 1,
+      "explication": "Deux VLANs sont deux réseaux isolés : un switch de niveau 2 seul ne peut pas les faire communiquer, il faut un routage inter-VLAN (router-on-a-stick ou switch de niveau 3)."
+    },
+    {
+      "id": "vlan-029",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "SW1 et SW2 sont reliés par leurs ports fa0/24.\nPC-A (VLAN 10 sur SW1) ne joint pas PC-B (VLAN 10 sur SW2).\nSur SW1, la commande show interfaces trunk ne renvoie aucune ligne pour fa0/24.",
+      "q": "Quelle est la cause la plus probable ?",
+      "choices": ["Le lien inter-switchs est resté en mode access au lieu d'être configuré en trunk", "Le Spanning-Tree a désactivé le port fa0/24", "Le VLAN 10 est saturé", "Les deux PC ont la même adresse MAC"],
+      "answer": 0,
+      "explication": "Si fa0/24 n'apparaît pas dans show interfaces trunk, le lien n'est pas en trunk : les trames du VLAN 10 ne sont pas taguées et le trafic inter-switchs du VLAN ne passe pas ; il faut appliquer switchport mode trunk."
+    },
+    {
+      "id": "vlan-030",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Sur SW1, show interfaces trunk affiche :\nPort      Mode  Encapsulation  Status    Native vlan\nFa0/24    on    802.1q         trunking  1\n\nVlans allowed on trunk : 10,11\n\nLes utilisateurs du VLAN 12 ne communiquent plus entre les deux switchs, alors que les VLANs 10 et 11 fonctionnent.",
+      "q": "Quelle est la cause du problème ?",
+      "choices": ["Le VLAN 12 n'est pas dans la liste des VLANs autorisés sur le trunk", "Le VLAN natif est mal configuré", "Le VLAN 12 a été supprimé de tous les switchs", "Le Spanning-Tree bloque le VLAN 12"],
+      "answer": 0,
+      "explication": "La commande switchport trunk allowed vlan restreint le trunk à une liste précise : tout VLAN absent de cette liste (ici le 12) est bloqué sur le lien, même s'il existe sur les deux switchs."
+    },
+    {
+      "id": "vlan-031",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Les postes du VLAN 12 se retrouvent en adresse APIPA (169.254.x.x).\nLe serveur DHCP (192.168.51.250) se trouve dans le VLAN 51.\nLes postes du VLAN 51, eux, obtiennent bien une adresse.",
+      "q": "Quelle est la cause la plus probable et sa correction ?",
+      "choices": ["Le serveur DHCP est en panne : il faut le redémarrer", "Il manque la commande ip helper-address 192.168.51.250 sur la passerelle du VLAN 12 : les broadcasts DHCP ne franchissent pas les VLANs", "Le VLAN 12 n'existe pas sur le switch", "Il faut obligatoirement installer un serveur DHCP par VLAN"],
+      "answer": 1,
+      "explication": "Les DHCP Discover sont des broadcasts confinés à leur VLAN ; ip helper-address sur l'interface (ou sous-interface) du VLAN 12 les relaie en unicast vers le serveur du VLAN 51."
+    },
+    {
+      "id": "vlan-032",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Sur le lien trunk entre SW1 et SW2, les journaux affichent :\n%CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on FastEthernet0/24 (99), with SW2 FastEthernet0/24 (1).",
+      "q": "Que signifie ce message et quel est le risque ?",
+      "choices": ["Les deux extrémités du trunk n'ont pas le même VLAN natif : le trafic non tagué peut passer d'un VLAN à l'autre", "Le câble utilisé est croisé au lieu d'être droit", "CDP est désactivé sur SW2", "Le VLAN 99 n'existe pas sur SW1"],
+      "answer": 0,
+      "explication": "Le VLAN natif doit être identique aux deux bouts d'un trunk : en cas de désaccord (ici 99 contre 1), les trames non taguées atterrissent dans des VLANs différents, ce qui crée des fuites de trafic entre segments."
+    }
+  ]
+}

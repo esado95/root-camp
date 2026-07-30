@@ -1,0 +1,474 @@
+{
+  "module": "Diagnostic & Wireshark",
+  "source": "Diagnostic-Reseau.md + Wireshark-Analyse-Trames.md",
+  "questions": [
+    {
+      "id": "diag-001",
+      "niveau": 1,
+      "type": "libre",
+      "q": "Sur quel port standard un serveur DNS écoute-t-il les requêtes ?",
+      "accept": ["53", "port 53", "53/udp", "udp 53"],
+      "explication": "Le port 53 (UDP ou TCP) est réservé au service DNS ; le client, lui, utilise un port source éphémère choisi dynamiquement."
+    },
+    {
+      "id": "diag-002",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Que se passe-t-il lorsqu'un paquet voit son TTL atteindre 0 en traversant un routeur ?",
+      "choices": [
+        "Le routeur le met en file d'attente jusqu'à libération du lien",
+        "Le paquet est détruit et un message ICMP Time Exceeded est renvoyé à l'émetteur",
+        "Le paquet est renvoyé à l'expéditeur avec son TTL d'origine",
+        "Le routeur remet le TTL à sa valeur initiale et le retransmet"
+      ],
+      "answer": 1,
+      "explication": "Le TTL perd 1 à chaque routeur traversé ; arrivé à 0, le paquet est détruit et l'ICMP Time Exceeded prévient l'émetteur — c'est ce mécanisme qu'exploite tracert."
+    },
+    {
+      "id": "diag-003",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Dans un en-tête Ethernet II, que signifie le champ Type positionné à la valeur 0x0800 ?",
+      "choices": [
+        "La trame transporte de l'ARP",
+        "La trame transporte de l'IPv4",
+        "La trame transporte de l'IPv6",
+        "La trame est une trame de broadcast"
+      ],
+      "answer": 1,
+      "explication": "Le champ Type indique le protocole de couche supérieure : 0x0800 pour IPv4 et 0x0806 pour ARP."
+    },
+    {
+      "id": "diag-004",
+      "niveau": 1,
+      "type": "libre",
+      "q": "Quelle adresse MAC de destination est utilisée pour une diffusion générale (broadcast) sur un réseau local ?",
+      "accept": ["ff:ff:ff:ff:ff:ff", "ff-ff-ff-ff-ff-ff", "ffffffffffff", "ff ff ff ff ff ff"],
+      "explication": "L'adresse ff:ff:ff:ff:ff:ff est reçue par tous les hôtes du segment : les switchs diffusent la trame sur tous leurs ports."
+    },
+    {
+      "id": "diag-005",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quelle charge utile maximale une Jumbo Frame Ethernet peut-elle transporter ?",
+      "choices": [
+        "1500 octets",
+        "4096 octets",
+        "9000 octets",
+        "65 535 octets"
+      ],
+      "answer": 2,
+      "explication": "Une Jumbo Frame transporte jusqu'à 9000 octets de charge utile, contre environ 1500 octets (MTU standard) pour une trame Ethernet classique."
+    },
+    {
+      "id": "diag-007",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Qu'est-ce que Wireshark ?",
+      "choices": [
+        "Un scanner de vulnérabilités réseau",
+        "Un analyseur de protocoles open-source qui capture et inspecte les trames",
+        "Un pare-feu applicatif avec journalisation",
+        "Un outil de supervision SNMP"
+      ],
+      "answer": 1,
+      "explication": "Wireshark (souvent appelé packet sniffer) capture en temps réel le trafic d'une interface et permet de l'inspecter couche par couche."
+    },
+    {
+      "id": "diag-008",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Que combine la commande Windows pathping ?",
+      "choices": [
+        "ping et nslookup",
+        "ping, tracert et des statistiques de perte de paquets sur chaque saut",
+        "tracert et netstat",
+        "ping et une analyse des ports ouverts"
+      ],
+      "answer": 1,
+      "explication": "pathping cumule le test de connectivité, le tracé du chemin et les statistiques de perte par saut : il permet de localiser où les paquets se perdent."
+    },
+    {
+      "id": "diag-009",
+      "niveau": 1,
+      "type": "terminal",
+      "prompt": "PS C:\\Users\\admin>",
+      "q": "Videz le cache de résolution DNS de cette machine Windows.",
+      "accept": ["ipconfig /flushdns", "ipconfig/flushdns", "ipconfig -flushdns"],
+      "output": "Configuration IP de Windows\n\nLe cache de résolution DNS a été vidé.",
+      "explication": "ipconfig /flushdns force l'ordinateur à interroger de nouveau son serveur DNS au lieu de réutiliser les réponses stockées en mémoire locale."
+    },
+    {
+      "id": "diag-010",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Dans Wireshark, quel volet affiche le contenu brut du paquet en hexadécimal et en ASCII ?",
+      "choices": [
+        "Packet List (liste des paquets)",
+        "Packet Details (détail des protocoles)",
+        "Packet Bytes (contenu en octets)",
+        "La barre de filtre d'affichage"
+      ],
+      "answer": 2,
+      "explication": "Le volet Packet Bytes montre l'hexadécimal à gauche et l'ASCII à droite ; cliquer sur un champ dans Packet Details surligne les octets correspondants."
+    },
+    {
+      "id": "diag-011",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "D'où provient l'adresse MAC d'une carte réseau ?",
+      "choices": [
+        "Elle est attribuée par le serveur DHCP au démarrage",
+        "Elle est gravée en usine par le constructeur, ou attribuée par l'hyperviseur pour une machine virtuelle",
+        "Elle est calculée à partir de l'adresse IP",
+        "Elle est définie par le serveur DNS du domaine"
+      ],
+      "answer": 1,
+      "explication": "La MAC est une adresse physique fixée par le constructeur de la carte (ou générée par l'hyperviseur pour une VM) ; c'est l'adresse IP qui vient du DHCP ou d'une configuration statique."
+    },
+    {
+      "id": "diag-012",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Lors d'un ping vers une machine du réseau local, pourquoi une résolution ARP est-elle effectuée avant l'envoi du paquet ICMP ?",
+      "choices": [
+        "Pour vérifier que la cible accepte les pings",
+        "Parce que la trame ne peut pas être émise sans connaître l'adresse MAC de la cible",
+        "Pour mesurer le temps de réponse du commutateur",
+        "Parce que le protocole ICMP l'exige dans son en-tête"
+      ],
+      "answer": 1,
+      "explication": "La couche liaison travaille avec des adresses MAC : tant que la correspondance IP vers MAC n'est pas connue, il est impossible d'émettre le paquet IP qui transporte l'ICMP."
+    },
+    {
+      "id": "diag-013",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi une requête ARP est-elle envoyée à l'adresse MAC de broadcast ff:ff:ff:ff:ff:ff ?",
+      "choices": [
+        "Pour accélérer la réponse du routeur",
+        "Parce que l'émetteur ne connaît pas encore la MAC de la cible : toutes les machines reçoivent la question et seule la concernée répond",
+        "Parce que les switchs refusent les trames ARP en unicast",
+        "Pour forcer la mise à jour de la table ARP de toutes les machines"
+      ],
+      "answer": 1,
+      "explication": "L'émetteur ignore justement la MAC recherchée : le broadcast fait diffuser la trame sur tous les ports des switchs, et seule la machine qui possède l'IP demandée répond (en unicast)."
+    },
+    {
+      "id": "diag-014",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi le protocole DNS utilise-t-il généralement UDP plutôt que TCP pour ses requêtes ?",
+      "choices": [
+        "UDP chiffre les échanges par défaut",
+        "UDP, sans connexion, est idéal pour des échanges légers et rapides",
+        "TCP ne permet pas d'utiliser le port 53",
+        "UDP garantit la retransmission automatique en cas de perte"
+      ],
+      "answer": 1,
+      "explication": "Une résolution DNS tient dans un échange bref question/réponse : le mode sans connexion d'UDP évite le coût d'établissement d'une session TCP."
+    },
+    {
+      "id": "diag-015",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Une requête DNS part vers 8.8.8.8, pourtant la MAC de destination de la trame est celle de la passerelle locale. Pourquoi ?",
+      "choices": [
+        "Le serveur DNS et la passerelle partagent la même carte réseau",
+        "8.8.8.8 est une adresse externe : la trame est remise physiquement au routeur, mais l'IP de destination reste 8.8.8.8",
+        "Wireshark affiche une MAC erronée pour les adresses publiques",
+        "La passerelle répond à la place du serveur DNS (proxy DNS)"
+      ],
+      "answer": 1,
+      "explication": "Une IP hors du réseau local est inatteignable directement : la trame de couche 2 vise la passerelle, qui transfère ensuite le paquet vers Internet sans toucher à l'IP de destination."
+    },
+    {
+      "id": "diag-016",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Entre une requête DNS et sa réponse, qu'observe-t-on sur les ports UDP ?",
+      "choices": [
+        "Les deux sens utilisent le port 53 en source et en destination",
+        "Les ports source et destination sont inversés : la réponse revient du port 53 vers le port éphémère du client",
+        "Le serveur choisit un nouveau port éphémère pour répondre",
+        "Le port source reste identique dans les deux sens"
+      ],
+      "answer": 1,
+      "explication": "C'est le principe de l'échange client-serveur : la réponse fait le chemin inverse exact (53 vers le port éphémère, par exemple 55859) pour être remise à l'application qui a émis la requête."
+    },
+    {
+      "id": "diag-017",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Avec un pare-feu à filtrage d'état (stateful), pourquoi suffit-il en général de configurer les règles pour le trafic sortant du client ?",
+      "choices": [
+        "Le trafic entrant n'est jamais filtré par défaut",
+        "Le pare-feu suit les sessions : le trafic retour d'une connexion sortante est reconnu comme légitime et accepté automatiquement",
+        "Les réponses passent toujours par le port 443, ouvert en permanence",
+        "Le NAT rend le trafic entrant invisible pour le pare-feu"
+      ],
+      "answer": 1,
+      "explication": "Le filtrage d'état mémorise la session sortante et laisse passer la réponse correspondante sans qu'il soit nécessaire d'ouvrir explicitement des ports entrants."
+    },
+    {
+      "id": "diag-018",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Que permet le mode promiscuous d'une carte réseau lors d'une capture Wireshark ?",
+      "choices": [
+        "Masquer la capture aux autres machines du réseau",
+        "Capturer tout le trafic du segment, même les trames non destinées à la MAC de la machine de capture",
+        "Déchiffrer le trafic TLS qui transite sur le réseau",
+        "Augmenter le débit de la carte pendant la capture"
+      ],
+      "answer": 1,
+      "explication": "En mode promiscuous, la carte remonte au système tous les paquets du segment physique ; le désactiver limite le bruit de fond en ne capturant que le trafic de sa propre machine."
+    },
+    {
+      "id": "diag-019",
+      "niveau": 2,
+      "type": "multi",
+      "q": "Quelles affirmations sur les Jumbo Frames sont exactes ? (plusieurs réponses)",
+      "choices": [
+        "Elles réduisent le nombre de trames à transmettre, donc la charge CPU liée au traitement des en-têtes",
+        "Elles accélèrent la résolution des noms DNS",
+        "Leur charge utile peut atteindre 9000 octets, contre environ 1500 en standard",
+        "En cas de perte, leur réémission est plus lourde et pénalise la bande passante",
+        "Elles ne fonctionnent que sur les réseaux Wi-Fi"
+      ],
+      "answer": [0, 2, 3],
+      "explication": "Prévues pour les connexions haut débit, les Jumbo Frames diminuent le nombre de trames et le traitement CPU, mais la retransmission d'une trame perdue coûte d'autant plus cher qu'elle est grande."
+    },
+    {
+      "id": "diag-020",
+      "niveau": 2,
+      "type": "multi",
+      "q": "Quelles informations la commande ipconfig /all affiche-t-elle ? (plusieurs réponses)",
+      "choices": [
+        "La table ARP locale",
+        "L'adresse MAC de chaque interface",
+        "Les serveurs DNS configurés",
+        "Les connexions TCP actives",
+        "La passerelle par défaut"
+      ],
+      "answer": [1, 2, 4],
+      "explication": "ipconfig /all affiche IP, MAC, DNS et passerelle ; la table ARP s'obtient avec arp -a et les connexions actives avec netstat."
+    },
+    {
+      "id": "diag-021",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Dans un tracert, un saut affiche « * » mais tous les sauts suivants répondent normalement. Que faut-il en conclure ?",
+      "choices": [
+        "La route est coupée à ce niveau",
+        "Ce routeur filtre les réponses ICMP : ce n'est pas forcément une erreur",
+        "La cible est injoignable",
+        "Le DNS n'a pas pu résoudre le nom de ce routeur"
+      ],
+      "answer": 1,
+      "explication": "Un « * » isolé signifie simplement que ce routeur ne renvoie pas de réponse ICMP ; le trafic continue de passer puisque les sauts suivants répondent."
+    },
+    {
+      "id": "diag-022",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quelle est la particularité de l'encapsulation d'ARP par rapport à ICMP ou DNS ?",
+      "choices": [
+        "ARP est encapsulé dans UDP",
+        "ARP est encapsulé directement dans la trame Ethernet II, sans en-tête IP",
+        "ARP est encapsulé dans IPv4, comme ICMP",
+        "ARP n'utilise aucune trame Ethernet"
+      ],
+      "answer": 1,
+      "explication": "ICMP voyage dans IPv4 et DNS dans UDP puis IPv4, mais ARP est porté directement par Ethernet II (type 0x0806) : il sert justement à résoudre les adresses du réseau local."
+    },
+    {
+      "id": "diag-023",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Remettez dans l'ordre la démarche de diagnostic recommandée pour localiser un problème de connectivité.",
+      "steps": [
+        "ping <cible> : vérifier si la cible répond",
+        "tracert <cible> : repérer où le chemin bloque",
+        "pathping <cible> : mesurer les pertes de paquets sur chaque saut"
+      ],
+      "explication": "On teste d'abord la connectivité globale, puis on localise le point de blocage, et enfin on quantifie les pertes saut par saut."
+    },
+    {
+      "id": "diag-024",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Après un vidage de la table ARP (arp -d *), remettez dans l'ordre les trames capturées lors d'un ping vers la passerelle.",
+      "steps": [
+        "ARP Request en broadcast : « Qui a cette IP ? »",
+        "ARP Reply en unicast : la passerelle communique sa MAC",
+        "ICMP Echo Request envoyé à la passerelle",
+        "ICMP Echo Reply renvoyé par la passerelle"
+      ],
+      "explication": "La résolution ARP est obligatoirement effectuée en premier : sans la MAC de la cible, le paquet ICMP ne peut pas être émis."
+    },
+    {
+      "id": "diag-025",
+      "niveau": 3,
+      "type": "terminal",
+      "prompt": "PS C:\\Users\\admin>",
+      "q": "Videz entièrement la table de cache ARP de cette machine Windows.",
+      "accept": ["arp -d *", "arp -d*", "arp -d", "arp /d *"],
+      "explication": "arp -d * supprime toutes les entrées du cache ARP, ce qui force la machine à réinterroger le réseau pour retrouver les correspondances IP/MAC. La commande n'affiche rien en cas de succès."
+    },
+    {
+      "id": "diag-027",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Comment l'adresse IP 172.16.9.53 s'écrit-elle en hexadécimal ?",
+      "choices": [
+        "AC.10.09.35",
+        "AC.10.09.FE",
+        "AC.16.09.53",
+        "B2.10.09.35"
+      ],
+      "answer": 0,
+      "explication": "172 = AC, 16 = 10, 9 = 09 et 53 = 35 en hexadécimal ; AC.10.09.FE correspondrait à 172.16.9.254, la passerelle."
+    },
+    {
+      "id": "diag-028",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Dans les octets bruts d'une requête DNS, le nom de domaine commence par « 03 77 77 77 ». Que représente cette séquence ?",
+      "choices": [
+        "Le type d'enregistrement demandé (A)",
+        "Le label « www » : un octet de longueur (3) suivi des trois caractères w en ASCII",
+        "L'adresse IP du serveur DNS en hexadécimal",
+        "Le numéro de port source de la requête"
+      ],
+      "answer": 1,
+      "explication": "DNS code chaque label par un octet de longueur suivi de ses caractères ASCII : 03 annonce trois caractères et 77 est la lettre w."
+    },
+    {
+      "id": "diag-029",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Dans le codage DNS du nom www.adrar-formation.com, quel octet précède « adrar-formation » et pourquoi ?",
+      "choices": [
+        "00, pour marquer le début du nom",
+        "0f, car chaque label est précédé de sa longueur (15 caractères)",
+        "2e, le point séparateur codé en ASCII",
+        "0a, un retour à la ligne"
+      ],
+      "answer": 1,
+      "explication": "DNS n'écrit pas les points : chaque label est préfixé par sa longueur (15 = 0f en hexadécimal) et le nom complet se termine par l'octet nul 00."
+    },
+    {
+      "id": "diag-030",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Comment autoriser une machine Windows à répondre aux pings sans désactiver son pare-feu ?",
+      "choices": [
+        "Ouvrir le port TCP 7 en entrée",
+        "Activer la règle de trafic entrant « Partage de fichiers et d'imprimantes - Demande d'écho (ICMPv4-In) »",
+        "Créer une règle de trafic sortant pour ICMP",
+        "Basculer le profil réseau en « Public »"
+      ],
+      "answer": 1,
+      "explication": "Dans le Pare-feu Windows avec sécurité avancée, il suffit d'activer cette règle entrante prédéfinie : le pare-feu reste actif pour tout le reste."
+    },
+    {
+      "id": "diag-031",
+      "niveau": 3,
+      "type": "assoc",
+      "q": "Associez chaque commande à son rôle.",
+      "pairs": [
+        ["nslookup", "Interroger la résolution DNS d'un domaine"],
+        ["netstat", "Lister les connexions actives et les ports en écoute"],
+        ["arp -a", "Afficher la table ARP locale"],
+        ["tracert", "Visualiser le chemin saut par saut vers une destination"]
+      ],
+      "explication": "Chaque commande cible une couche différente du diagnostic : résolution de noms, transport, correspondances IP/MAC et routage."
+    },
+    {
+      "id": "diag-032",
+      "niveau": 3,
+      "type": "terminal",
+      "prompt": "said@srv-deb:~$",
+      "q": "Affichez la configuration IP des interfaces réseau de ce serveur Linux (équivalent de la commande ipconfig de Windows).",
+      "accept": ["ip a", "ip addr", "ip address", "ip addr show", "ip address show"],
+      "output": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 00:0c:29:4f:8a:1b brd ff:ff:ff:ff:ff:ff\n    inet 172.16.9.162/24 brd 172.16.9.255 scope global ens33\n       valid_lft forever preferred_lft forever",
+      "explication": "Sous Linux, ip a remplace ipconfig ; de même, tracert devient traceroute."
+    },
+    {
+      "id": "diag-033",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "C:\\> tracert 203.0.113.10\n  1     1 ms    <1 ms    <1 ms  172.16.9.254\n  2     2 ms     2 ms     1 ms  46.255.202.186\n  3    25 ms    25 ms    26 ms  po11-75.er02.mar02.jaguar-network.net\n  4     *        *        *     Délai d'attente de la demande dépassé.\n  5     *        *        *     Délai d'attente de la demande dépassé.\n  6     *        *        *     Délai d'attente de la demande dépassé.",
+      "q": "Comment interpréter ce résultat de tracert ?",
+      "choices": [
+        "Simple filtrage ICMP sur le saut 4 : la suite du chemin est fonctionnelle",
+        "Tous les sauts répondent « * » à partir du saut 4 : la route est probablement bloquée après le saut 3",
+        "La latence est trop élevée sur le premier saut",
+        "Le DNS ne résout pas le nom de la cible"
+      ],
+      "answer": 1,
+      "explication": "Un « * » isolé traduit un simple filtrage ICMP, mais quand tous les sauts échouent à partir d'un point, la route est très probablement bloquée à cet endroit."
+    },
+    {
+      "id": "diag-034",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Capture Wireshark pendant « ping 172.16.9.254 » :\nNo.  Source             Destination        Protocole  Info\n1    00:15:5d:09:52:2a  ff:ff:ff:ff:ff:ff  ARP        Who has 172.16.9.254? Tell 172.16.9.53\n2    00:15:5d:09:52:2a  ff:ff:ff:ff:ff:ff  ARP        Who has 172.16.9.254? Tell 172.16.9.53\n3    00:15:5d:09:52:2a  ff:ff:ff:ff:ff:ff  ARP        Who has 172.16.9.254? Tell 172.16.9.53\n(aucune autre trame — le ping affiche « Impossible de joindre l'hôte »)",
+      "q": "Que révèle cette capture ?",
+      "choices": [
+        "Le pare-feu de la passerelle bloque l'ICMP entrant",
+        "Aucune réponse ARP : la passerelle est injoignable au niveau liaison, le paquet ICMP ne peut même pas être émis",
+        "Le serveur DNS est en panne",
+        "Le TTL des paquets ICMP a expiré en route"
+      ],
+      "answer": 1,
+      "explication": "Les ARP Request restent sans réponse : la machine cible est absente ou hors ligne sur le LAN. Sans résolution MAC, aucune trame ICMP ne part — ce n'est donc pas un filtrage ICMP."
+    },
+    {
+      "id": "diag-035",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "ping 8.8.8.8 → 4 réponses reçues, 0 % de perte.\nCapture Wireshark : la requête DNS (UDP 55859 → 53) part bien vers 8.8.8.8, mais aucune trame DNS Response ne revient.\nnslookup www.exemple.fr → « délai d'attente dépassé »",
+      "q": "Quel diagnostic poser ?",
+      "choices": [
+        "La connectivité IP vers 8.8.8.8 est en panne",
+        "La connectivité IP est bonne, mais le flux DNS (port 53) est filtré ou le serveur DNS ne répond pas",
+        "La table ARP locale est corrompue",
+        "Le port éphémère 55859 est réservé par une autre application"
+      ],
+      "answer": 1,
+      "explication": "Le ping prouve que la couche réseau fonctionne jusqu'à 8.8.8.8 : le problème est propre au service DNS, dont les réponses n'arrivent jamais (filtrage du port 53 ou serveur muet)."
+    },
+    {
+      "id": "diag-036",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Un serveur Windows fraîchement installé est joignable en Bureau à distance (RDP) et ses partages de fichiers répondent, mais « ping <serveur> » échoue depuis tous les postes.",
+      "q": "Quelle est la cause la plus probable ?",
+      "choices": [
+        "La carte réseau du serveur est défaillante",
+        "Le pare-feu Windows bloque par défaut les requêtes d'écho ICMP entrantes",
+        "La passerelle filtre tout le trafic vers ce serveur",
+        "Le serveur n'a pas d'adresse IP"
+      ],
+      "answer": 1,
+      "explication": "RDP et les partages fonctionnent : la connectivité est donc bonne. Par défaut, Windows bloque les pings entrants ; il faut activer la règle « Demande d'écho ICMPv4-In »."
+    },
+    {
+      "id": "diag-037",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "C:\\> tracert siege.entreprise.fr\n  1     1 ms     1 ms     1 ms   172.16.9.254\n  2     3 ms     2 ms     3 ms   46.255.202.186\n  3    24 ms    25 ms    24 ms   be1.er03.mar01.example.net\n  4   182 ms   175 ms   190 ms   217.0.0.14\n  5   185 ms   178 ms   188 ms   siege.entreprise.fr [203.0.113.20]",
+      "q": "La cible répond, mais les utilisateurs se plaignent de lenteurs. Que montre ce tracert ?",
+      "choices": [
+        "Une perte de paquets sur le saut 2",
+        "Une latence élevée (plus de 100 ms) qui apparaît au saut 4 : le segment entre les sauts 3 et 4 est en cause",
+        "Un filtrage ICMP sur le dernier saut",
+        "Un problème de résolution DNS"
+      ],
+      "answer": 1,
+      "explication": "Un temps supérieur à 100 ms signale une latence élevée sur un segment ; ici le bond de 25 ms à environ 180 ms entre les sauts 3 et 4 localise précisément le tronçon lent."
+    }
+  ]
+}

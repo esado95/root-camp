@@ -168,6 +168,34 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
 }
 .libre-row input:focus { border-color: var(--cyan); }
 
+.term {
+  background: #05090F;
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+.term-head {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--panel); padding: 7px 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px; color: var(--dim);
+}
+.term-head .dot { width: 9px; height: 9px; }
+.term-body { padding: 12px 14px; min-height: 90px; }
+.term-body .line { white-space: pre-wrap; word-break: break-all; line-height: 1.55; color: #C9D5E3; }
+.term-body .line.cmt { color: var(--dim); }
+.term-body .line.out { color: #9FB4CC; }
+.term-body .line.ok { color: var(--green); }
+.term-body .line.ko { color: var(--red); }
+.term-prompt { color: var(--green); }
+.term-input {
+  background: none; border: none; outline: none;
+  color: #E2E8F0; font-family: var(--mono); font-size: 13px;
+  width: 60%; caret-color: var(--green);
+}
+
 .feedback {
   margin-top: 14px; background: var(--panel); border: 1px solid var(--line);
   border-radius: 8px; padding: 12px 14px; font-size: 13.5px; color: var(--mut); line-height: 1.5;

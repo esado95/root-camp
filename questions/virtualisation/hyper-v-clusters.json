@@ -1,0 +1,332 @@
+{
+  "module": "Hyper-V & clusters",
+  "source": "Hyper-V-Virtualisation.md + Cluster-Hyper-V.md + Depannage-Hyper-V.md",
+  "questions": [
+    {
+      "id": "virt-001", "niveau": 1, "type": "qcm",
+      "q": "Quel type d'hyperviseur est Hyper-V ?",
+      "choices": ["Type 2, car il s'installe depuis Windows", "Type 1 (bare metal), il s'exécute directement sur le matériel", "Un émulateur matériel", "Un gestionnaire de conteneurs"],
+      "answer": 1,
+      "explication": "Hyper-V est un hyperviseur de type 1 : une fois le rôle activé, il s'intercale directement entre le matériel et les systèmes d'exploitation."
+    },
+    {
+      "id": "virt-002", "niveau": 2, "type": "qcm",
+      "q": "Quelle est la différence fondamentale entre émulation et virtualisation ?",
+      "choices": ["L'émulation est plus rapide car plus simple", "L'émulation recode une puce physique en logiciel, la virtualisation traduit un système vers un autre", "La virtualisation ne fonctionne que sous Linux", "Ce sont deux noms pour la même technique"],
+      "answer": 1,
+      "explication": "L'émulation recode entièrement une puce en logiciel et est donc très lourde, alors que la virtualisation traduit les instructions presque nativement, avec seulement ~10 % de perte de performance."
+    },
+    {
+      "id": "virt-003", "niveau": 1, "type": "qcm",
+      "q": "Quelle technologie processeur est requise pour installer Hyper-V ?",
+      "choices": ["Hyper-Threading", "Intel VT-x ou AMD-V", "TPM 2.0", "SSE4 et AVX"],
+      "answer": 1,
+      "explication": "Le CPU doit prendre en charge la virtualisation matérielle (Intel VT-x / AMD-V) et celle-ci doit être activée dans le BIOS/UEFI avant d'ajouter le rôle Hyper-V."
+    },
+    {
+      "id": "virt-004", "niveau": 1, "type": "qcm",
+      "q": "Quelles caractéristiques correspondent à une VM Hyper-V de génération 2 ?",
+      "choices": ["Firmware BIOS et partitionnement MBR", "Firmware UEFI et partitionnement GPT", "Firmware BIOS et partitionnement GPT", "Firmware UEFI et partitionnement MBR"],
+      "answer": 1,
+      "explication": "La génération 2 repose sur UEFI et GPT, ce qui apporte le Secure Boot et le démarrage PXE natif ; la génération 1 (BIOS/MBR) reste utile pour Linux et les anciens OS."
+    },
+    {
+      "id": "virt-005", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi est-il impossible de changer la génération d'une VM après l'installation de l'OS ?",
+      "choices": ["C'est une limitation de licence Microsoft", "Le firmware (BIOS/UEFI) et le partitionnement (MBR/GPT) du système installé ne correspondraient plus", "La génération est stockée dans le fichier .vhdx et ne peut pas être lue", "C'est possible, il suffit d'un simple redémarrage"],
+      "answer": 1,
+      "explication": "L'OS est installé pour un firmware et un schéma de partition donnés (BIOS/MBR en Gen 1, UEFI/GPT en Gen 2) : changer de génération l'empêcherait de démarrer."
+    },
+    {
+      "id": "virt-006", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque type de commutateur virtuel Hyper-V à sa portée de communication.",
+      "pairs": [
+        ["Commutateur privé", "Uniquement entre les VM connectées à ce switch"],
+        ["Commutateur interne", "Entre les VM et l'hôte physique, sans internet natif"],
+        ["Commutateur externe", "Accès au réseau physique complet (LAN, internet)"]
+      ],
+      "explication": "Le switch privé isole totalement les VM, l'interne y ajoute l'hôte, et l'externe est lié à la carte réseau physique de l'hôte."
+    },
+    {
+      "id": "virt-007", "niveau": 2, "type": "qcm",
+      "q": "En TP, pourquoi faut-il éviter un commutateur externe pour héberger un serveur DHCP de test ?",
+      "choices": ["Le service DHCP ne fonctionne pas sur un switch externe", "Le serveur distribuerait des adresses IP à tout le réseau réel de la salle", "Le switch externe est trop lent pour le DHCP", "Le DHCP nécessite obligatoirement un accès internet"],
+      "answer": 1,
+      "explication": "Relié au réseau physique, le DHCP de test polluerait le réseau de l'école en répondant aux vraies machines : on utilise toujours un switch privé ou interne pour ce type de TP."
+    },
+    {
+      "id": "virt-008", "niveau": 3, "type": "qcm",
+      "q": "Vous voulez administrer vos VM en SSH depuis l'hôte Hyper-V, sans leur donner accès à internet. Quel type de commutateur choisir ?",
+      "choices": ["Privé", "Interne", "Externe", "N'importe lequel, seul le pare-feu compte"],
+      "answer": 1,
+      "explication": "Le switch interne fait communiquer les VM et l'hôte sans accès internet natif ; le switch privé exclurait l'hôte de la communication."
+    },
+    {
+      "id": "virt-009", "niveau": 2, "type": "multi",
+      "q": "Quels paramètres peut-on modifier alors que la VM est allumée ? (plusieurs réponses)",
+      "choices": ["La RAM dynamique", "L'éjection d'un CD/ISO", "La taille du disque dur virtuel", "La RAM statique", "La génération de la VM"],
+      "answer": [0, 1],
+      "explication": "La RAM dynamique (sous Windows uniquement) et l'éjection d'un ISO se font à chaud ; la RAM statique exige un arrêt et le redimensionnement du disque à chaud présente un risque de corruption."
+    },
+    {
+      "id": "virt-010", "niveau": 1, "type": "qcm",
+      "q": "Où sont stockés par défaut les disques virtuels .vhdx sous Hyper-V ?",
+      "choices": ["C:\\ProgramData\\Microsoft\\Windows\\Virtual Hard Disks\\", "C:\\Program Files\\Hyper-V\\Disks\\", "C:\\Hyper-V\\Virtual Hard Disks\\", "C:\\Windows\\System32\\VHD\\"],
+      "answer": 0,
+      "explication": "Les .vhdx sont dans C:\\ProgramData\\Microsoft\\Windows\\Virtual Hard Disks\\ ; les fichiers de configuration et d'état (.vmcx, .vmgs, .vmrs) sont dans C:\\ProgramData\\Microsoft\\Windows\\Hyper-V\\Virtual Machines\\."
+    },
+    {
+      "id": "virt-011", "niveau": 2, "type": "qcm",
+      "q": "Une VM manque d'espace disque. Quelle est la bonne pratique recommandée ?",
+      "choices": ["Redimensionner le disque existant pendant que la VM tourne", "Ajouter un nouveau disque virtuel à la VM", "Compresser le fichier .vhdx", "Supprimer les fichiers de configuration de la VM"],
+      "answer": 1,
+      "explication": "Mieux vaut prévoir l'espace dès la création et, au besoin, ajouter un disque : le redimensionnement est impossible VM allumée et risque la corruption."
+    },
+    {
+      "id": "virt-012", "niveau": 1, "type": "libre",
+      "q": "Quelle est l'extension des fichiers de différence créés par les snapshots (points de contrôle) Hyper-V ?",
+      "accept": [".avhdx", "avhdx"],
+      "explication": "Un snapshot fige l'état complet de la VM à un instant T dans un fichier de différence .avhdx, chaîné au .vhdx principal."
+    },
+    {
+      "id": "virt-013", "niveau": 1, "type": "qcm",
+      "q": "Combien de snapshots est-il recommandé de conserver au maximum par VM ?",
+      "choices": ["1 seul", "2 à 3", "Une dizaine", "Aucune limite, c'est sans impact"],
+      "answer": 1,
+      "explication": "Les snapshots imbriqués en chaîne ralentissent la VM : on se limite à 2-3 points de contrôle maximum."
+    },
+    {
+      "id": "virt-014", "niveau": 2, "type": "multi",
+      "q": "Qu'apporte le mode de session étendue d'Hyper-V ? (plusieurs réponses)",
+      "choices": ["Le presse-papiers bidirectionnel hôte ↔ VM (texte et fichiers)", "La redirection de l'audio", "La redirection des disques et des imprimantes", "L'accélération graphique 3D", "La migration à chaud des VM"],
+      "answer": [0, 1, 2],
+      "explication": "La session étendue permet le copier/coller bidirectionnel et la redirection audio, disques et imprimantes ; elle doit être activée sur l'hôte et la VM connectée en session étendue."
+    },
+    {
+      "id": "virt-015", "niveau": 3, "type": "qcm",
+      "q": "Quelle cmdlet PowerShell permet de copier un fichier de l'hôte vers une VM isolée du réseau ?",
+      "choices": ["Copy-VMFile", "Copy-VMGuestFile", "Send-VMFile", "Move-VMStorage"],
+      "answer": 0,
+      "explication": "Copy-VMFile (avec -FileSource Host) transfère un fichier hors réseau, à condition que les Services d'invité soient cochés dans les paramètres de la VM cible."
+    },
+    {
+      "id": "virt-016", "niveau": 3, "type": "qcm",
+      "q": "Le copier/coller entre l'hôte et une VM ne fonctionne pas. Quelles activations sont nécessaires ?",
+      "choices": ["Le mode de session étendue sur l'hôte ET les Services d'invité dans les paramètres de la VM", "Uniquement un redémarrage de la VM", "L'installation d'un serveur RDP dans la VM", "La connexion de la VM à un commutateur externe"],
+      "answer": 0,
+      "explication": "La session étendue se coche dans les paramètres Hyper-V de l'hôte, et les Services d'invité (décochés par défaut) dans les services d'intégration de la VM."
+    },
+    {
+      "id": "virt-017", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi le mode « Éteindre » (bouton blanc) d'une VM présente-t-il un risque élevé de perte de données ?",
+      "choices": ["Il supprime les snapshots de la VM", "Il équivaut à débrancher électriquement la machine, sans arrêt propre de l'OS", "Il corrompt systématiquement le fichier .vhdx", "Il réinitialise la configuration réseau"],
+      "answer": 1,
+      "explication": "« Éteindre » coupe brutalement la VM comme un débranchement ; « Arrêter » (shutdown propre), « Pause » et « Enregistrer » sont eux sans risque pour les données."
+    },
+    {
+      "id": "virt-018", "niveau": 3, "type": "qcm",
+      "q": "Lors d'un import de VM, quel mode crée une VM totalement indépendante avec de nouveaux identifiants ?",
+      "choices": ["Inscrire sur place", "Restaurer", "Copier", "Dupliquer"],
+      "answer": 2,
+      "explication": "« Copier » génère de nouveaux IDs ; « Inscrire sur place » réutilise les fichiers à leur emplacement actuel et « Restaurer » copie vers un nouveau chemin en conservant l'original."
+    },
+    {
+      "id": "virt-019", "niveau": 3, "type": "qcm",
+      "q": "Après import sur un nouvel hôte, la VM a perdu sa configuration réseau. Quelle en est la cause la plus fréquente ?",
+      "choices": ["Le fichier .vhdx a été corrompu pendant le transfert", "Le commutateur virtuel d'origine n'existe pas sur le nouvel hôte", "Le mode « Copier » a réinitialisé la carte réseau", "L'adresse MAC a changé de format"],
+      "answer": 1,
+      "explication": "Il faut recréer sur le nouvel hôte un commutateur virtuel portant le même nom que l'original avant l'import pour conserver la configuration réseau."
+    },
+    {
+      "id": "virt-020", "niveau": 1, "type": "libre",
+      "q": "Quel raccourci clavier envoie l'équivalent de Ctrl + Alt + Suppr à l'intérieur d'une VM Hyper-V ?",
+      "accept": ["ctrl+alt+fin", "ctrl + alt + fin", "ctrl-alt-fin", "ctrl alt fin", "ctrl+alt+end", "ctrl + alt + end", "ctrl-alt-end", "ctrl alt end"],
+      "explication": "Ctrl + Alt + Fin remplace Ctrl + Alt + Suppr dans la VM, ce dernier étant intercepté par l'hôte."
+    },
+    {
+      "id": "virt-021", "niveau": 3, "type": "terminal",
+      "prompt": "X:\\Sources>",
+      "q": "Pendant l'installation de Windows 11, vous avez ouvert l'invite de commandes avec Maj + F10. Tapez la commande qui contourne l'obligation de connexion internet (la VM redémarrera).",
+      "accept": ["oobe\\bypassnro", "oobe bypassnro"],
+      "explication": "oobe\\bypassnro redémarre la VM et fait apparaître l'option « Je n'ai pas d'internet », permettant de créer un compte local."
+    },
+    {
+      "id": "virt-022", "niveau": 3, "type": "qcm",
+      "q": "Dans quelle clé de registre ajoute-t-on les valeurs BypassTPMCheck et BypassSecureBootCheck pour installer Windows 11 malgré les prérequis ?",
+      "choices": ["HKLM\\SYSTEM\\Setup\\LabConfig", "HKLM\\SOFTWARE\\Microsoft\\Windows\\Setup", "HKCU\\SYSTEM\\Setup\\Bypass", "HKLM\\SYSTEM\\CurrentControlSet\\Control\\TPM"],
+      "answer": 0,
+      "explication": "Les valeurs REG_DWORD BypassTPMCheck, BypassSecureBootCheck, BypassRAMCheck et BypassCPUCheck se créent sous HKLM\\SYSTEM\\Setup\\LabConfig pendant l'installation."
+    },
+    {
+      "id": "virt-023", "niveau": 1, "type": "qcm",
+      "q": "Qu'est-ce qu'un cluster de virtualisation ?",
+      "choices": ["Un groupe de VM hébergées sur un même hôte", "Un ensemble de serveurs physiques reliés pour héberger et gérer des VM de manière centralisée", "Un logiciel de sauvegarde de machines virtuelles", "Un commutateur virtuel redondant"],
+      "answer": 1,
+      "explication": "Le cluster assure continuité de service, haute disponibilité, répartition des ressources et maintenance simplifiée ; il possède sa propre adresse IP et son propre nom NetBIOS, distincts de ceux de chaque hôte."
+    },
+    {
+      "id": "virt-024", "niveau": 2, "type": "ordre",
+      "q": "Remettez dans l'ordre le déroulement d'une panne d'hôte gérée par la haute disponibilité du cluster.",
+      "steps": [
+        "Surveillance permanente des hôtes du cluster",
+        "Détection d'un problème sur un hôte",
+        "Identification des VM hébergées sur l'hôte défaillant",
+        "Redémarrage automatique des VM sur un autre hôte",
+        "Les VM sont de nouveau fonctionnelles"
+      ],
+      "explication": "La HA détecte automatiquement la panne, identifie les VM concernées et les redémarre sur un autre hôte pour réduire au minimum le temps d'indisponibilité."
+    },
+    {
+      "id": "virt-025", "niveau": 2, "type": "qcm",
+      "q": "À quoi sert le quorum dans un cluster ?",
+      "choices": ["À répartir la charge CPU entre les hôtes", "À déterminer quels nœuds ont le droit de continuer à fonctionner en cas de panne", "À chiffrer les communications entre les nœuds", "À sauvegarder automatiquement les VM"],
+      "answer": 1,
+      "explication": "Le quorum est un mécanisme de vote (une voix par hôte) qui évite le split brain, situation où plusieurs nœuds se croient nœud principal en même temps."
+    },
+    {
+      "id": "virt-026", "niveau": 2, "type": "qcm",
+      "q": "Quel est le rôle du witness (témoin) dans le quorum d'un cluster ?",
+      "choices": ["Superviser les performances des VM", "Apporter une voix supplémentaire pour départager les nœuds en cas d'égalité des votes", "Héberger les VM de secours", "Chiffrer le trafic heartbeat"],
+      "answer": 1,
+      "explication": "Le witness — souvent un petit disque partagé (disk witness) hébergé sur le SAN — ajoute une voix pour trancher lorsque les votes des nœuds sont à égalité."
+    },
+    {
+      "id": "virt-027", "niveau": 2, "type": "qcm",
+      "q": "Que sont les heartbeats dans un cluster ?",
+      "choices": ["Des sauvegardes régulières des VM", "Des messages échangés en permanence entre les nœuds pour signaler leur bon état", "Des tests de débit du réseau de stockage", "Des redémarrages planifiés des hôtes"],
+      "answer": 1,
+      "explication": "Si le heartbeat d'un nœud disparaît, le cluster vérifie le quorum, isole le nœud défaillant et la HA redémarre ses VM sur un autre hôte."
+    },
+    {
+      "id": "virt-028", "niveau": 1, "type": "qcm",
+      "q": "Que permet la migration à chaud (live migration) dans un cluster ?",
+      "choices": ["Copier une VM éteinte vers un autre hôte", "Déplacer une VM d'un serveur physique à un autre sans interruption visible pour les utilisateurs", "Convertir une VM de génération 1 en génération 2", "Augmenter la RAM d'une VM sans redémarrage"],
+      "answer": 1,
+      "explication": "Elle sert à effectuer la maintenance et à équilibrer les charges du cluster sans arrêt de production."
+    },
+    {
+      "id": "virt-029", "niveau": 2, "type": "multi",
+      "q": "Dans un cluster, le stockage partagé est indispensable pour... (plusieurs réponses)",
+      "choices": ["La haute disponibilité", "La migration à chaud", "Le redémarrage automatique des VM sur un autre hôte", "Augmenter la fréquence des processeurs", "Remplacer les sauvegardes"],
+      "answer": [0, 1, 2],
+      "explication": "Comme tous les hôtes accèdent aux mêmes fichiers de VM, n'importe quel nœud peut reprendre ou déplacer une VM ; le stockage partagé ne dispense jamais de sauvegarder."
+    },
+    {
+      "id": "virt-030", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque type de stockage à sa description.",
+      "pairs": [
+        ["SAN", "Réseau dédié au stockage, présenté aux serveurs comme un disque local"],
+        ["DAS", "Disque dur directement attaché au serveur"],
+        ["NAS", "Stockage réseau autonome offrant des services (partage de fichiers, DHCP, DNS...)"]
+      ],
+      "explication": "Le SAN (iSCSI) n'est pas autonome et agit comme un disque externe, alors que le NAS est un équipement autonome capable de rendre de nombreux services."
+    },
+    {
+      "id": "virt-031", "niveau": 1, "type": "libre",
+      "q": "Dans une infrastructure iSCSI, que signifie l'acronyme LUN ?",
+      "accept": ["logical unit number", "numéro d'unité logique", "numero d'unite logique"],
+      "explication": "Un LUN est un volume logique découpé sur une baie de stockage (par exemple 300 Go sur un disque de 1 To), présenté aux serveurs via une target."
+    },
+    {
+      "id": "virt-032", "niveau": 3, "type": "qcm",
+      "q": "Dans le protocole iSCSI, où se trouvent respectivement l'initiateur et la target ?",
+      "choices": ["L'initiateur côté serveur, la target côté baie de stockage", "L'initiateur côté baie, la target côté serveur", "Les deux côté serveur", "Les deux côté baie de stockage"],
+      "answer": 0,
+      "explication": "Le serveur (initiateur) se connecte à la target, le service iSCSI de la baie qui présente les LUN ; un même LUN peut être partagé entre plusieurs hôtes du cluster via la même target."
+    },
+    {
+      "id": "virt-033", "niveau": 2, "type": "multi",
+      "q": "Quels flux réseau est-il recommandé de séparer dans un cluster ? (plusieurs réponses)",
+      "choices": ["Le réseau de management (administration des hôtes)", "Le réseau de stockage (SAN/NAS, réplication)", "Le réseau de migration (live migration)", "Un réseau dédié aux impressions", "Un réseau dédié aux mises à jour Windows"],
+      "answer": [0, 1, 2],
+      "explication": "On sépare management, production/VM, stockage, migration et heartbeat — physiquement (NIC dédiées) ou logiquement (VLAN, QoS) — pour la performance, la sécurité et la résilience."
+    },
+    {
+      "id": "virt-034", "niveau": 1, "type": "qcm",
+      "q": "Combien d'hôtes au minimum est-il recommandé d'avoir dans un cluster fiable ?",
+      "choices": ["1", "2", "3", "5"],
+      "answer": 2,
+      "explication": "Avec 3 hôtes minimum, le cluster conserve une majorité de votes au quorum même en cas de panne d'un nœud ; on prévoit aussi stockage et réseau redondants, supervision et sauvegardes."
+    },
+    {
+      "id": "virt-035", "niveau": 3, "type": "qcm",
+      "q": "Une VM de génération 2 refuse de démarrer sur une image non signée avec une erreur « Secure Boot ». Que faire ?",
+      "choices": ["Convertir la VM en génération 1", "Désactiver le Secure Boot dans les paramètres de la VM", "Réinstaller le rôle Hyper-V", "Passer le disque en MBR"],
+      "answer": 1,
+      "explication": "Le Secure Boot, propre à la génération 2, bloque les images non signées : il se désactive dans les paramètres du firmware de la VM."
+    },
+    {
+      "id": "virt-036", "niveau": 3, "type": "terminal",
+      "prompt": "PS C:\\Users\\admin>",
+      "q": "Affichez la liste de toutes les machines virtuelles de l'hôte Hyper-V avec leur état.",
+      "accept": ["get-vm"],
+      "output": "Name       State   CPUUsage(%) MemoryAssigned(M) Uptime           Status                Version\n----       -----   ----------- ----------------- ------           ------                -------\nSRV-AD     Running 2           2048              1.02:15:33       Fonctionnement normal 9.0\nSRV-DEB    Running 0           1024              04:22:10         Fonctionnement normal 9.0\nWIN10-TEST Off     0           0                 00:00:00         Fonctionnement normal 9.0",
+      "explication": "Get-VM liste les VM et leur état ; Get-VMSwitch liste les commutateurs virtuels et Get-VMSnapshot les points de contrôle d'une VM."
+    },
+    {
+      "id": "virt-037", "niveau": 3, "type": "qcm",
+      "q": "Quelle commande supprime tous les snapshots d'une VM, y compris les snapshots enfants ?",
+      "choices": ["Remove-VMSnapshot -VMName \"MaVM\" -IncludeAllChildSnapshots", "Delete-VMSnapshot -VMName \"MaVM\" -All", "Clear-VMCheckpoint -VMName \"MaVM\"", "Remove-VM -Name \"MaVM\" -Snapshots"],
+      "answer": 0,
+      "explication": "Remove-VMSnapshot supprime les points de contrôle ; le paramètre -IncludeAllChildSnapshots étend la suppression à toute la chaîne."
+    },
+    {
+      "id": "virt-038", "niveau": 3, "type": "ordre",
+      "q": "Un snapshot refuse de se supprimer car la VM est en cours d'exécution. Remettez la procédure dans l'ordre.",
+      "steps": [
+        "Éteindre la VM",
+        "Supprimer le snapshot dans la console Hyper-V",
+        "Laisser la fusion des fichiers .avhdx s'effectuer au redémarrage"
+      ],
+      "explication": "La suppression d'un snapshot déclenche la fusion des .avhdx dans le .vhdx principal, ce qui libère aussi de l'espace disque sur l'hôte."
+    },
+    {
+      "id": "virt-039", "niveau": 4, "type": "scenario",
+      "context": "VM « WIN10-TEST » :\n- Génération : 2\n- RAM statique : 128 Mo\n- Disque : 60 Go\nAu démarrage, Windows affiche immédiatement un écran bleu (BSOD).",
+      "q": "Quelle est la cause la plus probable de ce BSOD ?",
+      "choices": ["Le disque de 60 Go est trop petit", "La RAM allouée (128 Mo) est très insuffisante pour Windows", "Le Secure Boot est activé", "Le fichier .vhdx est corrompu"],
+      "answer": 1,
+      "explication": "Avec 128 Mo de RAM, Windows plante en BSOD dès le démarrage : il faut au minimum 2 Go de RAM pour un Windows moderne."
+    },
+    {
+      "id": "virt-040", "niveau": 4, "type": "scenario",
+      "context": "Deux VM se pinguent entre elles sans problème.\nDepuis l'hôte Hyper-V :\nC:\\> ping 192.168.10.20\nDélai d'attente de la demande dépassé.",
+      "q": "Pourquoi l'hôte ne parvient-il pas à joindre les VM ?",
+      "choices": ["Le pare-feu des VM bloque l'ICMP", "Les VM sont connectées à un commutateur privé, qui exclut l'hôte", "Le serveur DHCP est mal configuré", "Les VM sont de génération 1"],
+      "answer": 1,
+      "explication": "Le switch privé ne fait communiquer que les VM entre elles : pour que l'hôte les joigne sans les exposer à internet, il faut un commutateur interne."
+    },
+    {
+      "id": "virt-041", "niveau": 4, "type": "scenario",
+      "context": "Lors de l'import d'une VM précédemment exportée, Hyper-V affiche :\n« L'opération a échoué : une machine virtuelle avec le même identificateur existe déjà. »",
+      "q": "Quelle solution retenir ?",
+      "choices": ["Supprimer la VM existante avant l'import", "Relancer l'import en mode « Copier » pour générer de nouveaux identifiants", "Renommer le fichier .vhdx importé", "Changer la génération de la VM importée"],
+      "answer": 1,
+      "explication": "Deux VM ne peuvent pas partager le même GUID sur un hôte : le mode « Copier » crée une VM indépendante avec de nouveaux IDs, contrairement à « Inscrire sur place »."
+    },
+    {
+      "id": "virt-042", "niveau": 4, "type": "scenario",
+      "context": "Une VM est devenue très lente. Contenu du dossier des disques virtuels :\nWIN10.vhdx          40 Go\nWIN10_A1B2.avhdx    12 Go\nWIN10_C3D4.avhdx    18 Go\nWIN10_E5F6.avhdx     9 Go",
+      "q": "Quelle est la cause probable et la solution ?",
+      "choices": ["Le disque est fragmenté : défragmenter le .vhdx", "Une longue chaîne de snapshots : les supprimer pour que les .avhdx fusionnent dans le .vhdx principal", "Le disque de l'hôte est trop lent : migrer vers un SSD", "L'antivirus scanne les disques : ajouter une exclusion"],
+      "answer": 1,
+      "explication": "Chaque snapshot ajoute un .avhdx à la chaîne, ce qui ralentit la VM et sature le disque de l'hôte ; leur suppression déclenche la fusion dans le .vhdx principal."
+    },
+    {
+      "id": "virt-043", "niveau": 4, "type": "scenario",
+      "context": "Vous avez généralisé une image Windows avec Sysprep puis pris un snapshot. Un collègue a rallumé la VM par erreur : Windows a terminé son installation (OOBE) et un nouveau SID a été créé.",
+      "q": "Que faire pour retrouver une image généralisée valide ?",
+      "choices": ["Relancer Sysprep une deuxième fois sans autre précaution", "Revenir au snapshot pris juste après le Sysprep, sans rallumer la VM avant la capture", "Supprimer les fichiers .avhdx de la VM", "Réinstaller les services d'intégration"],
+      "answer": 1,
+      "explication": "Une VM syspreppée ne doit jamais être rallumée avant la capture : le retour au snapshot post-Sysprep restaure l'état généralisé, sans SID."
+    },
+    {
+      "id": "virt-044", "niveau": 4, "type": "scenario",
+      "context": "Cluster Hyper-V de 2 nœuds avec un disk witness hébergé sur le SAN.\nLe lien réseau heartbeat entre les deux nœuds est coupé : chaque nœud croit que l'autre est en panne.",
+      "q": "Quel mécanisme empêche les deux nœuds de continuer chacun de leur côté (split brain) ?",
+      "choices": ["La migration à chaud", "Le quorum : le disk witness apporte la voix supplémentaire qui départage les deux nœuds", "Le heartbeat lui-même", "La réplication du stockage"],
+      "answer": 1,
+      "explication": "Avec un nœud = une voix, un cluster à deux nœuds serait à égalité : la voix du disk witness donne la majorité à un seul nœud, qui reste actif pendant que l'autre est isolé."
+    }
+  ]
+}

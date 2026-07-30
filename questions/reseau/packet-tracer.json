@@ -1,0 +1,477 @@
+{
+  "module": "Packet Tracer & IOS de base",
+  "source": "Cisco-Packet-Tracer.md + Cisco-Packet-Tracer-Cheat-Sheet.md + Evaluation-Packet-Tracer.md",
+  "questions": [
+    {
+      "id": "cis-001",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Sur un équipement Cisco, que signifie l'invite « Router# » ?",
+      "choices": [
+        "L'équipement est en mode utilisateur",
+        "L'équipement est en mode privilégié",
+        "L'équipement est en mode de configuration globale",
+        "L'équipement est en mode de configuration d'interface"
+      ],
+      "answer": 1,
+      "explication": "Le « # » indique le mode privilégié : on peut tout consulter et sauvegarder, mais pas encore configurer. Le mode utilisateur se reconnaît au « > »."
+    },
+    {
+      "id": "cis-002",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez chaque invite de commande Cisco IOS au mode correspondant.",
+      "pairs": [
+        ["Router>", "Mode utilisateur"],
+        ["Router#", "Mode privilégié"],
+        ["Router(config)#", "Configuration globale"],
+        ["Router(config-if)#", "Configuration d'interface"]
+      ],
+      "explication": "IOS est hiérarchique : chaque invite indique le mode courant, et chaque commande ne fonctionne que dans le bon mode."
+    },
+    {
+      "id": "cis-003",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Dans Packet Tracer, que représente une connexion affichée en pointillé ?",
+      "choices": [
+        "Un câble droit",
+        "Un câble console",
+        "Un câble croisé",
+        "Un lien en panne"
+      ],
+      "answer": 2,
+      "explication": "Le trait pointillé représente un câble croisé, le trait plein un câble droit. Choisir le mauvais type de câble empêche le lien de monter."
+    },
+    {
+      "id": "cis-004",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Dans Packet Tracer, que signifie une LED rouge sur une liaison ?",
+      "choices": [
+        "L'interface est éteinte ou en erreur",
+        "Le débit du lien est saturé",
+        "Le câble utilisé est croisé",
+        "Le VLAN du port n'existe pas"
+      ],
+      "answer": 0,
+      "explication": "La LED verte indique un lien opérationnel, la rouge une interface éteinte ou en erreur. Sur un routeur, c'est souvent le « no shutdown » qui manque."
+    },
+    {
+      "id": "cis-005",
+      "niveau": 1,
+      "type": "terminal",
+      "prompt": "Router>",
+      "q": "Vous êtes en mode utilisateur sur un routeur Cisco. Passez en mode privilégié.",
+      "accept": ["enable", "en"],
+      "explication": "La commande « enable » (abrégeable en « en ») fait passer de « Router> » à « Router# », donnant accès à la consultation complète et à la sauvegarde."
+    },
+    {
+      "id": "cis-006",
+      "niveau": 1,
+      "type": "terminal",
+      "prompt": "Router#",
+      "q": "Sauvegardez la configuration courante du routeur dans la NVRAM.",
+      "accept": ["wr", "write", "write memory", "copy running-config startup-config", "copy run start"],
+      "output": "Building configuration...\n[OK]",
+      "explication": "« wr » est le raccourci de « write memory », équivalent de « copy running-config startup-config » : la configuration courante est copiée en NVRAM."
+    },
+    {
+      "id": "cis-007",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quelle commande affiche un résumé de l'état de toutes les interfaces avec leurs adresses IP ?",
+      "choices": [
+        "show running-config",
+        "show ip interface brief",
+        "show vlan brief",
+        "show ip dhcp binding"
+      ],
+      "answer": 1,
+      "explication": "« show ip interface brief » donne en un coup d'oeil l'IP, le statut (up/down/administratively down) et le protocole de chaque interface : c'est la première commande de diagnostic."
+    },
+    {
+      "id": "cis-008",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez chaque commande « show » à ce qu'elle affiche.",
+      "pairs": [
+        ["show running-config", "La configuration en cours d'exécution"],
+        ["show ip interface brief", "L'état résumé des interfaces"],
+        ["show vlan brief", "La liste des VLANs et des ports affectés"],
+        ["show ip dhcp binding", "Les baux DHCP attribués"]
+      ],
+      "explication": "Les commandes « show » s'exécutent en mode privilégié et servent à vérifier chaque étape de la configuration."
+    },
+    {
+      "id": "cis-009",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Combien d'annulations (Ctrl+Z) Packet Tracer permet-il ?",
+      "choices": [
+        "Un nombre illimité",
+        "Dix",
+        "Une seule",
+        "Aucune"
+      ],
+      "answer": 2,
+      "explication": "Packet Tracer ne conserve qu'un seul niveau d'annulation : il faut donc travailler avec prudence, on ne peut pas revenir plusieurs étapes en arrière."
+    },
+    {
+      "id": "cis-010",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "En CLI Cisco, quel caractère affiche la liste des commandes disponibles dans le mode courant ?",
+      "choices": [
+        "Tab",
+        "?",
+        "!",
+        "Ctrl+C"
+      ],
+      "answer": 1,
+      "explication": "Le « ? » liste les commandes ou options possibles, tandis que la touche Tab auto-complète une commande commencée."
+    },
+    {
+      "id": "cis-011",
+      "niveau": 1,
+      "type": "multi",
+      "q": "Quels pièges de l'interface Packet Tracer faut-il connaître ? (plusieurs réponses)",
+      "choices": [
+        "L'outil Freeform de la palette de formes peut faire planter le logiciel",
+        "L'outil Supprimer reste actif si on répond « Non » à la confirmation",
+        "L'outil Enveloppe est déconseillé",
+        "Une connexion en pointillé représente un câble droit",
+        "Une LED verte signale une erreur"
+      ],
+      "answer": [0, 1, 2],
+      "explication": "Dans la palette, on se limite au rond et au carré avec couleur de remplissage (Freeform provoque des crashs), on évite l'enveloppe, et on pense à quitter le mode suppression après usage."
+    },
+    {
+      "id": "cis-012",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi faut-il systématiquement taper « no shutdown » après avoir configuré l'adresse IP d'une interface de routeur ?",
+      "choices": [
+        "Pour accélérer la négociation du lien",
+        "Pour attribuer automatiquement une adresse IP",
+        "Pour activer le routage entre les interfaces",
+        "Parce que les interfaces d'un routeur sont désactivées par défaut"
+      ],
+      "answer": 3,
+      "explication": "Contrairement aux ports d'un switch, les interfaces d'un routeur sont administrativement éteintes par défaut : sans « no shutdown », le lien reste down même correctement câblé."
+    },
+    {
+      "id": "cis-013",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quelle est la différence entre la running-config et la startup-config ?",
+      "choices": [
+        "La running-config est en RAM et se perd à l'extinction ; la startup-config est en NVRAM et chargée au démarrage",
+        "La running-config est chiffrée alors que la startup-config est en clair",
+        "La startup-config se met à jour automatiquement à chaque commande tapée",
+        "Les deux fichiers sont identiques en permanence"
+      ],
+      "answer": 0,
+      "explication": "Toute commande modifie la running-config, volatile. C'est « copy running-config startup-config » qui la rend persistante en NVRAM pour le prochain démarrage."
+    },
+    {
+      "id": "cis-014",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Dans Packet Tracer, que se passe-t-il pour les configurations effectuées en mode simulation ?",
+      "choices": [
+        "Elles sont appliquées mais ralenties",
+        "Elles ne sont pas sauvegardées",
+        "Elles sont dupliquées sur tous les équipements",
+        "Elles provoquent un redémarrage des équipements"
+      ],
+      "answer": 1,
+      "explication": "Le mode simulation sert à observer le cheminement des paquets : les configurations qu'on y effectue ne sont pas sauvegardées, il faut configurer en mode temps réel."
+    },
+    {
+      "id": "cis-015",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi l'adresse IP de gestion d'un switch se configure-t-elle sur une interface virtuelle (SVI) et non sur un port physique ?",
+      "choices": [
+        "Le switch est un équipement de niveau 2 : ses ports physiques n'ont pas d'adresse IP",
+        "Les ports physiques sont trop nombreux pour recevoir chacun une adresse",
+        "La SVI offre un meilleur débit que les ports physiques",
+        "C'est obligatoire pour que le switch commute les trames"
+      ],
+      "answer": 0,
+      "explication": "Un switch commute des trames au niveau 2 et fonctionne sans IP. L'adresse posée sur la SVI (par exemple « interface vlan 1 ») ne sert qu'à l'administrer à distance (SSH, ping)."
+    },
+    {
+      "id": "cis-016",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi est-il recommandé d'utiliser un VLAN de gestion dédié (par exemple VLAN 99) plutôt que le VLAN 1 par défaut ?",
+      "choices": [
+        "Le VLAN 1 ne peut pas recevoir d'adresse IP",
+        "Le VLAN 99 offre une meilleure priorité de trafic",
+        "Pour isoler les flux d'administration du trafic des utilisateurs",
+        "Le VLAN 1 est réservé aux liens trunk"
+      ],
+      "answer": 2,
+      "explication": "Tous les ports appartiennent au VLAN 1 par défaut : y laisser l'administration mélange les flux critiques et le trafic utilisateur. Un VLAN dédié isole et sécurise l'accès de gestion."
+    },
+    {
+      "id": "cis-018",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi faut-il configurer « ip domain-name » avant de générer les clés pour SSH ?",
+      "choices": [
+        "Le nom de domaine est requis pour la génération des clés RSA",
+        "Il permet au routeur de résoudre les noms DNS des clients",
+        "Il sert à authentifier les utilisateurs SSH",
+        "Il déclare le routeur auprès du serveur DHCP"
+      ],
+      "answer": 0,
+      "explication": "La commande « crypto key generate rsa » a besoin d'un nom de domaine (associé au hostname) pour créer les clés. Sans « ip domain-name », la génération est refusée."
+    },
+    {
+      "id": "cis-020",
+      "niveau": 2,
+      "type": "multi",
+      "q": "Quelles affirmations sont vraies à propos du mode privilégié (Router#) ? (plusieurs réponses)",
+      "choices": [
+        "Il permet de consulter l'ensemble de la configuration",
+        "Il permet de sauvegarder la configuration",
+        "Il permet de modifier la configuration des interfaces",
+        "On y accède avec la commande enable",
+        "Son invite se termine par >"
+      ],
+      "answer": [0, 1, 3],
+      "explication": "Le mode privilégié (invite « # », atteint via « enable ») permet de tout consulter et de sauvegarder, mais il faut passer en configuration globale (« configure terminal ») pour modifier quoi que ce soit."
+    },
+    {
+      "id": "cis-021",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "À quoi sert la commande « ip default-gateway » sur un switch ?",
+      "choices": [
+        "À distribuer la passerelle aux clients DHCP",
+        "À permettre d'administrer le switch depuis un autre réseau",
+        "À activer le routage entre les VLANs",
+        "À définir le VLAN natif du trunk"
+      ],
+      "answer": 1,
+      "explication": "Sans passerelle par défaut, le switch ne sait répondre qu'aux machines de son propre réseau : la commande est indispensable pour l'administrer (SSH, ping) depuis un autre sous-réseau."
+    },
+    {
+      "id": "cis-022",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Au premier démarrage d'un équipement Cisco, un dialogue de configuration s'ouvre dans la console. Pourquoi faut-il répondre « no » ?",
+      "choices": [
+        "Pour refuser l'assistant automatique et configurer manuellement en CLI",
+        "Pour effacer la configuration existante",
+        "Pour redémarrer l'équipement en mode sans échec",
+        "Pour activer le mode simulation"
+      ],
+      "answer": 0,
+      "explication": "Répondre « yes » lancerait l'assistant de configuration pas à pas, peu adapté aux TP : on répond toujours « no » pour garder la main et taper ses commandes soi-même."
+    },
+    {
+      "id": "cis-023",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Remettez dans l'ordre les commandes pour attribuer une adresse IP à l'interface G0/0 d'un routeur, puis l'activer, en partant du mode privilégié.",
+      "steps": [
+        "configure terminal",
+        "interface gigabitEthernet 0/0",
+        "ip address 192.168.10.254 255.255.255.0",
+        "no shutdown"
+      ],
+      "explication": "On descend dans la hiérarchie des modes : configuration globale, puis mode interface, où l'on pose l'IP avant d'activer l'interface avec « no shutdown »."
+    },
+    {
+      "id": "cis-024",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Remettez dans l'ordre les grandes étapes d'un TP réseau sous Packet Tracer.",
+      "steps": [
+        "Placer les équipements (routeurs, switchs, PC)",
+        "Câbler avec le bon type de câble",
+        "Configurer les adresses IP et activer les interfaces",
+        "Tester la connectivité avec ping"
+      ],
+      "explication": "Le workflow type va du physique vers le logique : topologie, câblage, adressage, puis validation par ping (et tracert en cas de problème). On sauvegarde ensuite avec « write » pour ne rien perdre à l'extinction."
+    },
+    {
+      "id": "cis-025",
+      "niveau": 3,
+      "type": "terminal",
+      "prompt": "SW1(config-if)#",
+      "q": "Ce port de switch est déjà passé en mode access. Affectez-le au VLAN 10.",
+      "accept": ["switchport access vlan 10", "sw access vlan 10"],
+      "explication": "Après « switchport mode access », c'est « switchport access vlan 10 » qui rattache le port au VLAN : les trames de ce port ne circuleront que dans le VLAN 10."
+    },
+    {
+      "id": "cis-026",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Dans un pool DHCP configuré sur un routeur Cisco, quelle commande définit la passerelle par défaut distribuée aux clients ?",
+      "choices": [
+        "network 192.168.10.0 255.255.255.0",
+        "default-router 192.168.10.254",
+        "dns-server 8.8.8.8",
+        "ip default-gateway 192.168.10.254"
+      ],
+      "answer": 1,
+      "explication": "Dans le pool, « network » définit la plage distribuée et « default-router » la passerelle envoyée aux clients. « ip default-gateway » est une commande de switch, hors pool DHCP."
+    },
+    {
+      "id": "cis-027",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Avant de créer un pool DHCP, comment éviter que l'adresse du routeur (192.168.10.254) soit distribuée à un client ?",
+      "choices": [
+        "ip dhcp excluded-address 192.168.10.254",
+        "no network 192.168.10.254",
+        "ip dhcp pool EXCLUSION",
+        "default-router 192.168.10.254"
+      ],
+      "answer": 0,
+      "explication": "« ip dhcp excluded-address » retire des adresses de la distribution : on y place l'IP du routeur, des serveurs et des imprimantes pour éviter les conflits d'adresses."
+    },
+    {
+      "id": "cis-028",
+      "niveau": 3,
+      "type": "terminal",
+      "prompt": "R1#",
+      "q": "Ce routeur fait office de serveur DHCP. Affichez les baux DHCP qu'il a distribués.",
+      "accept": ["show ip dhcp binding", "sh ip dhcp binding"],
+      "output": "IP address       Client-ID/              Lease expiration        Type\n                 Hardware address\n192.168.10.11    0001.C7B2.3A45          --                      Automatic\n192.168.10.12    00D0.BA55.E21F          --                      Automatic",
+      "explication": "« show ip dhcp binding » liste les associations adresse IP / adresse MAC attribuées : c'est le réflexe pour vérifier que les clients ont bien reçu une adresse."
+    },
+    {
+      "id": "cis-029",
+      "niveau": 3,
+      "type": "multi",
+      "q": "Quelles commandes sont indispensables pour activer l'accès SSH sur un routeur Cisco ? (plusieurs réponses)",
+      "choices": [
+        "ip domain-name lab.lan",
+        "crypto key generate rsa",
+        "transport input ssh",
+        "ip helper-address 10.10.10.5",
+        "switchport mode trunk"
+      ],
+      "answer": [0, 1, 2],
+      "explication": "SSH exige un nom de domaine, des clés RSA (2048 bits recommandés) et des lignes VTY limitées à SSH avec « login local » et un compte utilisateur. Le relais DHCP et le trunk n'ont aucun rapport."
+    },
+    {
+      "id": "cis-030",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Vous êtes en mode configuration de ligne (Router(config-line)#). Quelle commande vous ramène directement au mode privilégié ?",
+      "choices": [
+        "exit",
+        "end",
+        "logout",
+        "disable"
+      ],
+      "answer": 1,
+      "explication": "« end » revient directement au mode privilégié depuis n'importe quel sous-mode, alors que « exit » ne remonte que d'un seul niveau à la fois."
+    },
+    {
+      "id": "cis-031",
+      "niveau": 3,
+      "type": "terminal",
+      "prompt": "Switch(config)#",
+      "q": "Vous êtes en mode de configuration globale sur un switch. Renommez l'équipement en SW1.",
+      "accept": ["hostname SW1"],
+      "explication": "« hostname SW1 » change immédiatement le nom affiché dans l'invite : indispensable pour se repérer quand on administre plusieurs équipements."
+    },
+    {
+      "id": "cis-032",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Pour attribuer une adresse IP de gestion à un switch utilisant le VLAN par défaut, dans quelle interface faut-il entrer ?",
+      "choices": [
+        "line vty 0 4",
+        "interface fastEthernet 0/1",
+        "interface gigabitEthernet 0/0",
+        "interface vlan 1"
+      ],
+      "answer": 3,
+      "explication": "L'IP de gestion se pose sur la SVI « interface vlan 1 » (tous les ports y appartiennent par défaut), suivie de « ip address » et « no shutdown »."
+    },
+    {
+      "id": "cis-033",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "R1# show ip interface brief\nInterface              IP-Address      OK? Method Status                Protocol\nGigabitEthernet0/0     192.168.10.254  YES manual administratively down down\nGigabitEthernet0/1     unassigned      YES unset  administratively down    down",
+      "q": "Le PC branché sur G0/0 n'arrive pas à joindre sa passerelle 192.168.10.254. D'après cette sortie, quelle est la cause ?",
+      "choices": [
+        "La commande no shutdown n'a pas été exécutée sur G0/0",
+        "L'adresse IP configurée est incorrecte",
+        "Le câble entre le PC et le routeur est défectueux",
+        "Le VLAN 10 n'a pas été créé sur le routeur"
+      ],
+      "answer": 0,
+      "explication": "Le statut « administratively down » signifie que l'interface est volontairement désactivée : l'IP est bien posée, il ne manque que « no shutdown ». Un problème de câble donnerait « down/down » sans « administratively »."
+    },
+    {
+      "id": "cis-034",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Hier, votre routeur était entièrement configuré et tout fonctionnait. Après une coupure de courant, le routeur redémarre avec l'invite « Router> » : hostname, adresses IP, tout a disparu.",
+      "q": "Quelle est l'explication la plus probable ?",
+      "choices": [
+        "La NVRAM du routeur est défaillante",
+        "La configuration en cours n'avait jamais été copiée dans la startup-config",
+        "Une coupure de courant efface toujours la startup-config",
+        "Le mot de passe enable a expiré"
+      ],
+      "answer": 1,
+      "explication": "La running-config vit en RAM : sans « copy running-config startup-config » (ou « write »), elle disparaît à l'extinction et le routeur redémarre vierge."
+    },
+    {
+      "id": "cis-035",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "SW1 et SW2 sont reliés par leurs ports G0/1. PC-A (VLAN 10, sur SW1) ne parvient pas à joindre PC-B (VLAN 10, sur SW2).\n\nSW1# show running-config interface g0/1\ninterface GigabitEthernet0/1\n switchport mode access",
+      "q": "Quelle correction permet aux deux PC du VLAN 10 de communiquer ?",
+      "choices": [
+        "Remettre les deux PC dans le VLAN 1",
+        "Ajouter une route statique sur SW1",
+        "Configurer le lien entre les deux switchs en mode trunk",
+        "Taper no shutdown sur les ports des PC"
+      ],
+      "answer": 2,
+      "explication": "Un lien entre switchs doit être en trunk pour transporter les trames de plusieurs VLANs avec leur étiquette. En mode access, le lien ne véhicule qu'un seul VLAN."
+    },
+    {
+      "id": "cis-036",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "R1# pign 192.168.20.1\nTranslating \"pign\"...domain server (255.255.255.255)\n\n(La console semble bloquée et ne répond plus.)",
+      "q": "Vous avez fait une faute de frappe et la console est bloquée. Comment reprendre la main immédiatement ?",
+      "choices": [
+        "Appuyer sur Ctrl+Shift+6",
+        "Appuyer sur Ctrl+C",
+        "Appuyer sur Ctrl+Z",
+        "Fermer puis rouvrir la fenêtre CLI"
+      ],
+      "answer": 0,
+      "explication": "IOS interprète le mot inconnu comme un nom d'hôte et tente une résolution DNS interminable : Ctrl+Shift+6 interrompt la recherche. « no ip domain-lookup » évite définitivement ce comportement."
+    },
+    {
+      "id": "cis-037",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Router> configure terminal\n              ^\n% Invalid input detected at '^' marker.",
+      "q": "Un stagiaire tente de configurer le routeur mais la commande est rejetée. Pourquoi ?",
+      "choices": [
+        "La commande s'écrit « config terminal » sans e",
+        "Il est en mode utilisateur : il doit d'abord taper enable",
+        "Le routeur n'a pas de startup-config",
+        "L'accès SSH n'est pas encore activé"
+      ],
+      "answer": 1,
+      "explication": "L'invite « Router> » montre qu'il est en mode utilisateur, où « configure terminal » n'existe pas : il faut passer par « enable » pour atteindre le mode privilégié, puis entrer en configuration globale."
+    }
+  ]
+}

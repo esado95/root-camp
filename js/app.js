@@ -302,7 +302,8 @@ function showRules() {
       <p style="margin-bottom:6px"><i class="ti ti-arrows-left-right" style="color:var(--cyan)"></i> <b>Association</b> — reliez chaque élément de gauche à sa correspondance à droite</p>
       <p style="margin-bottom:6px"><i class="ti ti-sort-ascending-numbers" style="color:var(--cyan)"></i> <b>Remise en ordre</b> — cliquez les étapes dans le bon ordre</p>
       <p style="margin-bottom:6px"><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Champ libre</b> — tapez la réponse exacte (valeur ou commande)</p>
-      <p><i class="ti ti-stethoscope" style="color:var(--cyan)"></i> <b>Scénario</b> — une situation réelle à diagnostiquer, comme le jour J</p>
+      <p style="margin-bottom:6px"><i class="ti ti-stethoscope" style="color:var(--cyan)"></i> <b>Scénario</b> — une situation réelle à diagnostiquer, comme le jour J</p>
+      <p><i class="ti ti-terminal" style="color:var(--cyan)"></i> <b>Terminal simulé</b> — tapez la commande dans une vraie console : si elle est juste, son résultat s'affiche comme en réel</p>
     </div>
 
     <p class="section-title"># examen blanc</p>
@@ -424,6 +425,14 @@ function renderQuestion() {
   else if (q.type === "assoc") body = `<div class="pairs"><div class="col" id="colL"></div><div class="col" id="colR"></div></div>`;
   else if (q.type === "ordre") body = `<p class="comment"># cliquez les éléments dans le bon ordre</p><div class="answers" id="answers"></div>`;
   else if (q.type === "libre") body = `<div class="libre-row"><input id="libre" autocomplete="off" spellcheck="false" placeholder="votre réponse..."><button class="btn accent" id="validate">Valider</button></div>`;
+  else if (q.type === "terminal") body = `
+    <div class="term">
+      <div class="term-head">
+        <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
+        <span style="margin-left:6px">simulation — tapez la commande puis Entrée</span>
+      </div>
+      <div class="term-body" id="term-body"></div>
+    </div>`;
 
   screen.innerHTML = head + body + `<div id="fb"></div>`;
   $("#quit").onclick = () => { endTimer(); session.back(); session = null; };
@@ -444,6 +453,7 @@ function renderQuestion() {
   else if (q.type === "assoc") renderAssoc(q);
   else if (q.type === "ordre") renderOrdre(q);
   else if (q.type === "libre") renderLibre(q);
+  else if (q.type === "terminal") renderTerminal(q);
 }
 
 function letters(i) { return String.fromCharCode(65 + i); }
@@ -575,6 +585,49 @@ function renderLibre(q) {
   input.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
 }
 
+function renderTerminal(q) {
+  const body = $("#term-body");
+  const promptTxt = q.prompt || "$";
+  const addLine = (txt, cls) => {
+    const d = document.createElement("div");
+    d.className = "line" + (cls ? " " + cls : "");
+    d.textContent = txt;
+    body.appendChild(d);
+    return d;
+  };
+  const inputLine = document.createElement("div");
+  inputLine.className = "line";
+  inputLine.innerHTML = `<span class="term-prompt">${esc(promptTxt)} </span>`;
+  const input = document.createElement("input");
+  input.className = "term-input";
+  input.autocomplete = "off";
+  input.spellcheck = false;
+  inputLine.appendChild(input);
+  body.appendChild(inputLine);
+  input.focus();
+
+  input.addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    const val = input.value;
+    if (!normalize(val)) return;
+    input.disabled = true;
+    inputLine.remove();
+    addLine(promptTxt + " " + val);
+    const correct = q.accept.map(normalize).includes(normalize(val));
+    if (correct) {
+      if (q.output) q.output.split("\n").forEach(l => addLine(l, "out"));
+      addLine("# commande acceptée ✓", "ok");
+    } else {
+      addLine(q.error || "'" + val.trim() + "' : commande incorrecte ou incomplète", "ko");
+      if (!session.exam) {
+        addLine("# commande attendue : " + q.accept[0], "cmt");
+        if (q.output) q.output.split("\n").forEach(l => addLine(l, "out"));
+      }
+    }
+    finishQuestion(q, correct);
+  });
+}
+
 function finishQuestion(q, correct) {
   recordAnswer(q, correct, session.exam);
   if (correct) session.ok++;
@@ -660,7 +713,7 @@ function showResult(timeout) {
 
 function drawExam() {
   const weights = { 1: 0.2, 2: 0.3, 3: 0.3, 4: 0.2 };
-  const pool = BANK.filter(q => ["qcm", "multi", "libre", "scenario"].includes(q.type));
+  const pool = BANK.filter(q => ["qcm", "multi", "libre", "scenario", "terminal"].includes(q.type));
   let picked = [];
   for (const n of [1, 2, 3, 4]) {
     const want = Math.round(EXAM_SIZE * weights[n]);

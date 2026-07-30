@@ -1,0 +1,503 @@
+{
+  "module": "DNS, IIS & hébergement",
+  "source": "Procedure-DNS-IIS.md + Hebergement-Cours.md",
+  "questions": [
+    {
+      "id": "iis-001",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Dans un contrat d'hébergement, que désigne le SLA (Service Level Agreement) ?",
+      "choices": [
+        "Le contrat qui stipule les conditions de l'hébergement : garanties de disponibilité, temps de réponse, etc.",
+        "Le protocole de transfert de fichiers utilisé par le serveur",
+        "La licence logicielle du serveur web",
+        "Le certificat SSL du site hébergé"
+      ],
+      "answer": 0,
+      "explication": "Le SLA est le contrat de niveau de service : il engage l'hébergeur sur des garanties mesurables comme la haute disponibilité ou les temps de réponse."
+    },
+    {
+      "id": "iis-002",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez chaque type d'hébergement à sa description.",
+      "pairs": [
+        ["Mutualisé (partagé)", "Plusieurs sites cohabitent sur un même serveur"],
+        ["Dédié", "Serveur physique réservé à une seule entreprise"],
+        ["VPS", "Serveur virtualisé, souple et scalable"],
+        ["Cloud", "Infrastructure distante chez un prestataire"]
+      ],
+      "explication": "Le mutualisé est économique mais peu flexible, le dédié offre une liberté totale mais coûte cher, le VPS est un compromis virtualisé, et le cloud mise sur la scalabilité au prix d'une dépendance au fournisseur."
+    },
+    {
+      "id": "iis-003",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Que signifie héberger un service « on-premise » ?",
+      "choices": [
+        "L'héberger soi-même, sur site, dans ses propres locaux",
+        "Le confier à un hébergeur mutualisé",
+        "Le placer dans un cloud public",
+        "Le louer sur un serveur dédié distant"
+      ],
+      "answer": 0,
+      "explication": "On-premise signifie que l'entreprise héberge elle-même le service sur sa propre infrastructure, par opposition à l'externalisation chez un prestataire."
+    },
+    {
+      "id": "iis-004",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quel est le rôle fondamental du DNS ?",
+      "choices": [
+        "Attribuer automatiquement des adresses IP aux clients",
+        "Traduire les noms de domaine en adresses IP, et inversement",
+        "Chiffrer les échanges entre le client et le serveur web",
+        "Router les paquets entre les réseaux"
+      ],
+      "answer": 1,
+      "explication": "Le DNS est un annuaire bidirectionnel : il fait correspondre un nom comme google.com à son adresse IP, et inversement. L'attribution d'adresses, c'est le rôle du DHCP."
+    },
+    {
+      "id": "iis-005",
+      "niveau": 1,
+      "type": "libre",
+      "q": "Quel type d'enregistrement DNS associe un nom d'hôte à une adresse IPv6 ?",
+      "accept": ["AAAA"],
+      "explication": "L'enregistrement AAAA est l'équivalent IPv6 de l'enregistrement A, qui lui associe un nom à une adresse IPv4."
+    },
+    {
+      "id": "iis-006",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "À quoi sert un enregistrement CNAME dans une zone DNS ?",
+      "choices": [
+        "Créer un alias qui pointe vers un autre enregistrement",
+        "Associer un nom à une adresse IPv4",
+        "Déclarer le serveur de messagerie du domaine",
+        "Définir l'autorité sur la zone"
+      ],
+      "answer": 0,
+      "explication": "Le CNAME (Canonical Name) est un alias : il permet à plusieurs noms de pointer vers un même enregistrement sans dupliquer l'adresse IP."
+    },
+    {
+      "id": "iis-007",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Dans quel type de zone DNS trouve-t-on les enregistrements PTR ?",
+      "choices": [
+        "La zone de recherche inversée",
+        "La zone directe primaire",
+        "La zone de stub",
+        "La zone directe secondaire"
+      ],
+      "answer": 0,
+      "explication": "Le PTR effectue la résolution inverse (IP vers nom) : il est donc stocké dans la zone de recherche inversée."
+    },
+    {
+      "id": "iis-008",
+      "niveau": 1,
+      "type": "libre",
+      "q": "Quel est le port par défaut d'un site HTTP dans IIS ?",
+      "accept": ["80", "port 80", "tcp 80", "80/tcp"],
+      "explication": "HTTP utilise le port TCP 80 par défaut, ce qui permet d'accéder au site sans préciser le port dans l'URL."
+    },
+    {
+      "id": "iis-009",
+      "niveau": 1,
+      "type": "libre",
+      "q": "Dans quel répertoire IIS stocke-t-il par défaut les sites web sous Windows Server ?",
+      "accept": ["C:\\inetpub", "C:\\inetpub\\", "inetpub"],
+      "explication": "C:\\inetpub\\ est le répertoire par défaut d'IIS : on y crée un sous-dossier par site (ex : C:\\inetpub\\intranet)."
+    },
+    {
+      "id": "iis-010",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Qu'est-ce qu'IIS (Internet Information Services) ?",
+      "choices": [
+        "Le serveur web intégré à Windows Server",
+        "Le service d'annuaire de Microsoft",
+        "Un serveur DNS tiers",
+        "L'hyperviseur de Microsoft"
+      ],
+      "answer": 0,
+      "explication": "IIS est le rôle « Serveur Web » de Windows Server ; il héberge des sites HTTP/HTTPS et inclut aussi le sous-rôle Serveur FTP."
+    },
+    {
+      "id": "iis-011",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez chaque port TCP à son rôle.",
+      "pairs": [
+        ["21", "Canal de contrôle FTP (commandes, authentification)"],
+        ["20", "Canal de données FTP (transfert des fichiers)"],
+        ["80", "HTTP par défaut"]
+      ],
+      "explication": "Le FTP en mode actif utilise deux connexions distinctes : le port 21 pour les commandes et le port 20 pour les données ; le web non chiffré passe par le port 80."
+    },
+    {
+      "id": "iis-012",
+      "niveau": 2,
+      "type": "multi",
+      "q": "Quels enregistrements sont obligatoires dans une zone DNS ? (plusieurs réponses)",
+      "choices": [
+        "SOA (Start of Authority)",
+        "NS (Name Server)",
+        "A",
+        "CNAME",
+        "PTR"
+      ],
+      "answer": [0, 1],
+      "explication": "Toute zone doit posséder un SOA, qui définit l'autorité sur la zone, et un NS, qui nomme le serveur faisant autorité. A, CNAME et PTR sont facultatifs."
+    },
+    {
+      "id": "iis-013",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "À quoi sert un enregistrement MX dans une zone DNS ?",
+      "choices": [
+        "Désigner le serveur de messagerie qui reçoit les mails du domaine",
+        "Créer un alias vers un autre nom",
+        "Associer un nom à une adresse IPv4",
+        "Effectuer la résolution inverse"
+      ],
+      "answer": 0,
+      "explication": "MX (Mail eXchanger) indique aux serveurs expéditeurs vers quelle machine acheminer les courriels adressés au domaine."
+    },
+    {
+      "id": "iis-014",
+      "niveau": 2,
+      "type": "assoc",
+      "q": "Associez chaque type de zone DNS à sa description.",
+      "pairs": [
+        ["Zone directe primaire", "Traduit les noms en IP, en lecture/écriture"],
+        ["Zone directe secondaire", "Copie en lecture seule qui allège le trafic"],
+        ["Zone de stub", "Ne contient que les enregistrements NS, sert de pointeur"],
+        ["Zone inversée", "Traduit les adresses IP en noms"]
+      ],
+      "explication": "Seule la zone primaire est modifiable ; la secondaire en est une réplique en lecture seule, la stub ne garde que les NS, et la zone inversée sert à la résolution IP vers nom."
+    },
+    {
+      "id": "iis-015",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Que définit le TTL d'un enregistrement DNS ?",
+      "choices": [
+        "La durée pendant laquelle la réponse reste en cache chez le client",
+        "Le nombre maximal de routeurs traversés par la requête",
+        "Le délai avant expiration du bail DHCP",
+        "Le temps de réponse garanti par le SLA"
+      ],
+      "answer": 0,
+      "explication": "Tant que le TTL n'est pas expiré, la machine répond depuis son cache local sans réinterroger le serveur DNS."
+    },
+    {
+      "id": "iis-016",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Dans le FQDN « www.cours.com. », que représente le point final ?",
+      "choices": [
+        "La racine du DNS, souvent invisible à l'usage",
+        "Le TLD du domaine",
+        "Une erreur de syntaxe",
+        "Le séparateur entre le SLD et le TLD"
+      ],
+      "answer": 0,
+      "explication": "Un FQDN complet se termine par un point qui symbolise la racine de l'arborescence DNS ; les navigateurs l'omettent généralement."
+    },
+    {
+      "id": "iis-017",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Lors de la création d'un enregistrement A, que se passe-t-il si le champ « Nom d'hôte » est laissé vide ?",
+      "choices": [
+        "Le FQDN sera simplement celui de la zone (SLD.TLD.)",
+        "L'enregistrement est refusé par le serveur DNS",
+        "Le serveur attribue un nom d'hôte aléatoire",
+        "L'enregistrement est converti en CNAME"
+      ],
+      "answer": 0,
+      "explication": "Le nom d'hôte est facultatif : sans lui, l'enregistrement répond directement pour le nom de la zone, par exemple web.lan au lieu de www.web.lan."
+    },
+    {
+      "id": "iis-018",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi la page d'accueil d'un site IIS doit-elle s'appeler index.html (ou un équivalent configuré) ?",
+      "choices": [
+        "C'est le document par défaut que le serveur cherche automatiquement quand on accède à un dossier",
+        "C'est le seul nom de fichier autorisé par le protocole HTTP",
+        "IIS refuse de démarrer le site sans ce fichier",
+        "Le DNS exige ce nom pour résoudre le site"
+      ],
+      "answer": 0,
+      "explication": "Par convention, index.html (ou index.htm, index.php selon la configuration) est le point d'entrée du site ; sans document par défaut, IIS renvoie une erreur 403."
+    },
+    {
+      "id": "iis-019",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi l'extension .htm est-elle acceptée au même titre que .html ?",
+      "choices": [
+        "Historiquement, les extensions de fichier étaient limitées à 3 caractères",
+        "C'est une version compressée du HTML",
+        ".htm est réservé aux pages dynamiques",
+        "C'est une extension propre aux serveurs Linux"
+      ],
+      "answer": 0,
+      "explication": "Sur les anciens systèmes, les extensions ne pouvaient pas dépasser 3 caractères : .htm est donc resté un équivalent reconnu de .html."
+    },
+    {
+      "id": "iis-020",
+      "niveau": 2,
+      "type": "multi",
+      "q": "Par quels critères IIS peut-il distinguer plusieurs sites hébergés sur le même serveur ? (plusieurs réponses)",
+      "choices": [
+        "Le nom d'hôte",
+        "Le port",
+        "L'adresse IP",
+        "L'adresse MAC du client",
+        "Le TTL DNS"
+      ],
+      "answer": [0, 1, 2],
+      "explication": "Une liaison IIS combine nom d'hôte, port et adresse IP : ce sont les trois façons de rendre un site accessible et de le différencier des autres."
+    },
+    {
+      "id": "iis-021",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Dans un site FTP sous IIS, que requiert l'authentification basique ?",
+      "choices": [
+        "Un compte utilisateur Windows valide, local ou du domaine",
+        "Aucun identifiant : la connexion est libre",
+        "Uniquement l'identifiant « anonymous » sans mot de passe",
+        "Un certificat SSL installé sur le client"
+      ],
+      "answer": 0,
+      "explication": "L'authentification basique exige un nom d'utilisateur et un mot de passe correspondant à un compte Windows, contrairement à l'anonyme qui accepte « anonymous » sans mot de passe."
+    },
+    {
+      "id": "iis-022",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Les permissions IIS FTP accordent Lecture/Écriture, mais les droits NTFS du dossier physique n'accordent que la lecture. Que peut réellement faire l'utilisateur ?",
+      "choices": [
+        "Lire uniquement : c'est toujours l'autorisation la plus restrictive qui l'emporte",
+        "Lire et écrire : les permissions IIS priment sur NTFS",
+        "Rien du tout : le conflit bloque tout accès",
+        "Écrire uniquement, car l'écriture IIS est prioritaire"
+      ],
+      "answer": 0,
+      "explication": "Les droits finaux sont la combinaison des autorisations IIS et des droits NTFS : le plus restrictif gagne. Pour écrire, il faut l'écriture des deux côtés."
+    },
+    {
+      "id": "iis-023",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quel risque le DNS spoofing (ou hijacking) fait-il courir sur un réseau Wi-Fi public ?",
+      "choices": [
+        "Un attaquant peut faire pointer un nom légitime (ex : google.com) vers une fausse adresse IP",
+        "Le débit du réseau est fortement réduit",
+        "Les requêtes DNS deviennent simplement plus lentes",
+        "Le cache DNS local du client est vidé"
+      ],
+      "answer": 0,
+      "explication": "Sur un réseau non fiable, un attaquant qui contrôle la résolution DNS peut rediriger l'utilisateur vers un site frauduleux imitant l'original."
+    },
+    {
+      "id": "iis-024",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Remettez dans l'ordre les étapes de la résolution d'un nom DNS (cas où le cache local ne contient pas la réponse).",
+      "steps": [
+        "L'utilisateur saisit un nom de domaine dans son navigateur",
+        "La machine vérifie son cache local (fichier hosts, resolver)",
+        "Le résolveur interroge le serveur DNS de la box",
+        "Le DNS de la box interroge un serveur racine, qui indique le registrar faisant autorité",
+        "Le registrar répond avec l'adresse IP du domaine"
+      ],
+      "explication": "La résolution remonte du cache local vers le DNS de la box, puis vers les serveurs racine qui délèguent au registrar faisant autorité sur le domaine."
+    },
+    {
+      "id": "iis-025",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Remettez dans l'ordre les grandes étapes de mise en place d'un site web interne avec DNS et IIS.",
+      "steps": [
+        "Installer le rôle DNS sur le serveur DNS et le rôle IIS sur le serveur web",
+        "Créer la zone de recherche directe (ex : web.lan) et l'enregistrement A pointant vers le serveur web",
+        "Créer le répertoire physique du site dans C:\\inetpub\\",
+        "Créer le site dans IIS (liaison nom/port/IP) et y déposer un fichier index.html",
+        "Tester l'accès depuis un poste client via le navigateur"
+      ],
+      "explication": "On installe d'abord les rôles, puis on prépare la résolution de nom, le contenu et la liaison IIS ; le test se fait toujours depuis un poste client, pas depuis le serveur."
+    },
+    {
+      "id": "iis-026",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Vous créez l'enregistrement A « intranet » dans la zone web.lan pour publier un site hébergé sur le serveur SRV-IIS. Quelle adresse IP renseignez-vous ?",
+      "choices": [
+        "L'adresse IP de SRV-IIS, le serveur qui héberge le site",
+        "L'adresse IP du serveur DNS",
+        "L'adresse IP du poste client",
+        "L'adresse de la passerelle du réseau"
+      ],
+      "answer": 0,
+      "explication": "L'enregistrement A doit pointer vers la machine qui héberge réellement le service : ici le serveur web, pas le serveur DNS qui ne fait que résoudre le nom."
+    },
+    {
+      "id": "iis-027",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Lors de la création d'un enregistrement A, à quoi sert la case « Créer un pointeur d'enregistrement PTR associé » ?",
+      "choices": [
+        "Ajouter automatiquement l'enregistrement correspondant dans la zone de recherche inversée",
+        "Créer un alias CNAME portant le même nom",
+        "Répliquer l'enregistrement vers la zone secondaire",
+        "Activer le TTL de l'enregistrement"
+      ],
+      "answer": 0,
+      "explication": "Cocher cette case crée en une seule opération l'enregistrement PTR dans la zone inversée, ce qui permet la résolution IP vers nom sans saisie manuelle."
+    },
+    {
+      "id": "iis-028",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Vous créez un site IIS écoutant sur le port 8080. Quelle configuration devez-vous prévoir sur le serveur pour qu'il soit joignable depuis les clients ?",
+      "choices": [
+        "Ajouter une règle de trafic entrant autorisant le port TCP 8080 dans le pare-feu Windows",
+        "Rediriger le port 8080 vers le port 80 sur le routeur",
+        "Désactiver complètement le pare-feu Windows",
+        "Ouvrir le port UDP 8080"
+      ],
+      "answer": 0,
+      "explication": "Contrairement au port 80 ouvert par le rôle IIS, un port personnalisé comme 8080 doit être explicitement autorisé en entrée (TCP) dans le pare-feu du serveur."
+    },
+    {
+      "id": "iis-029",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Comment héberger deux sites web sur le même serveur IIS, avec la même adresse IP et le même port 80 ?",
+      "choices": [
+        "Différencier les sites par leur nom d'hôte, avec un enregistrement DNS pour chacun",
+        "C'est impossible : un serveur ne peut héberger qu'un seul site par port",
+        "Installer une seconde instance du rôle IIS",
+        "Passer obligatoirement le second site en HTTPS"
+      ],
+      "answer": 0,
+      "explication": "Le nom d'hôte de la liaison permet à IIS d'aiguiller la requête vers le bon site : chaque nom doit être résolu par un enregistrement DNS pointant vers le serveur."
+    },
+    {
+      "id": "iis-030",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Pour publier un site accessible par une adresse IP dédiée (ex : 192.168.10.200) sur un serveur qui possède déjà une IP, que fait-on ?",
+      "choices": [
+        "Ajouter une seconde carte réseau (ou adresse IP) au serveur et lier le site à cette adresse",
+        "Changer le port du site par défaut",
+        "Créer un simple alias CNAME dans la zone existante",
+        "Modifier le masque de sous-réseau du serveur"
+      ],
+      "answer": 0,
+      "explication": "Dans le TP, on ajoute une deuxième carte réseau en 192.168.10.200 sur SRV-IIS, on lie le site à cette IP et on crée une nouvelle zone DNS (intranetip.lan) avec l'hôte www."
+    },
+    {
+      "id": "iis-031",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Quelle condition doit être remplie pour copier un fichier de l'hôte Hyper-V vers une VM isolée avec la commande Copy-VMFile ?",
+      "choices": [
+        "Les « Services d'invité » doivent être activés dans les services d'intégration de la VM",
+        "La VM doit être connectée à Internet",
+        "Un partage réseau SMB doit exister entre l'hôte et la VM",
+        "La VM doit être éteinte pendant la copie"
+      ],
+      "answer": 0,
+      "explication": "Copy-VMFile passe par les services d'intégration Hyper-V : il faut cocher « Services d'invité » dans les paramètres de la VM, puis lancer la commande depuis l'hôte en PowerShell administrateur."
+    },
+    {
+      "id": "iis-032",
+      "niveau": 3,
+      "type": "libre",
+      "q": "Quel nom de fichier donner à la page d'accueil d'un site IIS pour éviter une erreur 403 à la racine du site ?",
+      "accept": ["index.html", "index.htm"],
+      "explication": "IIS cherche un document par défaut nommé index.html (ou index.htm) quand on accède au dossier ; sans lui, il renvoie 403 car il refuse de lister le contenu."
+    },
+    {
+      "id": "iis-033",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Site « intranet » créé dans IIS, liaison sur le port 80, le site est démarré.\nDepuis le client, intranet.web.lan est bien résolu par le DNS.\nLe navigateur affiche : HTTP Error 403 - Forbidden.\nContenu du dossier C:\\inetpub\\intranet : intranet.html",
+      "q": "Quelle est la cause la plus probable de l'erreur 403 ?",
+      "choices": [
+        "Le fichier d'accueil ne s'appelle pas index.html : IIS ne trouve pas de document par défaut",
+        "Le port 80 est bloqué par le pare-feu du serveur",
+        "L'enregistrement DNS pointe vers la mauvaise adresse",
+        "Le rôle IIS n'est pas installé correctement"
+      ],
+      "answer": 0,
+      "explication": "La résolution DNS et la connexion fonctionnent (sinon pas de réponse 403) : le problème vient du nom du fichier, qu'il faut renommer intranet.html en index.html."
+    },
+    {
+      "id": "iis-034",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Depuis le client CLIENT-W :\n- http://intranet.web.lan (port 80) répond normalement\n- http://intranetport.web.lan:8080 → délai d'attente dépassé\n- ping intranetport.web.lan → réponse de 192.168.10.12\n- Le site intranetport est bien démarré dans IIS",
+      "q": "Quelle est la cause la plus probable du timeout ?",
+      "choices": [
+        "Le port TCP 8080 n'est pas ouvert en règle entrante dans le pare-feu du serveur",
+        "L'enregistrement DNS de intranetport est absent",
+        "Le fichier index.html est manquant dans le dossier du site",
+        "Le site par défaut d'IIS n'a pas été arrêté"
+      ],
+      "answer": 0,
+      "explication": "Le ping prouve que le DNS résout et que le serveur répond, et le port 80 fonctionne : seul le port 8080 est filtré, il faut créer la règle entrante TCP 8080 dans le pare-feu Windows."
+    },
+    {
+      "id": "iis-035",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Un utilisateur connecté au site FTP tente de téléverser un fichier.\nRéponse du serveur : 550 Access Denied\nPermissions du site FTP dans IIS : Lecture + Écriture pour tous les utilisateurs",
+      "q": "Pourquoi le téléversement échoue-t-il malgré l'écriture autorisée dans IIS ?",
+      "choices": [
+        "Les droits NTFS du dossier physique n'accordent pas l'écriture : la permission la plus restrictive l'emporte",
+        "Le port 20 est fermé sur le poste client",
+        "L'authentification anonyme est désactivée",
+        "Le fichier dépasse la taille maximale autorisée par FTP"
+      ],
+      "answer": 0,
+      "explication": "L'erreur 550 traduit un conflit NTFS/IIS : il faut accorder Modification/Écriture en NTFS sur le dossier du serveur en plus des permissions d'écriture IIS FTP."
+    },
+    {
+      "id": "iis-036",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Depuis FileZilla sur le client :\nHôte : 192.168.10.12 — Identifiant : anonymous — Port : 21\nStatut : Connexion... puis « Délai d'attente dépassé »\nLe site FTP est démarré dans IIS et l'authentification anonyme est activée",
+      "q": "Quelle est la cause la plus probable de l'échec de connexion ?",
+      "choices": [
+        "Le port TCP 21 n'est pas ouvert en règle entrante dans le pare-feu du serveur",
+        "L'identifiant anonymous n'existe pas sur le serveur",
+        "Il manque un enregistrement PTR pour le serveur FTP",
+        "FileZilla ne prend pas en charge le port 21"
+      ],
+      "answer": 0,
+      "explication": "Un timeout dès la connexion indique que le trafic n'atteint pas le service : il faut ouvrir le port TCP 21 en règle entrante dans le pare-feu Windows du serveur IIS."
+    },
+    {
+      "id": "iis-037",
+      "niveau": 4,
+      "type": "scenario",
+      "context": "Sur le serveur SRV-IIS, http://localhost affiche bien le site par défaut.\nSur le poste client, http://localhost n'affiche rien.",
+      "q": "Comment le client doit-il accéder au site hébergé sur SRV-IIS ?",
+      "choices": [
+        "En tapant l'adresse IP du serveur web (ex : http://192.168.10.12) : localhost désigne la machine locale",
+        "En redémarrant le service DNS du serveur",
+        "En vidant le cache du navigateur du client",
+        "En désactivant le pare-feu du poste client"
+      ],
+      "answer": 0,
+      "explication": "localhost pointe toujours vers la machine sur laquelle on tape l'URL : depuis le client, il faut utiliser l'IP du serveur web (ou son nom DNS), jamais localhost."
+    }
+  ]
+}

@@ -52,7 +52,7 @@
     {
       "id": "dhcp-008", "niveau": 1, "type": "assoc",
       "q": "Associez chaque message DORA à son émetteur",
-      "pairs": [["Discover", "Client (broadcast)"], ["Offer", "Serveur (propose une IP)"], ["Request", "Client (accepte l'offre)"], ["ACK", "Serveur (confirme le bail)"]],
+      "pairs": [["Discover", "Client (cherche un serveur)"], ["Offer", "Serveur (propose une IP)"], ["Request", "Client (accepte l'offre)"], ["ACK", "Serveur (confirme le bail)"]],
       "explication": "Le client émet Discover et Request (broadcast, il n'a pas d'IP), le serveur répond avec Offer et ACK."
     },
     {
@@ -145,16 +145,20 @@
       "explication": "L'exclusion retire 1–20 de la distribution (réservés aux équipements fixes) : le serveur distribue 21 → 254."
     },
     {
-      "id": "dhcp-022", "niveau": 3, "type": "libre",
-      "q": "Quelle commande Windows libère l'adresse IP actuelle du client ?",
-      "accept": ["ipconfig /release", "ipconfig/release"],
-      "explication": "ipconfig /release libère le bail, ipconfig /renew en demande un nouveau, ipconfig /all affiche la configuration complète."
+      "id": "dhcp-022", "niveau": 3, "type": "terminal",
+      "q": "Le poste doit rendre son bail DHCP. Tapez la commande qui libère l'adresse IP actuelle.",
+      "prompt": "PS C:\\Users\\client>",
+      "accept": ["ipconfig /release", "ipconfig/release", "ipconfig -release"],
+      "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Suffixe DNS propre à la connexion. . . :\n   Adresse IPv4. . . . . . . . . . . . . : 0.0.0.0\n   Masque de sous-réseau. . . . . . . . : 0.0.0.0\n   Passerelle par défaut. . . . . . . . :",
+      "explication": "ipconfig /release libère le bail : l'adresse repasse à 0.0.0.0. ipconfig /renew en demande un nouveau, ipconfig /all affiche la configuration complète."
     },
     {
-      "id": "dhcp-023", "niveau": 3, "type": "libre",
-      "q": "Quelle commande Windows demande un nouveau bail DHCP ?",
-      "accept": ["ipconfig /renew", "ipconfig/renew"],
-      "explication": "ipconfig /renew relance une demande DHCP. À combiner avec /release pour repartir de zéro."
+      "id": "dhcp-023", "niveau": 3, "type": "terminal",
+      "q": "L'adresse a été libérée. Tapez maintenant la commande qui demande un nouveau bail DHCP.",
+      "prompt": "PS C:\\Users\\client>",
+      "accept": ["ipconfig /renew", "ipconfig/renew", "ipconfig -renew"],
+      "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Suffixe DNS propre à la connexion. . . : adrar.lan\n   Adresse IPv4. . . . . . . . . . . . . : 192.168.10.112\n   Masque de sous-réseau. . . . . . . . : 255.255.255.0\n   Passerelle par défaut. . . . . . . . : 192.168.10.254",
+      "explication": "ipconfig /renew relance une négociation DORA : le poste récupère une adresse de l'étendue avec ses options (masque, passerelle, DNS)."
     },
     {
       "id": "dhcp-024", "niveau": 3, "type": "qcm",

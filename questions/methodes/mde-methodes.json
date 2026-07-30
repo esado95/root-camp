@@ -1,0 +1,205 @@
+{
+  "module": "MDE & méthodes",
+  "source": "CRAFT-IA.md + MDE.md",
+  "questions": [
+    {
+      "id": "mde-001", "niveau": 1, "type": "libre",
+      "q": "Quel est le nom du framework en cinq lettres recommandé pour structurer une requête adressée à une IA ?",
+      "accept": ["CRAFT", "le framework CRAFT", "craft"],
+      "explication": "CRAFT structure un prompt en cinq éléments : Contexte, Rôle, Action, Format, Tonalité."
+    },
+    {
+      "id": "mde-002", "niveau": 1, "type": "qcm",
+      "q": "Dans le framework CRAFT, que désigne la lettre R ?",
+      "choices": ["Le résultat attendu", "Le rôle que l'IA doit assumer", "La requête principale", "Les références à citer"],
+      "answer": 1,
+      "explication": "Le R de CRAFT définit la posture confiée à l'IA : formateur pédagogue, expert concis, etc."
+    },
+    {
+      "id": "mde-003", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque lettre du framework CRAFT à sa signification.",
+      "pairs": [
+        ["C — Contexte", "Qui suis-je, quelle est ma situation"],
+        ["A — Action", "Ce que l'IA doit faire précisément"],
+        ["F — Format", "Structure attendue de la réponse (liste, tableau...)"],
+        ["T — Tonalité", "Public auquel s'adresse la réponse"]
+      ],
+      "explication": "Chaque lettre cadre un aspect du prompt ; le R restant désigne le Rôle donné à l'IA."
+    },
+    {
+      "id": "mde-004", "niveau": 1, "type": "qcm",
+      "q": "Comment appelle-t-on le phénomène où une IA fournit des informations fausses en les présentant avec assurance ?",
+      "choices": ["Une hallucination", "Un biais d'entraînement", "Une obsolescence", "Une saturation de contexte"],
+      "answer": 0,
+      "explication": "L'hallucination est d'autant plus dangereuse que la réponse paraît sûre d'elle : d'où la vérification systématique."
+    },
+    {
+      "id": "mde-005", "niveau": 1, "type": "multi",
+      "q": "Selon les recommandations MDE, quelles informations sont incontournables sur un CV ? (plusieurs réponses)",
+      "choices": ["La photo", "Le permis et le véhicule (mobilité)", "Le poste visé en titre clair", "La mention « Français natif » dans les langues", "La liste complète de tous les logiciels jamais utilisés"],
+      "answer": [0, 1, 2],
+      "explication": "Photo, mobilité et poste visé sont attendus ; « Français natif » est implicite et doit au contraire être supprimé."
+    },
+    {
+      "id": "mde-006", "niveau": 1, "type": "qcm",
+      "q": "Où doivent apparaître les centres d'intérêt dans un CV ?",
+      "choices": ["Avant les compétences, pour humaniser le profil", "Après les compétences", "En tout début de CV, sous le titre", "Nulle part : ils sont à proscrire sur un CV technique"],
+      "answer": 1,
+      "explication": "La hiérarchie du CV place d'abord les compétences ; les centres d'intérêt viennent ensuite."
+    },
+    {
+      "id": "mde-007", "niveau": 1, "type": "libre",
+      "q": "Comment appelle-t-on les qualités humaines d'un candidat, par opposition aux compétences techniques (hard skills) ?",
+      "accept": ["soft skills", "softskills", "les soft skills", "soft skill"],
+      "explication": "Les soft skills (qualités humaines) doivent être présentées séparément des hard skills (compétences techniques)."
+    },
+    {
+      "id": "mde-008", "niveau": 1, "type": "qcm",
+      "q": "Selon la tendance actuelle, où est-il préférable de placer les coordonnées de contact sur un CV ?",
+      "choices": ["En fin de document", "Obligatoirement en haut à gauche", "Dans un document séparé", "Uniquement dans la lettre de motivation"],
+      "answer": 0,
+      "explication": "Elles peuvent rester en évidence au début, mais la tendance actuelle privilégie la fin du document."
+    },
+    {
+      "id": "mde-009", "niveau": 1, "type": "qcm",
+      "q": "Quelle règle de mise en forme s'applique au titre du CV (poste visé) ?",
+      "choices": ["Il doit tenir sur une seule ligne, sans coupure", "Il doit s'étaler sur deux lignes pour être visible", "Il doit lister au moins trois intitulés de poste", "Il est facultatif si la photo est présente"],
+      "answer": 0,
+      "explication": "Un titre clair, sur une seule ligne et sans coupure, indique immédiatement le poste visé."
+    },
+    {
+      "id": "mde-010", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi une IA peut-elle donner des informations dépassées ?",
+      "choices": ["Ses connaissances s'arrêtent à sa date d'entraînement", "Elle supprime volontairement les données récentes", "Elle ne consulte que des sources en anglais", "Sa mémoire s'efface après chaque réponse"],
+      "answer": 0,
+      "explication": "Un modèle est limité à sa date d'entraînement : tout ce qui est postérieur lui est inconnu."
+    },
+    {
+      "id": "mde-011", "niveau": 2, "type": "qcm",
+      "q": "Que signifie la maxime « l'IA est un accélérateur, pas un oracle » ?",
+      "choices": ["Elle fait gagner du temps, mais ses réponses doivent toujours être vérifiées manuellement", "Elle répond plus vite qu'un moteur de recherche", "Elle prédit les pannes avant qu'elles n'arrivent", "Elle peut remplacer la documentation officielle"],
+      "answer": 0,
+      "explication": "La vérification est obligatoire : on ne prend jamais pour acquis ce que dit l'IA, on contrôle avant d'appliquer."
+    },
+    {
+      "id": "mde-012", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi préciser le type de jeux vidéo pratiqués (stratégie, RPG, compétitif...) dans les centres d'intérêt d'un CV ?",
+      "choices": ["Pour valoriser des transferts de compétences auprès du recruteur", "Pour montrer que l'on maîtrise l'informatique", "Pour remplir la page si le CV est trop court", "Parce que les recruteurs du secteur IT sont souvent joueurs"],
+      "answer": 0,
+      "explication": "Un centre d'intérêt précis permet de valoriser des compétences transférables (stratégie, esprit d'équipe, compétition)."
+    },
+    {
+      "id": "mde-013", "niveau": 2, "type": "qcm",
+      "q": "En cas de stress lors d'un oral, quel geste simple est conseillé ?",
+      "choices": ["Tenir un stylo pour occuper ses mains", "Croiser les bras pour se contenir", "Garder les mains dans les poches", "Lire ses notes en continu"],
+      "answer": 0,
+      "explication": "Tenir un stylo occupe les mains et évite d'avoir les bras ballants, ce qui aide à canaliser le stress."
+    },
+    {
+      "id": "mde-014", "niveau": 2, "type": "qcm",
+      "q": "Sur un CV, quelle est la différence entre un logiciel et une compétence ?",
+      "choices": ["Le logiciel est un outil, la compétence est un savoir-faire", "Ce sont deux synonymes interchangeables", "Le logiciel est un savoir-faire, la compétence est un outil", "La compétence ne concerne que les qualités humaines"],
+      "answer": 0,
+      "explication": "Il ne faut pas confondre les outils (logiciels) et les savoir-faire (compétences) ; les logiciels peuvent être listés à part si besoin."
+    },
+    {
+      "id": "mde-015", "niveau": 2, "type": "qcm",
+      "q": "Lors des premiers échanges d'un entretien d'embauche, qu'est-ce qui est souvent mis en avant en priorité ?",
+      "choices": ["La personnalité du candidat", "Les certifications techniques", "Le salaire souhaité", "Les résultats aux tests techniques"],
+      "answer": 0,
+      "explication": "La personnalité passe souvent avant les compétences techniques dans les premiers échanges : la posture compte autant que le savoir."
+    },
+    {
+      "id": "mde-016", "niveau": 2, "type": "qcm",
+      "q": "Quelles qualités doit avoir la phrase d'accroche d'un CV ou d'une présentation ?",
+      "choices": ["Courte et percutante, pour servir de base à la discussion en entretien", "Longue et détaillée, pour tout dire d'emblée", "Humoristique, pour détendre le recruteur", "Identique pour toutes les candidatures"],
+      "answer": 0,
+      "explication": "Une accroche courte et percutante donne un point de départ que le candidat pourra développer pendant l'entretien."
+    },
+    {
+      "id": "mde-017", "niveau": 2, "type": "multi",
+      "q": "Que faut-il éviter ou supprimer sur un CV ? (plusieurs réponses)",
+      "choices": ["Les qualités « bateau » trop communes", "La mention « Français natif » dans les langues", "Les compétences suivies de la mention « Base »", "Les dates de stage explicites", "Le poste visé en titre"],
+      "answer": [0, 1, 2],
+      "explication": "Les qualités passe-partout ne différencient pas, le français natif est implicite et la mention « Base » dévalue le profil ; les dates de stage doivent au contraire être mentionnées."
+    },
+    {
+      "id": "mde-018", "niveau": 3, "type": "ordre",
+      "q": "Remettez dans l'ordre les cinq éléments du framework CRAFT tels qu'ils s'enchaînent dans un prompt.",
+      "steps": [
+        "Contexte : présenter qui l'on est et sa situation",
+        "Rôle : définir la posture que l'IA doit adopter",
+        "Action : préciser la tâche demandée",
+        "Format : indiquer la structure attendue de la réponse",
+        "Tonalité : cibler le public auquel s'adresse la réponse"
+      ],
+      "explication": "L'ordre des lettres C-R-A-F-T donne la trame naturelle du prompt, du cadrage général vers le rendu attendu."
+    },
+    {
+      "id": "mde-019", "niveau": 3, "type": "qcm",
+      "q": "Dans le prompt « Explique-moi le protocole ARP sous forme d'un schéma étape par étape », à quel élément CRAFT correspond « sous forme d'un schéma étape par étape » ?",
+      "choices": ["Le Format", "L'Action", "La Tonalité", "Le Contexte"],
+      "answer": 0,
+      "explication": "Le Format décrit la structure de la réponse (schéma, liste, tableau) ; l'Action est ici « explique-moi ARP »."
+    },
+    {
+      "id": "mde-020", "niveau": 3, "type": "libre",
+      "q": "Dans un prompt CRAFT, quel élément correspond à la précision « en langage simple adapté à un débutant » ? (la lettre ou son nom)",
+      "accept": ["T", "tonalité", "tonalite", "la tonalité", "la tonalite"],
+      "explication": "La Tonalité (T) indique à qui s'adresse la réponse : débutant, expert ou public général."
+    },
+    {
+      "id": "mde-021", "niveau": 3, "type": "qcm",
+      "q": "Comment formuler une compétence sur un CV selon les recommandations MDE ?",
+      "choices": ["Avec un verbe d'action, par exemple « Administrer un parc de serveurs Windows »", "Par un simple mot-clé, par exemple « Windows »", "Avec le nom du logiciel suivi de la mention « Base »", "Par une phrase de motivation à la première personne"],
+      "answer": 0,
+      "explication": "Une compétence s'exprime avec un verbe d'action ; les logiciels se listent à part si besoin."
+    },
+    {
+      "id": "mde-022", "niveau": 3, "type": "qcm",
+      "q": "Comment rédiger la section « À propos » d'un CV ?",
+      "choices": ["En vraies phrases construites, plutôt qu'en alignant des mots-clés", "En liste de mots-clés pour les logiciels de tri automatique", "En recopiant mot pour mot l'annonce de l'offre d'emploi", "En citant uniquement ses diplômes et ses dates"],
+      "answer": 0,
+      "explication": "L'« À propos » doit se lire comme une vraie présentation rédigée, pas comme une suite de mots-clés."
+    },
+    {
+      "id": "mde-023", "niveau": 3, "type": "qcm",
+      "q": "Un stagiaire écrit le prompt : « Tu es un formateur réseau expérimenté. Explique-moi le protocole DHCP sous forme de tableau. » Quel élément CRAFT manque parmi les suivants ?",
+      "choices": ["Le Contexte (qui est le demandeur, sa situation)", "Le Rôle", "L'Action", "Le Format"],
+      "answer": 0,
+      "explication": "Rôle (formateur), Action (expliquer DHCP) et Format (tableau) sont présents ; il manque le Contexte — et la Tonalité."
+    },
+    {
+      "id": "mde-024", "niveau": 4, "type": "scenario",
+      "context": "Vous demandez à une IA : « Quelle commande active SSH sur ce switch ? »\nElle répond avec assurance : « Utilisez switch# enable ssh-server force »\nSur l'équipement, cette commande n'existe pas.",
+      "q": "Quel risque lié à l'usage de l'IA cette situation illustre-t-elle ?",
+      "choices": ["Une hallucination : une information fausse présentée avec assurance", "Un problème de confidentialité des données", "Une connaissance obsolète : la commande a été retirée du firmware", "Une erreur de formulation du prompt par l'utilisateur"],
+      "answer": 0,
+      "explication": "L'IA a inventé une commande plausible et l'a affirmée avec aplomb : toute réponse doit être vérifiée avant application."
+    },
+    {
+      "id": "mde-025", "niveau": 4, "type": "scenario",
+      "context": "Pour gagner du temps, un collègue colle dans un chatbot IA public le fichier de configuration complet d'un client,\nqui contient des identifiants et des mots de passe.",
+      "q": "Quelle règle d'usage de l'IA ce collègue enfreint-il ?",
+      "choices": ["La confidentialité : ne jamais partager de données sensibles avec une IA", "La vérification obligatoire des réponses de l'IA", "La structuration CRAFT du prompt", "La limite liée à la date d'entraînement du modèle"],
+      "answer": 0,
+      "explication": "Mots de passe et données client ne doivent jamais être transmis à une IA : ces données quittent le contrôle de l'entreprise."
+    },
+    {
+      "id": "mde-026", "niveau": 4, "type": "scenario",
+      "context": "En entretien collectif, un candidat ne regarde que le responsable technique et ignore la chargée RH.\nIl cite ensuite ses trois projets d'un mot chacun, sans en expliquer aucun.",
+      "q": "Quels conseils de posture et de contenu ce candidat n'a-t-il pas respectés ?",
+      "choices": ["S'adresser à l'ensemble des interlocuteurs et expliquer concrètement ses projets", "Tenir un stylo et parler plus fort", "Ne s'adresser qu'au décideur et rester le plus synthétique possible", "Éviter le contact visuel et remettre un dossier écrit détaillé"],
+      "answer": 0,
+      "explication": "Il faut parler à tous les interlocuteurs (pas seulement au « technique ») et développer concrètement ses projets plutôt que les citer."
+    },
+    {
+      "id": "mde-027", "niveau": 4, "type": "scenario",
+      "context": "Extrait d'un CV :\nÀ propos : rigoureux, motivé, sérieux, autonome\nLangues : Français natif, Anglais B1\nCompétences : Linux (Base), Réseau (Base), Windows, VMware, GLPI, Zabbix, Wireshark, Cisco...",
+      "q": "Quelle série de corrections est conforme aux recommandations MDE ?",
+      "choices": ["Rédiger l'« À propos » en vraies phrases, supprimer « Français natif » et les mentions « Base », réduire la liste de compétences", "Ajouter encore des compétences pour montrer la polyvalence du profil", "Conserver les mentions « Base » par honnêteté et étoffer la liste de qualités", "Remplacer l'« À propos » par une liste de mots-clés optimisée pour les robots"],
+      "answer": 0,
+      "explication": "L'« À propos » se rédige en phrases, « Français natif » est implicite, la mention « Base » dévalue le profil et il faut ne garder que les compétences essentielles."
+    }
+  ]
+}

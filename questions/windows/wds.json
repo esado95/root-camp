@@ -1,0 +1,278 @@
+{
+  "module": "Déploiement WDS",
+  "source": "Deploiement-WDS.md",
+  "questions": [
+    {
+      "id": "wds-001", "niveau": 1, "type": "qcm",
+      "q": "Que désigne le sigle WDS dans un environnement Windows Server ?",
+      "choices": ["Windows Distribution System", "Windows Deployment Services", "Windows Desktop Services", "Windows Domain Services"],
+      "answer": 1,
+      "explication": "WDS (Windows Deployment Services) est le service de déploiement automatisé d'images de systèmes d'exploitation, souvent utilisé conjointement avec MDT."
+    },
+    {
+      "id": "wds-002", "niveau": 2, "type": "multi",
+      "q": "Quels sont les avantages d'un déploiement avec WDS ? (plusieurs réponses)",
+      "choices": ["Automatisation de l'installation et de la configuration des postes", "Standardisation des configurations sur tout le parc", "Réduction du trafic réseau pendant le déploiement", "Envoi d'une image unique à plusieurs postes simultanément grâce au multicast", "Élimination de tout risque d'erreur de configuration"],
+      "answer": [0, 1, 3],
+      "explication": "WDS automatise, standardise et permet le multicast ; en revanche le trafic réseau élevé est un inconvénient, et une erreur dans le master se répercute sur tous les postes."
+    },
+    {
+      "id": "wds-003", "niveau": 2, "type": "qcm",
+      "q": "Un master WDS contient une erreur de configuration passée inaperçue. Que se passe-t-il lors du déploiement ?",
+      "choices": ["WDS détecte l'erreur et bloque le déploiement", "L'erreur se répercute sur tous les postes déployés", "Seul le premier poste déployé est affecté", "Sysprep corrige automatiquement l'image"],
+      "answer": 1,
+      "explication": "C'est le principal risque humain du déploiement d'images : toute erreur présente dans le master est reproduite à l'identique sur chaque poste."
+    },
+    {
+      "id": "wds-004", "niveau": 1, "type": "assoc",
+      "q": "Associez chaque solution de déploiement à sa caractéristique.",
+      "pairs": [
+        ["FOG Project", "Solution open source de déploiement très utilisée"],
+        ["Norton Ghost", "Logiciel historique, quasiment plus utilisé aujourd'hui"],
+        ["Clonezilla", "Utilitaire gratuit de clonage et de déploiement"],
+        ["Autopilot / Intune", "Solutions cloud Microsoft qui remplacent progressivement WDS"]
+      ],
+      "explication": "Microsoft délaisse WDS au profit de ses solutions cloud (Autopilot, Intune), tandis que FOG et Clonezilla restent des alternatives libres populaires."
+    },
+    {
+      "id": "wds-005", "niveau": 1, "type": "libre",
+      "q": "Quel protocole de transfert est utilisé par le boot PXE classique pour envoyer l'image de démarrage (boot.wim) du serveur vers le client ?",
+      "accept": ["TFTP", "Trivial File Transfer Protocol"],
+      "explication": "Le PXE classique repose sur TFTP, un protocole de transfert simple mais lent et non sécurisé, pour charger boot.wim sur le client."
+    },
+    {
+      "id": "wds-006", "niveau": 2, "type": "qcm",
+      "q": "Quels services un client PXE doit-il impérativement trouver sur le réseau pour démarrer et recevoir une image ?",
+      "choices": ["Un serveur DNS et un serveur web", "Un serveur DHCP avec une étendue active et un serveur WDS", "Un contrôleur de domaine et un serveur de fichiers", "Un serveur NTP et un serveur RADIUS"],
+      "answer": 1,
+      "explication": "Le client PXE n'a pas encore d'adresse IP : il lui faut un DHCP pour en obtenir une, puis le serveur WDS pour recevoir l'image de démarrage."
+    },
+    {
+      "id": "wds-007", "niveau": 1, "type": "libre",
+      "q": "Quel est le numéro de l'option DHCP à configurer avec la valeur PXEClient lorsque DHCP et WDS sont installés sur le même serveur ?",
+      "accept": ["60", "060", "option 60", "option 060"],
+      "explication": "L'option DHCP 60 (valeur PXEClient) signale aux clients PXE que le serveur DHCP héberge également un serveur de démarrage réseau."
+    },
+    {
+      "id": "wds-008", "niveau": 1, "type": "libre",
+      "q": "Comment appelle-t-on la procédure de création d'un support de déploiement contenant une copie complète d'un système d'exploitation, de ses applications et de ses configurations ?",
+      "accept": ["masterisation", "la masterisation", "masterization"],
+      "explication": "La masterisation consiste à préparer une image modèle (le master) qui sera ensuite déployée à l'identique sur les autres postes."
+    },
+    {
+      "id": "wds-009", "niveau": 2, "type": "qcm",
+      "q": "À quoi sert le mode « Audit système » de Windows dans un contexte de déploiement ?",
+      "choices": ["Vérifier l'intégrité des fichiers système", "Préparer une image à être masterisée pour obtenir des images de référence plus propres", "Analyser les journaux d'événements du poste", "Contrôler la conformité des licences installées"],
+      "answer": 1,
+      "explication": "Le mode Audit permet de personnaliser le système sans créer de profil utilisateur définitif, ce qui donne des images de référence plus propres avant masterisation."
+    },
+    {
+      "id": "wds-010", "niveau": 1, "type": "qcm",
+      "q": "Qu'est-ce que Windows PE (Preinstallation Environment) ?",
+      "choices": ["Une édition allégée de Windows destinée aux postes anciens", "Un système d'exploitation minimaliste chargé uniquement en RAM, utilisé pendant l'installation de l'image", "Un outil de partitionnement de disque", "Le programme d'amorçage du BIOS"],
+      "answer": 1,
+      "explication": "WinPE est un OS minimaliste chargé en RAM qui permet au client et au serveur de communiquer pour installer l'image déployée."
+    },
+    {
+      "id": "wds-011", "niveau": 1, "type": "qcm",
+      "q": "Quelle est l'extension du format d'image utilisé par WDS pour les images de démarrage et d'installation ?",
+      "choices": [".iso", ".wim", ".vhd", ".img"],
+      "answer": 1,
+      "explication": "Le format WIM (Windows Imaging Format) est le format d'image natif des déploiements Windows, utilisé par boot.wim et install.wim."
+    },
+    {
+      "id": "wds-012", "niveau": 2, "type": "qcm",
+      "q": "Quelle est la différence entre les fichiers boot.wim et install.wim ?",
+      "choices": ["boot.wim contient l'OS complet, install.wim l'environnement de démarrage", "boot.wim démarre le client dans WinPE, install.wim contient l'OS personnalisé à déployer", "Ce sont deux copies identiques de la même image", "boot.wim sert aux machines BIOS, install.wim aux machines UEFI"],
+      "answer": 1,
+      "explication": "L'image de démarrage (boot.wim) sert à booter l'ordinateur via WinPE, tandis que l'image d'installation (install.wim) contient le système complet à déployer."
+    },
+    {
+      "id": "wds-013", "niveau": 1, "type": "qcm",
+      "q": "Que fait Sysprep lorsqu'il « dépersonnalise » un système avant la capture ?",
+      "choices": ["Il supprime le SID, l'adresse IP, le nom de machine, les journaux et sort la machine du domaine", "Il désinstalle toutes les applications installées", "Il chiffre le disque avec BitLocker", "Il réinitialise Windows aux paramètres d'usine"],
+      "answer": 0,
+      "explication": "Sysprep (C:\\Windows\\System32\\Sysprep\\sysprep.exe) retire tous les éléments propres à la machine afin que l'image puisse être déployée sur n'importe quel poste."
+    },
+    {
+      "id": "wds-014", "niveau": 1, "type": "qcm",
+      "q": "Qu'est-ce que le SID d'une machine Windows ?",
+      "choices": ["Un identifiant de sécurité unique propre à chaque système Windows", "Le numéro de licence de Windows", "L'identifiant du domaine Active Directory", "L'adresse MAC convertie en identifiant logiciel"],
+      "answer": 0,
+      "explication": "Le SID (Security Identifier) identifie de façon unique chaque système Windows ; il est régénéré au premier démarrage après un Sysprep."
+    },
+    {
+      "id": "wds-015", "niveau": 2, "type": "qcm",
+      "q": "Pourquoi faut-il impérativement cocher « Généraliser » dans Sysprep avant de capturer un master ?",
+      "choices": ["Pour compresser l'image et accélérer le transfert", "Pour supprimer le SID et éviter les conflits d'identifiants entre les postes déployés", "Pour activer automatiquement la licence Windows sur tous les postes", "Pour intégrer la machine au domaine dès le premier démarrage"],
+      "answer": 1,
+      "explication": "Sans généralisation, tous les postes déployés partageraient le même SID, ce qui provoquerait des conflits ; un nouveau SID est régénéré au démarrage suivant."
+    },
+    {
+      "id": "wds-016", "niveau": 1, "type": "qcm",
+      "q": "Que désigne la phase OOBE (Out of Box Experience) de Windows ?",
+      "choices": ["La phase de configuration finale au premier démarrage (compte, langue, Wi-Fi, confidentialité)", "La phase de copie des fichiers d'installation sur le disque", "Le menu de sélection d'image du boot PXE", "Le mode sans échec de Windows"],
+      "answer": 0,
+      "explication": "L'OOBE est l'assistant de configuration finale de Windows ; Sysprep permet justement de relancer cet assistant au prochain démarrage de la machine déployée."
+    },
+    {
+      "id": "wds-017", "niveau": 3, "type": "qcm",
+      "q": "Quel prérequis de stockage est recommandé pour la VM serveur WDS ?",
+      "choices": ["Un second disque dédié d'au moins 80 Go pour stocker les images systèmes", "Une partition de 20 Go sur le disque système", "Un partage réseau obligatoire sur un NAS", "Un disque SSD NVMe impérativement"],
+      "answer": 0,
+      "explication": "On ajoute un deuxième disque (minimum 80 Go) dédié aux images, séparé du disque système, et on place l'emplacement des images dessus lors de la configuration du rôle."
+    },
+    {
+      "id": "wds-018", "niveau": 2, "type": "qcm",
+      "q": "Lorsque WDS et DHCP sont installés sur le même serveur, pourquoi cocher « Ne pas écouter sur le port 67 » ?",
+      "choices": ["Ce port est réservé au transfert TFTP", "Pour éviter un conflit avec le service DHCP qui utilise déjà ce port", "Pour bloquer les clients PXE non autorisés", "Parce que WDS n'utilise que des ports supérieurs à 1024"],
+      "answer": 1,
+      "explication": "Le port UDP 67 est celui du DHCP : WDS doit le lui laisser et se signaler aux clients PXE via l'option DHCP 60 configurée avec la valeur PXEClient."
+    },
+    {
+      "id": "wds-019", "niveau": 2, "type": "qcm",
+      "q": "Lors de l'installation du rôle WDS, à quoi sert le service « Serveur de transport » ?",
+      "choices": ["À stocker les images d'installation sur le disque dédié", "À assurer la multidiffusion (multicast) des images", "À fournir les adresses IP aux clients PXE", "À personnaliser les images avant le déploiement"],
+      "answer": 1,
+      "explication": "Le Serveur de transport gère la multidiffusion, tandis que le Serveur de déploiement permet de personnaliser et gérer les images ; les deux services sont cochés à l'installation."
+    },
+    {
+      "id": "wds-020", "niveau": 3, "type": "qcm",
+      "q": "Dans les paramètres PXE de l'assistant de configuration WDS, quelle option permet de servir n'importe quelle machine qui démarre en réseau ?",
+      "choices": ["Répondre à tous les ordinateurs clients", "Répondre uniquement aux ordinateurs clients connus", "Ne pas répondre aux ordinateurs clients", "Répondre uniquement aux clients approuvés par un administrateur"],
+      "answer": 0,
+      "explication": "« Répondre à tous les ordinateurs clients » autorise toute machine (connue ou inconnue) à démarrer en PXE sur le serveur, ce qui convient à un environnement de labo."
+    },
+    {
+      "id": "wds-021", "niveau": 3, "type": "ordre",
+      "q": "Remettez dans l'ordre les 4 grandes phases d'un déploiement WDS complet.",
+      "steps": [
+        "Préparer le serveur WDS (disque dédié, rôle WDS, configuration PXE et DHCP)",
+        "Ajouter l'image de démarrage boot.wim et créer l'outil de capture",
+        "Créer et personnaliser la VM master, puis la capturer après Sysprep",
+        "Déployer l'image capturée sur les nouveaux clients via boot PXE"
+      ],
+      "explication": "La procédure suit toujours cet enchaînement : préparation du serveur, ajout des images de base, création/capture du master, puis déploiement sur les clients."
+    },
+    {
+      "id": "wds-022", "niveau": 3, "type": "qcm",
+      "q": "Lors de l'ajout d'une image de démarrage dans la console WDS, quel fichier importe-t-on ?",
+      "choices": ["Le fichier boot.wim du dossier sources d'une ISO Windows 10 montée", "Le fichier setup.exe de l'ISO Windows", "Le fichier winload.exe du serveur", "L'image ISO complète, directement"],
+      "answer": 0,
+      "explication": "On monte une ISO Windows 10 (éviter Windows 11 pour cette étape) et on importe le fichier D:\\sources\\boot.wim depuis la console WDS."
+    },
+    {
+      "id": "wds-023", "niveau": 3, "type": "qcm",
+      "q": "Comment crée-t-on l'outil de capture dans la console WDS ?",
+      "choices": ["Clic droit sur l'image de démarrage, puis « Créer une image de capture »", "Clic droit sur le groupe d'images d'installation, puis « Nouvelle capture »", "En copiant manuellement un fichier capture.wim depuis l'ISO", "En exécutant Sysprep sur le serveur WDS"],
+      "answer": 0,
+      "explication": "L'image de capture se génère à partir d'une image de démarrage existante ; on coche ensuite la case de fin d'assistant pour l'ajouter directement aux images de démarrage."
+    },
+    {
+      "id": "wds-024", "niveau": 3, "type": "qcm",
+      "q": "Quelles options choisir dans Sysprep pour préparer correctement un master avant capture ?",
+      "choices": ["Entrer en mode OOBE, cocher Généraliser, Arrêter le système", "Entrer en mode audit, cocher Généraliser, Redémarrer", "Entrer en mode OOBE, sans Généraliser, Redémarrer", "Entrer en mode audit, sans Généraliser, Arrêter le système"],
+      "answer": 0,
+      "explication": "Le master doit repartir en OOBE au prochain démarrage, être généralisé (suppression du SID) et s'arrêter pour être capturé sans redémarrer."
+    },
+    {
+      "id": "wds-025", "niveau": 3, "type": "terminal",
+      "prompt": "PS C:\\Users\\admin>",
+      "q": "Sysprep échoue sur la VM master à cause du package d'application Microsoft.ZuneMusic. Supprimez ce package en PowerShell afin de pouvoir relancer Sysprep.",
+      "accept": [
+        "Remove-AppxPackage -AllUsers -Package Microsoft.ZuneMusic",
+        "Remove-AppxPackage -Package Microsoft.ZuneMusic -AllUsers",
+        "Remove-AppxPackage -AllUsers Microsoft.ZuneMusic",
+        "Remove-AppxPackage Microsoft.ZuneMusic -AllUsers",
+        "Remove-AppxPackage -Package Microsoft.ZuneMusic",
+        "Remove-AppxPackage Microsoft.ZuneMusic",
+        "Get-AppxPackage Microsoft.ZuneMusic | Remove-AppxPackage"
+      ],
+      "explication": "En cas d'erreur Sysprep liée aux applications, on supprime le package fautif avec Remove-AppxPackage (option -AllUsers pour tous les profils), puis on relance Sysprep."
+    },
+    {
+      "id": "wds-026", "niveau": 2, "type": "qcm",
+      "q": "Après l'extinction de la VM master par Sysprep, pourquoi ne faut-il surtout pas la redémarrer normalement ?",
+      "choices": ["Le disque virtuel serait corrompu", "Windows régénérerait un SID et il faudrait refaire tout le Sysprep", "La licence Windows serait définitivement perdue", "La VM ne peut techniquement plus démarrer après un Sysprep"],
+      "answer": 1,
+      "explication": "Un démarrage normal recréerait un SID et repersonnaliserait le système ; c'est pourquoi on prend un snapshot de la VM éteinte juste après le Sysprep."
+    },
+    {
+      "id": "wds-027", "niveau": 3, "type": "ordre",
+      "q": "Remettez dans l'ordre les étapes de préparation et de capture d'une VM master.",
+      "steps": [
+        "Personnaliser la VM master (sessions, logiciels, fond d'écran)",
+        "Exécuter Sysprep en mode OOBE avec Généraliser et arrêt du système",
+        "Prendre un instantané (snapshot) de la VM une fois éteinte",
+        "Démarrer la VM en PXE sur l'image de capture (OutilCapture)",
+        "Sélectionner le volume à capturer puis téléverser l'image vers le serveur WDS"
+      ],
+      "explication": "Le snapshot se prend après le Sysprep et avant tout redémarrage ; la capture se fait ensuite en bootant en PXE sur l'outil de capture, jamais en démarrage normal."
+    },
+    {
+      "id": "wds-028", "niveau": 4, "type": "scenario",
+      "context": "Vous créez une nouvelle VM vierge pour recevoir l'image master.\nElle démarre en PXE mais n'obtient aucune adresse IP et n'atteint jamais le serveur WDS.\nLe serveur WDS (avec son DHCP) est connecté au commutateur virtuel « Interne », la nouvelle VM au commutateur « Externe ».",
+      "q": "Quelle est la cause la plus probable du problème ?",
+      "choices": ["La VM cliente n'est pas sur le même commutateur virtuel que le serveur WDS et son DHCP", "Le fichier install.wim du master est corrompu", "Le groupe d'images n'a pas encore été créé sur le serveur", "Le service Serveur de transport n'est pas installé"],
+      "answer": 0,
+      "explication": "Les diffusions DHCP/PXE ne traversent pas des réseaux virtuels distincts : le client doit être connecté au même commutateur virtuel que le serveur WDS."
+    },
+    {
+      "id": "wds-029", "niveau": 4, "type": "scenario",
+      "context": "Pendant la capture du master, le client démarre bien en PXE puis échoue avec l'erreur 0xc0000001 au chargement de l'image.",
+      "q": "Quelle correction faut-il appliquer sur le serveur WDS ?",
+      "choices": ["Dans les propriétés du serveur, onglet TFTP : fixer la taille de bloc maximale à 1024 et décocher « Activer l'extension de fenêtre variable »", "Réinstaller complètement le rôle WDS", "Augmenter la mémoire vive du client à 8 Go", "Recréer l'image de capture à partir d'une ISO Windows 11"],
+      "answer": 0,
+      "explication": "L'erreur 0xc0000001 lors de la capture se corrige en réduisant la taille de bloc TFTP à 1024 et en désactivant l'extension de fenêtre variable dans les propriétés du serveur WDS."
+    },
+    {
+      "id": "wds-030", "niveau": 4, "type": "scenario",
+      "context": "Un poste cible démarre correctement en PXE et charge WinPE.\nUne fois dans l'assistant, le clavier ne répond pas et le serveur WDS est introuvable.",
+      "q": "Quelle est la cause la plus probable et sa correction ?",
+      "choices": ["Des pilotes manquent dans l'image de démarrage : les ajouter via le dossier Pilotes de la console WDS puis les lier à l'image", "Le câble réseau du serveur est débranché", "L'image install.wim est corrompue : il faut recapturer le master", "Le pare-feu du client bloque le port 69"],
+      "answer": 0,
+      "explication": "Un clavier ou un réseau muet dans WinPE trahit des pilotes absents : on les ajoute dans la console WDS (clic droit sur Pilotes) puis on les lie à l'image de démarrage."
+    },
+    {
+      "id": "wds-031", "niveau": 4, "type": "scenario",
+      "context": "Au démarrage sur l'image de capture, le client affiche une erreur liée au fichier Winload.exe.",
+      "q": "Quelle procédure de dépannage appliquer ?",
+      "choices": ["Monter l'image capture.wim avec Dism /Mount-Image, la démonter avec /commit, puis redémarrer le service WDS", "Formater le disque du client et relancer le boot PXE", "Désactiver le Secure Boot sur le serveur WDS", "Refaire entièrement le Sysprep de la VM master"],
+      "answer": 0,
+      "explication": "Le montage puis le démontage avec validation (Dism /Mount-Image puis /commit) répare l'image de capture ; il faut ensuite redémarrer le service WDS."
+    },
+    {
+      "id": "wds-032", "niveau": 3, "type": "qcm",
+      "q": "Où active-t-on le fichier de réponses WdsClientUnattend.xml qui automatise la phase WinPE ?",
+      "choices": ["Dans les propriétés du serveur WDS, onglet Client, « Activer l'installation sans assistance »", "Dans les propriétés de chaque image d'installation, onglet Général", "Dans le fichier boot.ini du client", "Dans la console DHCP, via l'option 67"],
+      "answer": 0,
+      "explication": "Le fichier WinPE se configure au niveau global du serveur (onglet Client), alors que le fichier OOBE (ImageUnattend.xml) s'associe individuellement à chaque image d'installation."
+    },
+    {
+      "id": "wds-033", "niveau": 3, "type": "assoc",
+      "q": "Associez chaque élément de l'automatisation WDS à son rôle.",
+      "pairs": [
+        ["WdsClientUnattend.xml", "Automatise la phase WinPE (passe 1 windowsPE) : langue, partitionnement, connexion au WDS"],
+        ["ImageUnattend.xml", "Automatise la phase OOBE (passe 7 oobeSystem) : compte local, EULA, télémétrie"],
+        ["Fichier .clg", "Catalogue généré par WSIM à partir du fichier install.wim"],
+        ["WSIM", "Outil du Windows ADK servant à créer les fichiers de réponses"]
+      ],
+      "explication": "L'automatisation complète repose sur deux fichiers de réponses XML créés dans WSIM (inclus dans les Outils de déploiement de l'ADK), chacun agissant sur une passe différente de l'installation."
+    },
+    {
+      "id": "wds-034", "niveau": 4, "type": "scenario",
+      "context": "Dans WSIM, vous ouvrez le fichier install.wim copié depuis l'ISO afin de générer le catalogue.\nLa création du catalogue (.clg) échoue systématiquement.",
+      "q": "Quelle est la cause la plus probable de l'échec ?",
+      "choices": ["Le fichier install.wim est resté en lecture seule : il faut décocher cet attribut dans ses propriétés Windows", "WSIM ne prend pas en charge le format WIM", "Il fallait ouvrir boot.wim à la place d'install.wim", "Le catalogue ne peut être créé que sur un client, pas sur le serveur"],
+      "answer": 0,
+      "explication": "Règle d'or WSIM : copier install.wim en local et décocher la case « Lecture seule » avant ouverture, sinon la génération du catalogue .clg échoue."
+    },
+    {
+      "id": "wds-035", "niveau": 2, "type": "multi",
+      "q": "Quels avantages iPXE apporte-t-il par rapport au PXE classique ? (plusieurs réponses)",
+      "choices": ["Boot via HTTP/HTTPS, plus rapide et plus sécurisé que TFTP", "Support de scripts et de menus de démarrage personnalisés", "Suppression de tout besoin de firmware sur la carte réseau", "Boot possible depuis une baie iSCSI ou un réseau sans fil", "Il rend le serveur DHCP inutile"],
+      "answer": [0, 1, 3],
+      "explication": "iPXE ouvre le boot réseau aux protocoles modernes (HTTP/HTTPS, iSCSI, Wi-Fi) et aux scripts, mais nécessite au contraire un firmware iPXE installé sur la carte réseau."
+    }
+  ]
+}
