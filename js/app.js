@@ -829,6 +829,21 @@ function renderLibre(q) {
   }
 }
 
+/* Caret IOS : ligne d'espaces + « ^ » aligné sous le premier mot de la commande
+   tapée qui diverge de la commande attendue (comme un vrai routeur Cisco). */
+function ligneCaret(promptTxt, val, reference) {
+  const tokens = [];
+  const re = /\S+/g;
+  let m;
+  while ((m = re.exec(val)) !== null) tokens.push({ t: m[0], i: m.index });
+  if (!tokens.length) return null;
+  const ref = (reference || "").trim().split(/\s+/);
+  let idx = 0;
+  while (idx < tokens.length && ref[idx] && tokens[idx].t.toLowerCase() === ref[idx].toLowerCase()) idx++;
+  if (idx >= tokens.length) idx = tokens.length - 1;
+  return " ".repeat(promptTxt.length + 1 + tokens[idx].i) + "^";
+}
+
 function renderTerminal(q) {
   const body = $("#term-body");
   const promptTxt = q.prompt || "$";
@@ -866,7 +881,12 @@ function renderTerminal(q) {
       if (q.output) q.output.split("\n").forEach(l => addLine(l, "out"));
       addLine("# commande acceptée ✓", "ok");
     } else {
-      addLine(q.error || "'" + val.trim() + "' : commande incorrecte ou incomplète", "ko");
+      const msgErr = q.error || "'" + val.trim() + "' : commande incorrecte ou incomplète";
+      if (msgErr.includes("'^'")) {
+        const caret = ligneCaret(q.prompt || "$", val, q.accept[0]);
+        if (caret) addLine(caret, "ko");
+      }
+      addLine(msgErr, "ko");
       addLine("# commande attendue : " + q.accept[0], "cmt");
       if (q.output) q.output.split("\n").forEach(l => addLine(l, "out"));
     }
@@ -945,7 +965,12 @@ function renderTP(q) {
       } else {
         errors++;
         attempts++;
-        addLine(st.error || "% Commande incorrecte ou incomplète", "ko");
+        const msgErr = st.error || "% Commande incorrecte ou incomplète";
+        if (msgErr.includes("'^'")) {
+          const caret = ligneCaret(st.prompt || "$", val, st.accept[0]);
+          if (caret) addLine(caret, "ko");
+        }
+        addLine(msgErr, "ko");
         if (attempts === 1 && st.hint) addLine("# indice : " + st.hint, "cmt");
         if (attempts >= 3) addLine("# solution : " + st.accept[0], "cmt");
         askInput(st);
