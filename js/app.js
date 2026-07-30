@@ -460,6 +460,7 @@ function startSession(questions, opts) {
     exam: !!opts.exam, title: opts.title, color: opts.color || "var(--cyan)",
     back: opts.back || (() => nav("home")),
     wrong: [], review: !!opts.review,
+    reviewStart: state.review.length,
     deadline: opts.exam ? Date.now() + EXAM_MINUTES * 60000 : null, timer: null
   };
   renderQuestion();
@@ -821,7 +822,8 @@ function showResult(timeout) {
       <p class="note">
         ${timeout ? "Temps écoulé ! " : ""}${answered < total ? `${total - answered} question(s) sans réponse. ` : ""}
         +${gained} XP${session.exam ? " (bonus examen ×2 inclus)" : ""} ·
-        ${good ? "continuez comme ça" : "les erreurs sont parties en révision"}
+        ${session.review ? `${Math.max(0, session.reviewStart - state.review.length)} question(s) sortie(s) de la pile — les autres attendent une 2e bonne réponse d'affilée` :
+          (good ? "continuez comme ça" : "les erreurs sont parties en révision")}
       </p>
       <div class="actions">
         <button class="btn" id="res-back"><i class="ti ti-arrow-left"></i> Retour</button>
@@ -891,11 +893,15 @@ function showReview() {
     <h1>À revoir</h1>
     <p class="comment"># ${qs.length} question(s) en attente — 2 bonnes réponses d'affilée pour en sortir</p>
     <div class="level-list">
-      ${qs.slice(0, 8).map(q => `
+      ${qs.slice(0, 8).map(q => {
+        const s = (state.q[q.id] && state.q[q.id].s) || 0;
+        return `
         <div class="level-row" style="cursor:default">
           <div class="lvl" style="background:${LEVEL_COLORS[q.niveau]}22; color:${LEVEL_COLORS[q.niveau]}">${q.niveau}</div>
           <div><h3 style="font-size:13px">${esc(q.q)}</h3><p>${esc(q.module)}</p></div>
-        </div>`).join("")}
+          <div class="right" style="color:${s >= 1 ? "var(--green)" : "var(--dim)"}">${s >= 1 ? "✓ 1/2" : "0/2"}</div>
+        </div>`;
+      }).join("")}
       ${qs.length > 8 ? `<p class="comment">… et ${qs.length - 8} autre(s)</p>` : ""}
     </div>
     <button class="btn accent" id="start-rev" style="width:100%; text-align:center; padding:12px; margin-top:14px">
