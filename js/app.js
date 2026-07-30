@@ -308,9 +308,11 @@ function showHome() {
   screen.innerHTML = `
     <h1 style="margin-bottom:14px">Root Camp</h1>
     <div class="grid">${cards}</div>
-    <div class="wide" id="go-exam">
-      <div class="chip"><i class="ti ti-clock-bolt"></i></div>
-      <div><h3>Mode examen</h3><p>${EXAM_SIZE} questions aléatoires · ${EXAM_MINUTES} min · XP doublés</p></div>
+    <div class="wide" id="go-exam" style="${examUnlocked().ok ? "" : "opacity:.65"}">
+      <div class="chip"><i class="ti ${examUnlocked().ok ? "ti-clock-bolt" : "ti-lock"}"></i></div>
+      <div><h3>Mode examen</h3><p>${examUnlocked().ok
+        ? `${EXAM_SIZE} questions aléatoires · ${EXAM_MINUTES} min · XP doublés`
+        : "verrouillé — validez le niveau 1 de chaque thème"}</p></div>
       <i class="ti ti-chevron-right arrow"></i>
     </div>
     <div class="wide" id="go-rules" style="background:var(--panel); border-color:var(--line2)">
@@ -376,6 +378,7 @@ function showRules() {
 
     <p class="section-title"># examen blanc</p>
     <div class="feedback" style="margin-top:0">
+      L'examen se débloque une fois le niveau 1 validé dans chaque thème.
       ${EXAM_SIZE} questions tirées de tous les thèmes (hors Atelier TP), ${EXAM_MINUTES} minutes chrono, aucune correction pendant l'épreuve.
       Les bonnes réponses rapportent <b style="color:var(--cyan)">le double d'XP</b>.
       À la fin : le corrigé de vos erreurs et des questions non traitées. Seuil de réussite : 60 %.
@@ -718,6 +721,25 @@ function renderTerminal(q) {
 function renderTP(q) {
   const body = $("#term-body");
   let idx = 0, errors = 0, attempts = 0;
+  const histoire = [];
+  let histIdx = -1;
+  const brancheHistorique = input => {
+    input.addEventListener("keydown", e => {
+      if (e.key === "ArrowUp") {
+        if (!histoire.length) return;
+        e.preventDefault();
+        histIdx = histIdx < 0 ? histoire.length - 1 : Math.max(0, histIdx - 1);
+        input.value = histoire[histIdx];
+        requestAnimationFrame(() => input.setSelectionRange(input.value.length, input.value.length));
+      } else if (e.key === "ArrowDown") {
+        if (histIdx < 0) return;
+        e.preventDefault();
+        histIdx++;
+        if (histIdx >= histoire.length) { histIdx = -1; input.value = ""; }
+        else input.value = histoire[histIdx];
+      }
+    });
+  };
   const addLine = (txt, cls) => {
     const d = document.createElement("div");
     d.className = "line" + (cls ? " " + cls : "");
@@ -737,10 +759,13 @@ function renderTP(q) {
     body.appendChild(line);
     input.focus();
     input.scrollIntoView({ block: "nearest" });
+    brancheHistorique(input);
     input.addEventListener("keydown", e => {
       if (e.key !== "Enter") return;
       const val = input.value;
       if (!normalize(val)) return;
+      histoire.push(val);
+      histIdx = -1;
       line.remove();
       addLine((st.prompt || "$") + " " + val);
       if (st.accept.map(normalize).includes(normalize(val))) {
@@ -878,6 +903,17 @@ function showResult(timeout) {
 
 /* ============ Examen blanc ============ */
 
+const EXAM_TYPES = ["qcm", "multi", "libre", "scenario", "terminal"];
+
+/* L'examen blanc se mérite : niveau 1 validé (donc niveau 2 débloqué)
+   dans chaque thème présent dans le tirage. */
+function examUnlocked() {
+  const themesExamen = MANIFEST.themes.filter(t =>
+    BANK.some(q => q.theme === t.id && EXAM_TYPES.includes(q.type)));
+  const restants = themesExamen.filter(t => unlockedLevel(t.id) < 2);
+  return { ok: restants.length === 0, restants, total: themesExamen.length };
+}
+
 /* Tirage qui privilégie les questions jamais vues (puis les moins vues) —
    le hasard ne départage que les ex æquo. */
 function drawPreferUnseen(pool, n) {
@@ -887,7 +923,7 @@ function drawPreferUnseen(pool, n) {
 
 function drawExam() {
   const weights = { 1: 0.2, 2: 0.3, 3: 0.3, 4: 0.2 };
-  const pool = BANK.filter(q => ["qcm", "multi", "libre", "scenario", "terminal"].includes(q.type));
+  const pool = BANK.filter(q => EXAM_TYPES.includes(q.type));
   let picked = [];
   for (const n of [1, 2, 3, 4]) {
     const want = Math.round(EXAM_SIZE * weights[n]);
@@ -901,6 +937,33 @@ function drawExam() {
 
 function showExamIntro() {
   setPath("./quiz --examen");
+  const acces = examUnlocked();
+  if (!acces.ok) {
+    const faits = acces.total - acces.restants.length;
+    screen.innerHTML = `
+      <h1 style="margin-bottom:14px">Examen blanc</h1>
+      <div class="feedback" style="margin-bottom:16px">
+        <p style="margin-bottom:8px"><i class="ti ti-lock" style="color:var(--amber)"></i>
+        <b>Examen verrouillé</b> — validez d'abord le niveau 1 de chaque thème (${faits}/${acces.total} thèmes prêts).</p>
+        <p>L'examen mélange toutes les matières : il se tente une fois les bases posées partout.</p>
+      </div>
+      <p class="section-title"># thèmes restants</p>
+      <div class="level-list">
+        ${acces.restants.map(t => `
+          <div class="level-row" data-theme="${t.id}">
+            <div class="chip" style="width:34px; height:34px; border-radius:8px; background:${t.color}22; color:${t.color}; display:flex; align-items:center; justify-content:center; flex-shrink:0"><i class="${t.icon}"></i></div>
+            <div><h3>${esc(t.name)}</h3><p>valider le niveau 1 — ${UNLOCK_MIN_ATTEMPTS} réponses à ${Math.round(UNLOCK_RATE * 100)} %</p></div>
+            <i class="ti ti-chevron-right" style="margin-left:auto; color:var(--dim)"></i>
+          </div>`).join("")}
+      </div>`;
+    document.querySelectorAll(".level-row[data-theme]").forEach(r => {
+      r.onclick = () => {
+        const t = MANIFEST.themes.find(x => x.id === r.dataset.theme);
+        if (t) showTheme(t);
+      };
+    });
+    return;
+  }
   screen.innerHTML = `
     <h1 style="margin-bottom:14px">Examen blanc</h1>
     <div class="feedback" style="margin-bottom:16px">
