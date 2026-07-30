@@ -1,7 +1,7 @@
 @echo off
-title Quiz TSSR2601 - serveur local
+title Root Camp - serveur local
 echo ============================================
-echo   Quiz TSSR2601 - http://localhost:8123
+echo   Root Camp (TSSR2601) - http://localhost:8123
 echo   Fermez cette fenetre pour arreter le quiz
 echo ============================================
 start "" http://localhost:8123

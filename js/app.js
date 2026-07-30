@@ -237,8 +237,8 @@ function showHome() {
   }
   const pct = state.cnt.total ? Math.round(state.cnt.ok / state.cnt.total * 100) : 0;
   screen.innerHTML = `
-    <h1>Quiz TSSR2601</h1>
-    <p class="comment"># préparation au titre professionnel — grade actuel : ${esc(g.name)}</p>
+    <h1>Root Camp</h1>
+    <p class="comment"># de stagiaire à root — préparation TSSR2601 · grade actuel : ${esc(g.name)}</p>
     <div class="grid">${cards}</div>
     <div class="wide" id="go-exam">
       <div class="chip"><i class="ti ti-clock-bolt"></i></div>

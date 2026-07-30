@@ -1,6 +1,6 @@
-# Quiz TSSR2601
+# Root Camp — quiz TSSR2601
 
-Application web de révision pour la préparation au titre professionnel **TSSR** (Technicien Supérieur Systèmes et Réseaux). Les questions sont générées à partir des fiches de cours de la promotion TSSR2601.
+**Root Camp** : de stagiaire à `root@tssr`. Application web de révision pour la préparation au titre professionnel **TSSR** (Technicien Supérieur Systèmes et Réseaux). Les questions (858, sur 9 thèmes) sont générées à partir des fiches de cours de la promotion TSSR2601, avec examens blancs chronométrés, terminal simulé pour les commandes, révision espacée, grades et badges.
 
 ## Fonctionnalités
 
