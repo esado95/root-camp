@@ -28,9 +28,9 @@ Chaque question corrigée affiche une explication et sa fiche source — on appr
 
 ## 📸 Aperçu
 
-| Bienvenue | Accueil | Profil | Classement | Examens | Révision |
+| Bienvenue | Thèmes | Examens | À revoir | Classement | Profil |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| <img src="assets/screens/bienvenue.png" width="130" alt="Écran de bienvenue"> | <img src="assets/screens/accueil.png" width="130" alt="Accueil — 10 thèmes"> | <img src="assets/screens/profil.png" width="130" alt="Profil, grades et badges"> | <img src="assets/screens/classement.png" width="130" alt="Classement en temps réel"> | <img src="assets/screens/examens.png" width="130" alt="Les 4 paliers d'examen"> | <img src="assets/screens/revision.png" width="130" alt="Pile de révision"> |
+| <img src="assets/screens/bienvenue.png" width="130" alt="Écran de bienvenue"> | <img src="assets/screens/accueil.png" width="130" alt="Accueil — 10 thèmes"> | <img src="assets/screens/examens.png" width="130" alt="Les 4 paliers d'examen"> | <img src="assets/screens/revision.png" width="130" alt="Pile de révision"> | <img src="assets/screens/classement.png" width="130" alt="Classement en temps réel"> | <img src="assets/screens/profil.png" width="130" alt="Profil, grades et badges"> |
 
 <!-- À ajouter : | Terminal simulé | ![Terminal](assets/screens/terminal.png) | -->
 
