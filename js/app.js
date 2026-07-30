@@ -2,7 +2,8 @@
 
 /* ============ Constantes ============ */
 
-const LS_KEY = "quiz-tssr2601-v1";
+const LS_KEY = "root-camp-v1";
+const LS_KEY_ANCIEN = "quiz-tssr2601-v1";
 const POINTS = { 1: 1, 2: 2, 3: 3, 4: 5 };
 const LEVEL_NAMES = { 1: "connaissance", 2: "compréhension", 3: "application", 4: "analyse" };
 const LEVEL_COLORS = { 1: "#63D471", 2: "#38BDF8", 3: "#FBBF24", 4: "#F87171" };
@@ -119,7 +120,14 @@ function normalizeState(raw) {
 
 function load() {
   try {
-    const raw = localStorage.getItem(LS_KEY);
+    let raw = localStorage.getItem(LS_KEY);
+    if (!raw) {
+      raw = localStorage.getItem(LS_KEY_ANCIEN);
+      if (raw) {
+        localStorage.setItem(LS_KEY, raw);
+        localStorage.removeItem(LS_KEY_ANCIEN);
+      }
+    }
     if (raw) return normalizeState(JSON.parse(raw));
   } catch (e) { /* état corrompu → repartir de zéro */ }
   return defaultState();
@@ -424,7 +432,7 @@ function showBienvenue() {
   screen.innerHTML = `
     <h1 style="margin-bottom:14px">Bienvenue sur Root Camp</h1>
     <div class="feedback" style="margin-top:0">
-      De <b>stagiaire</b> à <b style="color:var(--cyan)">root@tssr</b> : révisez tout le programme TSSR2601
+      De <b>stagiaire</b> à <b style="color:var(--cyan)">root@tssr</b> : révisez tout le programme TSSR
       en répondant à des questions générées depuis les cours de la promo.
     </div>
     <div class="level-list" style="margin-top:14px">
@@ -1424,13 +1432,13 @@ function timeAgo(iso) {
 
 async function showBoard() {
   setPath("./quiz --classement");
-  screen.innerHTML = `<h1>Classement TSSR2601</h1><p class="comment"># chargement...</p>`;
+  screen.innerHTML = `<h1>Classement de la promo</h1><p class="comment"># chargement...</p>`;
   const tk = navToken;
   const rows = (typeof onlineBoard === "function") ? await onlineBoard() : null;
   if (tk !== navToken) return;
   if (!rows) {
     screen.innerHTML = `
-      <h1>Classement TSSR2601</h1>
+      <h1>Classement de la promo</h1>
       <p class="comment"># classement du groupe</p>
       <div class="feedback">Classement indisponible pour le moment — vérifiez votre connexion Internet.</div>`;
     return;
@@ -1450,7 +1458,7 @@ async function showBoard() {
       </div>`;
   }).join("");
   screen.innerHTML = `
-    <h1>Classement TSSR2601</h1>
+    <h1>Classement de la promo</h1>
     <p class="comment"># ${rows.length} participant(s) · trié par XP</p>
     ${rows.length ? list : '<div class="feedback">Personne au classement pour l\'instant — soyez le premier !</div>'}
     ${me ? "" : `<div class="feedback" style="margin-top:14px"><i class="ti ti-info-circle" style="color:var(--cyan)"></i>
