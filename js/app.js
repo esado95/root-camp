@@ -53,7 +53,7 @@ function defaultState() {
     q: {},
     lv: {},
     review: [],
-    cnt: { total: 0, ok: 0, streak: 0, best: 0, exams: 0, examBest: 0, night: false, days: [] },
+    cnt: { total: 0, ok: 0, streak: 0, best: 0, exams: 0, examBest: 0, palierBest: {}, night: false, days: [] },
     badges: []
   };
 }
@@ -90,6 +90,11 @@ function normalizeState(raw) {
     total: Number(c.total) || 0, ok: Number(c.ok) || 0,
     streak: Number(c.streak) || 0, best: Number(c.best) || 0,
     exams: Number(c.exams) || 0, examBest: Number(c.examBest) || 0,
+    palierBest: (c.palierBest && typeof c.palierBest === "object")
+      ? Object.fromEntries(Object.entries(c.palierBest)
+          .filter(([k, v]) => ["1", "2", "3", "4"].includes(String(k)) && Number.isFinite(Number(v)))
+          .map(([k, v]) => [k, Math.max(0, Math.min(100, Number(v)))]))
+      : {},
     night: c.night === true,
     days: Array.isArray(c.days) ? c.days.filter(x => typeof x === "string") : []
   };
@@ -308,13 +313,18 @@ function showHome() {
   screen.innerHTML = `
     <h1 style="margin-bottom:14px">Root Camp</h1>
     <div class="grid">${cards}</div>
-    <div class="wide" id="go-exam" style="${examUnlocked().ok ? "" : "opacity:.65"}">
-      <div class="chip"><i class="ti ${examUnlocked().ok ? "ti-clock-bolt" : "ti-lock"}"></i></div>
-      <div><h3>Mode examen</h3><p>${examUnlocked().ok
-        ? `${EXAM_SIZE} questions aléatoires · ${EXAM_MINUTES} min · XP doublés`
-        : "verrouillé — validez le niveau 1 de chaque thème"}</p></div>
+    ${(() => {
+      let dispo = 0;
+      for (let p = 4; p >= 1; p--) if (palierAccess(p).ok) { dispo = p; break; }
+      return `
+    <div class="wide" id="go-exam" style="${dispo ? "" : "opacity:.65"}">
+      <div class="chip"><i class="ti ${dispo ? "ti-clock-bolt" : "ti-lock"}"></i></div>
+      <div><h3>Examens blancs</h3><p>${dispo
+        ? `palier ${dispo}/4 accessible · ${EXAM_SIZE} questions · XP doublés`
+        : "verrouillés — validez le niveau 1 de chaque thème"}</p></div>
       <i class="ti ti-chevron-right arrow"></i>
-    </div>
+    </div>`;
+    })()}
     <div class="wide" id="go-rules" style="background:var(--panel); border-color:var(--line2)">
       <div class="chip" style="background:var(--panel2); color:var(--cyan)"><i class="ti ti-book-2"></i></div>
       <div><h3 style="color:var(--txt)">Règles du jeu</h3><p style="color:var(--dim)">niveaux · points · grades · badges · classement</p></div>
@@ -378,8 +388,9 @@ function showRules() {
 
     <p class="section-title"># examen blanc</p>
     <div class="feedback" style="margin-top:0">
-      L'examen se débloque une fois le niveau 1 validé dans chaque thème.
-      ${EXAM_SIZE} questions tirées de tous les thèmes (hors Atelier TP), ${EXAM_MINUTES} minutes chrono, aucune correction pendant l'épreuve.
+      Quatre paliers : le palier N se débloque quand le niveau N est validé dans chaque thème,
+      et n'interroge que les niveaux déjà travaillés (palier 1 = fondamentaux seuls, palier 4 = tout).
+      ${EXAM_SIZE} questions (hors Atelier TP), ${EXAM_MINUTES} minutes chrono, aucune correction pendant l'épreuve.
       Les bonnes réponses rapportent <b style="color:var(--cyan)">le double d'XP</b>.
       À la fin : le corrigé de vos erreurs et des questions non traitées. Seuil de réussite : 60 %.
     </div>
@@ -467,6 +478,7 @@ function startSession(questions, opts) {
     exam: !!opts.exam, title: opts.title, color: opts.color || "var(--cyan)",
     back: opts.back || (() => nav("home")),
     wrong: [], answered: [], review: !!opts.review,
+    palier: opts.palier || 4,
     reviewStart: state.review.length,
     done: false, nextTimer: null,
     deadline: opts.exam ? Date.now() + EXAM_MINUTES * 60000 : null, timer: null
@@ -844,6 +856,8 @@ function showResult(timeout) {
   if (session.exam) {
     state.cnt.exams++;
     if (pct > state.cnt.examBest) state.cnt.examBest = pct;
+    if (!state.cnt.palierBest) state.cnt.palierBest = {};
+    if (pct > (state.cnt.palierBest[session.palier] || 0)) state.cnt.palierBest[session.palier] = pct;
     checkBadges();
     save();
     updateNavPill(true);
@@ -894,8 +908,8 @@ function showResult(timeout) {
     </div>`;
   $("#res-back").onclick = () => { const b = session.back; session = null; b(); };
   $("#res-again").onclick = () => {
-    const opts = { title: session.title, color: session.color, back: session.back, exam: session.exam };
-    const qs = session.exam ? drawExam() : shuffle(session.qs);
+    const opts = { title: session.title, color: session.color, back: session.back, exam: session.exam, palier: session.palier };
+    const qs = session.exam ? drawExam(session.palier) : shuffle(session.qs);
     session = null;
     startSession(qs, opts);
   };
@@ -905,13 +919,32 @@ function showResult(timeout) {
 
 const EXAM_TYPES = ["qcm", "multi", "libre", "scenario", "terminal"];
 
-/* L'examen blanc se mérite : niveau 1 validé (donc niveau 2 débloqué)
-   dans chaque thème présent dans le tirage. */
-function examUnlocked() {
-  const themesExamen = MANIFEST.themes.filter(t =>
-    BANK.some(q => q.theme === t.id && EXAM_TYPES.includes(q.type)));
-  const restants = themesExamen.filter(t => unlockedLevel(t.id) < 2);
-  return { ok: restants.length === 0, restants, total: themesExamen.length };
+/* Examens à paliers : le palier N se débloque quand le niveau N est validé
+   dans chaque thème, et n'interroge que les niveaux déjà travaillés. */
+const PALIER_WEIGHTS = {
+  1: { 1: 1 },
+  2: { 1: 0.4, 2: 0.6 },
+  3: { 1: 0.2, 2: 0.4, 3: 0.4 },
+  4: { 1: 0.2, 2: 0.3, 3: 0.3, 4: 0.2 }
+};
+
+function levelValide(themeId, n) {
+  const st = themeLevelStats(themeId, n);
+  return st.a >= UNLOCK_MIN_ATTEMPTS && st.c / st.a >= UNLOCK_RATE;
+}
+
+function examThemes() {
+  return MANIFEST.themes.filter(t => BANK.some(q => q.theme === t.id && EXAM_TYPES.includes(q.type)));
+}
+
+function palierAccess(p) {
+  const restants = examThemes().filter(t => {
+    const aDesQuestions = BANK.some(q => q.theme === t.id && q.niveau === p && EXAM_TYPES.includes(q.type));
+    if (!aDesQuestions) return false;
+    if (p === 4) return !(unlockedLevel(t.id) >= 4 && levelValide(t.id, 4));
+    return unlockedLevel(t.id) < p + 1;
+  });
+  return { p, ok: restants.length === 0, restants, total: examThemes().length };
 }
 
 /* Tirage qui privilégie les questions jamais vues (puis les moins vues) —
@@ -921,13 +954,13 @@ function drawPreferUnseen(pool, n) {
   return shuffle(pool).sort((a, b) => vues(a) - vues(b)).slice(0, n);
 }
 
-function drawExam() {
-  const weights = { 1: 0.2, 2: 0.3, 3: 0.3, 4: 0.2 };
-  const pool = BANK.filter(q => EXAM_TYPES.includes(q.type));
+function drawExam(palier) {
+  const weights = PALIER_WEIGHTS[palier] || PALIER_WEIGHTS[4];
+  const pool = BANK.filter(q => EXAM_TYPES.includes(q.type) && weights[q.niveau]);
   let picked = [];
-  for (const n of [1, 2, 3, 4]) {
+  for (const n of Object.keys(weights)) {
     const want = Math.round(EXAM_SIZE * weights[n]);
-    picked = picked.concat(drawPreferUnseen(pool.filter(q => q.niveau === n), want));
+    picked = picked.concat(drawPreferUnseen(pool.filter(q => q.niveau === Number(n)), want));
   }
   const rest = drawPreferUnseen(pool.filter(q => !picked.includes(q)), EXAM_SIZE);
   let i = 0;
@@ -937,48 +970,45 @@ function drawExam() {
 
 function showExamIntro() {
   setPath("./quiz --examen");
-  const acces = examUnlocked();
-  if (!acces.ok) {
-    const faits = acces.total - acces.restants.length;
-    screen.innerHTML = `
-      <h1 style="margin-bottom:14px">Examen blanc</h1>
-      <div class="feedback" style="margin-bottom:16px">
-        <p style="margin-bottom:8px"><i class="ti ti-lock" style="color:var(--amber)"></i>
-        <b>Examen verrouillé</b> — validez d'abord le niveau 1 de chaque thème (${faits}/${acces.total} thèmes prêts).</p>
-        <p>L'examen mélange toutes les matières : il se tente une fois les bases posées partout.</p>
-      </div>
-      <p class="section-title"># thèmes restants</p>
-      <div class="level-list">
-        ${acces.restants.map(t => `
-          <div class="level-row" data-theme="${t.id}">
-            <div class="chip" style="width:34px; height:34px; border-radius:8px; background:${t.color}22; color:${t.color}; display:flex; align-items:center; justify-content:center; flex-shrink:0"><i class="${t.icon}"></i></div>
-            <div><h3>${esc(t.name)}</h3><p>valider le niveau 1 — ${UNLOCK_MIN_ATTEMPTS} réponses à ${Math.round(UNLOCK_RATE * 100)} %</p></div>
-            <i class="ti ti-chevron-right" style="margin-left:auto; color:var(--dim)"></i>
-          </div>`).join("")}
-      </div>`;
-    document.querySelectorAll(".level-row[data-theme]").forEach(r => {
-      r.onclick = () => {
-        const t = MANIFEST.themes.find(x => x.id === r.dataset.theme);
-        if (t) showTheme(t);
-      };
-    });
-    return;
-  }
-  screen.innerHTML = `
-    <h1 style="margin-bottom:14px">Examen blanc</h1>
-    <div class="feedback" style="margin-bottom:16px">
-      <p style="margin-bottom:8px"><i class="ti ti-clock-bolt" style="color:var(--violet)"></i> <b>${EXAM_SIZE} questions</b> tirées de tous les thèmes (hors Atelier TP)</p>
-      <p style="margin-bottom:8px"><i class="ti ti-hourglass" style="color:var(--amber)"></i> <b>${EXAM_MINUTES} minutes</b> — le chrono tourne, les questions sans réponse comptent faux</p>
-      <p style="margin-bottom:8px"><i class="ti ti-bolt" style="color:var(--cyan)"></i> <b>XP doublés</b> pour chaque bonne réponse</p>
-      <p><i class="ti ti-eye-off" style="color:var(--red)"></i> Les explications ne s'affichent qu'à la fin</p>
-    </div>
-    <p class="comment"># meilleur score : ${state.cnt.examBest} % · examens passés : ${state.cnt.exams}</p>
-    <button class="btn accent" id="start-exam" style="width:100%; text-align:center; padding:12px">
-      <i class="ti ti-player-play"></i> Lancer l'examen
-    </button>`;
-  $("#start-exam").onclick = () => {
-    startSession(drawExam(), { exam: true, title: "Examen blanc", color: "var(--violet)", back: () => nav("exam") });
+  const paliers = [1, 2, 3, 4].map(p => palierAccess(p));
+  const best = state.cnt.palierBest || {};
+  const DESC = {
+    1: "niveau 1 uniquement — les fondamentaux",
+    2: "mélange des niveaux 1 et 2",
+    3: "mélange des niveaux 1 à 3",
+    4: "tous les niveaux — l'épreuve finale"
   };
+  const rows = paliers.map(a => {
+    if (a.ok) return `
+      <div class="level-row" data-palier="${a.p}">
+        <div class="lvl" style="background:${LEVEL_COLORS[a.p]}22; color:${LEVEL_COLORS[a.p]}">${a.p}</div>
+        <div><h3>Examen palier ${a.p}</h3><p>${DESC[a.p]} · ${EXAM_SIZE} questions · ${EXAM_MINUTES} min</p></div>
+        <div class="right">${best[a.p] != null ? "meilleur<br>" + best[a.p] + " %" : ""}</div>
+      </div>`;
+    const faits = a.total - a.restants.length;
+    return `
+      <div class="level-row locked">
+        <div class="lvl" style="background:${LEVEL_COLORS[a.p]}22; color:${LEVEL_COLORS[a.p]}"><i class="ti ti-lock"></i></div>
+        <div><h3>Examen palier ${a.p}</h3><p>valider le niveau ${a.p} de chaque thème — ${faits}/${a.total} thèmes prêts</p></div>
+      </div>`;
+  }).join("");
+  screen.innerHTML = `
+    <h1 style="margin-bottom:14px">Examens blancs</h1>
+    <div class="level-list">${rows}</div>
+    <div class="feedback" style="margin-top:16px">
+      <i class="ti ti-info-circle" style="color:var(--cyan)"></i>
+      Chaque palier n'interroge que les niveaux déjà validés partout : le palier 1 reste sur les
+      fondamentaux, le palier 4 mélange tout. ${EXAM_MINUTES} minutes chrono, aucune correction pendant
+      l'épreuve, les questions sans réponse comptent faux, XP doublés. Corrigé des erreurs et des
+      questions non traitées à la fin. Seuil de réussite : 60 %.
+    </div>
+    <p class="comment" style="margin-top:10px"># examens passés : ${state.cnt.exams} · meilleur score : ${state.cnt.examBest} %</p>`;
+  document.querySelectorAll(".level-row[data-palier]").forEach(r => {
+    r.onclick = () => {
+      const p = parseInt(r.dataset.palier, 10);
+      startSession(drawExam(p), { exam: true, palier: p, title: "Examen palier " + p, color: "var(--violet)", back: () => nav("exam") });
+    };
+  });
 }
 
 /* ============ Révision ============ */
