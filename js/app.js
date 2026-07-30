@@ -292,8 +292,7 @@ function showHome() {
   }
   const pct = state.cnt.total ? Math.round(state.cnt.ok / state.cnt.total * 100) : 0;
   screen.innerHTML = `
-    <h1>Root Camp</h1>
-    <p class="comment"># de stagiaire à root — préparation TSSR2601 · grade actuel : ${esc(g.name)}</p>
+    <h1 style="margin-bottom:14px">Root Camp</h1>
     <div class="grid">${cards}</div>
     <div class="wide" id="go-exam">
       <div class="chip"><i class="ti ti-clock-bolt"></i></div>
@@ -332,8 +331,7 @@ function showRules() {
       <button class="btn small" id="back"><i class="ti ti-arrow-left"></i> Accueil</button>
       <span class="qmeta" style="color:var(--cyan)">règles du jeu</span>
     </div>
-    <h1>Comment ça marche</h1>
-    <p class="comment"># man quiz — le mode d'emploi complet</p>
+    <h1 style="margin-bottom:14px">Comment ça marche</h1>
 
     <p class="section-title"># le principe</p>
     <div class="feedback" style="margin-top:0">
@@ -782,8 +780,7 @@ function drawExam() {
 function showExamIntro() {
   setPath("./quiz --examen");
   screen.innerHTML = `
-    <h1>Examen blanc</h1>
-    <p class="comment"># conditions réelles : pas de correction pendant l'épreuve</p>
+    <h1 style="margin-bottom:14px">Examen blanc</h1>
     <div class="feedback" style="margin-bottom:16px">
       <p style="margin-bottom:8px"><i class="ti ti-clock-bolt" style="color:var(--violet)"></i> <b>${EXAM_SIZE} questions</b> tirées de tous les thèmes disponibles</p>
       <p style="margin-bottom:8px"><i class="ti ti-hourglass" style="color:var(--amber)"></i> <b>${EXAM_MINUTES} minutes</b> — le chrono tourne, les questions sans réponse comptent faux</p>
@@ -909,8 +906,7 @@ function showProfile() {
   const pseudo = me ? me.pseudo : "Invité";
   const initials = pseudo.slice(0, 2).toUpperCase();
   screen.innerHTML = `
-    <h1>Profil</h1>
-    <p class="comment"># whoami — ${me ? "compte synchronisé" : "mode invité (local)"}</p>
+    <h1 style="margin-bottom:14px">Profil</h1>
     <div style="display:flex; align-items:center; gap:14px; margin-bottom:4px">
       <span style="width:52px; height:52px; border-radius:14px; background:var(--panel2); border:1px solid var(--cyan);
         display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:18px; color:var(--cyan)">${esc(initials)}</span>
