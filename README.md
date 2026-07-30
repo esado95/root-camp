@@ -28,17 +28,17 @@ Chaque question corrigée affiche une explication et sa fiche source — on appr
 
 ## 📸 Aperçu
 
-| Accueil | Révision en cours |
+| Accueil | Profil & grades |
 |:---:|:---:|
-| ![Accueil — 10 thèmes](assets/screens/accueil.png) | ![Pile de révision avec progression](assets/screens/revision.png) |
+| ![Accueil — 10 thèmes](assets/screens/accueil.png) | ![Profil, échelle des grades et badges](assets/screens/profil.png) |
 
-| Profil & grades | Examens à paliers |
+| Classement de la promo | Examens à paliers |
 |:---:|:---:|
-| ![Profil, échelle des grades et badges](assets/screens/profil.png) | ![Les 4 paliers d'examen](assets/screens/examens.png) |
+| ![Classement en temps réel](assets/screens/classement.png) | ![Les 4 paliers d'examen](assets/screens/examens.png) |
 
-| Classement de la promo |
+| Révision en cours |
 |:---:|
-| ![Classement en temps réel](assets/screens/classement.png) |
+| ![Pile de révision avec progression](assets/screens/revision.png) |
 
 <!-- À ajouter : | Terminal simulé | ![Terminal](assets/screens/terminal.png) | -->
 
