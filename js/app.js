@@ -232,6 +232,7 @@ function recordAnswer(q, correct, exam) {
   const gradeAvant = gradeIndex();
   const nivAvant = unlockedLevel(q.theme);
   const palierAvant = plusHautPalier();
+  const atelierAvant = atelierAccess().ok;
   const st = state.q[q.id] || (state.q[q.id] = { a: 0, c: 0, s: 0 });
   st.a++;
   if (correct) { st.c++; st.s++; } else st.s = 0;
@@ -256,6 +257,7 @@ function recordAnswer(q, correct, exam) {
   if (nivApres > nivAvant) toastOuDiffere(`<i class="ti ti-lock-open"></i> Niveau ${nivApres} débloqué — <b>${esc(q.themeName)}</b>`);
   const palierApres = plusHautPalier();
   if (palierApres > palierAvant) toastOuDiffere(`<i class="ti ti-trophy"></i> Examen palier ${palierApres} débloqué !`);
+  if (!atelierAvant && atelierAccess().ok) toastOuDiffere(`<i class="ti ti-flask"></i> <b>Atelier TP débloqué</b> — le terminal vous attend !`);
   const gradeApres = gradeIndex();
   if (gradeApres > gradeAvant) toastOuDiffere(`<i class="ti ti-chevrons-up"></i> Nouveau grade : <b>${esc(GRADES[gradeApres].name)}</b>`);
 
@@ -349,13 +351,14 @@ function showHome() {
   for (const t of MANIFEST.themes) {
     const count = BANK.filter(q => q.theme === t.id).length;
     const off = t.modules.length === 0;
-    const icon = t.icon.startsWith("devicon") ? `<i class="${t.icon}"></i>` : `<i class="${t.icon}"></i>`;
+    const verrou = t.id === "atelier" && !atelierAccess().ok;
+    const icon = verrou ? '<i class="ti ti-lock"></i>' : `<i class="${t.icon}"></i>`;
     cards += `
       <div class="card ${off ? "off" : ""}" data-theme="${t.id}" style="--c:${t.color}">
         <div class="chip" style="background:${t.color}22; color:${t.color}">${icon}</div>
         <h3>${esc(t.name)}</h3>
         <p>${esc(t.sub)}</p>
-        <p class="count" style="color:${off ? "var(--dim)" : t.color}">${off ? "bientôt disponible" : count + " questions"}</p>
+        <p class="count" style="color:${off || verrou ? "var(--dim)" : t.color}">${off ? "bientôt disponible" : (verrou ? "verrouillé — niveau 3 requis" : count + " questions")}</p>
       </div>`;
   }
   const pct = state.cnt.total ? Math.round(state.cnt.ok / state.cnt.total * 100) : 0;
@@ -542,6 +545,39 @@ function showRules() {
 
 function showTheme(theme) {
   setPath(`./quiz --theme ${theme.id}`);
+  if (theme.id === "atelier") {
+    const acces = atelierAccess();
+    if (!acces.ok) {
+      screen.innerHTML = `
+        <div class="qhead">
+          <button class="btn small" id="back"><i class="ti ti-arrow-left"></i> Thèmes</button>
+          <span class="qmeta" style="color:${theme.color}">${esc(theme.name)}</span>
+        </div>
+        ${theme.intro ? `<div class="feedback" style="margin:0 0 14px"><i class="ti ti-sparkles" style="color:${theme.color}"></i> ${esc(theme.intro)}</div>` : ""}
+        <div class="feedback" style="margin:0 0 14px">
+          <i class="ti ti-lock" style="color:var(--amber)"></i>
+          <b>Atelier verrouillé</b> — comme les examens, il se mérite : débloquez le niveau 3
+          dans les trois thèmes qu'il met en pratique (${acces.total - acces.restants.length}/${acces.total} prêts).
+        </div>
+        <p class="section-title"># thèmes à faire progresser</p>
+        <div class="level-list">
+          ${acces.restants.map(t => `
+            <div class="level-row" data-theme="${t.id}">
+              <div class="chip" style="width:34px; height:34px; border-radius:8px; background:${t.color}22; color:${t.color}; display:flex; align-items:center; justify-content:center; flex-shrink:0"><i class="${t.icon}"></i></div>
+              <div><h3>${esc(t.name)}</h3><p>niveau atteint : ${unlockedLevel(t.id)}/3 requis</p></div>
+              <i class="ti ti-chevron-right" style="margin-left:auto; color:var(--dim)"></i>
+            </div>`).join("")}
+        </div>`;
+      $("#back").onclick = () => nav("home");
+      document.querySelectorAll(".level-row[data-theme]").forEach(r => {
+        r.onclick = () => {
+          const t = MANIFEST.themes.find(x => x.id === r.dataset.theme);
+          if (t) showTheme(t);
+        };
+      });
+      return;
+    }
+  }
   const unlocked = unlockedLevel(theme.id);
   let rows = "";
   let precedent = null;
@@ -1249,6 +1285,16 @@ const PALIER_WEIGHTS = {
 function levelValide(themeId, n) {
   const st = themeLevelStats(themeId, n);
   return st.a >= UNLOCK_MIN_ATTEMPTS && st.c / st.a >= UNLOCK_RATE;
+}
+
+/* L'Atelier TP se mérite, comme les examens : niveau 3 débloqué dans les
+   trois thèmes que les TP mettent en pratique. */
+const ATELIER_REQUIS = ["reseau", "linux", "windows"];
+function atelierAccess() {
+  const restants = ATELIER_REQUIS
+    .map(id => MANIFEST.themes.find(t => t.id === id))
+    .filter(t => t && unlockedLevel(t.id) < 3);
+  return { ok: restants.length === 0, restants, total: ATELIER_REQUIS.length };
 }
 
 function examThemes() {
