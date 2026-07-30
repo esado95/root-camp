@@ -70,6 +70,18 @@ def check_question(f, q, idx):
             err(f, qid, "accept absent ou vide")
         elif any(not isinstance(a, str) or not a.strip() for a in acc):
             err(f, qid, "accept contient une entrée vide")
+    elif t == "tp":
+        steps = q.get("steps")
+        if not isinstance(steps, list) or len(steps) < 2:
+            err(f, qid, "steps absent ou < 2 étapes")
+        else:
+            for j, s in enumerate(steps):
+                if not isinstance(s, dict) or "q" not in s:
+                    err(f, qid, f"étape {j + 1} : objectif (q) manquant")
+                    continue
+                acc = s.get("accept")
+                if not isinstance(acc, list) or not acc or any(not isinstance(a, str) or not a.strip() for a in acc):
+                    err(f, qid, f"étape {j + 1} : accept absent ou vide")
     if len(q.get("explication", "")) < 15:
         warnings.append(f"[{f.name}] {qid}: explication très courte")
 

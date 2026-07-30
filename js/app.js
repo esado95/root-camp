@@ -153,6 +153,11 @@ function themeLevelStats(themeId, niveau) {
 function unlockedLevel(themeId) {
   let max = 1;
   for (let n = 1; n <= 3; n++) {
+    const count = BANK.filter(q => q.theme === themeId && q.niveau === n).length;
+    if (count === 0) {
+      if (max === n) max = n + 1;
+      continue;
+    }
     const st = themeLevelStats(themeId, n);
     if (st.a >= UNLOCK_MIN_ATTEMPTS && st.c / st.a >= UNLOCK_RATE) max = n + 1;
     else break;
@@ -208,7 +213,7 @@ function recordAnswer(q, correct, exam) {
     state.cnt.ok++;
     state.cnt.streak++;
     if (state.cnt.streak > state.cnt.best) state.cnt.best = state.cnt.streak;
-    state.xp += POINTS[q.niveau] * (exam ? 2 : 1);
+    state.xp += POINTS[q.niveau] * (exam ? 2 : 1) * (q.type === "tp" ? 2 : 1);
   } else {
     state.cnt.streak = 0;
     if (!state.review.includes(q.id)) state.review.push(q.id);
@@ -356,7 +361,8 @@ function showRules() {
       <p style="margin-bottom:6px"><i class="ti ti-sort-ascending-numbers" style="color:var(--cyan)"></i> <b>Remise en ordre</b> — cliquez les étapes dans le bon ordre</p>
       <p style="margin-bottom:6px"><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Champ libre</b> — tapez la réponse exacte (valeur ou commande)</p>
       <p style="margin-bottom:6px"><i class="ti ti-stethoscope" style="color:var(--cyan)"></i> <b>Scénario</b> — une situation réelle à diagnostiquer, comme le jour J</p>
-      <p><i class="ti ti-terminal" style="color:var(--cyan)"></i> <b>Terminal simulé</b> — tapez la commande dans une vraie console : si elle est juste, son résultat s'affiche comme en réel</p>
+      <p style="margin-bottom:6px"><i class="ti ti-terminal" style="color:var(--cyan)"></i> <b>Terminal simulé</b> — tapez la commande dans une vraie console : si elle est juste, son résultat s'affiche comme en réel</p>
+      <p><i class="ti ti-flask" style="color:var(--cyan)"></i> <b>Mini-TP</b> — une session guidée en plusieurs étapes (IOS, Bash, PowerShell) : le prompt évolue comme en vrai, indice après une erreur, <b>XP doublés</b></p>
     </div>
 
     <p class="section-title"># examen blanc</p>
@@ -478,11 +484,11 @@ function renderQuestion() {
   else if (q.type === "assoc") body = `<div class="pairs"><div class="col" id="colL"></div><div class="col" id="colR"></div></div>`;
   else if (q.type === "ordre") body = `<p class="comment"># cliquez les éléments dans le bon ordre</p><div class="answers" id="answers"></div>`;
   else if (q.type === "libre") body = `<div class="libre-row"><input id="libre" autocomplete="off" spellcheck="false" placeholder="votre réponse..."><button class="btn accent" id="validate">Valider</button></div>`;
-  else if (q.type === "terminal") body = `
+  else if (q.type === "terminal" || q.type === "tp") body = `
     <div class="term">
       <div class="term-head">
         <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
-        <span style="margin-left:6px">simulation — tapez la commande puis Entrée</span>
+        <span style="margin-left:6px">${q.type === "tp" ? "mini-TP guidé — une commande par étape" : "simulation — tapez la commande puis Entrée"}</span>
       </div>
       <div class="term-body" id="term-body"></div>
     </div>`;
@@ -507,6 +513,7 @@ function renderQuestion() {
   else if (q.type === "ordre") renderOrdre(q);
   else if (q.type === "libre") renderLibre(q);
   else if (q.type === "terminal") renderTerminal(q);
+  else if (q.type === "tp") renderTP(q);
 }
 
 function letters(i) { return String.fromCharCode(65 + i); }
@@ -679,6 +686,60 @@ function renderTerminal(q) {
     }
     finishQuestion(q, correct);
   });
+}
+
+function renderTP(q) {
+  const body = $("#term-body");
+  let idx = 0, errors = 0, attempts = 0;
+  const addLine = (txt, cls) => {
+    const d = document.createElement("div");
+    d.className = "line" + (cls ? " " + cls : "");
+    d.textContent = txt;
+    body.appendChild(d);
+    return d;
+  };
+  const askInput = st => {
+    const line = document.createElement("div");
+    line.className = "line";
+    line.innerHTML = `<span class="term-prompt">${esc(st.prompt || "$")} </span>`;
+    const input = document.createElement("input");
+    input.className = "term-input";
+    input.autocomplete = "off";
+    input.spellcheck = false;
+    line.appendChild(input);
+    body.appendChild(line);
+    input.focus();
+    input.scrollIntoView({ block: "nearest" });
+    input.addEventListener("keydown", e => {
+      if (e.key !== "Enter") return;
+      const val = input.value;
+      if (!normalize(val)) return;
+      line.remove();
+      addLine((st.prompt || "$") + " " + val);
+      if (st.accept.map(normalize).includes(normalize(val))) {
+        attempts = 0;
+        if (st.output) st.output.split("\n").forEach(l => addLine(l, "out"));
+        idx++;
+        if (idx >= q.steps.length) {
+          addLine(errors === 0 ? "# TP terminé sans erreur ✓" : `# TP terminé — ${errors} erreur(s) en route`, errors === 0 ? "ok" : "cmt");
+          finishQuestion(q, errors === 0);
+        } else nextStep();
+      } else {
+        errors++;
+        attempts++;
+        addLine(st.error || "% Commande incorrecte ou incomplète", "ko");
+        if (attempts === 1 && st.hint) addLine("# indice : " + st.hint, "cmt");
+        if (attempts >= 3) addLine("# solution : " + st.accept[0], "cmt");
+        askInput(st);
+      }
+    });
+  };
+  const nextStep = () => {
+    const st = q.steps[idx];
+    addLine(`# étape ${idx + 1}/${q.steps.length} — ${st.q}`, "cmt");
+    askInput(st);
+  };
+  nextStep();
 }
 
 function finishQuestion(q, correct) {

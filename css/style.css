@@ -40,8 +40,9 @@ body {
   align-self: flex-start;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 32px);
-  min-height: calc(100dvh - 32px);
+  height: calc(100vh - 32px);
+  height: calc(100dvh - 32px);
+  overflow: hidden;
 }
 
 .titlebar {
@@ -62,7 +63,10 @@ body {
 @keyframes blink { 50% { opacity: 0; } }
 .online { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--green); white-space: nowrap; }
 
-main { padding: 20px 22px; min-height: 420px; flex: 1 1 auto; }
+main { padding: 20px 22px; flex: 1 1 auto; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line2) transparent; }
+main::-webkit-scrollbar { width: 8px; }
+main::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 4px; }
+main::-webkit-scrollbar-track { background: transparent; }
 .loading { font-family: var(--mono); font-size: 13px; color: var(--dim); }
 
 h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
@@ -259,7 +263,7 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
 
 .nav {
   display: flex; border-top: 1px solid var(--line); background: var(--panel);
-  position: sticky; bottom: 0; z-index: 10;
+  flex-shrink: 0;
   border-radius: 0 0 14px 14px;
   padding-bottom: env(safe-area-inset-bottom);
 }
