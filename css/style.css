@@ -128,6 +128,23 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
 }
 .btn:hover:not(:disabled) { border-color: var(--cyan); }
 .btn:disabled { cursor: default; opacity: .55; }
+
+/* Focus clavier : anneau cyan intégré au thème, visible uniquement en
+   navigation clavier (:focus-visible) — jamais au clic souris. */
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+.nav button:focus-visible {
+  outline-offset: -6px;
+  border-radius: 12px;
+}
+.card:focus-visible, .level-row:focus-visible, .wide:focus-visible {
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+.term-input:focus-visible { outline: none; }
 .btn.small { font-size: 13px; padding: 5px 12px; }
 .btn.accent { border-color: var(--cyan); color: var(--cyan); }
 .btn.full { width: 100%; text-align: left; }

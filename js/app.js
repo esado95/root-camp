@@ -9,6 +9,7 @@ const LEVEL_COLORS = { 1: "#63D471", 2: "#38BDF8", 3: "#FBBF24", 4: "#F87171" };
 const UNLOCK_MIN_ATTEMPTS = 8;
 const UNLOCK_RATE = 0.7;
 const SESSION_SIZE = 10;
+const TP_SESSION_SIZE = 3;
 const EXAM_SIZE = 20;
 const EXAM_MINUTES = 20;
 
@@ -309,6 +310,10 @@ function updateOnlineBadge() {
   if (st === "ok") { el.textContent = "● " + onlineUser.pseudo; el.style.color = "var(--green)"; }
   else if (st === "erreur") { el.textContent = "● synchro en échec"; el.style.color = "var(--amber)"; }
   else { el.textContent = "● local"; el.style.color = "var(--dim)"; }
+  const u = document.getElementById("tb-user");
+  if (u) u.textContent = (typeof onlineUser !== "undefined" && onlineUser)
+    ? onlineUser.pseudo.toLowerCase()
+    : "invite";
 }
 
 function nav(page) {
@@ -432,8 +437,10 @@ function showRules() {
     <p class="section-title"># le principe</p>
     <div class="feedback" style="margin-top:0">
       Chaque thème (Réseaux, Windows/AD, Linux...) regroupe des questions générées à partir des fiches du cours TSSR.
-      Vous choisissez un thème puis un niveau : chaque session propose jusqu'à ${SESSION_SIZE} questions,
-      avec la correction et l'explication après chaque réponse.
+      Vous choisissez un thème puis un niveau : chaque session propose jusqu'à ${SESSION_SIZE} questions
+      (${TP_SESSION_SIZE} pour les mini-TP de l'Atelier, plus longs), avec la correction et l'explication après
+      chaque réponse. Chaque question terminée est enregistrée immédiatement — quitter une session ne fait
+      perdre que la question en cours.
     </div>
 
     <p class="section-title"># les 4 niveaux de difficulté</p>
@@ -454,7 +461,7 @@ function showRules() {
       <p style="margin-bottom:6px"><i class="ti ti-stethoscope" style="color:var(--cyan)"></i> <b>Scénario</b> — une situation réelle à diagnostiquer, comme le jour J</p>
       <p style="margin-bottom:6px"><i class="ti ti-terminal" style="color:var(--cyan)"></i> <b>Terminal simulé</b> — tapez la commande dans une vraie console : si elle est juste, son résultat s'affiche comme en réel</p>
       <p style="margin-bottom:6px"><i class="ti ti-flask" style="color:var(--cyan)"></i> <b>Mini-TP</b> — une session guidée en plusieurs étapes (IOS, Bash, PowerShell) : le prompt évolue comme en vrai, indice après une erreur, <b>XP doublés</b></p>
-      <p><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Au clavier</b> — touches 1-4 ou A-D pour répondre, Entrée pour valider et passer à la suite</p>
+      <p><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Au clavier</b> — touches 1-4 ou A-D pour répondre, Entrée pour valider et passer à la suite ; dans le terminal : Tab complète le mot en cours, flèches ↑/↓ pour l'historique</p>
     </div>
 
     <p class="section-title"># examen blanc</p>
@@ -532,7 +539,9 @@ function showTheme(theme) {
   document.querySelectorAll(".level-row:not(.locked)").forEach(r => {
     r.onclick = () => {
       const n = parseInt(r.dataset.lvl, 10);
-      const pool = drawPreferUnseen(BANK.filter(q => q.theme === theme.id && q.niveau === n), SESSION_SIZE);
+      const brut = BANK.filter(q => q.theme === theme.id && q.niveau === n);
+      const taille = brut.length && brut.every(x => x.type === "tp") ? TP_SESSION_SIZE : SESSION_SIZE;
+      const pool = drawPreferUnseen(brut, taille);
       if (!pool.length) return;
       startSession(pool, { title: `${theme.name} · niveau ${n}`, color: theme.color, back: () => showTheme(theme) });
     };
@@ -829,6 +838,47 @@ function renderLibre(q) {
   }
 }
 
+/* Autocomplétion Tab : complète le MOT en cours (jamais la commande entière —
+   sinon Tab donnerait la réponse). Plusieurs candidats → plus long préfixe
+   commun, comme bash/IOS. Retourne null s'il n'y a rien à compléter. */
+function completerCommande(saisie, variantes) {
+  const m = saisie.match(/^(.*?)(\S*)$/);
+  const avant = m[1], partiel = m[2];
+  if (!partiel) return null;
+  const idx = avant.trim() ? avant.trim().split(/\s+/).length : 0;
+  const precedents = avant.trim() ? avant.trim().split(/\s+/) : [];
+  const candidats = new Set();
+  for (const v of variantes) {
+    const toks = v.trim().split(/\s+/);
+    if (toks.length <= idx) continue;
+    if (!precedents.every((t, i) => toks[i] && toks[i].toLowerCase() === t.toLowerCase())) continue;
+    if (toks[idx].toLowerCase().startsWith(partiel.toLowerCase())) candidats.add(toks[idx]);
+  }
+  if (!candidats.size) return null;
+  const arr = [...candidats];
+  let commun = arr[0];
+  for (const c of arr.slice(1)) {
+    let k = 0;
+    while (k < commun.length && k < c.length && commun[k].toLowerCase() === c[k].toLowerCase()) k++;
+    commun = commun.slice(0, k);
+  }
+  if (commun.length <= partiel.length) return null;
+  const motComplet = arr.length === 1 && commun.length === arr[0].length;
+  return avant + commun + (motComplet ? " " : "");
+}
+
+function brancheTab(input, getVariantes) {
+  input.addEventListener("keydown", e => {
+    if (e.key !== "Tab") return;
+    e.preventDefault();
+    const r = completerCommande(input.value, getVariantes());
+    if (r !== null) {
+      input.value = r;
+      requestAnimationFrame(() => input.setSelectionRange(r.length, r.length));
+    }
+  });
+}
+
 /* Caret IOS : ligne d'espaces + « ^ » aligné sous le premier mot de la commande
    tapée qui diverge de la commande attendue (comme un vrai routeur Cisco). */
 function ligneCaret(promptTxt, val, reference) {
@@ -864,6 +914,7 @@ function renderTerminal(q) {
   inputLine.appendChild(input);
   body.appendChild(inputLine);
   input.focus();
+  brancheTab(input, () => q.accept);
 
   input.addEventListener("keydown", e => {
     if (e.key !== "Enter") return;
@@ -946,6 +997,7 @@ function renderTP(q) {
     input.focus();
     input.scrollIntoView({ block: "nearest" });
     brancheHistorique(input);
+    brancheTab(input, () => st.accept);
     input.addEventListener("keydown", e => {
       if (e.key !== "Enter") return;
       const val = input.value;
