@@ -79,7 +79,7 @@ async function onlineSignUp(pseudo, password) {
   if (!pseudoValide(pseudo)) return "Pseudo invalide : 2 à 20 caractères, lettres/chiffres/-/_ uniquement.";
   const { data, error } = await sb.auth.signUp({ email: pseudoToEmail(pseudo), password });
   if (error) return authErrorMessage(error);
-  if (!data.session) return "Compte créé mais session absente — vérifiez que « Confirm email » est désactivé dans Supabase.";
+  if (!data.session) return "Compte créé, mais connexion impossible pour le moment — réessayez, ou signalez-le à l'administrateur.";
   const { error: pe } = await sb.from("profiles").upsert({ id: data.user.id, pseudo });
   if (pe) {
     console.warn("Création du profil :", pe);
@@ -99,10 +99,13 @@ async function onlineSignIn(pseudo, password) {
   if (!sb) return "Partie en ligne indisponible.";
   const { data, error } = await sb.auth.signInWithPassword({ email: pseudoToEmail(pseudo), password });
   if (error) return authErrorMessage(error);
-  onlineUser = { id: data.user.id, pseudo };
+  onlineUser = { id: data.user.id, pseudo, pseudoConfirme: true };
   const { data: prof, error: se } = await sb.from("profiles").select("pseudo").eq("id", data.user.id).maybeSingle();
-  if (!se && prof) onlineUser.pseudo = prof.pseudo;
-  else if (!se && !prof) {
+  if (se) {
+    console.warn("Profil illisible :", se);
+    onlineUser.pseudoConfirme = false;
+  } else if (prof) onlineUser.pseudo = prof.pseudo;
+  else {
     const { error: ie } = await sb.from("profiles").upsert({ id: data.user.id, pseudo });
     if (ie) console.warn("Création du profil :", ie);
   }
@@ -166,13 +169,34 @@ async function onlinePushState(st, gradeNum) {
     if (e1 || e2) {
       console.warn("Synchronisation en échec :", e1 || e2);
       syncError = true;
-      return;
+    } else {
+      syncError = false;
     }
-    syncError = false;
   } catch (e) {
     console.warn("Synchronisation impossible :", e);
     syncError = true;
   }
+  if (typeof updateOnlineBadge === "function") updateOnlineBadge();
+}
+
+/* Push « meilleur effort » à la fermeture de page : pas de lecture de garde
+   (un aller-retour de moins maximise les chances que les upserts partent). */
+function onlinePushFast(st, gradeNum) {
+  if (!sb || !onlineUser || !syncOk) return;
+  const now = new Date().toISOString();
+  const payload = {
+    id: onlineUser.id, xp: st.xp, grade: gradeNum,
+    badges: st.badges.length, exam_best: st.cnt.examBest, updated_at: now
+  };
+  if (onlineUser.pseudoConfirme !== false) payload.pseudo = onlineUser.pseudo;
+  sb.from("profiles").upsert(payload).then(() => {}, () => {});
+  sb.from("progress").upsert({ id: onlineUser.id, state: st, updated_at: now }).then(() => {}, () => {});
+}
+
+function onlineCancelPending() {
+  clearTimeout(pushTimer);
+  pushTimer = null;
+  lastPushArgs = null;
 }
 
 function onlinePushSoon(st, gradeNum) {
@@ -194,7 +218,7 @@ function flushSync() {
   if (pushTimer && lastPushArgs) {
     clearTimeout(pushTimer);
     pushTimer = null;
-    onlinePushState(lastPushArgs[0], lastPushArgs[1]);
+    onlinePushFast(lastPushArgs[0], lastPushArgs[1]);
   }
 }
 window.addEventListener("pagehide", flushSync);

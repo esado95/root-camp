@@ -5,7 +5,7 @@
 const LS_KEY = "quiz-tssr2601-v1";
 const POINTS = { 1: 1, 2: 2, 3: 3, 4: 5 };
 const LEVEL_NAMES = { 1: "connaissance", 2: "compréhension", 3: "application", 4: "analyse" };
-const LEVEL_COLORS = { 1: "var(--green)", 2: "var(--cyan)", 3: "var(--amber)", 4: "var(--red)" };
+const LEVEL_COLORS = { 1: "#63D471", 2: "#38BDF8", 3: "#FBBF24", 4: "#F87171" };
 const UNLOCK_MIN_ATTEMPTS = 8;
 const UNLOCK_RATE = 0.7;
 const SESSION_SIZE = 10;
@@ -29,7 +29,7 @@ const BADGES = [
     test: s => moduleStats("Adressage IP & CIDR").c >= 20 },
   { id: "serie7", name: "Série de 7 jours", desc: "Jouer 7 jours d'affilée", icon: "ti-flame", color: "var(--amber)",
     test: s => dayStreak(s) >= 7 },
-  { id: "cent", name: "Première centaine", desc: "100 questions répondues", icon: "ti-stack-2", color: "var(--violet)",
+  { id: "cent", name: "Première centaine", desc: "Donner 100 réponses (répétitions comprises)", icon: "ti-stack-2", color: "var(--violet)",
     test: s => s.cnt.total >= 100 },
   { id: "sansfilet", name: "Sans filet", desc: "20 bonnes réponses d'affilée", icon: "ti-target-arrow", color: "var(--red)",
     test: s => s.cnt.best >= 20 },
@@ -103,8 +103,12 @@ function load() {
   } catch (e) { /* état corrompu → repartir de zéro */ }
   return defaultState();
 }
+function persist() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+  catch (e) { console.warn("Stockage local indisponible :", e); }
+}
 function save() {
-  localStorage.setItem(LS_KEY, JSON.stringify(state));
+  persist();
   if (typeof onlinePushSoon === "function") onlinePushSoon(state, gradeIndex() + 1);
 }
 
@@ -315,7 +319,7 @@ function showHome() {
       <i class="ti ti-chevron-right arrow" style="color:var(--dim)"></i>
     </div>
     <div class="stats">
-      <div class="stat"><p style="color:var(--cyan2)">questions</p><b>${state.cnt.total}</b></div>
+      <div class="stat"><p style="color:var(--cyan2)">réponses</p><b>${state.cnt.total}</b></div>
       <div class="stat"><p style="color:var(--green)">réussite</p><b>${pct}%</b></div>
       <div class="stat"><p style="color:var(--amber)">à revoir</p><b>${state.review.length}</b></div>
     </div>`;
@@ -353,8 +357,8 @@ function showRules() {
     <p class="section-title"># les 4 niveaux de difficulté</p>
     ${lvRows}
     <div class="feedback">
-      Chaque thème démarre au niveau 1. Pour débloquer le niveau suivant :
-      répondre à au moins ${UNLOCK_MIN_ATTEMPTS} questions du niveau en cours avec
+      Chaque thème démarre à son premier niveau disponible. Pour débloquer le niveau suivant :
+      donner au moins ${UNLOCK_MIN_ATTEMPTS} réponses au niveau en cours avec
       <b style="color:var(--green)">${Math.round(UNLOCK_RATE * 100)} % de réussite</b>.
     </div>
 
@@ -372,22 +376,22 @@ function showRules() {
 
     <p class="section-title"># examen blanc</p>
     <div class="feedback" style="margin-top:0">
-      ${EXAM_SIZE} questions tirées de tous les thèmes, ${EXAM_MINUTES} minutes chrono, aucune correction pendant l'épreuve.
+      ${EXAM_SIZE} questions tirées de tous les thèmes (hors Atelier TP), ${EXAM_MINUTES} minutes chrono, aucune correction pendant l'épreuve.
       Les bonnes réponses rapportent <b style="color:var(--cyan)">le double d'XP</b>.
-      Le corrigé complet s'affiche à la fin. Seuil de réussite : 60 %.
+      À la fin : le corrigé de vos erreurs et des questions non traitées. Seuil de réussite : 60 %.
     </div>
 
     <p class="section-title"># révision (à revoir)</p>
     <div class="feedback" style="margin-top:0">
       Chaque erreur envoie la question dans la pile « à revoir ».
       Pour l'en sortir : <b style="color:var(--amber)">2 bonnes réponses d'affilée</b> sur cette question.
-      C'est la répétition espacée : on retravaille ce qu'on rate, pas ce qu'on sait déjà.
+      Le principe : on retravaille ce qu'on rate, pas ce qu'on sait déjà.
     </div>
 
     <p class="section-title"># grades et classement</p>
     <div class="feedback" style="margin-top:0">
       L'XP cumulé fait monter votre grade : de <b>stagiaire</b> à <b style="color:var(--cyan)">root@tssr</b> (7 échelons —
-      détail dans l'onglet Profil). Les séries de bonnes réponses et les examens font grimper plus vite.
+      détail dans l'onglet Profil). Les examens blancs et les mini-TP rapportent le double d'XP.
       Créez un compte (pseudo + mot de passe, onglet Profil) pour apparaître dans le <b>classement du groupe</b>
       et synchroniser votre progression entre PC et téléphone. Sans compte, tout reste enregistré localement.
     </div>
@@ -420,7 +424,7 @@ function showTheme(theme) {
         <div class="lvl" style="background:${LEVEL_COLORS[n]}22; color:${LEVEL_COLORS[n]}">${vide ? "–" : (locked ? '<i class="ti ti-lock"></i>' : n)}</div>
         <div>
           <h3>Niveau ${n} — ${LEVEL_NAMES[n]}</h3>
-          <p>${vide ? "aucune question à ce niveau" : count + " questions" + (locked ? ` · réussir ${Math.round(UNLOCK_RATE * 100)} % du niveau ${n - 1} pour débloquer` : "")}</p>
+          <p>${vide ? "aucune question à ce niveau" : count + " questions" + (locked ? ` · pour débloquer : ≥ ${UNLOCK_MIN_ATTEMPTS} réponses au niveau ${n - 1} avec ${Math.round(UNLOCK_RATE * 100)} % de réussite` : "")}</p>
         </div>
         <div class="right">${rate !== null ? rate + " %<br>" + st.a + " rép." : ""}</div>
       </div>`;
@@ -443,7 +447,7 @@ function showTheme(theme) {
   document.querySelectorAll(".level-row:not(.locked)").forEach(r => {
     r.onclick = () => {
       const n = parseInt(r.dataset.lvl, 10);
-      const pool = shuffle(BANK.filter(q => q.theme === theme.id && q.niveau === n)).slice(0, SESSION_SIZE);
+      const pool = drawPreferUnseen(BANK.filter(q => q.theme === theme.id && q.niveau === n), SESSION_SIZE);
       if (!pool.length) return;
       startSession(pool, { title: `${theme.name} · niveau ${n}`, color: theme.color, back: () => showTheme(theme) });
     };
@@ -459,8 +463,9 @@ function startSession(questions, opts) {
     qs: questions, idx: 0, ok: 0, xpStart: state.xp,
     exam: !!opts.exam, title: opts.title, color: opts.color || "var(--cyan)",
     back: opts.back || (() => nav("home")),
-    wrong: [], review: !!opts.review,
+    wrong: [], answered: [], review: !!opts.review,
     reviewStart: state.review.length,
+    done: false, nextTimer: null,
     deadline: opts.exam ? Date.now() + EXAM_MINUTES * 60000 : null, timer: null
   };
   renderQuestion();
@@ -501,7 +506,16 @@ function renderQuestion() {
     </div>`;
 
   screen.innerHTML = head + body + `<div id="fb"></div>`;
-  $("#quit").onclick = () => { endTimer(); session.back(); session = null; };
+  $("#quit").onclick = () => {
+    endTimer();
+    if (session.nextTimer) clearTimeout(session.nextTimer);
+    pendingToasts.forEach(toast);
+    pendingToasts = [];
+    const back = session.back;
+    session = null;
+    updateNavPill();
+    back();
+  };
 
   if (session.exam) {
     const tick = () => {
@@ -759,14 +773,21 @@ function finishQuestion(q, correct) {
   recordAnswer(q, correct, session.exam);
   if (correct) session.ok++;
   else session.wrong.push(q);
+  session.answered.push(q.id);
 
   const fb = $("#fb");
   const last = session.idx + 1 >= session.qs.length;
   if (session.exam) {
-    setTimeout(() => { session.idx++; renderQuestion(); }, 600);
+    const s = session;
+    s.nextTimer = setTimeout(() => {
+      s.nextTimer = null;
+      if (session !== s || s.done) return;
+      s.idx++;
+      renderQuestion();
+    }, 600);
     return;
   }
-  const pts = POINTS[q.niveau];
+  const pts = POINTS[q.niveau] * (q.type === "tp" ? 2 : 1);
   fb.insertAdjacentHTML("beforeend", `
     <div class="feedback">
       <p class="verdict" style="color:${correct ? "var(--green)" : "var(--red)"}">
@@ -783,6 +804,9 @@ function finishQuestion(q, correct) {
 }
 
 function showResult(timeout) {
+  if (!session || session.done) return;
+  session.done = true;
+  if (session.nextTimer) { clearTimeout(session.nextTimer); session.nextTimer = null; }
   endTimer();
   const total = session.qs.length;
   const answered = session.ok + session.wrong.length;
@@ -795,9 +819,9 @@ function showResult(timeout) {
   if (session.exam) {
     state.cnt.exams++;
     if (pct > state.cnt.examBest) state.cnt.examBest = pct;
+    checkBadges();
     save();
     updateNavPill(true);
-    checkBadges();
     pendingToasts.forEach(toast);
     pendingToasts = [];
   }
@@ -810,6 +834,18 @@ function showResult(timeout) {
           <p class="verdict" style="color:var(--red)">${esc(q.q)}</p>
           ${esc(q.explication)}
         </div>`).join("");
+  }
+  if (session.exam) {
+    const repondu = new Set(session.answered);
+    const nonTraitees = session.qs.filter(q => !repondu.has(q.id));
+    if (nonTraitees.length) {
+      wrongList += `<p class="section-title" style="text-align:left"># non traitées (comptées fausses)</p>` +
+        nonTraitees.map(q => `
+          <div class="feedback" style="text-align:left; margin-top:8px">
+            <p class="verdict" style="color:var(--amber)">${esc(q.q)}</p>
+            ${esc(q.explication)}
+          </div>`).join("");
+    }
   }
 
   screen.innerHTML = `
@@ -842,16 +878,24 @@ function showResult(timeout) {
 
 /* ============ Examen blanc ============ */
 
+/* Tirage qui privilégie les questions jamais vues (puis les moins vues) —
+   le hasard ne départage que les ex æquo. */
+function drawPreferUnseen(pool, n) {
+  const vues = q => (state.q[q.id] && state.q[q.id].a) || 0;
+  return shuffle(pool).sort((a, b) => vues(a) - vues(b)).slice(0, n);
+}
+
 function drawExam() {
   const weights = { 1: 0.2, 2: 0.3, 3: 0.3, 4: 0.2 };
   const pool = BANK.filter(q => ["qcm", "multi", "libre", "scenario", "terminal"].includes(q.type));
   let picked = [];
   for (const n of [1, 2, 3, 4]) {
     const want = Math.round(EXAM_SIZE * weights[n]);
-    picked = picked.concat(shuffle(pool.filter(q => q.niveau === n)).slice(0, want));
+    picked = picked.concat(drawPreferUnseen(pool.filter(q => q.niveau === n), want));
   }
-  const rest = shuffle(pool.filter(q => !picked.includes(q)));
-  while (picked.length < EXAM_SIZE && rest.length) picked.push(rest.pop());
+  const rest = drawPreferUnseen(pool.filter(q => !picked.includes(q)), EXAM_SIZE);
+  let i = 0;
+  while (picked.length < EXAM_SIZE && i < rest.length) picked.push(rest[i++]);
   return shuffle(picked).slice(0, EXAM_SIZE);
 }
 
@@ -860,7 +904,7 @@ function showExamIntro() {
   screen.innerHTML = `
     <h1 style="margin-bottom:14px">Examen blanc</h1>
     <div class="feedback" style="margin-bottom:16px">
-      <p style="margin-bottom:8px"><i class="ti ti-clock-bolt" style="color:var(--violet)"></i> <b>${EXAM_SIZE} questions</b> tirées de tous les thèmes disponibles</p>
+      <p style="margin-bottom:8px"><i class="ti ti-clock-bolt" style="color:var(--violet)"></i> <b>${EXAM_SIZE} questions</b> tirées de tous les thèmes (hors Atelier TP)</p>
       <p style="margin-bottom:8px"><i class="ti ti-hourglass" style="color:var(--amber)"></i> <b>${EXAM_MINUTES} minutes</b> — le chrono tourne, les questions sans réponse comptent faux</p>
       <p style="margin-bottom:8px"><i class="ti ti-bolt" style="color:var(--cyan)"></i> <b>XP doublés</b> pour chaque bonne réponse</p>
       <p><i class="ti ti-eye-off" style="color:var(--red)"></i> Les explications ne s'affichent qu'à la fin</p>
@@ -1086,12 +1130,10 @@ function showProfile() {
         if (etranger) state = cloud || defaultState();
         else if (cloud && (cg > sg || (cg === sg && cloud.xp >= state.xp))) state = cloud;
         state.owner = onlineUser.id;
-        localStorage.setItem(LS_KEY, JSON.stringify(state));
+        persist();
         await onlinePushState(state, gradeIndex() + 1);
         toast(`<i class="ti ti-cloud-check"></i> ${signup ? "Compte créé" : "Connecté"} : <b>${esc(onlineUser.pseudo)}</b>`);
       } else {
-        state.owner = onlineUser.id;
-        localStorage.setItem(LS_KEY, JSON.stringify(state));
         toast(`<i class="ti ti-cloud-off"></i> Connecté, mais cloud injoignable — synchronisation en pause`);
       }
       updateNavPill();
@@ -1120,7 +1162,8 @@ function showProfile() {
     state = defaultState();
     state.gen = gen;
     state.owner = owner;
-    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    persist();
+    if (typeof onlineCancelPending === "function") onlineCancelPending();
     if (typeof onlineUser !== "undefined" && onlineUser) await onlinePushState(state, 1);
     updateNavPill();
     nav("profile");
@@ -1133,7 +1176,10 @@ document.querySelectorAll(".nav button").forEach(b => {
   b.onclick = () => {
     if (session) {
       endTimer();
+      if (session.nextTimer) clearTimeout(session.nextTimer);
       session = null;
+      pendingToasts.forEach(toast);
+      pendingToasts = [];
     }
     nav(b.dataset.nav);
   };
@@ -1147,7 +1193,7 @@ document.querySelectorAll(".nav button").forEach(b => {
         await onlineRestore();
         if (typeof onlineUser !== "undefined" && onlineUser) {
           const lecture = await onlineFetchState();
-          if (lecture.ok && lecture.state) {
+          if (lecture.ok && lecture.state && !session) {
             const cloud = normalizeState(lecture.state);
             const etranger = state.owner && state.owner !== onlineUser.id;
             const cg = cloud.gen || 0, sg = state.gen || 0;
@@ -1155,7 +1201,7 @@ document.querySelectorAll(".nav button").forEach(b => {
               state = cloud;
             }
             state.owner = onlineUser.id;
-            localStorage.setItem(LS_KEY, JSON.stringify(state));
+            persist();
           }
         }
       }
@@ -1163,6 +1209,10 @@ document.querySelectorAll(".nav button").forEach(b => {
   })();
   try {
     await Promise.all([loadBank(), avecDelai(partieEnLigne, 6000)]);
+    const connus = new Set(BANK.map(q => q.id));
+    const avantPurge = state.review.length;
+    state.review = state.review.filter(id => connus.has(id));
+    if (state.review.length !== avantPurge) persist();
     updateOnlineBadge();
     updateNavPill();
     nav("home");

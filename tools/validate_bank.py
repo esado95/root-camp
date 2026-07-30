@@ -70,6 +70,9 @@ def check_question(f, q, idx):
             err(f, qid, "accept absent ou vide")
         elif any(not isinstance(a, str) or not a.strip() for a in acc):
             err(f, qid, "accept contient une entrée vide")
+        for champ in ("output", "error", "prompt"):
+            if champ in q and not isinstance(q[champ], str):
+                err(f, qid, f"{champ} doit être une chaîne (pas un tableau/objet)")
     elif t == "tp":
         steps = q.get("steps")
         if not isinstance(steps, list) or len(steps) < 2:
@@ -82,6 +85,9 @@ def check_question(f, q, idx):
                 acc = s.get("accept")
                 if not isinstance(acc, list) or not acc or any(not isinstance(a, str) or not a.strip() for a in acc):
                     err(f, qid, f"étape {j + 1} : accept absent ou vide")
+                for champ in ("output", "error", "hint", "prompt"):
+                    if champ in s and not isinstance(s[champ], str):
+                        err(f, qid, f"étape {j + 1} : {champ} doit être une chaîne")
     if len(q.get("explication", "")) < 15:
         warnings.append(f"[{f.name}] {qid}: explication très courte")
 
@@ -106,6 +112,8 @@ def main():
         if "module" not in data or "questions" not in data:
             errors.append(f"[{p.name}] champs module/questions manquants")
             continue
+        if not isinstance(data.get("source"), str) or not data["source"].strip():
+            errors.append(f"[{p.name}] champ source manquant (affiché dans chaque feedback)")
         by_level = {1: 0, 2: 0, 3: 0, 4: 0}
         by_type = {}
         for i, q in enumerate(data["questions"]):

@@ -7,7 +7,7 @@
   --line2: #2E4368;
   --txt: #F1F5F9;
   --mut: #94A3B8;
-  --dim: #64748B;
+  --dim: #7F8EA6;
   --cyan: #38BDF8;
   --cyan2: #7DD3FC;
   --green: #63D471;
@@ -126,8 +126,8 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
   padding: 9px 16px;
   transition: border-color .15s, background .15s;
 }
-.btn:hover { border-color: var(--cyan); }
-.btn:disabled { cursor: default; }
+.btn:hover:not(:disabled) { border-color: var(--cyan); }
+.btn:disabled { cursor: default; opacity: .55; }
 .btn.small { font-size: 13px; padding: 5px 12px; }
 .btn.accent { border-color: var(--cyan); color: var(--cyan); }
 .btn.full { width: 100%; text-align: left; }
@@ -150,6 +150,7 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
   white-space: pre-wrap;
 }
 .question { font-size: 16px; font-weight: 600; margin-bottom: 14px; line-height: 1.45; }
+.btn, .question, .feedback, .context { overflow-wrap: anywhere; }
 
 .answers { display: flex; flex-direction: column; gap: 8px; }
 .answers .btn { display: flex; align-items: center; gap: 10px; }
@@ -198,10 +199,11 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
 .term-body .line.ok { color: var(--green); }
 .term-body .line.ko { color: var(--red); }
 .term-prompt { color: var(--green); }
+.term-body .line:has(.term-input) { display: flex; gap: 6px; }
 .term-input {
   background: none; border: none; outline: none;
   color: #E2E8F0; font-family: var(--mono); font-size: 13px;
-  width: 60%; caret-color: var(--green);
+  width: 60%; flex: 1; min-width: 0; caret-color: var(--green);
 }
 
 .feedback {
@@ -283,6 +285,7 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
 #toast {
   position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; gap: 8px; z-index: 50;
+  width: max-content; max-width: calc(100vw - 32px);
 }
 .toast-item {
   background: var(--panel2); border: 1px solid var(--cyan); border-radius: 10px;
@@ -297,5 +300,7 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
 @media (max-width: 480px) {
   main { padding: 16px 14px; }
   .pairs { grid-template-columns: 1fr; }
+  .pairs .col + .col { border-top: 1px dashed var(--line2); padding-top: 10px; }
   .online { display: none; }
+  .term-input, .libre-row input, main input { font-size: 16px !important; }
 }
