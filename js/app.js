@@ -49,7 +49,7 @@ let state = load();
 
 function defaultState() {
   return {
-    v: 1, xp: 0, gen: 0, owner: null,
+    v: 1, xp: 0, gen: 0, owner: null, accueilVu: false,
     q: {},
     lv: {},
     review: [],
@@ -66,6 +66,7 @@ function normalizeState(raw) {
   d.xp = Math.max(0, Number(raw.xp) || 0);
   d.gen = Math.max(0, Number(raw.gen) || 0);
   d.owner = typeof raw.owner === "string" ? raw.owner : null;
+  d.accueilVu = raw.accueilVu === true;
   if (raw.q && typeof raw.q === "object") {
     for (const k in raw.q) {
       const s = raw.q[k];
@@ -343,6 +344,46 @@ function showHome() {
   $("#go-rules").onclick = showRules;
 }
 
+function showBienvenue() {
+  setPath("./welcome.sh");
+  screen.innerHTML = `
+    <h1 style="margin-bottom:14px">Bienvenue sur Root Camp</h1>
+    <div class="feedback" style="margin-top:0">
+      De <b>stagiaire</b> à <b style="color:var(--cyan)">root@tssr</b> : révisez tout le programme TSSR2601
+      en répondant à des questions générées depuis les cours de la promo.
+    </div>
+    <div class="level-list" style="margin-top:14px">
+      <div class="level-row" style="cursor:default">
+        <div class="lvl" style="background:#38BDF822; color:var(--cyan)"><i class="ti ti-layout-grid"></i></div>
+        <div><h3>${BANK.length} questions · 10 thèmes · 4 niveaux</h3>
+        <p>chaque thème se débloque niveau par niveau (70 % de réussite)</p></div>
+      </div>
+      <div class="level-row" style="cursor:default">
+        <div class="lvl" style="background:#A78BFA22; color:var(--violet)"><i class="ti ti-clock-bolt"></i></div>
+        <div><h3>Examens blancs à paliers</h3>
+        <p>validez le niveau 1 de chaque thème pour ouvrir le premier examen</p></div>
+      </div>
+      <div class="level-row" style="cursor:default">
+        <div class="lvl" style="background:#2DD4BF22; color:#2DD4BF"><i class="ti ti-flask"></i></div>
+        <div><h3>Atelier TP — terminal simulé</h3>
+        <p>tapez de vraies commandes IOS, Bash et PowerShell, avec leurs sorties</p></div>
+      </div>
+      <div class="level-row" style="cursor:default">
+        <div class="lvl" style="background:#63D47122; color:var(--green)"><i class="ti ti-cloud"></i></div>
+        <div><h3>Compte facultatif</h3>
+        <p>pseudo + mot de passe (onglet Profil) : synchronisation PC/téléphone et classement du groupe — sinon, tout reste local</p></div>
+      </div>
+    </div>
+    <p class="comment" style="margin-top:12px"># astuce : répondez au clavier — touches 1-4 ou A-D, Entrée pour continuer</p>
+    <div style="display:flex; gap:10px; margin-top:14px">
+      <button class="btn" id="bv-regles" style="flex:1"><i class="ti ti-book-2"></i> Les règles en détail</button>
+      <button class="btn accent" id="bv-go" style="flex:1"><i class="ti ti-player-play"></i> C'est parti</button>
+    </div>`;
+  const marquer = () => { state.accueilVu = true; persist(); };
+  $("#bv-regles").onclick = () => { marquer(); showRules(); };
+  $("#bv-go").onclick = () => { marquer(); nav("home"); };
+}
+
 function showRules() {
   setPath("./quiz --regles");
   const lvRows = [1, 2, 3, 4].map(n => `
@@ -383,7 +424,8 @@ function showRules() {
       <p style="margin-bottom:6px"><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Champ libre</b> — tapez la réponse exacte (valeur ou commande)</p>
       <p style="margin-bottom:6px"><i class="ti ti-stethoscope" style="color:var(--cyan)"></i> <b>Scénario</b> — une situation réelle à diagnostiquer, comme le jour J</p>
       <p style="margin-bottom:6px"><i class="ti ti-terminal" style="color:var(--cyan)"></i> <b>Terminal simulé</b> — tapez la commande dans une vraie console : si elle est juste, son résultat s'affiche comme en réel</p>
-      <p><i class="ti ti-flask" style="color:var(--cyan)"></i> <b>Mini-TP</b> — une session guidée en plusieurs étapes (IOS, Bash, PowerShell) : le prompt évolue comme en vrai, indice après une erreur, <b>XP doublés</b></p>
+      <p style="margin-bottom:6px"><i class="ti ti-flask" style="color:var(--cyan)"></i> <b>Mini-TP</b> — une session guidée en plusieurs étapes (IOS, Bash, PowerShell) : le prompt évolue comme en vrai, indice après une erreur, <b>XP doublés</b></p>
+      <p><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Au clavier</b> — touches 1-4 ou A-D pour répondre, Entrée pour valider et passer à la suite</p>
     </div>
 
     <p class="section-title"># examen blanc</p>
@@ -500,7 +542,7 @@ function renderQuestion() {
       <span class="qmeta" style="color:${session.color}">${esc(session.title)} · ${session.idx + 1}/${session.qs.length}</span>
       ${session.exam ? '<span class="qmeta" id="timer" style="color:var(--amber)"></span>' : ""}
     </div>
-    <div class="progress"><div style="width:${Math.round(session.idx / session.qs.length * 100)}%; background:${session.color}"></div></div>
+    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${session.qs.length}" aria-valuenow="${session.idx}" aria-label="progression de la session"><div style="width:${Math.round(session.idx / session.qs.length * 100)}%; background:${session.color}"></div></div>
     <span class="badge-pill" style="background:${LEVEL_COLORS[q.niveau]}22; color:${LEVEL_COLORS[q.niveau]}; margin-bottom:10px">niveau ${q.niveau} · ${LEVEL_NAMES[q.niveau]}</span>
     ${q.context ? `<div class="context">${esc(q.context)}</div>` : ""}
     <p class="question">${esc(q.q)}</p>`;
@@ -517,7 +559,7 @@ function renderQuestion() {
         <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
         <span style="margin-left:6px">${q.type === "tp" ? "mini-TP guidé — une commande par étape" : "simulation — tapez la commande puis Entrée"}</span>
       </div>
-      <div class="term-body" id="term-body"></div>
+      <div class="term-body" id="term-body" role="log" aria-live="polite"></div>
     </div>`;
 
   screen.innerHTML = head + body + `<div id="fb"></div>`;
@@ -556,12 +598,36 @@ function renderQuestion() {
 function letters(i) { return String.fromCharCode(65 + i); }
 
 /* Bouclier anti double-clic : après chaque rendu d'écran interactif, les clics
-   sont ignorés 250 ms — le « rebond » d'un double-clic ne peut plus répondre
-   à la question suivante par accident. */
+   ET les réponses clavier sont ignorés 250 ms — le « rebond » d'un double-clic
+   ou d'une touche maintenue ne peut plus répondre à la question suivante. */
+let lastShield = 0;
 function shieldClicks() {
+  lastShield = Date.now();
   screen.style.pointerEvents = "none";
   setTimeout(() => { screen.style.pointerEvents = ""; }, 250);
 }
+
+/* Réponses au clavier : 1-9 ou A-E sélectionnent une proposition,
+   Entrée déclenche « suivant » ou « valider ». Inactif dans les champs de saisie. */
+document.addEventListener("keydown", e => {
+  if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+  if (!session || Date.now() - lastShield < 250) return;
+  if (e.key === "Enter") {
+    const next = document.getElementById("next");
+    if (next && !next.disabled) { e.preventDefault(); next.click(); return; }
+    const val = document.getElementById("validate");
+    if (val) { e.preventDefault(); val.click(); }
+    return;
+  }
+  const answers = document.getElementById("answers");
+  if (!answers) return;
+  let idx = -1;
+  if (/^[1-9]$/.test(e.key)) idx = Number(e.key) - 1;
+  else if (/^[a-eA-E]$/.test(e.key)) idx = e.key.toLowerCase().charCodeAt(0) - 97;
+  if (idx < 0) return;
+  const btns = answers.querySelectorAll(".btn");
+  if (idx < btns.length && !btns[idx].disabled) { e.preventDefault(); btns[idx].click(); }
+});
 
 function renderQCM(q) {
   const box = $("#answers");
@@ -1324,7 +1390,8 @@ document.querySelectorAll(".nav button").forEach(b => {
     if (state.review.length !== avantPurge) persist();
     updateOnlineBadge();
     updateNavPill();
-    nav("home");
+    if (!state.accueilVu && state.cnt.total === 0) showBienvenue();
+    else nav("home");
   } catch (err) {
     screen.innerHTML = `<p class="loading" style="color:var(--red)"># erreur de chargement : ${esc(err.message)}<br># ouvrez le site via un serveur web (http), pas en fichier local.</p>`;
   }

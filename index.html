@@ -14,7 +14,7 @@
   <div class="titlebar">
     <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
     <span class="prompt">said@rootcamp:~$ <span id="tb-path">./quiz --start</span><span class="cursor">▊</span></span>
-    <span class="online" id="online-badge" style="color:var(--dim)">● local</span>
+    <span class="online" id="online-badge" style="color:var(--dim)" aria-live="polite">● local</span>
   </div>
   <main id="screen"><p class="loading"># chargement de la banque de questions...</p></main>
   <nav class="nav">
@@ -25,11 +25,11 @@
     <button data-nav="profile"><i class="ti ti-user-hexagon"></i><span>Profil</span></button>
   </nav>
 </div>
-<div id="toast"></div>
+<div id="toast" aria-live="polite"></div>
 <script src="js/vendor/supabase.min.js"></script>
 <script src="js/config.js?v=3"></script>
 <script src="js/online.js?v=4"></script>
-<script src="js/app.js?v=12"></script>
+<script src="js/app.js?v=13"></script>
 
 </body>
 </html>
