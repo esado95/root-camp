@@ -49,7 +49,7 @@ let state = load();
 
 function defaultState() {
   return {
-    v: 1, xp: 0,
+    v: 1, xp: 0, gen: 0, owner: null,
     q: {},
     lv: {},
     review: [],
@@ -57,14 +57,56 @@ function defaultState() {
     badges: []
   };
 }
+
+/* Normalisation profonde : tout état (local, cloud, ancien schéma) est reconstruit
+   champ par champ sur defaultState() — jamais de sous-objet remplacé en bloc. */
+function normalizeState(raw) {
+  const d = defaultState();
+  if (!raw || typeof raw !== "object") return d;
+  d.xp = Math.max(0, Number(raw.xp) || 0);
+  d.gen = Math.max(0, Number(raw.gen) || 0);
+  d.owner = typeof raw.owner === "string" ? raw.owner : null;
+  if (raw.q && typeof raw.q === "object") {
+    for (const k in raw.q) {
+      const s = raw.q[k];
+      if (s && typeof s === "object") d.q[k] = { a: Number(s.a) || 0, c: Number(s.c) || 0, s: Number(s.s) || 0 };
+    }
+  }
+  if (raw.lv && typeof raw.lv === "object") {
+    for (const t in raw.lv) {
+      const lv = raw.lv[t];
+      if (!lv || typeof lv !== "object") continue;
+      d.lv[t] = {};
+      for (const n in lv) {
+        const x = lv[n];
+        if (x && typeof x === "object") d.lv[t][n] = { a: Number(x.a) || 0, c: Number(x.c) || 0 };
+      }
+    }
+  }
+  if (Array.isArray(raw.review)) d.review = raw.review.filter(x => typeof x === "string");
+  if (Array.isArray(raw.badges)) d.badges = raw.badges.filter(x => typeof x === "string");
+  const c = (raw.cnt && typeof raw.cnt === "object") ? raw.cnt : {};
+  d.cnt = {
+    total: Number(c.total) || 0, ok: Number(c.ok) || 0,
+    streak: Number(c.streak) || 0, best: Number(c.best) || 0,
+    exams: Number(c.exams) || 0, examBest: Number(c.examBest) || 0,
+    night: c.night === true,
+    days: Array.isArray(c.days) ? c.days.filter(x => typeof x === "string") : []
+  };
+  return d;
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(LS_KEY);
-    if (raw) return Object.assign(defaultState(), JSON.parse(raw));
+    if (raw) return normalizeState(JSON.parse(raw));
   } catch (e) { /* état corrompu → repartir de zéro */ }
   return defaultState();
 }
-function save() { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+function save() {
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+  if (typeof onlinePushSoon === "function") onlinePushSoon(state, gradeIndex() + 1);
+}
 
 /* ============ Aides ============ */
 
@@ -211,11 +253,24 @@ async function loadBank() {
 
 /* ============ Écrans ============ */
 
+let navToken = 0;
+
+function updateOnlineBadge() {
+  const el = document.getElementById("online-badge");
+  if (!el) return;
+  const st = (typeof onlineStatus === "function") ? onlineStatus() : "local";
+  if (st === "ok") { el.textContent = "● " + onlineUser.pseudo; el.style.color = "var(--green)"; }
+  else if (st === "erreur") { el.textContent = "● synchro en échec"; el.style.color = "var(--amber)"; }
+  else { el.textContent = "● local"; el.style.color = "var(--dim)"; }
+}
+
 function nav(page) {
+  navToken++;
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.nav === page));
   if (page === "home") showHome();
   else if (page === "exam") showExamIntro();
   else if (page === "review") showReview();
+  else if (page === "board") showBoard();
   else if (page === "profile") showProfile();
 }
 
@@ -324,8 +379,8 @@ function showRules() {
     <div class="feedback" style="margin-top:0">
       L'XP cumulé fait monter votre grade : de <b>stagiaire</b> à <b style="color:var(--cyan)">root@tssr</b> (7 échelons —
       détail dans l'onglet Profil). Les séries de bonnes réponses et les examens font grimper plus vite.
-      Le classement de groupe TSSR2601 arrive dans une prochaine version : pour l'instant, votre progression
-      est enregistrée localement dans votre navigateur.
+      Créez un compte (pseudo + mot de passe, onglet Profil) pour apparaître dans le <b>classement du groupe</b>
+      et synchroniser votre progression entre PC et téléphone. Sans compte, tout reste enregistré localement.
     </div>
 
     <p class="section-title"># badges</p>
@@ -778,6 +833,50 @@ function showReview() {
   };
 }
 
+/* ============ Classement ============ */
+
+function timeAgo(iso) {
+  const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 3600) return "il y a " + Math.max(1, Math.round(s / 60)) + " min";
+  if (s < 86400) return "il y a " + Math.round(s / 3600) + " h";
+  return "il y a " + Math.round(s / 86400) + " j";
+}
+
+async function showBoard() {
+  setPath("./quiz --classement");
+  screen.innerHTML = `<h1>Classement TSSR2601</h1><p class="comment"># chargement...</p>`;
+  const tk = navToken;
+  const rows = (typeof onlineBoard === "function") ? await onlineBoard() : null;
+  if (tk !== navToken) return;
+  if (!rows) {
+    screen.innerHTML = `
+      <h1>Classement TSSR2601</h1>
+      <p class="comment"># classement du groupe</p>
+      <div class="feedback">Classement indisponible pour le moment — vérifiez votre connexion Internet.</div>`;
+    return;
+  }
+  const me = (typeof onlineUser !== "undefined" && onlineUser) ? onlineUser : null;
+  const list = rows.map((r, i) => {
+    const mine = me && r.id === me.id;
+    const g = GRADES[Math.min(Math.max((r.grade || 1) - 1, 0), GRADES.length - 1)];
+    const medal = i === 0 ? '<i class="ti ti-crown" style="color:var(--amber)"></i>' : "#" + (i + 1);
+    return `
+      <div class="rank-row ${mine ? "cur" : ""}">
+        <span style="width:26px; text-align:center">${medal}</span>
+        <span style="flex:1">${esc(r.pseudo)}${mine ? " (vous)" : ""}<br>
+          <span style="font-size:11px; color:${mine ? "var(--cyan2)" : "var(--dim)"}">${esc(g.name)} · ${r.badges} badge(s) · examen ${r.exam_best} % · ${timeAgo(r.updated_at)}</span>
+        </span>
+        <span class="xp">${(r.xp || 0).toLocaleString("fr-FR")} XP</span>
+      </div>`;
+  }).join("");
+  screen.innerHTML = `
+    <h1>Classement TSSR2601</h1>
+    <p class="comment"># ${rows.length} participant(s) · trié par XP</p>
+    ${rows.length ? list : '<div class="feedback">Personne au classement pour l\'instant — soyez le premier !</div>'}
+    ${me ? "" : `<div class="feedback" style="margin-top:14px"><i class="ti ti-info-circle" style="color:var(--cyan)"></i>
+      Créez un compte dans l'onglet Profil pour apparaître ici et synchroniser votre progression.</div>`}`;
+}
+
 /* ============ Profil ============ */
 
 function showProfile() {
@@ -806,14 +905,17 @@ function showProfile() {
       </div>`;
   }).join("");
 
+  const me = (typeof onlineUser !== "undefined" && onlineUser) ? onlineUser : null;
+  const pseudo = me ? me.pseudo : "Invité";
+  const initials = pseudo.slice(0, 2).toUpperCase();
   screen.innerHTML = `
     <h1>Profil</h1>
-    <p class="comment"># whoami</p>
+    <p class="comment"># whoami — ${me ? "compte synchronisé" : "mode invité (local)"}</p>
     <div style="display:flex; align-items:center; gap:14px; margin-bottom:4px">
       <span style="width:52px; height:52px; border-radius:14px; background:var(--panel2); border:1px solid var(--cyan);
-        display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:18px; color:var(--cyan)">SA</span>
+        display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:18px; color:var(--cyan)">${esc(initials)}</span>
       <div style="flex:1">
-        <p style="font-weight:600">Said</p>
+        <p style="font-weight:600">${esc(pseudo)}</p>
         <p class="qmeta" style="color:var(--cyan)"><i class="ti ${g.icon}"></i> ${esc(g.name)} · grade ${gi + 1}/${GRADES.length}</p>
       </div>
       <div style="text-align:right; font-family:var(--mono)">
@@ -836,12 +938,95 @@ function showProfile() {
     <p class="section-title"># badges — ${state.badges.length}/${BADGES.length} débloqués</p>
     <div class="badges">${badges}</div>
 
+    <p class="section-title"># compte en ligne</p>
+    ${me ? `
+    <div class="feedback" style="margin-top:0">
+      <i class="ti ti-cloud-check" style="color:var(--green)"></i>
+      Connecté en tant que <b>${esc(me.pseudo)}</b> — progression synchronisée entre vos appareils,
+      visible dans le classement.
+      ${(typeof onlineStatus === "function" && onlineStatus() === "erreur") ? `
+      <br><span style="color:var(--amber)"><i class="ti ti-alert-triangle"></i>
+      Dernière synchronisation en échec — vérifiez votre connexion ou reconnectez-vous.</span>` : ""}
+    </div>
+    <button class="btn small" id="logout" style="margin-top:10px"><i class="ti ti-logout"></i> Se déconnecter</button>
+    ` : `
+    <div class="feedback" style="margin-top:0">
+      Créez un compte (pseudo + mot de passe) pour synchroniser votre progression entre PC et téléphone
+      et apparaître dans le classement du groupe. Sans compte, tout reste enregistré dans ce navigateur.
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px; max-width:340px">
+      <input id="auth-pseudo" autocomplete="username" placeholder="pseudo (2 à 20 caractères)"
+        style="background:var(--frame); border:1px solid var(--line2); border-radius:8px; color:var(--txt); font-size:14px; padding:9px 12px; outline:none">
+      <input id="auth-pass" type="password" autocomplete="new-password" placeholder="mot de passe (6 caractères min.)"
+        style="background:var(--frame); border:1px solid var(--line2); border-radius:8px; color:var(--txt); font-size:14px; padding:9px 12px; outline:none">
+      <div style="display:flex; gap:8px">
+        <button class="btn accent" id="signup" style="flex:1">Créer mon compte</button>
+        <button class="btn" id="signin" style="flex:1">Se connecter</button>
+      </div>
+      <p id="auth-msg" style="font-family:var(--mono); font-size:12px; color:var(--red); min-height:16px"></p>
+      <p style="font-size:12px; color:var(--dim)">Mot de passe oublié ? Demandez à l'administrateur (Said) de le réinitialiser.</p>
+    </div>
+    `}
+
     <p class="section-title"># données</p>
     <button class="btn small" id="reset" style="color:var(--red); border-color:var(--red)">
       <i class="ti ti-trash"></i> Réinitialiser ma progression
     </button>`;
+  if (me) {
+    $("#logout").onclick = async () => {
+      await onlineSignOut();
+      updateOnlineBadge();
+      nav("profile");
+    };
+  } else if ($("#signup")) {
+    let authBusy = false;
+    const doAuth = async signup => {
+      if (authBusy) return;
+      const p = $("#auth-pseudo").value.trim();
+      const pass = $("#auth-pass").value;
+      const msg = $("#auth-msg");
+      if (!p || !pass) { msg.textContent = "Renseignez le pseudo et le mot de passe."; return; }
+      authBusy = true;
+      $("#signup").disabled = true;
+      $("#signin").disabled = true;
+      msg.style.color = "var(--dim)";
+      msg.textContent = signup ? "création du compte..." : "connexion...";
+      const err = signup ? await onlineSignUp(p, pass) : await onlineSignIn(p, pass);
+      if (err) {
+        authBusy = false;
+        $("#signup").disabled = false;
+        $("#signin").disabled = false;
+        msg.style.color = "var(--red)";
+        msg.textContent = err;
+        return;
+      }
+      const lecture = await onlineFetchState();
+      if (lecture.ok) {
+        const cloud = lecture.state ? normalizeState(lecture.state) : null;
+        const etranger = state.owner && state.owner !== onlineUser.id;
+        const cg = cloud ? cloud.gen : 0, sg = state.gen || 0;
+        if (etranger) state = cloud || defaultState();
+        else if (cloud && (cg > sg || (cg === sg && cloud.xp >= state.xp))) state = cloud;
+        state.owner = onlineUser.id;
+        localStorage.setItem(LS_KEY, JSON.stringify(state));
+        await onlinePushState(state, gradeIndex() + 1);
+        toast(`<i class="ti ti-cloud-check"></i> ${signup ? "Compte créé" : "Connecté"} : <b>${esc(onlineUser.pseudo)}</b>`);
+      } else {
+        state.owner = onlineUser.id;
+        localStorage.setItem(LS_KEY, JSON.stringify(state));
+        toast(`<i class="ti ti-cloud-off"></i> Connecté, mais cloud injoignable — synchronisation en pause`);
+      }
+      updateNavPill();
+      updateOnlineBadge();
+      nav("profile");
+    };
+    $("#signup").onclick = () => doAuth(true);
+    $("#signin").onclick = () => doAuth(false);
+    $("#auth-pass").addEventListener("keydown", e => { if (e.key === "Enter") doAuth(false); });
+  }
+
   let resetArmed = false;
-  $("#reset").onclick = () => {
+  $("#reset").onclick = async () => {
     if (!resetArmed) {
       resetArmed = true;
       $("#reset").innerHTML = '<i class="ti ti-alert-triangle"></i> Cliquez à nouveau pour tout effacer';
@@ -852,8 +1037,13 @@ function showProfile() {
       }, 3000);
       return;
     }
+    const gen = (state.gen || 0) + 1;
+    const owner = state.owner;
     state = defaultState();
-    save();
+    state.gen = gen;
+    state.owner = owner;
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+    if (typeof onlineUser !== "undefined" && onlineUser) await onlinePushState(state, 1);
     updateNavPill();
     nav("profile");
   };
@@ -871,8 +1061,34 @@ document.querySelectorAll(".nav button").forEach(b => {
   };
 });
 
-loadBank()
-  .then(() => { updateNavPill(); nav("home"); })
-  .catch(err => {
+(async () => {
+  const avecDelai = (p, ms) => Promise.race([p, new Promise(r => setTimeout(r, ms))]);
+  const partieEnLigne = (async () => {
+    try {
+      if (typeof onlineInit === "function" && onlineInit()) {
+        await onlineRestore();
+        if (typeof onlineUser !== "undefined" && onlineUser) {
+          const lecture = await onlineFetchState();
+          if (lecture.ok && lecture.state) {
+            const cloud = normalizeState(lecture.state);
+            const etranger = state.owner && state.owner !== onlineUser.id;
+            const cg = cloud.gen || 0, sg = state.gen || 0;
+            if (etranger || cg > sg || (cg === sg && cloud.xp > state.xp)) {
+              state = cloud;
+            }
+            state.owner = onlineUser.id;
+            localStorage.setItem(LS_KEY, JSON.stringify(state));
+          }
+        }
+      }
+    } catch (e) { console.warn("Mode hors ligne :", e); }
+  })();
+  try {
+    await Promise.all([loadBank(), avecDelai(partieEnLigne, 6000)]);
+    updateOnlineBadge();
+    updateNavPill();
+    nav("home");
+  } catch (err) {
     screen.innerHTML = `<p class="loading" style="color:var(--red)"># erreur de chargement : ${esc(err.message)}<br># ouvrez le site via un serveur web (http), pas en fichier local.</p>`;
-  });
+  }
+})();
