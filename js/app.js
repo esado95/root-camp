@@ -9,7 +9,6 @@ const LEVEL_COLORS = { 1: "#63D471", 2: "#38BDF8", 3: "#FBBF24", 4: "#F87171" };
 const UNLOCK_MIN_ATTEMPTS = 8;
 const UNLOCK_RATE = 0.7;
 const SESSION_SIZE = 10;
-const TP_SESSION_SIZE = 3;
 const EXAM_SIZE = 20;
 const EXAM_MINUTES = 20;
 
@@ -50,7 +49,7 @@ let state = load();
 
 function defaultState() {
   return {
-    v: 1, xp: 0, gen: 0, owner: null, accueilVu: false,
+    v: 1, xp: 0, gen: 0, owner: null, accueilVu: false, checkpoint: null,
     q: {},
     lv: {},
     review: [],
@@ -68,6 +67,21 @@ function normalizeState(raw) {
   d.gen = Math.max(0, Number(raw.gen) || 0);
   d.owner = typeof raw.owner === "string" ? raw.owner : null;
   d.accueilVu = raw.accueilVu === true;
+  const cp = raw.checkpoint;
+  if (cp && typeof cp === "object" && Array.isArray(cp.qs) && cp.qs.every(x => typeof x === "string") && cp.qs.length) {
+    d.checkpoint = {
+      qs: cp.qs.slice(0, 50),
+      idx: Math.max(0, Number(cp.idx) || 0),
+      ok: Math.max(0, Number(cp.ok) || 0),
+      wrongIds: Array.isArray(cp.wrongIds) ? cp.wrongIds.filter(x => typeof x === "string") : [],
+      answered: Array.isArray(cp.answered) ? cp.answered.filter(x => typeof x === "string") : [],
+      title: typeof cp.title === "string" ? cp.title : "Session",
+      color: typeof cp.color === "string" ? cp.color : "var(--cyan)",
+      themeId: typeof cp.themeId === "string" ? cp.themeId : null,
+      review: cp.review === true,
+      ts: Number(cp.ts) || 0
+    };
+  }
   if (raw.q && typeof raw.q === "object") {
     for (const k in raw.q) {
       const s = raw.q[k];
@@ -345,8 +359,22 @@ function showHome() {
       </div>`;
   }
   const pct = state.cnt.total ? Math.round(state.cnt.ok / state.cnt.total * 100) : 0;
+  let reprise = "";
+  const cp = state.checkpoint;
+  if (cp) {
+    const dispo = cp.qs.filter(id => BANK.some(q => q.id === id)).length;
+    if (!dispo) { state.checkpoint = null; persist(); }
+    else reprise = `
+    <div class="wide" id="go-reprise" style="background:#2A2010; border-color:var(--amber); margin:0 0 12px">
+      <div class="chip" style="background:#3A2D12; color:var(--amber)"><i class="ti ti-player-pause"></i></div>
+      <div><h3 style="color:var(--amber)">Reprendre : ${esc(cp.title)}</h3>
+      <p style="color:var(--amber); opacity:.85">question ${Math.min(cp.idx + 1, cp.qs.length)}/${cp.qs.length} · ${cp.ok} bonne(s) réponse(s)</p></div>
+      <button class="btn small" id="cp-annuler" style="margin-left:auto; flex-shrink:0" aria-label="abandonner la session sauvegardée"><i class="ti ti-x"></i></button>
+    </div>`;
+  }
   screen.innerHTML = `
     <h1 style="margin-bottom:14px">Root Camp</h1>
+    ${reprise}
     <div class="grid">${cards}</div>
     ${(() => {
       let dispo = 0;
@@ -376,6 +404,16 @@ function showHome() {
   });
   $("#go-exam").onclick = () => nav("exam");
   $("#go-rules").onclick = showRules;
+  const rep = $("#go-reprise");
+  if (rep) {
+    rep.onclick = reprendreCheckpoint;
+    $("#cp-annuler").onclick = e => {
+      e.stopPropagation();
+      state.checkpoint = null;
+      persist();
+      nav("home");
+    };
+  }
 }
 
 function showBienvenue() {
@@ -437,10 +475,11 @@ function showRules() {
     <p class="section-title"># le principe</p>
     <div class="feedback" style="margin-top:0">
       Chaque thème (Réseaux, Windows/AD, Linux...) regroupe des questions générées à partir des fiches du cours TSSR.
-      Vous choisissez un thème puis un niveau : chaque session propose jusqu'à ${SESSION_SIZE} questions
-      (${TP_SESSION_SIZE} pour les mini-TP de l'Atelier, plus longs), avec la correction et l'explication après
-      chaque réponse. Chaque question terminée est enregistrée immédiatement — quitter une session ne fait
-      perdre que la question en cours.
+      Vous choisissez un thème puis un niveau : chaque session propose jusqu'à ${SESSION_SIZE} questions,
+      avec la correction et l'explication après chaque réponse. Interrompez quand vous voulez :
+      la session est sauvegardée après chaque question, et la carte
+      <b style="color:var(--amber)">« Reprendre »</b> sur l'accueil vous remet exactement où vous étiez —
+      comme un point de contrôle dans un jeu (examens exclus, chrono oblige).
     </div>
 
     <p class="section-title"># les 4 niveaux de difficulté</p>
@@ -539,11 +578,9 @@ function showTheme(theme) {
   document.querySelectorAll(".level-row:not(.locked)").forEach(r => {
     r.onclick = () => {
       const n = parseInt(r.dataset.lvl, 10);
-      const brut = BANK.filter(q => q.theme === theme.id && q.niveau === n);
-      const taille = brut.length && brut.every(x => x.type === "tp") ? TP_SESSION_SIZE : SESSION_SIZE;
-      const pool = drawPreferUnseen(brut, taille);
+      const pool = drawPreferUnseen(BANK.filter(q => q.theme === theme.id && q.niveau === n), SESSION_SIZE);
       if (!pool.length) return;
-      startSession(pool, { title: `${theme.name} · niveau ${n}`, color: theme.color, back: () => showTheme(theme) });
+      startSession(pool, { title: `${theme.name} · niveau ${n}`, color: theme.color, themeId: theme.id, back: () => showTheme(theme) });
     };
   });
 }
@@ -552,6 +589,43 @@ function showTheme(theme) {
 
 let session = null;
 
+/* Point de contrôle : la session en cours (hors examen) est sauvegardée après
+   chaque question — on peut quitter et reprendre plus tard, comme dans un jeu. */
+function majCheckpoint() {
+  if (!session || session.exam) return;
+  state.checkpoint = {
+    qs: session.qs.map(q => q.id),
+    idx: session.idx + 1,
+    ok: session.ok,
+    wrongIds: session.wrong.map(q => q.id),
+    answered: session.answered.slice(),
+    title: session.title,
+    color: session.color,
+    themeId: session.themeId || null,
+    review: session.review,
+    ts: Date.now()
+  };
+}
+
+function reprendreCheckpoint() {
+  const cp = state.checkpoint;
+  if (!cp) return;
+  const qs = cp.qs.map(id => BANK.find(q => q.id === id)).filter(Boolean);
+  if (!qs.length) { state.checkpoint = null; persist(); nav("home"); return; }
+  const themeObj = cp.themeId ? MANIFEST.themes.find(t => t.id === cp.themeId) : null;
+  session = {
+    qs, idx: Math.min(cp.idx, qs.length), ok: cp.ok, xpStart: state.xp,
+    exam: false, title: cp.title, color: cp.color,
+    back: themeObj ? () => showTheme(themeObj) : () => nav("home"),
+    wrong: cp.wrongIds.map(id => BANK.find(q => q.id === id)).filter(Boolean),
+    answered: cp.answered.slice(),
+    review: cp.review, palier: 4, themeId: cp.themeId,
+    reviewStart: state.review.length,
+    done: false, nextTimer: null, deadline: null, timer: null
+  };
+  renderQuestion();
+}
+
 function startSession(questions, opts) {
   session = {
     qs: questions, idx: 0, ok: 0, xpStart: state.xp,
@@ -559,6 +633,7 @@ function startSession(questions, opts) {
     back: opts.back || (() => nav("home")),
     wrong: [], answered: [], review: !!opts.review,
     palier: opts.palier || 4,
+    themeId: opts.themeId || null,
     reviewStart: state.review.length,
     done: false, nextTimer: null,
     deadline: opts.exam ? Date.now() + EXAM_MINUTES * 60000 : null, timer: null
@@ -1042,6 +1117,7 @@ function finishQuestion(q, correct) {
   if (correct) session.ok++;
   else session.wrong.push(q);
   session.answered.push(q.id);
+  if (!session.exam) { majCheckpoint(); persist(); }
 
   const fb = $("#fb");
   const last = session.idx + 1 >= session.qs.length;
@@ -1087,6 +1163,10 @@ function showResult(timeout) {
   const filled = Math.round(pct / 10);
   const bar = "█".repeat(filled) + "░".repeat(10 - filled);
 
+  if (!session.exam && state.checkpoint) {
+    state.checkpoint = null;
+    persist();
+  }
   if (session.exam) {
     state.cnt.exams++;
     if (pct > state.cnt.examBest) state.cnt.examBest = pct;
