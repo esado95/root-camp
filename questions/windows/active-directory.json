@@ -1,144 +1,294 @@
 {
   "module": "Active Directory",
-  "source": "05_Services-Serveur/Active-Directory.md",
   "questions": [
     {
-      "id": "ad-001", "niveau": 1, "type": "qcm",
+      "id": "ad-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Qu'est-ce qu'Active Directory ?",
-      "choices": ["Un antivirus de Microsoft", "Un service d'annuaire qui centralise utilisateurs, ordinateurs et ressources du réseau", "Un serveur de fichiers", "Un protocole de routage"],
+      "choices": [
+        "Un antivirus de Microsoft",
+        "Un service d'annuaire qui centralise utilisateurs, ordinateurs et ressources du réseau",
+        "Un serveur de fichiers",
+        "Un protocole de routage"
+      ],
       "answer": 1,
       "explication": "AD centralise la gestion des utilisateurs, ordinateurs, groupes, droits et stratégies (GPO), et valide l'authentification sur le domaine."
     },
     {
-      "id": "ad-002", "niveau": 1, "type": "qcm",
+      "id": "ad-002",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Dans un groupe de travail (workgroup), où sont stockés les comptes utilisateurs ?",
-      "choices": ["Sur le contrôleur de domaine", "Localement, sur chaque machine", "Dans le cloud Microsoft", "Sur le serveur DHCP"],
+      "choices": [
+        "Sur le contrôleur de domaine",
+        "Localement, sur chaque machine",
+        "Dans le cloud Microsoft",
+        "Sur le serveur DHCP"
+      ],
       "answer": 1,
       "explication": "En workgroup, chaque machine gère ses propres comptes locaux : aucune gestion centralisée — ingérable à grande échelle."
     },
     {
-      "id": "ad-003", "niveau": 1, "type": "qcm",
+      "id": "ad-003",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quel fichier contient la base de données de l'annuaire sur un contrôleur de domaine ?",
-      "choices": ["SYSVOL.dbf", "NTDS.dit", "AD.mdb", "SAM.dat"],
+      "choices": [
+        "SYSVOL.dbf",
+        "NTDS.dit",
+        "AD.mdb",
+        "SAM.dat"
+      ],
       "answer": 1,
       "explication": "Chaque DC stocke une copie de l'annuaire dans le fichier NTDS.dit, répliqué entre les contrôleurs."
     },
     {
-      "id": "ad-004", "niveau": 1, "type": "assoc",
+      "id": "ad-004",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque protocole à son rôle dans Active Directory",
-      "pairs": [["Kerberos", "Authentification par tickets"], ["LDAP", "Interrogation de l'annuaire"], ["DNS", "Localisation des services (SRV)"]],
+      "pairs": [
+        [
+          "Kerberos",
+          "Authentification par tickets"
+        ],
+        [
+          "LDAP",
+          "Interrogation de l'annuaire"
+        ],
+        [
+          "DNS",
+          "Localisation des services (SRV)"
+        ]
+      ],
       "explication": "Kerberos authentifie sans envoyer de mot de passe, LDAP interroge et lit l'annuaire, DNS localise les DC et les services du domaine."
     },
     {
-      "id": "ad-005", "niveau": 1, "type": "libre",
+      "id": "ad-005",
+      "niveau": 1,
+      "type": "libre",
       "q": "Quel port utilise LDAP (non sécurisé) ?",
-      "accept": ["389", "port 389", "tcp 389"],
+      "accept": [
+        "389",
+        "port 389",
+        "tcp 389"
+      ],
       "explication": "LDAP = 389, LDAPS (sécurisé, équivalent HTTPS) = 636."
     },
     {
-      "id": "ad-006", "niveau": 1, "type": "qcm",
+      "id": "ad-006",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Que contient le dossier partagé SYSVOL ?",
-      "choices": ["La base NTDS.dit", "Les GPO et les scripts de connexion, répliqués entre DC", "Les profils itinérants des utilisateurs", "Les journaux d'événements"],
+      "choices": [
+        "La base NTDS.dit",
+        "Les GPO et les scripts de connexion, répliqués entre DC",
+        "Les profils itinérants des utilisateurs",
+        "Les journaux d'événements"
+      ],
       "answer": 1,
       "explication": "SYSVOL est répliqué entre tous les DC et contient notamment les stratégies de groupe (GPO) et les scripts de connexion."
     },
     {
-      "id": "ad-007", "niveau": 2, "type": "ordre",
+      "id": "ad-007",
+      "niveau": 2,
+      "type": "ordre",
       "q": "Classez la hiérarchie logique AD du plus large au plus précis",
-      "steps": ["Forêt", "Arbre", "Domaine", "Unité d'organisation (OU)"],
+      "steps": [
+        "Forêt",
+        "Arbre",
+        "Domaine",
+        "Unité d'organisation (OU)"
+      ],
       "explication": "La forêt contient un ou plusieurs arbres ; un arbre contient des domaines (parent/enfant) ; dans un domaine, les objets sont rangés dans des OU."
     },
     {
-      "id": "ad-008", "niveau": 2, "type": "qcm",
+      "id": "ad-008",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi faut-il au moins deux contrôleurs de domaine ?",
-      "choices": ["Pour doubler la vitesse d'authentification", "Si l'unique DC tombe, le domaine devient inutilisable", "C'est imposé par la licence Windows Server", "Pour séparer utilisateurs et ordinateurs"],
+      "choices": [
+        "Pour doubler la vitesse d'authentification",
+        "Si l'unique DC tombe, le domaine devient inutilisable",
+        "C'est imposé par la licence Windows Server",
+        "Pour séparer utilisateurs et ordinateurs"
+      ],
       "answer": 1,
       "explication": "Le DC est critique : sans lui, plus d'authentification. La redondance (2 DC minimum + réplication) assure la continuité de service."
     },
     {
-      "id": "ad-009", "niveau": 2, "type": "qcm",
+      "id": "ad-009",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Que signifie « réplication multi-maître » entre les DC ?",
-      "choices": ["Un seul DC peut écrire, les autres lisent", "Plusieurs DC peuvent modifier les données, les changements se synchronisent", "Chaque DC gère un domaine différent", "La réplication ne fonctionne que la nuit"],
+      "choices": [
+        "Un seul DC peut écrire, les autres lisent",
+        "Plusieurs DC peuvent modifier les données, les changements se synchronisent",
+        "Chaque DC gère un domaine différent",
+        "La réplication ne fonctionne que la nuit"
+      ],
       "answer": 1,
       "explication": "Chaque DC accepte les modifications et les réplique automatiquement aux autres — cohérence et tolérance aux pannes."
     },
     {
-      "id": "ad-010", "niveau": 2, "type": "qcm",
+      "id": "ad-010",
+      "niveau": 2,
+      "type": "qcm",
       "q": "À quoi sert le catalogue global ?",
-      "choices": ["À sauvegarder l'annuaire complet", "À indexer une copie partielle des objets de la forêt pour accélérer les recherches inter-domaines", "À héberger les GPO", "À distribuer les adresses IP"],
+      "choices": [
+        "À sauvegarder l'annuaire complet",
+        "À indexer une copie partielle des objets de la forêt pour accélérer les recherches inter-domaines",
+        "À héberger les GPO",
+        "À distribuer les adresses IP"
+      ],
       "answer": 1,
       "explication": "Le catalogue global (rôle attribué à un DC) garde l'essentiel des attributs de tous les objets de la forêt : recherches rapides et authentification multi-domaines."
     },
     {
-      "id": "ad-011", "niveau": 2, "type": "qcm",
+      "id": "ad-011",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quel type d'enregistrement DNS permet aux clients de localiser les services du domaine ?",
-      "choices": ["A", "MX", "SRV", "CNAME"],
+      "choices": [
+        "A",
+        "MX",
+        "SRV",
+        "CNAME"
+      ],
       "answer": 2,
       "explication": "Les enregistrements SRV publient l'hôte et le port des services essentiels (authentification, LDAP...). Sans eux, impossible de trouver un DC."
     },
     {
-      "id": "ad-012", "niveau": 2, "type": "qcm",
+      "id": "ad-012",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Dans Kerberos, quelle est la différence entre TGT et TGS ?",
-      "choices": ["Le TGT chiffre les fichiers, le TGS les déchiffre", "Le TGT est obtenu à l'ouverture de session ; les TGS donnent accès aux services sans se ré-authentifier", "Le TGS est réservé aux administrateurs", "Aucune, ce sont deux noms du même ticket"],
+      "choices": [
+        "Le TGT chiffre les fichiers, le TGS les déchiffre",
+        "Le TGT est obtenu à l'ouverture de session ; les TGS donnent accès aux services sans se ré-authentifier",
+        "Le TGS est réservé aux administrateurs",
+        "Aucune, ce sont deux noms du même ticket"
+      ],
       "answer": 1,
       "explication": "Le Ticket Granting Ticket prouve l'identité après connexion ; l'AD délivre ensuite des Ticket Granting Service pour chaque service demandé."
     },
     {
-      "id": "ad-013", "niveau": 2, "type": "qcm",
+      "id": "ad-013",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quel avantage principal apporte Kerberos ?",
-      "choices": ["Il compresse le trafic réseau", "Il évite l'envoi des mots de passe sur le réseau grâce aux tickets", "Il remplace le DNS", "Il chiffre les disques durs"],
+      "choices": [
+        "Il compresse le trafic réseau",
+        "Il évite l'envoi des mots de passe sur le réseau grâce aux tickets",
+        "Il remplace le DNS",
+        "Il chiffre les disques durs"
+      ],
       "answer": 1,
       "explication": "L'authentification repose sur des tickets chiffrés et une authentification mutuelle client/serveur — le mot de passe ne circule pas."
     },
     {
-      "id": "ad-014", "niveau": 2, "type": "multi",
+      "id": "ad-014",
+      "niveau": 2,
+      "type": "multi",
       "q": "Quels sont les rôles d'un contrôleur de domaine ? (plusieurs réponses)",
-      "choices": ["Traiter les demandes d'authentification", "Stocker une copie de l'annuaire (NTDS.dit)", "Répliquer SYSVOL avec les autres DC", "Attribuer les adresses IP aux clients"],
-      "answer": [0, 1, 2],
+      "choices": [
+        "Traiter les demandes d'authentification",
+        "Stocker une copie de l'annuaire (NTDS.dit)",
+        "Répliquer SYSVOL avec les autres DC",
+        "Attribuer les adresses IP aux clients"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "Authentification, annuaire, réplication : c'est le cœur du DC. L'attribution d'IP est le rôle du serveur DHCP (souvent co-installé, mais distinct)."
     },
     {
-      "id": "ad-015", "niveau": 2, "type": "qcm",
+      "id": "ad-015",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Qu'est-ce qui limite le niveau fonctionnel d'un domaine ?",
-      "choices": ["Le nombre d'utilisateurs", "La version du contrôleur de domaine le plus ancien", "La taille du fichier NTDS.dit", "Le nombre d'OU"],
+      "choices": [
+        "Le nombre d'utilisateurs",
+        "La version du contrôleur de domaine le plus ancien",
+        "La taille du fichier NTDS.dit",
+        "Le nombre d'OU"
+      ],
       "answer": 1,
       "explication": "Impossible de définir un niveau fonctionnel plus récent que le DC le plus ancien — il garantit la compatibilité entre contrôleurs."
     },
     {
-      "id": "ad-016", "niveau": 3, "type": "scenario",
+      "id": "ad-016",
+      "niveau": 3,
+      "type": "scenario",
       "context": "Un poste Windows n'arrive pas à rejoindre le domaine entreprise.local. Son DNS est configuré sur 8.8.8.8.",
       "q": "Que faut-il corriger ?",
-      "choices": ["Mettre le poste dans le même VLAN que le serveur", "Pointer le DNS du poste vers le serveur DNS du domaine (le DC)", "Désactiver le pare-feu Windows", "Changer le nom du poste"],
+      "choices": [
+        "Mettre le poste dans le même VLAN que le serveur",
+        "Pointer le DNS du poste vers le serveur DNS du domaine (le DC)",
+        "Désactiver le pare-feu Windows",
+        "Changer le nom du poste"
+      ],
       "answer": 1,
       "explication": "Le DNS public ne connaît pas entreprise.local ni ses enregistrements SRV. Le poste doit interroger le DNS du domaine pour trouver le DC."
     },
     {
-      "id": "ad-017", "niveau": 3, "type": "qcm",
+      "id": "ad-017",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Dans combien de domaines un ordinateur peut-il être membre simultanément ?",
-      "choices": ["Un seul", "Deux maximum", "Un par carte réseau", "Autant que nécessaire"],
+      "choices": [
+        "Un seul",
+        "Deux maximum",
+        "Un par carte réseau",
+        "Autant que nécessaire"
+      ],
       "answer": 0,
       "explication": "Un poste n'appartient qu'à un seul domaine à la fois. Les accès inter-domaines passent par les relations d'approbation."
     },
     {
-      "id": "ad-018", "niveau": 3, "type": "qcm",
+      "id": "ad-018",
+      "niveau": 3,
+      "type": "qcm",
       "q": "lyon.entreprise.local par rapport à entreprise.local est :",
-      "choices": ["Une forêt distincte", "Un domaine enfant, lié au parent par une relation d'approbation", "Un alias DNS", "Un site AD"],
+      "choices": [
+        "Une forêt distincte",
+        "Un domaine enfant, lié au parent par une relation d'approbation",
+        "Un alias DNS",
+        "Un site AD"
+      ],
       "answer": 1,
       "explication": "Même arbre : entreprise.local est le domaine parent, lyon.entreprise.local le domaine enfant, avec une relation de confiance automatique."
     },
     {
-      "id": "ad-019", "niveau": 4, "type": "scenario",
+      "id": "ad-019",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Le serveur DNS du domaine est en panne. Les utilisateurs n'arrivent plus à ouvrir de session sur le domaine ni à accéder aux partages.",
       "q": "Pourquoi le domaine entier semble-t-il hors service ?",
-      "choices": ["L'annuaire NTDS.dit est corrompu", "Sans DNS, les clients ne peuvent plus localiser les DC ni les services (enregistrements SRV)", "Les GPO bloquent les connexions", "Le catalogue global est saturé"],
+      "choices": [
+        "L'annuaire NTDS.dit est corrompu",
+        "Sans DNS, les clients ne peuvent plus localiser les DC ni les services (enregistrements SRV)",
+        "Les GPO bloquent les connexions",
+        "Le catalogue global est saturé"
+      ],
       "answer": 1,
       "explication": "Tout repose sur le DNS : les clients le consultent pour trouver les contrôleurs de domaine. DNS en panne = domaine injoignable, même si les DC fonctionnent."
     },
     {
-      "id": "ad-020", "niveau": 4, "type": "scenario",
+      "id": "ad-020",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Une PME n'a qu'un seul contrôleur de domaine. Sa carte mère grille un lundi matin.",
       "q": "Quelle est la conséquence immédiate, et quelle mesure aurait dû être prise ?",
-      "choices": ["Rien de grave : les postes gardent leur session en cache indéfiniment", "Plus d'authentification ni de ressources du domaine ; il aurait fallu un second DC avec réplication", "Seuls les nouveaux utilisateurs sont bloqués", "Le DHCP prend automatiquement le relais"],
+      "choices": [
+        "Rien de grave : les postes gardent leur session en cache indéfiniment",
+        "Plus d'authentification ni de ressources du domaine ; il aurait fallu un second DC avec réplication",
+        "Seuls les nouveaux utilisateurs sont bloqués",
+        "Le DHCP prend automatiquement le relais"
+      ],
       "answer": 1,
       "explication": "DC unique = point de défaillance unique : domaine inutilisable. La règle : toujours au moins deux DC, la réplication multi-maître assure la continuité."
     }

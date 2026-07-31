@@ -1,116 +1,232 @@
 {
   "module": "NAT & PAT",
-  "source": "04_Reseau/NAT.md",
   "questions": [
     {
-      "id": "nat-001", "niveau": 1, "type": "qcm",
+      "id": "nat-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quel est le rôle du NAT ?",
-      "choices": ["Chiffrer le trafic entre LAN et WAN", "Traduire les adresses IP privées en adresses publiques, et inversement", "Attribuer automatiquement les adresses IP", "Bloquer les sites web dangereux"],
+      "choices": [
+        "Chiffrer le trafic entre LAN et WAN",
+        "Traduire les adresses IP privées en adresses publiques, et inversement",
+        "Attribuer automatiquement les adresses IP",
+        "Bloquer les sites web dangereux"
+      ],
       "answer": 1,
       "explication": "Le NAT (Network Address Translation) permet à tout un réseau privé de communiquer sur Internet via l'adresse publique du routeur."
     },
     {
-      "id": "nat-002", "niveau": 1, "type": "qcm",
+      "id": "nat-002",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quel autre nom désigne le PAT ?",
-      "choices": ["NAT statique", "NAT Overload (surcharge)", "Port Mirroring", "Proxy ARP"],
+      "choices": [
+        "NAT statique",
+        "NAT Overload (surcharge)",
+        "Port Mirroring",
+        "Proxy ARP"
+      ],
       "answer": 1,
       "explication": "PAT = Port Address Translation = NAT Overload : une seule IP publique partagée grâce aux numéros de port. C'est le mode des box Internet."
     },
     {
-      "id": "nat-003", "niveau": 1, "type": "qcm",
+      "id": "nat-003",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle est la plage des ports réservés (well-known) ?",
-      "choices": ["1 à 1 023", "1 à 65 535", "1 024 à 49 151", "0 à 255"],
+      "choices": [
+        "1 à 1 023",
+        "1 à 65 535",
+        "1 024 à 49 151",
+        "0 à 255"
+      ],
       "answer": 0,
       "explication": "Ports 1–1023 = réservés aux services connus (HTTP 80, HTTPS 443, SSH 22...). La plage totale va de 1 à 65 535."
     },
     {
-      "id": "nat-004", "niveau": 1, "type": "assoc",
+      "id": "nat-004",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque type de NAT à son principe",
-      "pairs": [["NAT statique", "1 IP privée ↔ 1 IP publique fixe"], ["NAT dynamique", "Pool d'IP publiques, premier arrivé premier servi"], ["PAT (overload)", "Une IP publique partagée via les ports"]],
+      "pairs": [
+        [
+          "NAT statique",
+          "1 IP privée ↔ 1 IP publique fixe"
+        ],
+        [
+          "NAT dynamique",
+          "Pool d'IP publiques, premier arrivé premier servi"
+        ],
+        [
+          "PAT (overload)",
+          "Une IP publique partagée via les ports"
+        ]
+      ],
       "explication": "Statique = mappage permanent (serveurs), dynamique = pool limité (obsolète), PAT = standard actuel des box."
     },
     {
-      "id": "nat-005", "niveau": 2, "type": "qcm",
+      "id": "nat-005",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Comment le PAT distingue-t-il les connexions des différents PC du LAN ?",
-      "choices": ["Par leur adresse MAC", "Par le numéro de port source attribué à chaque connexion", "Par leur nom d'hôte", "Par ordre d'arrivée"],
+      "choices": [
+        "Par leur adresse MAC",
+        "Par le numéro de port source attribué à chaque connexion",
+        "Par leur nom d'hôte",
+        "Par ordre d'arrivée"
+      ],
       "answer": 1,
       "explication": "Le routeur étiquette chaque connexion avec un port source unique (ex. 40000). Au retour, il lit ce port pour renvoyer le paquet au bon PC."
     },
     {
-      "id": "nat-006", "niveau": 2, "type": "qcm",
+      "id": "nat-006",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Dans quel cas privilégier le NAT statique ?",
-      "choices": ["Pour des postes bureautiques", "Pour un serveur hébergé qui doit rester joignable sur la même IP publique", "Pour le Wi-Fi invité", "Pour réduire la consommation du routeur"],
+      "choices": [
+        "Pour des postes bureautiques",
+        "Pour un serveur hébergé qui doit rester joignable sur la même IP publique",
+        "Pour le Wi-Fi invité",
+        "Pour réduire la consommation du routeur"
+      ],
       "answer": 1,
       "explication": "Un serveur (web, mail) doit être joignable en permanence à une adresse fixe : mappage permanent 1 pour 1."
     },
     {
-      "id": "nat-007", "niveau": 2, "type": "qcm",
+      "id": "nat-007",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Limite du NAT dynamique avec un pool de 5 IP publiques :",
-      "choices": ["Seuls 5 équipements peuvent sortir sur Internet simultanément", "Le débit est divisé par 5", "Les IP privées changent toutes les 5 minutes", "Aucune limite"],
+      "choices": [
+        "Seuls 5 équipements peuvent sortir sur Internet simultanément",
+        "Le débit est divisé par 5",
+        "Les IP privées changent toutes les 5 minutes",
+        "Aucune limite"
+      ],
       "answer": 0,
       "explication": "Premier arrivé, premier servi : pool épuisé = les suivants attendent. C'est pourquoi le PAT l'a remplacé."
     },
     {
-      "id": "nat-008", "niveau": 2, "type": "qcm",
+      "id": "nat-008",
+      "niveau": 2,
+      "type": "qcm",
       "q": "À quoi sert le port forwarding (redirection de port) ?",
-      "choices": ["À accélérer les téléchargements", "À rendre un service hébergé en LAN accessible depuis Internet", "À changer le port d'écoute d'un serveur", "À bloquer les connexions entrantes"],
+      "choices": [
+        "À accélérer les téléchargements",
+        "À rendre un service hébergé en LAN accessible depuis Internet",
+        "À changer le port d'écoute d'un serveur",
+        "À bloquer les connexions entrantes"
+      ],
       "answer": 1,
       "explication": "Le routeur bloque par défaut le trafic entrant non sollicité. La règle de redirection renvoie IP_publique:port vers IP_privée:port du serveur interne."
     },
     {
-      "id": "nat-009", "niveau": 2, "type": "qcm",
+      "id": "nat-009",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Comment publier DEUX serveurs web internes derrière un seul port 443 public ?",
-      "choices": ["Impossible dans tous les cas", "Avec un reverse proxy interne qui trie selon le nom de domaine demandé", "En doublant le NAT", "En utilisant le port 444 pour les deux"],
+      "choices": [
+        "Impossible dans tous les cas",
+        "Avec un reverse proxy interne qui trie selon le nom de domaine demandé",
+        "En doublant le NAT",
+        "En utilisant le port 444 pour les deux"
+      ],
       "answer": 1,
       "explication": "Le port forwarding ne sait rediriger un port que vers une seule cible. Le reverse proxy lit le nom de domaine (SNI/Host) et distribue vers le bon serveur."
     },
     {
-      "id": "nat-010", "niveau": 3, "type": "qcm",
+      "id": "nat-010",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Avant toute configuration NAT sur un routeur Cisco, que faut-il déclarer ?",
-      "choices": ["Le nom de domaine du routeur", "Les interfaces « ip nat inside » (LAN) et « ip nat outside » (WAN)", "Le serveur DHCP", "La route par défaut uniquement"],
+      "choices": [
+        "Le nom de domaine du routeur",
+        "Les interfaces « ip nat inside » (LAN) et « ip nat outside » (WAN)",
+        "Le serveur DHCP",
+        "La route par défaut uniquement"
+      ],
       "answer": 1,
       "explication": "Prérequis systématique : désigner l'interface interne (ip nat inside) et l'interface externe (ip nat outside)."
     },
     {
-      "id": "nat-011", "niveau": 3, "type": "qcm",
+      "id": "nat-011",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande Cisco configure un NAT statique ?",
-      "choices": ["ip nat inside source static <IP_privée> <IP_publique>", "ip nat static <IP_publique> <IP_privée>", "nat source 1:1 <IP_privée>", "ip nat overload static"],
+      "choices": [
+        "ip nat inside source static <IP_privée> <IP_publique>",
+        "ip nat static <IP_publique> <IP_privée>",
+        "nat source 1:1 <IP_privée>",
+        "ip nat overload static"
+      ],
       "answer": 0,
       "explication": "ip nat inside source static 192.168.1.10 8.8.8.100 : mappage permanent entre l'adresse interne et l'adresse publique."
     },
     {
-      "id": "nat-012", "niveau": 3, "type": "libre",
+      "id": "nat-012",
+      "niveau": 3,
+      "type": "libre",
       "q": "Quel mot-clé termine la commande Cisco qui active le PAT sur l'interface de sortie ?",
-      "accept": ["overload"],
+      "accept": [
+        "overload"
+      ],
       "explication": "ip nat inside source list 1 interface g0/1 overload — le mot-clé overload active la translation par ports (PAT)."
     },
     {
-      "id": "nat-013", "niveau": 3, "type": "qcm",
+      "id": "nat-013",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Terminologie Cisco : l'adresse IP privée de votre PC est appelée :",
-      "choices": ["Inside Global", "Inside Local", "Outside Local", "Outside Global"],
+      "choices": [
+        "Inside Global",
+        "Inside Local",
+        "Outside Local",
+        "Outside Global"
+      ],
       "answer": 1,
       "explication": "Inside Local = IP privée vue du LAN. Inside Global = IP publique de la box. Outside Global = IP publique du serveur distant."
     },
     {
-      "id": "nat-014", "niveau": 3, "type": "qcm",
+      "id": "nat-014",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Pourquoi éviter un « permit any » dans l'ACL associée au NAT ?",
-      "choices": ["C'est une faute de syntaxe", "Le routeur translaterait tout le trafic : surconsommation extrême de ressources", "Cela bloque tout le trafic", "Cela désactive le PAT"],
+      "choices": [
+        "C'est une faute de syntaxe",
+        "Le routeur translaterait tout le trafic : surconsommation extrême de ressources",
+        "Cela bloque tout le trafic",
+        "Cela désactive le PAT"
+      ],
       "answer": 1,
       "explication": "L'ACL du NAT ne doit contenir que les réseaux à translater — le deny any implicite de fin d'ACL fait le reste."
     },
     {
-      "id": "nat-015", "niveau": 4, "type": "scenario",
+      "id": "nat-015",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Un serveur web interne (10.0.0.20:443) doit être accessible depuis Internet. Les clients externes qui tapent l'IP publique du routeur obtiennent un délai d'attente.",
       "q": "Que manque-t-il ?",
-      "choices": ["Un serveur DNS interne", "Une règle de port forwarding 443 → 10.0.0.20:443 sur le routeur", "Une deuxième carte réseau sur le serveur", "Un bail DHCP plus long"],
+      "choices": [
+        "Un serveur DNS interne",
+        "Une règle de port forwarding 443 → 10.0.0.20:443 sur le routeur",
+        "Une deuxième carte réseau sur le serveur",
+        "Un bail DHCP plus long"
+      ],
       "answer": 1,
       "explication": "Le trafic entrant non sollicité est bloqué par défaut. La règle de redirection réécrit la destination publique vers l'IP privée du serveur."
     },
     {
-      "id": "nat-016", "niveau": 4, "type": "scenario",
+      "id": "nat-016",
+      "niveau": 4,
+      "type": "scenario",
       "context": "NAT dynamique avec un pool de 5 IP publiques. Les 5 premiers postes naviguent normalement ; le 6e ne sort pas sur Internet.",
       "q": "Quelle est la cause, et la solution moderne ?",
-      "choices": ["Panne de câble — remplacer le switch", "Pool d'adresses épuisé — passer en PAT (overload) pour partager une seule IP", "Le 6e poste est infecté", "Le DNS du 6e poste est incorrect"],
+      "choices": [
+        "Panne de câble — remplacer le switch",
+        "Pool d'adresses épuisé — passer en PAT (overload) pour partager une seule IP",
+        "Le 6e poste est infecté",
+        "Le DNS du 6e poste est incorrect"
+      ],
       "answer": 1,
       "explication": "Le NAT dynamique sert les IP du pool premier arrivé, premier servi. Le PAT lève cette limite : des milliers de connexions sur une seule IP publique."
     }

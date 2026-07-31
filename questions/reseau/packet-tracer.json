@@ -1,6 +1,5 @@
 {
   "module": "Packet Tracer & IOS de base",
-  "source": "Cisco-Packet-Tracer.md + Cisco-Packet-Tracer-Cheat-Sheet.md + Evaluation-Packet-Tracer.md",
   "questions": [
     {
       "id": "cis-001",
@@ -22,10 +21,22 @@
       "type": "assoc",
       "q": "Associez chaque invite de commande Cisco IOS au mode correspondant.",
       "pairs": [
-        ["Router>", "Mode utilisateur"],
-        ["Router#", "Mode privilégié"],
-        ["Router(config)#", "Configuration globale"],
-        ["Router(config-if)#", "Configuration d'interface"]
+        [
+          "Router>",
+          "Mode utilisateur"
+        ],
+        [
+          "Router#",
+          "Mode privilégié"
+        ],
+        [
+          "Router(config)#",
+          "Configuration globale"
+        ],
+        [
+          "Router(config-if)#",
+          "Configuration d'interface"
+        ]
       ],
       "explication": "IOS est hiérarchique : chaque invite indique le mode courant, et chaque commande ne fonctionne que dans le bon mode."
     },
@@ -63,7 +74,10 @@
       "type": "terminal",
       "prompt": "Router>",
       "q": "Vous êtes en mode utilisateur sur un routeur Cisco. Passez en mode privilégié.",
-      "accept": ["enable", "en"],
+      "accept": [
+        "enable",
+        "en"
+      ],
       "explication": "La commande « enable » (abrégeable en « en ») fait passer de « Router> » à « Router# », donnant accès à la consultation complète et à la sauvegarde."
     },
     {
@@ -72,7 +86,13 @@
       "type": "terminal",
       "prompt": "Router#",
       "q": "Sauvegardez la configuration courante du routeur dans la NVRAM.",
-      "accept": ["wr", "write", "write memory", "copy running-config startup-config", "copy run start"],
+      "accept": [
+        "wr",
+        "write",
+        "write memory",
+        "copy running-config startup-config",
+        "copy run start"
+      ],
       "output": "Building configuration...\n[OK]",
       "explication": "« wr » est le raccourci de « write memory », équivalent de « copy running-config startup-config » : la configuration courante est copiée en NVRAM."
     },
@@ -96,10 +116,22 @@
       "type": "assoc",
       "q": "Associez chaque commande « show » à ce qu'elle affiche.",
       "pairs": [
-        ["show running-config", "La configuration en cours d'exécution"],
-        ["show ip interface brief", "L'état résumé des interfaces"],
-        ["show vlan brief", "La liste des VLANs et des ports affectés"],
-        ["show ip dhcp binding", "Les baux DHCP attribués"]
+        [
+          "show running-config",
+          "La configuration en cours d'exécution"
+        ],
+        [
+          "show ip interface brief",
+          "L'état résumé des interfaces"
+        ],
+        [
+          "show vlan brief",
+          "La liste des VLANs et des ports affectés"
+        ],
+        [
+          "show ip dhcp binding",
+          "Les baux DHCP attribués"
+        ]
       ],
       "explication": "Les commandes « show » s'exécutent en mode privilégié et servent à vérifier chaque étape de la configuration."
     },
@@ -143,7 +175,11 @@
         "Une connexion en pointillé représente un câble droit",
         "Une LED verte signale une erreur"
       ],
-      "answer": [0, 1, 2],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "Dans la palette, on se limite au rond et au carré avec couleur de remplissage (Freeform provoque des crashs), on évite l'enveloppe, et on pense à quitter le mode suppression après usage."
     },
     {
@@ -242,7 +278,11 @@
         "On y accède avec la commande enable",
         "Son invite se termine par >"
       ],
-      "answer": [0, 1, 3],
+      "answer": [
+        0,
+        1,
+        3
+      ],
       "explication": "Le mode privilégié (invite « # », atteint via « enable ») permet de tout consulter et de sauvegarder, mais il faut passer en configuration globale (« configure terminal ») pour modifier quoi que ce soit."
     },
     {
@@ -305,7 +345,10 @@
       "type": "terminal",
       "prompt": "SW1(config-if)#",
       "q": "Ce port de switch est déjà passé en mode access. Affectez-le au VLAN 10.",
-      "accept": ["switchport access vlan 10", "sw access vlan 10"],
+      "accept": [
+        "switchport access vlan 10",
+        "sw access vlan 10"
+      ],
       "explication": "Après « switchport mode access », c'est « switchport access vlan 10 » qui rattache le port au VLAN : les trames de ce port ne circuleront que dans le VLAN 10."
     },
     {
@@ -342,7 +385,10 @@
       "type": "terminal",
       "prompt": "R1#",
       "q": "Ce routeur fait office de serveur DHCP. Affichez les baux DHCP qu'il a distribués.",
-      "accept": ["show ip dhcp binding", "sh ip dhcp binding"],
+      "accept": [
+        "show ip dhcp binding",
+        "sh ip dhcp binding"
+      ],
       "output": "IP address       Client-ID/              Lease expiration        Type\n                 Hardware address\n192.168.10.11    0001.C7B2.3A45          --                      Automatic\n192.168.10.12    00D0.BA55.E21F          --                      Automatic",
       "explication": "« show ip dhcp binding » liste les associations adresse IP / adresse MAC attribuées : c'est le réflexe pour vérifier que les clients ont bien reçu une adresse."
     },
@@ -358,7 +404,11 @@
         "ip helper-address 10.10.10.5",
         "switchport mode trunk"
       ],
-      "answer": [0, 1, 2],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "SSH exige un nom de domaine, des clés RSA (2048 bits recommandés) et des lignes VTY limitées à SSH avec « login local » et un compte utilisateur. Le relais DHCP et le trunk n'ont aucun rapport."
     },
     {
@@ -381,7 +431,9 @@
       "type": "terminal",
       "prompt": "Switch(config)#",
       "q": "Vous êtes en mode de configuration globale sur un switch. Renommez l'équipement en SW1.",
-      "accept": ["hostname SW1"],
+      "accept": [
+        "hostname SW1"
+      ],
       "explication": "« hostname SW1 » change immédiatement le nom affiché dans l'invite : indispensable pour se repérer quand on administre plusieurs équipements."
     },
     {

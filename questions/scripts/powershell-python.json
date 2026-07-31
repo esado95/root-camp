@@ -1,274 +1,617 @@
 {
   "module": "PowerShell & Python",
-  "source": "PowerShell.md + Python.md",
   "questions": [
     {
-      "id": "scr-001", "niveau": 1, "type": "qcm",
+      "id": "scr-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle est la différence fondamentale entre PowerShell et l'invite de commandes CMD ?",
-      "choices": ["PowerShell est simplement plus rapide à l'exécution", "PowerShell manipule des objets .NET, CMD du texte brut", "CMD ne fonctionne plus sous Windows 11", "PowerShell ne fonctionne que sur les serveurs"],
+      "choices": [
+        "PowerShell est simplement plus rapide à l'exécution",
+        "PowerShell manipule des objets .NET, CMD du texte brut",
+        "CMD ne fonctionne plus sous Windows 11",
+        "PowerShell ne fonctionne que sur les serveurs"
+      ],
       "answer": 1,
       "explication": "Chaque cmdlet retourne des objets dotés de propriétés exploitables (Name, CPU, Id...), alors que CMD ne produit que du texte : c'est ce qui rend le pipeline PowerShell si puissant."
     },
     {
-      "id": "scr-002", "niveau": 1, "type": "qcm",
+      "id": "scr-002",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Comment sont construits les noms des cmdlets PowerShell ?",
-      "choices": ["Nom-Verbe (ex : Service-Get)", "Verbe-Nom (ex : Get-Service)", "Un mot unique en minuscules (ex : getservice)", "Nom.Méthode (ex : Service.Get)"],
+      "choices": [
+        "Nom-Verbe (ex : Service-Get)",
+        "Verbe-Nom (ex : Get-Service)",
+        "Un mot unique en minuscules (ex : getservice)",
+        "Nom.Méthode (ex : Service.Get)"
+      ],
       "answer": 1,
       "explication": "Toutes les cmdlets suivent la convention Verbe-Nom avec des verbes standardisés (Get, Set, New, Remove...), ce qui rend leurs noms prévisibles."
     },
     {
-      "id": "scr-003", "niveau": 1, "type": "assoc",
+      "id": "scr-003",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque verbe standard PowerShell à l'action qu'il désigne.",
-      "pairs": [["Get", "Lire une information"], ["New", "Créer un élément"], ["Set", "Modifier un élément existant"], ["Remove", "Supprimer un élément"]],
+      "pairs": [
+        [
+          "Get",
+          "Lire une information"
+        ],
+        [
+          "New",
+          "Créer un élément"
+        ],
+        [
+          "Set",
+          "Modifier un élément existant"
+        ],
+        [
+          "Remove",
+          "Supprimer un élément"
+        ]
+      ],
       "explication": "Les verbes normalisés permettent de deviner une cmdlet sans la connaître : Get-Service lit, New-LocalUser crée, Set-Service modifie, Remove-Item supprime."
     },
     {
-      "id": "scr-004", "niveau": 1, "type": "libre",
+      "id": "scr-004",
+      "niveau": 1,
+      "type": "libre",
       "q": "Quel caractère précède toujours le nom d'une variable en PowerShell ?",
-      "accept": ["$", "dollar", "le dollar", "signe dollar", "le signe dollar"],
+      "accept": [
+        "$",
+        "dollar",
+        "le dollar",
+        "signe dollar",
+        "le signe dollar"
+      ],
       "explication": "Toute variable PowerShell commence par $ (ex : $nom = \"Robin\"). Le type est inféré automatiquement à l'affectation."
     },
     {
-      "id": "scr-005", "niveau": 1, "type": "qcm",
+      "id": "scr-005",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quel opérateur PowerShell teste l'égalité entre deux valeurs ?",
-      "choices": ["==", "-eq", "=", "-like"],
+      "choices": [
+        "==",
+        "-eq",
+        "=",
+        "-like"
+      ],
       "answer": 1,
       "explication": "PowerShell utilise des opérateurs préfixés d'un tiret : -eq (égal), -ne (différent), -gt/-lt (supérieur/inférieur). Le signe = sert uniquement à l'affectation."
     },
     {
-      "id": "scr-006", "niveau": 1, "type": "assoc",
+      "id": "scr-006",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque cmdlet PowerShell à la commande classique équivalente.",
-      "pairs": [["Get-ChildItem", "ls / dir"], ["Set-Location", "cd"], ["Test-Connection", "ping"], ["Resolve-DnsName", "nslookup"]],
+      "pairs": [
+        [
+          "Get-ChildItem",
+          "ls / dir"
+        ],
+        [
+          "Set-Location",
+          "cd"
+        ],
+        [
+          "Test-Connection",
+          "ping"
+        ],
+        [
+          "Resolve-DnsName",
+          "nslookup"
+        ]
+      ],
       "explication": "PowerShell fournit des alias hérités de CMD et d'Unix, mais chaque alias renvoie à une vraie cmdlet Verbe-Nom qui retourne des objets, pas du texte."
     },
     {
-      "id": "scr-007", "niveau": 1, "type": "qcm",
+      "id": "scr-007",
+      "niveau": 1,
+      "type": "qcm",
       "q": "En Python, quel est le type de la valeur 3.14 ?",
-      "choices": ["int", "float", "str", "double"],
+      "choices": [
+        "int",
+        "float",
+        "str",
+        "double"
+      ],
       "answer": 1,
       "explication": "Les nombres à virgule sont de type float en Python ; double n'existe pas comme type de base. type(3.14) retourne <class 'float'>."
     },
     {
-      "id": "scr-008", "niveau": 1, "type": "qcm",
+      "id": "scr-008",
+      "niveau": 1,
+      "type": "qcm",
       "q": "En Python, quel type de donnée la fonction input() retourne-t-elle ?",
-      "choices": ["int si l'utilisateur tape un nombre", "Toujours une chaîne de caractères (str)", "float si la valeur contient une virgule", "Le type est détecté automatiquement"],
+      "choices": [
+        "int si l'utilisateur tape un nombre",
+        "Toujours une chaîne de caractères (str)",
+        "float si la valeur contient une virgule",
+        "Le type est détecté automatiquement"
+      ],
       "answer": 1,
       "explication": "input() retourne toujours une chaîne : si l'utilisateur tape 25, la variable vaut \"25\". Pour calculer, il faut convertir avec int() ou float()."
     },
     {
-      "id": "scr-009", "niveau": 1, "type": "libre",
+      "id": "scr-009",
+      "niveau": 1,
+      "type": "libre",
       "q": "Quelle fonction Python retourne le nombre d'éléments d'une liste ?",
-      "accept": ["len", "len()", "len(liste)"],
+      "accept": [
+        "len",
+        "len()",
+        "len(liste)"
+      ],
       "explication": "len(liste) retourne la taille de la liste ; elle fonctionne aussi sur les chaînes de caractères."
     },
     {
-      "id": "scr-010", "niveau": 1, "type": "qcm",
+      "id": "scr-010",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle convention de nommage est recommandée pour les variables en Python ?",
-      "choices": ["camelCase (monPrenom)", "snake_case (mon_prenom)", "PascalCase (MonPrenom)", "kebab-case (mon-prenom)"],
+      "choices": [
+        "camelCase (monPrenom)",
+        "snake_case (mon_prenom)",
+        "PascalCase (MonPrenom)",
+        "kebab-case (mon-prenom)"
+      ],
       "answer": 1,
       "explication": "Python recommande le snake_case : mots en minuscules séparés par des underscores. Rappel : un nom de variable ne peut pas commencer par un chiffre."
     },
     {
-      "id": "scr-011", "niveau": 1, "type": "libre",
+      "id": "scr-011",
+      "niveau": 1,
+      "type": "libre",
       "q": "Quelle méthode Python ajoute un élément à la fin d'une liste ?",
-      "accept": ["append", ".append", "append()", ".append()"],
+      "accept": [
+        "append",
+        ".append",
+        "append()",
+        ".append()"
+      ],
       "explication": "liste.append(x) ajoute x en fin de liste. Pour insérer à une position précise, on utilise insert(i, x)."
     },
     {
-      "id": "scr-016", "niveau": 1, "type": "qcm",
+      "id": "scr-016",
+      "niveau": 1,
+      "type": "qcm",
       "q": "En PowerShell, que crée l'instruction @{ Nom = \"Robin\"; Age = 25 } ?",
-      "choices": ["Un tableau (array)", "Une table de hachage (hashtable)", "Une chaîne de caractères", "Un objet Process"],
+      "choices": [
+        "Un tableau (array)",
+        "Une table de hachage (hashtable)",
+        "Une chaîne de caractères",
+        "Un objet Process"
+      ],
       "answer": 1,
       "explication": "@{ } crée une hashtable (paires clé/valeur), alors que @( ) crée un tableau : deux structures distinctes à ne pas confondre."
     },
     {
-      "id": "scr-012", "niveau": 2, "type": "qcm",
+      "id": "scr-012",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Dans un script PowerShell, pourquoi préférer Write-Output à Write-Host ?",
-      "choices": ["Write-Output affiche en couleur", "Write-Host est plus lent à l'exécution", "Write-Output renvoie la valeur dans le pipeline, Write-Host la perd", "Write-Host n'existe plus en PowerShell 7"],
+      "choices": [
+        "Write-Output affiche en couleur",
+        "Write-Host est plus lent à l'exécution",
+        "Write-Output renvoie la valeur dans le pipeline, Write-Host la perd",
+        "Write-Host n'existe plus en PowerShell 7"
+      ],
       "answer": 2,
       "explication": "Write-Host se contente d'afficher à l'écran : la donnée n'est pas transmise au pipeline et ne peut plus être filtrée ni exportée. Write-Output conserve l'objet dans le flux."
     },
     {
-      "id": "scr-013", "niveau": 2, "type": "qcm",
+      "id": "scr-013",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Que représente $_ dans un bloc Where-Object ou ForEach-Object ?",
-      "choices": ["La dernière erreur rencontrée", "L'objet en cours de traitement dans le pipeline", "Le répertoire courant", "Le dernier script exécuté"],
+      "choices": [
+        "La dernière erreur rencontrée",
+        "L'objet en cours de traitement dans le pipeline",
+        "Le répertoire courant",
+        "Le dernier script exécuté"
+      ],
       "answer": 1,
       "explication": "$_ (alias de $PSItem) désigne l'objet courant transmis par le pipeline ; on accède à ses propriétés avec $_.Name, $_.Status, etc."
     },
     {
-      "id": "scr-014", "niveau": 2, "type": "assoc",
+      "id": "scr-014",
+      "niveau": 2,
+      "type": "assoc",
       "q": "Associez chaque cmdlet du pipeline PowerShell à son rôle.",
-      "pairs": [["Where-Object", "Filtrer les objets selon une condition"], ["Select-Object", "Ne garder que certaines propriétés"], ["ForEach-Object", "Exécuter une action sur chaque objet"], ["Measure-Object", "Compter, sommer ou calculer une moyenne"]],
+      "pairs": [
+        [
+          "Where-Object",
+          "Filtrer les objets selon une condition"
+        ],
+        [
+          "Select-Object",
+          "Ne garder que certaines propriétés"
+        ],
+        [
+          "ForEach-Object",
+          "Exécuter une action sur chaque objet"
+        ],
+        [
+          "Measure-Object",
+          "Compter, sommer ou calculer une moyenne"
+        ]
+      ],
       "explication": "Ces quatre cmdlets forment le cœur du pipeline : on filtre (Where), on sélectionne les propriétés (Select), on agit (ForEach) et on agrège (Measure)."
     },
     {
-      "id": "scr-015", "niveau": 2, "type": "qcm",
+      "id": "scr-015",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quelle est la différence entre les opérateurs -like et -match en PowerShell ?",
-      "choices": ["-like utilise des jokers (*), -match des expressions régulières", "-like est sensible à la casse, pas -match", "-match ne fonctionne que sur les nombres", "Aucune, ce sont des alias l'un de l'autre"],
+      "choices": [
+        "-like utilise des jokers (*), -match des expressions régulières",
+        "-like est sensible à la casse, pas -match",
+        "-match ne fonctionne que sur les nombres",
+        "Aucune, ce sont des alias l'un de l'autre"
+      ],
       "answer": 0,
       "explication": "-like compare avec des jokers de type fichier (\"*.txt\"), tandis que -match évalue une expression régulière, beaucoup plus puissante pour les motifs complexes."
     },
     {
-      "id": "scr-017", "niveau": 2, "type": "qcm",
+      "id": "scr-017",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Que signifie la stratégie d'exécution RemoteSigned en PowerShell ?",
-      "choices": ["Tous les scripts doivent être signés numériquement", "Les scripts locaux s'exécutent, les scripts téléchargés doivent être signés", "Aucun script ne peut s'exécuter", "Seuls les scripts signés par Microsoft s'exécutent"],
+      "choices": [
+        "Tous les scripts doivent être signés numériquement",
+        "Les scripts locaux s'exécutent, les scripts téléchargés doivent être signés",
+        "Aucun script ne peut s'exécuter",
+        "Seuls les scripts signés par Microsoft s'exécutent"
+      ],
       "answer": 1,
       "explication": "RemoteSigned autorise les scripts écrits localement mais exige une signature numérique pour ceux provenant d'Internet : bon compromis sécurité/praticité sur un serveur."
     },
     {
-      "id": "scr-018", "niveau": 2, "type": "qcm",
+      "id": "scr-018",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi ajouter -ErrorAction Stop à une cmdlet placée dans un bloc try ?",
-      "choices": ["Pour accélérer l'exécution du script", "Parce que les erreurs non bloquantes ne déclenchent pas le catch sans cela", "Pour arrêter le service concerné en cas d'erreur", "C'est une obligation de syntaxe dans tout bloc try"],
+      "choices": [
+        "Pour accélérer l'exécution du script",
+        "Parce que les erreurs non bloquantes ne déclenchent pas le catch sans cela",
+        "Pour arrêter le service concerné en cas d'erreur",
+        "C'est une obligation de syntaxe dans tout bloc try"
+      ],
       "answer": 1,
       "explication": "Par défaut, les erreurs PowerShell sont « non-terminating » : le script continue et le catch n'est jamais exécuté. -ErrorAction Stop transforme l'erreur en erreur bloquante interceptable."
     },
     {
-      "id": "scr-019", "niveau": 2, "type": "multi",
+      "id": "scr-019",
+      "niveau": 2,
+      "type": "multi",
       "q": "Quelles cmdlets n'existent plus en PowerShell 7 ? (plusieurs réponses)",
-      "choices": ["Get-EventLog", "Get-WinEvent", "Get-WmiObject", "Get-CimInstance", "Get-Service"],
-      "answer": [0, 2],
+      "choices": [
+        "Get-EventLog",
+        "Get-WinEvent",
+        "Get-WmiObject",
+        "Get-CimInstance",
+        "Get-Service"
+      ],
+      "answer": [
+        0,
+        2
+      ],
       "explication": "PowerShell 7 supprime Get-EventLog (remplacé par Get-WinEvent) et Get-WmiObject (remplacé par Get-CimInstance). Piège classique quand un script PS5 est exécuté en PS7."
     },
     {
-      "id": "scr-020", "niveau": 2, "type": "qcm",
+      "id": "scr-020",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Après avoir configuré une IP statique avec New-NetIPAddress, quelle étape est indispensable pour que le poste reste pleinement fonctionnel ?",
-      "choices": ["Redémarrer la carte réseau", "Configurer les serveurs DNS avec Set-DnsClientServerAddress", "Désactiver le pare-feu Windows", "Vider le cache ARP"],
+      "choices": [
+        "Redémarrer la carte réseau",
+        "Configurer les serveurs DNS avec Set-DnsClientServerAddress",
+        "Désactiver le pare-feu Windows",
+        "Vider le cache ARP"
+      ],
       "answer": 1,
       "explication": "New-NetIPAddress ne configure pas les DNS : sans Set-DnsClientServerAddress, la résolution de noms échoue et l'accès aux ressources par nom devient impossible."
     },
     {
-      "id": "scr-021", "niveau": 2, "type": "multi",
+      "id": "scr-021",
+      "niveau": 2,
+      "type": "multi",
       "q": "En Python, quelles valeurs sont évaluées comme False dans une condition ? (plusieurs réponses)",
-      "choices": ["0", "\"\" (chaîne vide)", "None", "1", "\"0\" (chaîne contenant le caractère zéro)"],
-      "answer": [0, 1, 2],
+      "choices": [
+        "0",
+        "\"\" (chaîne vide)",
+        "None",
+        "1",
+        "\"0\" (chaîne contenant le caractère zéro)"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "0, la chaîne vide, la liste vide et None sont « falsy ». En revanche, la chaîne \"0\" n'est pas vide : elle est donc évaluée comme True."
     },
     {
-      "id": "scr-022", "niveau": 2, "type": "qcm",
+      "id": "scr-022",
+      "niveau": 2,
+      "type": "qcm",
       "q": "En Python, quelle est la différence entre liste.remove(x) et liste.pop(i) ?",
-      "choices": ["remove supprime par valeur, pop supprime par index et retourne l'élément", "remove supprime toutes les occurrences, pop une seule", "pop supprime par valeur, remove par index", "Aucune différence, ce sont des synonymes"],
+      "choices": [
+        "remove supprime par valeur, pop supprime par index et retourne l'élément",
+        "remove supprime toutes les occurrences, pop une seule",
+        "pop supprime par valeur, remove par index",
+        "Aucune différence, ce sont des synonymes"
+      ],
       "answer": 0,
       "explication": "remove(x) retire la première occurrence de la valeur x, tandis que pop(i) retire l'élément situé à l'index i et le retourne (le dernier élément si aucun index n'est donné)."
     },
     {
-      "id": "scr-023", "niveau": 2, "type": "assoc",
+      "id": "scr-023",
+      "niveau": 2,
+      "type": "assoc",
       "q": "Associez chaque élément Python à son rôle dans une boucle.",
-      "pairs": [["break", "Sortir immédiatement de la boucle"], ["continue", "Passer à l'itération suivante"], ["enumerate()", "Obtenir à la fois l'index et la valeur"], ["range(5)", "Générer les nombres de 0 à 4"]],
+      "pairs": [
+        [
+          "break",
+          "Sortir immédiatement de la boucle"
+        ],
+        [
+          "continue",
+          "Passer à l'itération suivante"
+        ],
+        [
+          "enumerate()",
+          "Obtenir à la fois l'index et la valeur"
+        ],
+        [
+          "range(5)",
+          "Générer les nombres de 0 à 4"
+        ]
+      ],
       "explication": "break interrompt la boucle, continue saute le reste de l'itération en cours, enumerate fournit des couples (index, valeur) et range génère une séquence dont la borne haute est exclue."
     },
     {
-      "id": "scr-024", "niveau": 3, "type": "qcm",
+      "id": "scr-024",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Que fait la commande : Get-Service | Where-Object { $_.Status -eq \"Running\" } ?",
-      "choices": ["Elle démarre tous les services arrêtés", "Elle affiche uniquement les services en cours d'exécution", "Elle arrête les services en cours d'exécution", "Elle affiche l'état du service nommé « Running »"],
+      "choices": [
+        "Elle démarre tous les services arrêtés",
+        "Elle affiche uniquement les services en cours d'exécution",
+        "Elle arrête les services en cours d'exécution",
+        "Elle affiche l'état du service nommé « Running »"
+      ],
       "answer": 1,
       "explication": "Get-Service envoie tous les services dans le pipeline, puis Where-Object ne laisse passer que les objets dont la propriété Status vaut Running."
     },
     {
-      "id": "scr-025", "niveau": 3, "type": "terminal",
+      "id": "scr-025",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Vérifiez que le fichier C:\\Scripts\\audit.ps1 existe bien sur ce poste.",
-      "accept": ["Test-Path C:\\Scripts\\audit.ps1", "Test-Path -Path C:\\Scripts\\audit.ps1", "Test-Path \"C:\\Scripts\\audit.ps1\"", "Test-Path 'C:\\Scripts\\audit.ps1'", "Test-Path -Path \"C:\\Scripts\\audit.ps1\""],
+      "accept": [
+        "Test-Path C:\\Scripts\\audit.ps1",
+        "Test-Path -Path C:\\Scripts\\audit.ps1",
+        "Test-Path \"C:\\Scripts\\audit.ps1\"",
+        "Test-Path 'C:\\Scripts\\audit.ps1'",
+        "Test-Path -Path \"C:\\Scripts\\audit.ps1\""
+      ],
       "output": "True",
       "explication": "Test-Path retourne True si le chemin existe (fichier ou dossier) : idéal dans un if avant de créer ou de supprimer un élément."
     },
     {
-      "id": "scr-026", "niveau": 3, "type": "ordre",
+      "id": "scr-026",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre les étapes du pipeline qui exporte les services en cours d'exécution vers un fichier CSV, en respectant la bonne pratique « filtrer le plus tôt possible ».",
-      "steps": ["Get-Service pour récupérer tous les services", "Where-Object { $_.Status -eq \"Running\" } pour filtrer", "Select-Object Name, Status pour ne garder que les propriétés utiles", "Export-Csv avec -Encoding UTF8 pour écrire le fichier"],
+      "steps": [
+        "Get-Service pour récupérer tous les services",
+        "Where-Object { $_.Status -eq \"Running\" } pour filtrer",
+        "Select-Object Name, Status pour ne garder que les propriétés utiles",
+        "Export-Csv avec -Encoding UTF8 pour écrire le fichier"
+      ],
       "explication": "Le pipeline se lit de gauche à droite : on collecte, on filtre, on sélectionne les propriétés puis on exporte. L'encodage UTF8 protège les caractères accentués."
     },
     {
-      "id": "scr-027", "niveau": 3, "type": "ordre",
+      "id": "scr-027",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre les étapes de la procédure recommandée pour passer un poste en IP statique fonctionnelle avec PowerShell.",
-      "steps": ["Identifier l'interface avec Get-NetAdapter", "Attribuer l'adresse et la passerelle avec New-NetIPAddress", "Configurer les serveurs DNS avec Set-DnsClientServerAddress", "Vérifier la connectivité avec Test-Connection"],
+      "steps": [
+        "Identifier l'interface avec Get-NetAdapter",
+        "Attribuer l'adresse et la passerelle avec New-NetIPAddress",
+        "Configurer les serveurs DNS avec Set-DnsClientServerAddress",
+        "Vérifier la connectivité avec Test-Connection"
+      ],
       "explication": "On repère d'abord le nom de l'interface, on fixe IP/masque/passerelle, on ajoute les DNS (l'étape souvent oubliée), puis on valide par un ping."
     },
     {
-      "id": "scr-028", "niveau": 3, "type": "qcm",
+      "id": "scr-028",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Comment fournir un mot de passe accepté par New-LocalUser en PowerShell ?",
-      "choices": ["Directement en texte clair entre guillemets", "Avec (ConvertTo-SecureString \"P@ssw0rd\" -AsPlainText -Force)", "Dans un fichier texte lu avec Get-Content", "Avec un paramètre -PlainTextPassword"],
+      "choices": [
+        "Directement en texte clair entre guillemets",
+        "Avec (ConvertTo-SecureString \"P@ssw0rd\" -AsPlainText -Force)",
+        "Dans un fichier texte lu avec Get-Content",
+        "Avec un paramètre -PlainTextPassword"
+      ],
       "answer": 1,
       "explication": "New-LocalUser, comme New-ADUser, n'accepte jamais une chaîne en clair : le mot de passe doit être converti en SecureString avec ConvertTo-SecureString."
     },
     {
-      "id": "scr-029", "niveau": 3, "type": "qcm",
+      "id": "scr-029",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Que récupère la commande : Get-WinEvent -FilterHashtable @{ LogName = \"System\"; Level = 2 } ?",
-      "choices": ["Les 2 derniers événements du journal System", "Les événements de niveau Erreur du journal System", "Les avertissements du journal System", "Les événements du journal numéro 2"],
+      "choices": [
+        "Les 2 derniers événements du journal System",
+        "Les événements de niveau Erreur du journal System",
+        "Les avertissements du journal System",
+        "Les événements du journal numéro 2"
+      ],
       "answer": 1,
       "explication": "Dans un FilterHashtable, Level = 2 correspond au niveau Erreur. Get-WinEvent est la méthode moderne de lecture des journaux, plus puissante que Get-EventLog."
     },
     {
-      "id": "scr-030", "niveau": 3, "type": "terminal",
+      "id": "scr-030",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Testez si le port TCP 80 est ouvert sur le serveur 192.168.1.10.",
-      "accept": ["Test-NetConnection 192.168.1.10 -Port 80", "Test-NetConnection -ComputerName 192.168.1.10 -Port 80", "tnc 192.168.1.10 -Port 80", "tnc -ComputerName 192.168.1.10 -Port 80", "Test-NetConnection \"192.168.1.10\" -Port 80"],
+      "accept": [
+        "Test-NetConnection 192.168.1.10 -Port 80",
+        "Test-NetConnection -ComputerName 192.168.1.10 -Port 80",
+        "tnc 192.168.1.10 -Port 80",
+        "tnc -ComputerName 192.168.1.10 -Port 80",
+        "Test-NetConnection \"192.168.1.10\" -Port 80"
+      ],
       "output": "ComputerName     : 192.168.1.10\nRemoteAddress    : 192.168.1.10\nRemotePort       : 80\nInterfaceAlias   : Ethernet\nSourceAddress    : 192.168.1.50\nTcpTestSucceeded : True",
       "explication": "Test-NetConnection <serveur> -Port <n> vérifie l'ouverture d'un port TCP ; sans le paramètre -Port, elle se comporte comme un ping amélioré. TcpTestSucceeded = True confirme que le port répond."
     },
     {
-      "id": "scr-031", "niveau": 3, "type": "qcm",
+      "id": "scr-031",
+      "niveau": 3,
+      "type": "qcm",
       "q": "En Python, quels nombres sont produits par range(0, 10, 2) ?",
-      "choices": ["0, 2, 4, 6, 8", "0, 2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "0, 5, 10"],
+      "choices": [
+        "0, 2, 4, 6, 8",
+        "0, 2, 4, 6, 8, 10",
+        "2, 4, 6, 8, 10",
+        "0, 5, 10"
+      ],
       "answer": 0,
       "explication": "range(début, fin, pas) exclut toujours la borne de fin : la séquence s'arrête donc à 8, dernier multiple de 2 strictement inférieur à 10."
     },
     {
-      "id": "scr-032", "niveau": 3, "type": "qcm",
+      "id": "scr-032",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Avec liste = [\"a\", \"b\", \"c\", \"d\"], que retourne liste[1:3] ?",
-      "choices": ["[\"b\", \"c\"]", "[\"b\", \"c\", \"d\"]", "[\"a\", \"b\", \"c\"]", "[\"c\", \"d\"]"],
+      "choices": [
+        "[\"b\", \"c\"]",
+        "[\"b\", \"c\", \"d\"]",
+        "[\"a\", \"b\", \"c\"]",
+        "[\"c\", \"d\"]"
+      ],
       "answer": 0,
       "explication": "Le slicing inclut l'index de début (1) et exclut l'index de fin (3) : on obtient les éléments d'index 1 et 2, soit \"b\" et \"c\". Rappel : l'index -1 désigne le dernier élément."
     },
     {
-      "id": "scr-033", "niveau": 3, "type": "assoc",
+      "id": "scr-033",
+      "niveau": 3,
+      "type": "assoc",
       "q": "Associez chaque fonction Python appliquée à la liste [1, 5, 2] à son résultat.",
-      "pairs": [["len([1, 5, 2])", "3"], ["min([1, 5, 2])", "1"], ["max([1, 5, 2])", "5"], ["sum([1, 5, 2])", "8"]],
+      "pairs": [
+        [
+          "len([1, 5, 2])",
+          "3"
+        ],
+        [
+          "min([1, 5, 2])",
+          "1"
+        ],
+        [
+          "max([1, 5, 2])",
+          "5"
+        ],
+        [
+          "sum([1, 5, 2])",
+          "8"
+        ]
+      ],
       "explication": "len compte les éléments, min et max retournent les valeurs extrêmes, sum additionne toutes les valeurs numériques de la liste."
     },
     {
-      "id": "scr-034", "niveau": 3, "type": "qcm",
+      "id": "scr-034",
+      "niveau": 3,
+      "type": "qcm",
       "q": "En Python, quelle syntaxe affiche « Bonjour Robin » en utilisant la variable nom ?",
-      "choices": ["print(f\"Bonjour {nom}\")", "print(\"Bonjour {nom}\")", "print(\"Bonjour\" + {nom})", "print(f\"Bonjour $nom\")"],
+      "choices": [
+        "print(f\"Bonjour {nom}\")",
+        "print(\"Bonjour {nom}\")",
+        "print(\"Bonjour\" + {nom})",
+        "print(f\"Bonjour $nom\")"
+      ],
       "answer": 0,
       "explication": "La f-string (préfixe f) interpole les variables placées entre accolades. Sans le préfixe f, {nom} s'affiche tel quel ; la syntaxe $nom appartient à PowerShell."
     },
     {
-      "id": "scr-035", "niveau": 4, "type": "scenario",
+      "id": "scr-035",
+      "niveau": 4,
+      "type": "scenario",
       "context": "PS C:\\> .\\audit.ps1\nImpossible de charger le fichier C:\\audit.ps1, car l'exécution de scripts est désactivée sur ce système.",
       "q": "Un technicien lance son premier script sur un serveur Windows fraîchement installé et obtient ce message. Quelle est la solution adaptée ?",
-      "choices": ["Renommer le script avec l'extension .bat", "Exécuter Set-ExecutionPolicy RemoteSigned -Scope LocalMachine", "Réinstaller PowerShell", "Copier le script dans C:\\Windows\\System32"],
+      "choices": [
+        "Renommer le script avec l'extension .bat",
+        "Exécuter Set-ExecutionPolicy RemoteSigned -Scope LocalMachine",
+        "Réinstaller PowerShell",
+        "Copier le script dans C:\\Windows\\System32"
+      ],
       "answer": 1,
       "explication": "Par défaut, Windows bloque l'exécution des scripts .ps1. RemoteSigned autorise les scripts locaux tout en exigeant une signature pour les scripts téléchargés — à préférer à Bypass en production."
     },
     {
-      "id": "scr-036", "niveau": 4, "type": "scenario",
+      "id": "scr-036",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Un script exporte la liste des utilisateurs avec Export-Csv.\nÀ l'ouverture du fichier, les prénoms s'affichent ainsi :\n« RÃ©mi » au lieu de « Rémi », « JÃ©rÃ´me » au lieu de « Jérôme »",
       "q": "Les caractères accentués de l'export CSV sont corrompus. Quelle est la cause la plus probable ?",
-      "choices": ["Le fichier est trop volumineux", "Le paramètre -Encoding UTF8 a été oublié sur Export-Csv", "Excel ne sait pas ouvrir les fichiers CSV", "Le paramètre -NoTypeInformation est manquant"],
+      "choices": [
+        "Le fichier est trop volumineux",
+        "Le paramètre -Encoding UTF8 a été oublié sur Export-Csv",
+        "Excel ne sait pas ouvrir les fichiers CSV",
+        "Le paramètre -NoTypeInformation est manquant"
+      ],
       "answer": 1,
       "explication": "Sans -Encoding UTF8, l'encodage par défaut de Windows corrompt les caractères accentués. Il faut le spécifier avec Export-Csv comme avec Import-Csv."
     },
     {
-      "id": "scr-037", "niveau": 4, "type": "scenario",
+      "id": "scr-037",
+      "niveau": 4,
+      "type": "scenario",
       "context": "try {\n    Get-Service -Name \"ServiceInexistant\"\n}\ncatch {\n    Write-Host \"Service introuvable !\"\n}\n# Résultat : l'erreur rouge s'affiche, mais le message du catch n'apparaît jamais.",
       "q": "Pourquoi le bloc catch ne s'exécute-t-il pas ?",
-      "choices": ["Il manque un bloc finally", "L'erreur est non bloquante : il faut ajouter -ErrorAction Stop à la cmdlet", "Le mot-clé catch doit être écrit en majuscules", "Get-Service ne peut pas générer d'erreur"],
+      "choices": [
+        "Il manque un bloc finally",
+        "L'erreur est non bloquante : il faut ajouter -ErrorAction Stop à la cmdlet",
+        "Le mot-clé catch doit être écrit en majuscules",
+        "Get-Service ne peut pas générer d'erreur"
+      ],
       "answer": 1,
       "explication": "Les erreurs PowerShell sont par défaut « non-terminating » et ne déclenchent pas le catch. Ajouter -ErrorAction Stop rend l'erreur bloquante et donc interceptable."
     },
     {
-      "id": "scr-038", "niveau": 4, "type": "scenario",
+      "id": "scr-038",
+      "niveau": 4,
+      "type": "scenario",
       "context": "age = input(\"Votre âge ? \")\nif age >= 18:\n    print(\"Majeur\")\n\n# TypeError: '>=' not supported between instances of 'str' and 'int'",
       "q": "Ce script Python plante dès la comparaison. Quelle correction faut-il apporter ?",
-      "choices": ["Écrire if age >= \"18\":", "Convertir la saisie : age = int(input(\"Votre âge ? \"))", "Remplacer >= par ==", "Ajouter des parenthèses autour de la condition"],
+      "choices": [
+        "Écrire if age >= \"18\":",
+        "Convertir la saisie : age = int(input(\"Votre âge ? \"))",
+        "Remplacer >= par ==",
+        "Ajouter des parenthèses autour de la condition"
+      ],
       "answer": 1,
       "explication": "input() retourne toujours une chaîne de caractères : comparer une str à un int provoque une TypeError. La conversion avec int() permet une vraie comparaison numérique."
     },
     {
-      "id": "scr-039", "niveau": 4, "type": "scenario",
+      "id": "scr-039",
+      "niveau": 4,
+      "type": "scenario",
       "context": "PS C:\\> Get-EventLog -LogName System -Newest 20\nGet-EventLog : le terme « Get-EventLog » n'est pas reconnu...\n\nPS C:\\> $PSVersionTable.PSVersion\nMajor  Minor\n-----  -----\n7      4",
       "q": "Cette commande fonctionnait en PowerShell 5 mais échoue ici. Que faire ?",
-      "choices": ["Réinstaller le module EventLog", "Utiliser Get-WinEvent, car Get-EventLog n'existe plus en PowerShell 7", "Relancer la commande en tant qu'administrateur", "Activer le journal System dans l'Observateur d'événements"],
+      "choices": [
+        "Réinstaller le module EventLog",
+        "Utiliser Get-WinEvent, car Get-EventLog n'existe plus en PowerShell 7",
+        "Relancer la commande en tant qu'administrateur",
+        "Activer le journal System dans l'Observateur d'événements"
+      ],
       "answer": 1,
       "explication": "PowerShell 7 a supprimé Get-EventLog : la lecture des journaux passe par Get-WinEvent (ex. Get-WinEvent -LogName System -MaxEvents 20)."
     }

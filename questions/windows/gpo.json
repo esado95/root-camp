@@ -1,295 +1,588 @@
 {
   "module": "GPO",
-  "source": "Active-Directory-GPO.md + Evaluation-GPO-Cheat-Sheet.md",
   "questions": [
     {
-      "id": "gpo-001", "niveau": 1, "type": "qcm",
+      "id": "gpo-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Qu'est-ce qu'une GPO (Group Policy Object) dans un environnement Active Directory ?",
-      "choices": ["Un objet contenant des paramètres de configuration appliqués aux utilisateurs et aux ordinateurs", "Un groupe de sécurité rassemblant des comptes utilisateurs", "Un protocole de réplication entre contrôleurs de domaine", "Un partage réseau centralisant les profils itinérants"],
+      "choices": [
+        "Un objet contenant des paramètres de configuration appliqués aux utilisateurs et aux ordinateurs",
+        "Un groupe de sécurité rassemblant des comptes utilisateurs",
+        "Un protocole de réplication entre contrôleurs de domaine",
+        "Un partage réseau centralisant les profils itinérants"
+      ],
       "answer": 0,
       "explication": "Une GPO regroupe un ou plusieurs paramètres de configuration et permet de centraliser l'administration des objets Utilisateurs, Ordinateurs, ou des deux."
     },
     {
-      "id": "gpo-002", "niveau": 1, "type": "qcm",
+      "id": "gpo-002",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Comment chaque GPO est-elle identifiée de manière unique dans le domaine ?",
-      "choices": ["Par son nom d'affichage", "Par un GUID", "Par son numéro d'ordre de liaison", "Par un SID"],
+      "choices": [
+        "Par son nom d'affichage",
+        "Par un GUID",
+        "Par son numéro d'ordre de liaison",
+        "Par un SID"
+      ],
       "answer": 1,
       "explication": "Chaque GPO possède un GUID (Globally Unique Identifier), ce qui garantit son unicité même si deux GPO portent des noms proches."
     },
     {
-      "id": "gpo-003", "niveau": 1, "type": "terminal",
+      "id": "gpo-003",
+      "niveau": 1,
+      "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Ouvrez l'éditeur de stratégie de groupe locale de ce poste de travail.",
-      "accept": ["gpedit.msc", "gpedit"],
+      "accept": [
+        "gpedit.msc",
+        "gpedit"
+      ],
       "explication": "gpedit.msc ouvre l'Éditeur de stratégie de groupe locale (console graphique, rien ne s'affiche dans le terminal) : la GPO locale s'applique uniquement à la machine, indépendamment de l'Active Directory."
     },
     {
-      "id": "gpo-004", "niveau": 1, "type": "terminal",
+      "id": "gpo-004",
+      "niveau": 1,
+      "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Depuis le serveur d'administration, lancez la console de gestion des stratégies de groupe du domaine (GPMC).",
-      "accept": ["gpmc.msc", "gpmc"],
+      "accept": [
+        "gpmc.msc",
+        "gpmc"
+      ],
       "explication": "gpmc.msc ouvre la Group Policy Management Console (console graphique, aucune sortie dans le terminal), l'outil principal pour créer, lier et gérer les GPO du domaine."
     },
     {
-      "id": "gpo-005", "niveau": 1, "type": "assoc",
+      "id": "gpo-005",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque stratégie à sa portée ou à son emplacement de liaison.",
       "pairs": [
-        ["Default Domain Policy", "Liée à la racine du domaine, concerne tous les utilisateurs et ordinateurs"],
-        ["Default Domain Controllers Policy", "Liée à l'OU des contrôleurs de domaine, sécurité renforcée"],
-        ["GPO locale", "S'applique uniquement à la machine, de manière isolée"]
+        [
+          "Default Domain Policy",
+          "Liée à la racine du domaine, concerne tous les utilisateurs et ordinateurs"
+        ],
+        [
+          "Default Domain Controllers Policy",
+          "Liée à l'OU des contrôleurs de domaine, sécurité renforcée"
+        ],
+        [
+          "GPO locale",
+          "S'applique uniquement à la machine, de manière isolée"
+        ]
       ],
       "explication": "Les deux premières sont créées automatiquement à la création du domaine ; la GPO locale, elle, ne dépend pas de l'Active Directory."
     },
     {
-      "id": "gpo-006", "niveau": 1, "type": "ordre",
+      "id": "gpo-006",
+      "niveau": 1,
+      "type": "ordre",
       "q": "Remettez dans l'ordre d'application les niveaux de stratégies selon la règle LSDOU.",
-      "steps": ["GPO locale", "GPO de site", "GPO de domaine", "GPO d'unité d'organisation (OU)"],
+      "steps": [
+        "GPO locale",
+        "GPO de site",
+        "GPO de domaine",
+        "GPO d'unité d'organisation (OU)"
+      ],
       "explication": "LSDOU : Local, Site, Domaine, OU. La dernière GPO appliquée écrase les précédentes en cas de conflit."
     },
     {
-      "id": "gpo-007", "niveau": 1, "type": "qcm",
+      "id": "gpo-007",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quel est le taux de rafraîchissement par défaut des GPO sur une station de travail ?",
-      "choices": ["15 minutes", "45 minutes", "90 minutes avec un décalage aléatoire", "24 heures"],
+      "choices": [
+        "15 minutes",
+        "45 minutes",
+        "90 minutes avec un décalage aléatoire",
+        "24 heures"
+      ],
       "answer": 2,
       "explication": "Les stations interrogent le serveur environ toutes les 90 minutes (plus un décalage aléatoire pour éviter que tous les postes le fassent en même temps)."
     },
     {
-      "id": "gpo-008", "niveau": 1, "type": "libre",
+      "id": "gpo-008",
+      "niveau": 1,
+      "type": "libre",
       "q": "Sur un contrôleur de domaine, quel est l'intervalle de rafraîchissement des GPO par défaut, en minutes ?",
-      "accept": ["5", "5 min", "5 minutes", "5min"],
+      "accept": [
+        "5",
+        "5 min",
+        "5 minutes",
+        "5min"
+      ],
       "explication": "Un contrôleur de domaine actualise ses stratégies toutes les 5 minutes, contre 90 minutes pour une station de travail."
     },
     {
-      "id": "gpo-009", "niveau": 1, "type": "qcm",
+      "id": "gpo-009",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Dans la GPMC, que se passe-t-il lorsqu'on désactive le lien d'une GPO ?",
-      "choices": ["La GPO est supprimée du domaine", "La GPO apparaît grisée : elle reste à son emplacement mais n'affecte plus rien", "La GPO ne s'applique plus qu'aux ordinateurs", "La GPO devient automatiquement forcée (Enforced)"],
+      "choices": [
+        "La GPO est supprimée du domaine",
+        "La GPO apparaît grisée : elle reste à son emplacement mais n'affecte plus rien",
+        "La GPO ne s'applique plus qu'aux ordinateurs",
+        "La GPO devient automatiquement forcée (Enforced)"
+      ],
       "answer": 1,
       "explication": "Désactiver le lien ne supprime rien : la GPO reste en place, grisée, et cesse simplement d'affecter son conteneur (site, domaine ou OU)."
     },
     {
-      "id": "gpo-010", "niveau": 1, "type": "assoc",
+      "id": "gpo-010",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque catégorie de paramétrage d'une GPO à son rôle.",
       "pairs": [
-        ["Paramètres de logiciel", "Déployer et installer automatiquement des applications ou des packages"],
-        ["Paramètres Windows", "Gérer les scripts, la sécurité et la maintenance"],
-        ["Modèles d'administration", "Modifier l'environnement de travail, par exemple masquer le panneau de configuration"]
+        [
+          "Paramètres de logiciel",
+          "Déployer et installer automatiquement des applications ou des packages"
+        ],
+        [
+          "Paramètres Windows",
+          "Gérer les scripts, la sécurité et la maintenance"
+        ],
+        [
+          "Modèles d'administration",
+          "Modifier l'environnement de travail, par exemple masquer le panneau de configuration"
+        ]
       ],
       "explication": "Ces trois catégories se retrouvent dans l'Éditeur de gestion des stratégies de groupe, côté Configuration ordinateur comme côté Configuration utilisateur."
     },
     {
-      "id": "gpo-011", "niveau": 1, "type": "qcm",
+      "id": "gpo-011",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Concrètement, sur quoi une GPO applique-t-elle ses modifications ?",
-      "choices": ["Sur la base de registre des machines ou sur les propriétés des comptes utilisateurs", "Sur le fichier hosts des postes clients", "Uniquement sur la base de données NTDS.dit du contrôleur de domaine", "Sur le BIOS/UEFI des ordinateurs"],
+      "choices": [
+        "Sur la base de registre des machines ou sur les propriétés des comptes utilisateurs",
+        "Sur le fichier hosts des postes clients",
+        "Uniquement sur la base de données NTDS.dit du contrôleur de domaine",
+        "Sur le BIOS/UEFI des ordinateurs"
+      ],
       "answer": 0,
       "explication": "Les GPO modifient directement la base de registre de la machine ou les propriétés des comptes utilisateurs."
     },
     {
-      "id": "gpo-012", "niveau": 2, "type": "qcm",
+      "id": "gpo-012",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Une GPO liée au domaine contredit une GPO liée à l'OU de l'utilisateur. Quel paramètre s'applique finalement ?",
-      "choices": ["Celui du domaine, car le domaine est au-dessus de l'OU dans l'arborescence", "Celui de l'OU, car elle est appliquée en dernier dans l'ordre LSDOU", "Aucun des deux : le conflit annule les deux paramètres", "Celui du domaine, car les GPO de domaine sont toujours forcées"],
+      "choices": [
+        "Celui du domaine, car le domaine est au-dessus de l'OU dans l'arborescence",
+        "Celui de l'OU, car elle est appliquée en dernier dans l'ordre LSDOU",
+        "Aucun des deux : le conflit annule les deux paramètres",
+        "Celui du domaine, car les GPO de domaine sont toujours forcées"
+      ],
       "answer": 1,
       "explication": "La dernière GPO appliquée écrase les précédentes : l'OU arrive en dernier dans LSDOU, c'est donc elle qui gagne (sauf option Enforced)."
     },
     {
-      "id": "gpo-013", "niveau": 2, "type": "qcm",
+      "id": "gpo-013",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quelle est la bonne pratique si l'on doit modifier des paramètres présents dans la Default Domain Policy ?",
-      "choices": ["La modifier directement, c'est son rôle", "La dupliquer et modifier la copie, sans toucher à l'originale", "La supprimer puis la recréer proprement", "La délier du domaine avant de la modifier"],
+      "choices": [
+        "La modifier directement, c'est son rôle",
+        "La dupliquer et modifier la copie, sans toucher à l'originale",
+        "La supprimer puis la recréer proprement",
+        "La délier du domaine avant de la modifier"
+      ],
       "answer": 1,
       "explication": "Règle d'or : on ne touche jamais aux GPO par défaut. On travaille sur une copie, et si on doit annuler la stratégie, on la désactive simplement."
     },
     {
-      "id": "gpo-014", "niveau": 2, "type": "qcm",
+      "id": "gpo-014",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi la Default Domain Controllers Policy contient-elle une sécurité renforcée ?",
-      "choices": ["Parce que les contrôleurs de domaine ont moins de puissance de calcul", "Parce que si un attaquant compromet un contrôleur de domaine, c'est tout le système d'information qui tombe", "Parce que les contrôleurs de domaine n'ont pas de pare-feu", "Parce qu'elle remplace l'antivirus sur les serveurs"],
+      "choices": [
+        "Parce que les contrôleurs de domaine ont moins de puissance de calcul",
+        "Parce que si un attaquant compromet un contrôleur de domaine, c'est tout le système d'information qui tombe",
+        "Parce que les contrôleurs de domaine n'ont pas de pare-feu",
+        "Parce qu'elle remplace l'antivirus sur les serveurs"
+      ],
       "answer": 1,
       "explication": "Le contrôleur de domaine détient l'annuaire et les secrets d'authentification : sa compromission entraîne celle de tout le système d'information."
     },
     {
-      "id": "gpo-015", "niveau": 2, "type": "qcm",
+      "id": "gpo-015",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quelle est la différence entre une « stratégie » et une « préférence » dans une GPO ?",
-      "choices": ["La stratégie s'impose à l'utilisateur, la préférence propose une configuration qu'il peut modifier ou ignorer", "La stratégie concerne les ordinateurs, la préférence uniquement les utilisateurs", "La préférence est toujours prioritaire sur la stratégie", "La stratégie s'applique une seule fois, la préférence à chaque connexion"],
+      "choices": [
+        "La stratégie s'impose à l'utilisateur, la préférence propose une configuration qu'il peut modifier ou ignorer",
+        "La stratégie concerne les ordinateurs, la préférence uniquement les utilisateurs",
+        "La préférence est toujours prioritaire sur la stratégie",
+        "La stratégie s'applique une seule fois, la préférence à chaque connexion"
+      ],
       "answer": 0,
       "explication": "Une stratégie impose la configuration sans laisser le choix ; une préférence (raccourcis, lecteurs réseau...) propose une configuration initiale que l'utilisateur peut changer."
     },
     {
-      "id": "gpo-016", "niveau": 2, "type": "qcm",
+      "id": "gpo-016",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quel est l'effet de l'option « Bloquer l'héritage » activée sur une OU ?",
-      "choices": ["Elle empêche les GPO des OU mères de s'appliquer sur l'OU cible et ses OU filles", "Elle supprime les GPO liées à l'OU", "Elle empêche la création de nouvelles GPO dans l'OU", "Elle bloque uniquement l'application de la GPO locale"],
+      "choices": [
+        "Elle empêche les GPO des OU mères de s'appliquer sur l'OU cible et ses OU filles",
+        "Elle supprime les GPO liées à l'OU",
+        "Elle empêche la création de nouvelles GPO dans l'OU",
+        "Elle bloque uniquement l'application de la GPO locale"
+      ],
       "answer": 0,
       "explication": "Le blocage d'héritage coupe la transmission des stratégies venant des conteneurs parents ; seules les GPO marquées « Appliqué » (Enforced) passent outre."
     },
     {
-      "id": "gpo-017", "niveau": 2, "type": "qcm",
+      "id": "gpo-017",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Qu'apporte l'option « Appliqué » (Enforced) sur le lien d'une GPO ?",
-      "choices": ["Elle applique la GPO immédiatement sans attendre le cycle de rafraîchissement", "Elle impose la GPO par-dessus toutes les autres, même si l'héritage est bloqué plus bas", "Elle réserve la GPO aux administrateurs du domaine", "Elle verrouille la GPO contre toute modification ultérieure"],
+      "choices": [
+        "Elle applique la GPO immédiatement sans attendre le cycle de rafraîchissement",
+        "Elle impose la GPO par-dessus toutes les autres, même si l'héritage est bloqué plus bas",
+        "Elle réserve la GPO aux administrateurs du domaine",
+        "Elle verrouille la GPO contre toute modification ultérieure"
+      ],
       "answer": 1,
       "explication": "Une GPO forcée (un cadenas apparaît sur son icône) a priorité absolue et traverse le blocage d'héritage ; si plusieurs GPO sont forcées, la dernière appliquée en Enforced l'emporte. À utiliser avec parcimonie."
     },
     {
-      "id": "gpo-018", "niveau": 2, "type": "qcm",
+      "id": "gpo-018",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Plusieurs GPO sont liées à la même OU. Laquelle est prioritaire en cas de conflit ?",
-      "choices": ["Celle qui porte le numéro d'ordre le plus petit", "Celle qui porte le numéro d'ordre le plus grand", "Celle qui a été créée le plus récemment", "Celle dont le nom arrive en premier par ordre alphabétique"],
+      "choices": [
+        "Celle qui porte le numéro d'ordre le plus petit",
+        "Celle qui porte le numéro d'ordre le plus grand",
+        "Celle qui a été créée le plus récemment",
+        "Celle dont le nom arrive en premier par ordre alphabétique"
+      ],
       "answer": 0,
       "explication": "Au sein d'une même OU, la stratégie disposant du numéro d'ordre le plus petit est prioritaire."
     },
     {
-      "id": "gpo-019", "niveau": 2, "type": "multi",
+      "id": "gpo-019",
+      "niveau": 2,
+      "type": "multi",
       "q": "Concernant la liaison des GPO, quelles affirmations sont exactes ? (plusieurs réponses)",
-      "choices": ["Une GPO ne produit aucun effet tant qu'elle n'est pas liée à un conteneur (site, domaine ou OU)", "Une même GPO peut être liée à plusieurs conteneurs", "Dans la GPMC, un simple glisser-déposer suffit pour lier une GPO", "Une GPO s'applique automatiquement à tout le domaine dès sa création", "Une GPO ne peut être liée qu'à une seule OU à la fois"],
-      "answer": [0, 1, 2],
+      "choices": [
+        "Une GPO ne produit aucun effet tant qu'elle n'est pas liée à un conteneur (site, domaine ou OU)",
+        "Une même GPO peut être liée à plusieurs conteneurs",
+        "Dans la GPMC, un simple glisser-déposer suffit pour lier une GPO",
+        "Une GPO s'applique automatiquement à tout le domaine dès sa création",
+        "Une GPO ne peut être liée qu'à une seule OU à la fois"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "Une GPO n'agit que via ses liens : sans liaison, elle n'affecte rien, et le même objet peut être lié à plusieurs endroits par glisser-déposer."
     },
     {
-      "id": "gpo-020", "niveau": 2, "type": "qcm",
+      "id": "gpo-020",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi activer le paramètre « Toujours attendre le réseau lors du démarrage de l'ordinateur et de l'ouverture de session » ?",
-      "choices": ["Pour accélérer l'ouverture de session des utilisateurs", "Pour garantir la réussite du déploiement de logiciels .msi, du mappage de lecteurs et des scripts de démarrage via GPO", "Pour empêcher toute connexion en dehors du domaine", "Pour forcer les mises à jour Windows au démarrage"],
+      "choices": [
+        "Pour accélérer l'ouverture de session des utilisateurs",
+        "Pour garantir la réussite du déploiement de logiciels .msi, du mappage de lecteurs et des scripts de démarrage via GPO",
+        "Pour empêcher toute connexion en dehors du domaine",
+        "Pour forcer les mises à jour Windows au démarrage"
+      ],
       "answer": 1,
       "explication": "Sans ce paramètre, le poste peut ouvrir la session avant que le réseau soit initialisé, ce qui fait échouer les traitements GPO qui dépendent du réseau."
     },
     {
-      "id": "gpo-021", "niveau": 2, "type": "assoc",
+      "id": "gpo-021",
+      "niveau": 2,
+      "type": "assoc",
       "q": "Associez chaque outil d'analyse des GPO à sa fonction.",
       "pairs": [
-        ["Modélisation de stratégie de groupe", "Simuler un scénario avant de l'appliquer (tel utilisateur sur tel PC, connexion lente...)"],
-        ["Résultats de stratégie de groupe", "Afficher à distance les stratégies réellement appliquées à un ordinateur ou un utilisateur"],
-        ["gpresult /r", "Lister en ligne de commande les groupes et les GPO appliqués sur le poste"]
+        [
+          "Modélisation de stratégie de groupe",
+          "Simuler un scénario avant de l'appliquer (tel utilisateur sur tel PC, connexion lente...)"
+        ],
+        [
+          "Résultats de stratégie de groupe",
+          "Afficher à distance les stratégies réellement appliquées à un ordinateur ou un utilisateur"
+        ],
+        [
+          "gpresult /r",
+          "Lister en ligne de commande les groupes et les GPO appliqués sur le poste"
+        ]
       ],
       "explication": "La modélisation prédit ce qui se passerait ; les résultats (console ou gpresult) montrent ce qui est réellement appliqué."
     },
     {
-      "id": "gpo-022", "niveau": 2, "type": "qcm",
+      "id": "gpo-022",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi renommer par GPO le compte Administrateur local des postes (par exemple en « AdminSys ») ?",
-      "choices": ["Pour compliquer les attaques par force brute qui ciblent le nom de compte « Administrateur »", "Pour libérer le nom « Administrateur » pour un autre usage", "Parce que Windows exige un nom de compte unique dans tout le domaine", "Pour désactiver définitivement le compte"],
+      "choices": [
+        "Pour compliquer les attaques par force brute qui ciblent le nom de compte « Administrateur »",
+        "Pour libérer le nom « Administrateur » pour un autre usage",
+        "Parce que Windows exige un nom de compte unique dans tout le domaine",
+        "Pour désactiver définitivement le compte"
+      ],
       "answer": 0,
       "explication": "Le paramètre « Comptes : renommer le compte administrateur » (Stratégies locales > Options de sécurité) évite le bruteforce sur le nom de compte connu de tous."
     },
     {
-      "id": "gpo-023", "niveau": 3, "type": "terminal",
+      "id": "gpo-023",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Sur ce poste client, forcez immédiatement l'application de toutes les stratégies de groupe, sans attendre le cycle de rafraîchissement.",
-      "accept": ["gpupdate /force", "gpupdate/force", "gpupdate.exe /force"],
+      "accept": [
+        "gpupdate /force",
+        "gpupdate/force",
+        "gpupdate.exe /force"
+      ],
       "output": "Mise à jour de la stratégie...\n\nLa mise à jour de la stratégie d'ordinateur s'est terminée avec succès.\nLa mise à jour de la stratégie d'utilisateur s'est terminée avec succès.",
       "explication": "gpupdate /force réapplique toutes les stratégies sans attendre le cycle de rafraîchissement ; ajouter /boot force en plus un redémarrage."
     },
     {
-      "id": "gpo-024", "niveau": 3, "type": "multi",
+      "id": "gpo-024",
+      "niveau": 3,
+      "type": "multi",
       "q": "Quels moyens permettent de forcer la mise à jour des stratégies de groupe sur des postes ? (plusieurs réponses)",
-      "choices": ["Exécuter gpupdate /force sur le client", "Utiliser la cmdlet PowerShell Invoke-GPUpdate", "Dans la GPMC, faire un clic droit sur l'OU > « Mise à jour de la stratégie de groupe »", "Exécuter gpresult /force sur le client", "Redémarrer le contrôleur de domaine"],
-      "answer": [0, 1, 2],
+      "choices": [
+        "Exécuter gpupdate /force sur le client",
+        "Utiliser la cmdlet PowerShell Invoke-GPUpdate",
+        "Dans la GPMC, faire un clic droit sur l'OU > « Mise à jour de la stratégie de groupe »",
+        "Exécuter gpresult /force sur le client",
+        "Redémarrer le contrôleur de domaine"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "Trois méthodes existent : la commande gpupdate /force en local, Invoke-GPUpdate en PowerShell, ou la mise à jour à distance depuis la GPMC. gpresult ne fait que consulter."
     },
     {
-      "id": "gpo-025", "niveau": 3, "type": "qcm",
+      "id": "gpo-025",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande génère un rapport HTML complet des stratégies appliquées au poste et à l'utilisateur courant ?",
-      "choices": ["gpresult /h rapport.html", "gpresult /r", "gpupdate /force /boot", "gpmc.msc /report"],
+      "choices": [
+        "gpresult /h rapport.html",
+        "gpresult /r",
+        "gpupdate /force /boot",
+        "gpmc.msc /report"
+      ],
       "answer": 0,
       "explication": "gpresult /h produit un fichier HTML détaillé à ouvrir dans un navigateur ; gpresult /r n'affiche qu'un résumé en ligne de commande."
     },
     {
-      "id": "gpo-026", "niveau": 3, "type": "ordre",
+      "id": "gpo-026",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre les étapes pour déployer un nouveau paramètre par GPO sur une OU.",
-      "steps": ["Ouvrir la console GPMC (gpmc.msc)", "Clic droit sur l'OU cible > « Créer un objet GPO dans ce domaine et le lier ici »", "Clic droit sur la GPO > « Modifier », puis configurer les paramètres dans l'éditeur", "Exécuter gpupdate /force sur un poste client pour tester"],
+      "steps": [
+        "Ouvrir la console GPMC (gpmc.msc)",
+        "Clic droit sur l'OU cible > « Créer un objet GPO dans ce domaine et le lier ici »",
+        "Clic droit sur la GPO > « Modifier », puis configurer les paramètres dans l'éditeur",
+        "Exécuter gpupdate /force sur un poste client pour tester"
+      ],
       "explication": "On crée et on lie la GPO dans la GPMC, on la configure dans l'éditeur, puis on force l'application côté client pour valider le résultat."
     },
     {
-      "id": "gpo-027", "niveau": 3, "type": "qcm",
+      "id": "gpo-027",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Où configurer le déploiement automatique d'un logiciel au format .msi sur les machines ?",
-      "choices": ["Configuration ordinateur > Stratégies > Paramètres logiciels > Installation de logiciel", "Configuration utilisateur > Modèles d'administration > Système", "Configuration ordinateur > Préférences > Paramètres Windows > Raccourcis", "Configuration utilisateur > Paramètres Windows > Scripts"],
+      "choices": [
+        "Configuration ordinateur > Stratégies > Paramètres logiciels > Installation de logiciel",
+        "Configuration utilisateur > Modèles d'administration > Système",
+        "Configuration ordinateur > Préférences > Paramètres Windows > Raccourcis",
+        "Configuration utilisateur > Paramètres Windows > Scripts"
+      ],
       "answer": 0,
       "explication": "Le déploiement machine se fait dans les Paramètres logiciels de la Configuration ordinateur ; le .msi doit être sur un partage réseau lisible par « Ordinateurs du domaine »."
     },
     {
-      "id": "gpo-028", "niveau": 3, "type": "qcm",
+      "id": "gpo-028",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Dans quel chemin de l'éditeur GPO masquer le lecteur C: dans l'explorateur des utilisateurs ?",
-      "choices": ["Configuration utilisateur > Modèles d'administration > Composants Windows > Explorateur de fichiers", "Configuration ordinateur > Paramètres Windows > Sécurité > Options de sécurité", "Configuration utilisateur > Préférences > Paramètres Windows > Mappages de lecteurs", "Configuration ordinateur > Modèles d'administration > Système > Accès au stockage amovible"],
+      "choices": [
+        "Configuration utilisateur > Modèles d'administration > Composants Windows > Explorateur de fichiers",
+        "Configuration ordinateur > Paramètres Windows > Sécurité > Options de sécurité",
+        "Configuration utilisateur > Préférences > Paramètres Windows > Mappages de lecteurs",
+        "Configuration ordinateur > Modèles d'administration > Système > Accès au stockage amovible"
+      ],
       "answer": 0,
       "explication": "Le paramètre « Masquer ces lecteurs spécifiés dans Poste de travail » (avec l'option « Restreindre le lecteur C uniquement ») empêche la navigation dans les fichiers système."
     },
     {
-      "id": "gpo-029", "niveau": 3, "type": "qcm",
+      "id": "gpo-029",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Vous mappez un lecteur réseau par GPO (Préférences), mais vous voulez qu'il ne s'applique qu'aux membres du groupe G_Toulouse. Quelle fonctionnalité utiliser ?",
-      "choices": ["Le ciblage au niveau de l'élément, dans l'onglet « Commun » de la préférence", "L'option Enforced sur le lien de la GPO", "Le blocage d'héritage sur l'OU", "Un filtre dans gpresult"],
+      "choices": [
+        "Le ciblage au niveau de l'élément, dans l'onglet « Commun » de la préférence",
+        "L'option Enforced sur le lien de la GPO",
+        "Le blocage d'héritage sur l'OU",
+        "Un filtre dans gpresult"
+      ],
       "answer": 0,
       "explication": "Le ciblage au niveau de l'élément permet de conditionner une préférence (mappage de lecteur, raccourci...) à un critère comme l'appartenance à un groupe."
     },
     {
-      "id": "gpo-030", "niveau": 3, "type": "libre",
+      "id": "gpo-030",
+      "niveau": 3,
+      "type": "libre",
       "q": "Quel port TCP faut-il ouvrir dans le pare-feu (par une règle de trafic entrant GPO) pour autoriser le Bureau à distance ?",
-      "accept": ["3389", "tcp 3389", "3389/tcp", "le port 3389"],
+      "accept": [
+        "3389",
+        "tcp 3389",
+        "3389/tcp",
+        "le port 3389"
+      ],
       "explication": "Activer le Bureau à distance par GPO ne suffit pas : il faut aussi créer une règle de pare-feu autorisant le port TCP 3389 en entrée."
     },
     {
-      "id": "gpo-031", "niveau": 3, "type": "qcm",
+      "id": "gpo-031",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quel paramètre GPO bloque l'utilisation des clés USB (stockage de masse) sur les postes ?",
-      "choices": ["Configuration ordinateur > Modèles d'administration > Système > Accès au stockage amovible > « Toutes les classes : refuser tous les accès »", "Configuration utilisateur > Modèles d'administration > Système > « Empêcher l'accès à l'invite de commandes »", "Configuration ordinateur > Paramètres Windows > Scripts > Démarrage", "Configuration utilisateur > Préférences > Paramètres Windows > Raccourcis"],
+      "choices": [
+        "Configuration ordinateur > Modèles d'administration > Système > Accès au stockage amovible > « Toutes les classes : refuser tous les accès »",
+        "Configuration utilisateur > Modèles d'administration > Système > « Empêcher l'accès à l'invite de commandes »",
+        "Configuration ordinateur > Paramètres Windows > Scripts > Démarrage",
+        "Configuration utilisateur > Préférences > Paramètres Windows > Raccourcis"
+      ],
       "answer": 0,
       "explication": "Refuser tous les accès au stockage amovible évite le vol de données et l'infection par virus via les clés USB."
     },
     {
-      "id": "gpo-032", "niveau": 3, "type": "libre",
+      "id": "gpo-032",
+      "niveau": 3,
+      "type": "libre",
       "q": "Pour activer le pavé numérique au démarrage via une préférence Registre, quelle valeur donner à InitialKeyboardIndicators (HKEY_USERS\\.DEFAULT\\Control Panel\\Keyboard) ?",
-      "accept": ["2"],
+      "accept": [
+        "2"
+      ],
       "explication": "La préférence Registre (Configuration ordinateur) crée l'élément InitialKeyboardIndicators de type REG_SZ avec la valeur 2 pour verrouiller le pavé numérique."
     },
     {
-      "id": "gpo-033", "niveau": 3, "type": "qcm",
+      "id": "gpo-033",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Comment configurer par GPO le verrouillage automatique des sessions après 5 minutes d'inactivité ?",
-      "choices": ["Définir le « Délai d'expiration de l'écran de veille » à 300 secondes, forcer l'écran de veille et le protéger par mot de passe", "Régler la valeur 5 dans la stratégie de mot de passe du domaine", "Déployer un script de démarrage qui verrouille la session", "Limiter la taille du profil itinérant à 300 Ko"],
+      "choices": [
+        "Définir le « Délai d'expiration de l'écran de veille » à 300 secondes, forcer l'écran de veille et le protéger par mot de passe",
+        "Régler la valeur 5 dans la stratégie de mot de passe du domaine",
+        "Déployer un script de démarrage qui verrouille la session",
+        "Limiter la taille du profil itinérant à 300 Ko"
+      ],
       "answer": 0,
       "explication": "Le délai se règle en secondes (5 min = 300 s) dans Configuration utilisateur > Modèles d'administration > Panneau de configuration > Personnalisation, avec l'écran de veille forcé et protégé par mot de passe."
     },
     {
-      "id": "gpo-034", "niveau": 3, "type": "qcm",
+      "id": "gpo-034",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Vous devez limiter la taille du profil itinérant à 10 Mo. Quelle valeur saisir dans le paramètre « Limiter la taille du profil » ?",
-      "choices": ["10", "10000, car la valeur s'exprime en Ko", "10240000", "0,01"],
+      "choices": [
+        "10",
+        "10000, car la valeur s'exprime en Ko",
+        "10240000",
+        "0,01"
+      ],
       "answer": 1,
       "explication": "Le paramètre s'exprime en Ko : 10000 Ko correspondent à 10 Mo. Pensez à cocher l'option qui notifie l'utilisateur en cas de dépassement."
     },
     {
-      "id": "gpo-035", "niveau": 4, "type": "scenario",
+      "id": "gpo-035",
+      "niveau": 4,
+      "type": "scenario",
       "context": "GPO « Restrictions-Domaine » : liée à la racine du domaine, option « Appliqué » (Enforced) activée.\nGPO « Confort-Compta » : liée à l'OU Compta, elle contredit plusieurs paramètres de Restrictions-Domaine.\nL'option « Bloquer l'héritage » est activée sur l'OU Compta.",
       "q": "Quels paramètres s'appliquent finalement aux utilisateurs de l'OU Compta ?",
-      "choices": ["Ceux de Confort-Compta : l'OU est appliquée en dernier selon LSDOU", "Ceux de Restrictions-Domaine : une GPO forcée passe outre le blocage d'héritage et s'impose par-dessus les autres", "Aucun : le blocage d'héritage neutralise toutes les GPO du domaine", "Les deux GPO fusionnent en conservant la valeur la plus restrictive"],
+      "choices": [
+        "Ceux de Confort-Compta : l'OU est appliquée en dernier selon LSDOU",
+        "Ceux de Restrictions-Domaine : une GPO forcée passe outre le blocage d'héritage et s'impose par-dessus les autres",
+        "Aucun : le blocage d'héritage neutralise toutes les GPO du domaine",
+        "Les deux GPO fusionnent en conservant la valeur la plus restrictive"
+      ],
       "answer": 1,
       "explication": "L'option Enforced donne une priorité absolue : la GPO forcée traverse le blocage d'héritage et écrase les paramètres contradictoires, même ceux appliqués après elle dans LSDOU."
     },
     {
-      "id": "gpo-036", "niveau": 4, "type": "scenario",
+      "id": "gpo-036",
+      "niveau": 4,
+      "type": "scenario",
       "context": "GPO « Fond-Ecran » : Papier peint du Bureau = C:\\Images\\fond.jpg\nSur les postes clients, le fond d'écran imposé ne s'affiche pas, alors que gpresult confirme que la GPO est bien appliquée.",
       "q": "Quelle est la cause la plus probable du problème ?",
-      "choices": ["Le paramètre doit pointer vers un chemin UNC (ex. \\\\SRV-AD\\Ressources$\\fond.jpg) sur un partage accessible en lecture aux Utilisateurs du domaine", "Le fichier doit obligatoirement être au format .png", "Il faut redémarrer le contrôleur de domaine après chaque modification de GPO", "Le papier peint ne peut se définir que dans la Configuration ordinateur"],
+      "choices": [
+        "Le paramètre doit pointer vers un chemin UNC (ex. \\\\SRV-AD\\Ressources$\\fond.jpg) sur un partage accessible en lecture aux Utilisateurs du domaine",
+        "Le fichier doit obligatoirement être au format .png",
+        "Il faut redémarrer le contrôleur de domaine après chaque modification de GPO",
+        "Le papier peint ne peut se définir que dans la Configuration ordinateur"
+      ],
       "answer": 0,
       "explication": "Le chemin C:\\ est interprété localement sur chaque poste, où l'image n'existe pas : il faut un chemin UNC vers un partage en lecture pour « Utilisateurs du domaine »."
     },
     {
-      "id": "gpo-037", "niveau": 4, "type": "scenario",
+      "id": "gpo-037",
+      "niveau": 4,
+      "type": "scenario",
       "context": "GPO de déploiement de 7zip.msi liée à l'OU Postes (Configuration ordinateur > Installation de logiciel).\nLe fichier est sur \\\\SRV-AD\\Softs$, partage en lecture pour « Utilisateurs du domaine » uniquement.\nAprès redémarrage des postes, le logiciel ne s'installe pas.",
       "q": "Quelle est la cause la plus probable de l'échec ?",
-      "choices": ["Le partage n'est pas lisible par « Ordinateurs du domaine », or l'installation au démarrage s'exécute avec le compte machine", "Le fichier .msi doit être copié manuellement sur chaque poste", "Le déploiement de logiciels ne fonctionne que dans la Configuration utilisateur", "Le port TCP 3389 n'est pas ouvert sur le serveur de fichiers"],
+      "choices": [
+        "Le partage n'est pas lisible par « Ordinateurs du domaine », or l'installation au démarrage s'exécute avec le compte machine",
+        "Le fichier .msi doit être copié manuellement sur chaque poste",
+        "Le déploiement de logiciels ne fonctionne que dans la Configuration utilisateur",
+        "Le port TCP 3389 n'est pas ouvert sur le serveur de fichiers"
+      ],
       "answer": 0,
       "explication": "Un déploiement machine se fait au démarrage, avant toute ouverture de session : c'est le compte ordinateur qui accède au partage, d'où la nécessité d'un droit de lecture pour « Ordinateurs du domaine » (et du paramètre « Toujours attendre le réseau »)."
     },
     {
-      "id": "gpo-038", "niveau": 4, "type": "scenario",
+      "id": "gpo-038",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Une GPO active « Empêcher l'accès à l'invite de commandes » avec l'option « Désactiver aussi le traitement des scripts » réglée sur Oui.\nDepuis, les scripts d'ouverture de session (.bat) ne s'exécutent plus sur les postes concernés.",
       "q": "Pourquoi les scripts d'ouverture de session échouent-ils ?",
-      "choices": ["L'option « Désactiver le traitement des scripts » bloque aussi les scripts d'ouverture de session : il faut la régler sur Non", "Les scripts .bat ne sont pas compatibles avec les GPO", "Le serveur de fichiers qui héberge les scripts est forcément hors ligne", "Il manque un gpupdate /force sur le contrôleur de domaine"],
+      "choices": [
+        "L'option « Désactiver le traitement des scripts » bloque aussi les scripts d'ouverture de session : il faut la régler sur Non",
+        "Les scripts .bat ne sont pas compatibles avec les GPO",
+        "Le serveur de fichiers qui héberge les scripts est forcément hors ligne",
+        "Il manque un gpupdate /force sur le contrôleur de domaine"
+      ],
       "answer": 0,
       "explication": "C'est le piège classique de ce paramètre : bloquer le CMD avec le traitement des scripts désactivé empêche aussi l'exécution des scripts de connexion légitimes."
     },
     {
-      "id": "gpo-039", "niveau": 4, "type": "scenario",
+      "id": "gpo-039",
+      "niveau": 4,
+      "type": "scenario",
       "context": "GPO « MDP-9car » : longueur minimale 9 caractères, complexité activée, historique de 24 mots de passe.\nLa GPO est liée uniquement à l'OU « Utilisateurs_Toulouse ».\nLes utilisateurs de cette OU peuvent toujours définir des mots de passe de 6 caractères.",
       "q": "Pourquoi la stratégie de mot de passe ne s'applique-t-elle pas ?",
-      "choices": ["Une stratégie de mot de passe des comptes de domaine ne s'applique correctement qu'au niveau du domaine entier, pas via une GPO liée à une OU", "Il manque l'option Enforced sur le lien de la GPO", "La longueur minimale ne peut pas dépasser 8 caractères", "La complexité doit être désactivée pour que la longueur minimale s'applique"],
+      "choices": [
+        "Une stratégie de mot de passe des comptes de domaine ne s'applique correctement qu'au niveau du domaine entier, pas via une GPO liée à une OU",
+        "Il manque l'option Enforced sur le lien de la GPO",
+        "La longueur minimale ne peut pas dépasser 8 caractères",
+        "La complexité doit être désactivée pour que la longueur minimale s'applique"
+      ],
       "answer": 0,
       "explication": "Les stratégies de comptes (mot de passe, verrouillage) des comptes de domaine ne sont prises en compte que si la GPO est liée au niveau du domaine."
     },
     {
-      "id": "gpo-040", "niveau": 4, "type": "scenario",
+      "id": "gpo-040",
+      "niveau": 4,
+      "type": "scenario",
       "context": "14 h 00 : vous liez une nouvelle GPO à l'OU Postes.\n14 h 10 : aucun changement n'est visible sur les stations de travail, aucun message d'erreur nulle part.",
       "q": "Quelle est l'explication la plus probable et la solution immédiate ?",
-      "choices": ["Le cycle de rafraîchissement des stations est d'environ 90 minutes : exécuter gpupdate /force sur les postes pour appliquer sans attendre", "La GPO est corrompue : il faut la supprimer et la recréer", "Les postes doivent être sortis puis réintégrés au domaine", "Il faut redémarrer les services Active Directory sur le contrôleur de domaine"],
+      "choices": [
+        "Le cycle de rafraîchissement des stations est d'environ 90 minutes : exécuter gpupdate /force sur les postes pour appliquer sans attendre",
+        "La GPO est corrompue : il faut la supprimer et la recréer",
+        "Les postes doivent être sortis puis réintégrés au domaine",
+        "Il faut redémarrer les services Active Directory sur le contrôleur de domaine"
+      ],
       "answer": 0,
       "explication": "Rien d'anormal : les stations n'actualisent leurs GPO que toutes les 90 minutes environ. gpupdate /force (ou Invoke-GPUpdate, ou la mise à jour depuis la GPMC) applique immédiatement."
     }

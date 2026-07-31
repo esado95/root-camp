@@ -1,157 +1,338 @@
 {
   "module": "Linux — bases & administration",
-  "source": "08_Linux/Linux.md",
   "questions": [
     {
-      "id": "lin-001", "niveau": 1, "type": "qcm",
+      "id": "lin-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle est la racine du système de fichiers Linux ?",
-      "choices": ["C:\\", "/root", "/", "/home"],
+      "choices": [
+        "C:\\",
+        "/root",
+        "/",
+        "/home"
+      ],
       "answer": 2,
       "explication": "Tout part de la racine « / » : pas de lecteurs C: ou D:, chaque périphérique est monté dans l'arborescence."
     },
     {
-      "id": "lin-002", "niveau": 1, "type": "assoc",
+      "id": "lin-002",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque dossier système à son contenu",
-      "pairs": [["/etc", "Fichiers de configuration"], ["/var/log", "Journaux du système"], ["/home", "Dossiers des utilisateurs"], ["/boot", "Noyau et GRUB"]],
+      "pairs": [
+        [
+          "/etc",
+          "Fichiers de configuration"
+        ],
+        [
+          "/var/log",
+          "Journaux du système"
+        ],
+        [
+          "/home",
+          "Dossiers des utilisateurs"
+        ],
+        [
+          "/boot",
+          "Noyau et GRUB"
+        ]
+      ],
       "explication": "/etc = configuration, /var = données variables dont les logs, /home = utilisateurs standards, /boot = fichiers de démarrage."
     },
     {
-      "id": "lin-003", "niveau": 1, "type": "qcm",
+      "id": "lin-003",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Comment rend-on un fichier caché sous Linux ?",
-      "choices": ["Avec l'attribut « caché » des propriétés", "En préfixant son nom par un point (.fichier)", "En le déplaçant dans /hidden", "Avec la commande hide"],
+      "choices": [
+        "Avec l'attribut « caché » des propriétés",
+        "En préfixant son nom par un point (.fichier)",
+        "En le déplaçant dans /hidden",
+        "Avec la commande hide"
+      ],
       "answer": 1,
       "explication": "Un nom commençant par un point est caché ; « ls -a » permet de les afficher."
     },
     {
-      "id": "lin-004", "niveau": 1, "type": "qcm",
+      "id": "lin-004",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle est la bonne pratique concernant le compte root en entreprise ?",
-      "choices": ["S'y connecter en permanence pour gagner du temps", "Ne jamais s'y connecter directement : utiliser un compte standard et sudo", "Le supprimer", "Partager son mot de passe avec l'équipe"],
+      "choices": [
+        "S'y connecter en permanence pour gagner du temps",
+        "Ne jamais s'y connecter directement : utiliser un compte standard et sudo",
+        "Le supprimer",
+        "Partager son mot de passe avec l'équipe"
+      ],
       "answer": 1,
       "explication": "On travaille avec un utilisateur standard et on élève ses privilèges ponctuellement avec sudo — traçabilité et sécurité."
     },
     {
-      "id": "lin-005", "niveau": 1, "type": "terminal",
+      "id": "lin-005",
+      "niveau": 1,
+      "type": "terminal",
       "q": "Vous êtes perdu dans l'arborescence. Tapez la commande qui affiche le chemin du répertoire courant.",
       "prompt": "tech@srv-deb:~/travaux/tp3$",
-      "accept": ["pwd"],
+      "accept": [
+        "pwd"
+      ],
       "output": "/home/tech/travaux/tp3",
       "explication": "pwd = print working directory. Pour naviguer : cd, pour lister : ls."
     },
     {
-      "id": "lin-006", "niveau": 1, "type": "assoc",
+      "id": "lin-006",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque commande à son usage",
-      "pairs": [["grep", "Chercher un motif dans un fichier"], ["find", "Chercher un fichier sur le disque"], ["man", "Afficher le manuel d'une commande"], ["less", "Lire un fichier page par page"]],
+      "pairs": [
+        [
+          "grep",
+          "Chercher un motif dans un fichier"
+        ],
+        [
+          "find",
+          "Chercher un fichier sur le disque"
+        ],
+        [
+          "man",
+          "Afficher le manuel d'une commande"
+        ],
+        [
+          "less",
+          "Lire un fichier page par page"
+        ]
+      ],
       "explication": "grep filtre le contenu, find cherche les fichiers, man documente, less affiche sans modifier."
     },
     {
-      "id": "lin-007", "niveau": 1, "type": "qcm",
+      "id": "lin-007",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Que désigne le symbole « ~ » dans un chemin ?",
-      "choices": ["La racine du système", "Le dossier parent", "Le dossier personnel de l'utilisateur", "Un fichier temporaire"],
+      "choices": [
+        "La racine du système",
+        "Le dossier parent",
+        "Le dossier personnel de l'utilisateur",
+        "Un fichier temporaire"
+      ],
       "answer": 2,
       "explication": "~ = home de l'utilisateur courant (ex. /home/tech). « .. » = dossier parent, « . » = dossier courant."
     },
     {
-      "id": "lin-008", "niveau": 2, "type": "qcm",
+      "id": "lin-008",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Sous Debian, quelle différence entre adduser et useradd ?",
-      "choices": ["Aucune, ce sont des alias", "adduser est un script interactif haut niveau qui configure home et mot de passe ; useradd est bas niveau", "useradd est plus récent et remplace adduser", "adduser ne fonctionne qu'en mode graphique"],
+      "choices": [
+        "Aucune, ce sont des alias",
+        "adduser est un script interactif haut niveau qui configure home et mot de passe ; useradd est bas niveau",
+        "useradd est plus récent et remplace adduser",
+        "adduser ne fonctionne qu'en mode graphique"
+      ],
       "answer": 1,
       "explication": "adduser (Debian) crée l'utilisateur avec /home, shell et mot de passe. useradd crée l'entité brute — il faut tout préciser en options."
     },
     {
-      "id": "lin-009", "niveau": 2, "type": "qcm",
+      "id": "lin-009",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Que contient le fichier /etc/shadow ?",
-      "choices": ["La liste des groupes", "Les mots de passe chiffrés, lisibles uniquement par root", "Les fichiers cachés", "La configuration du réseau"],
+      "choices": [
+        "La liste des groupes",
+        "Les mots de passe chiffrés, lisibles uniquement par root",
+        "Les fichiers cachés",
+        "La configuration du réseau"
+      ],
       "answer": 1,
       "explication": "/etc/passwd liste les comptes (lisible par tous), /etc/shadow stocke les empreintes des mots de passe — réservé à root."
     },
     {
-      "id": "lin-010", "niveau": 2, "type": "qcm",
+      "id": "lin-010",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Que fait le pipe « | » entre deux commandes ?",
-      "choices": ["Il exécute les deux commandes en parallèle", "Il envoie la sortie de la commande de gauche en entrée de celle de droite", "Il compare leurs résultats", "Il redirige la sortie vers un fichier"],
+      "choices": [
+        "Il exécute les deux commandes en parallèle",
+        "Il envoie la sortie de la commande de gauche en entrée de celle de droite",
+        "Il compare leurs résultats",
+        "Il redirige la sortie vers un fichier"
+      ],
       "answer": 1,
       "explication": "Ex. : cat /etc/services | less — la sortie de cat est lue par less. La redirection vers un fichier, c'est « > »."
     },
     {
-      "id": "lin-011", "niveau": 2, "type": "qcm",
+      "id": "lin-011",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Un dossier a les droits r-- pour votre utilisateur (pas de x). Que se passe-t-il ?",
-      "choices": ["Vous pouvez tout faire dedans", "Vous ne pouvez ni entrer dans le dossier ni accéder à ses fichiers", "Vous pouvez y créer des fichiers", "Vous pouvez l'exécuter comme un script"],
+      "choices": [
+        "Vous pouvez tout faire dedans",
+        "Vous ne pouvez ni entrer dans le dossier ni accéder à ses fichiers",
+        "Vous pouvez y créer des fichiers",
+        "Vous pouvez l'exécuter comme un script"
+      ],
       "answer": 1,
       "explication": "Sur un dossier, x = droit d'entrer (cd). Sans lui, l'accès au contenu est impossible même avec r."
     },
     {
-      "id": "lin-012", "niveau": 2, "type": "assoc",
+      "id": "lin-012",
+      "niveau": 2,
+      "type": "assoc",
       "q": "Associez chaque droit à sa valeur octale",
-      "pairs": [["r (lecture)", "4"], ["w (écriture)", "2"], ["x (exécution)", "1"], ["rwx (tous)", "7"]],
+      "pairs": [
+        [
+          "r (lecture)",
+          "4"
+        ],
+        [
+          "w (écriture)",
+          "2"
+        ],
+        [
+          "x (exécution)",
+          "1"
+        ],
+        [
+          "rwx (tous)",
+          "7"
+        ]
+      ],
       "explication": "r=4, w=2, x=1 ; on additionne : rwx = 7, rw- = 6, r-x = 5, r-- = 4."
     },
     {
-      "id": "lin-013", "niveau": 2, "type": "qcm",
+      "id": "lin-013",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Qu'est-ce qu'un chemin absolu ?",
-      "choices": ["Un chemin qui commence par la racine « / »", "Un chemin relatif au dossier courant", "Un chemin vers un fichier caché", "Un raccourci"],
+      "choices": [
+        "Un chemin qui commence par la racine « / »",
+        "Un chemin relatif au dossier courant",
+        "Un chemin vers un fichier caché",
+        "Un raccourci"
+      ],
       "answer": 0,
       "explication": "Absolu = part de la racine (/home/user/doc). Relatif = part du dossier courant (doc/fichier.txt)."
     },
     {
-      "id": "lin-014", "niveau": 3, "type": "libre",
+      "id": "lin-014",
+      "niveau": 3,
+      "type": "libre",
       "q": "Quelle valeur octale donne les droits rwxr-xr-x ?",
-      "accept": ["755", "0755"],
+      "accept": [
+        "755",
+        "0755"
+      ],
       "explication": "rwx=7 (propriétaire), r-x=5 (groupe), r-x=5 (autres) → chmod 755. Classique pour un script exécutable."
     },
     {
-      "id": "lin-015", "niveau": 3, "type": "terminal",
+      "id": "lin-015",
+      "niveau": 3,
+      "type": "terminal",
       "q": "Ajoutez l'utilisateur « tech » au groupe sudo.",
       "prompt": "root@srv-deb:~#",
-      "accept": ["usermod -aG sudo tech", "usermod -a -G sudo tech", "gpasswd -a tech sudo"],
+      "accept": [
+        "usermod -aG sudo tech",
+        "usermod -a -G sudo tech",
+        "gpasswd -a tech sudo"
+      ],
       "explication": "usermod -aG sudo tech (-a = ajouter sans écraser les autres groupes). gpasswd -a tech sudo fonctionne aussi ; « id tech » permet de vérifier."
     },
     {
-      "id": "lin-016", "niveau": 3, "type": "qcm",
+      "id": "lin-016",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande affiche la passerelle par défaut ?",
-      "choices": ["ip a", "ip r", "ping -g", "cat /etc/hostname"],
+      "choices": [
+        "ip a",
+        "ip r",
+        "ping -g",
+        "cat /etc/hostname"
+      ],
       "answer": 1,
       "explication": "ip r affiche la table de routage : la ligne « default via ... » indique la passerelle. ip a montre les interfaces et adresses."
     },
     {
-      "id": "lin-017", "niveau": 3, "type": "libre",
+      "id": "lin-017",
+      "niveau": 3,
+      "type": "libre",
       "q": "Dans quel fichier configure-t-on l'adresse IP sous Debian (méthode classique) ?",
-      "accept": ["/etc/network/interfaces", "etc/network/interfaces"],
+      "accept": [
+        "/etc/network/interfaces",
+        "etc/network/interfaces"
+      ],
       "explication": "/etc/network/interfaces : auto eth0, iface eth0 inet static, address, gateway, dns-nameservers."
     },
     {
-      "id": "lin-018", "niveau": 3, "type": "qcm",
+      "id": "lin-018",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Que fait « chmod 700 dossier » ?",
-      "choices": ["Tout le monde a tous les droits", "Le propriétaire a tous les droits, groupe et autres n'ont rien", "Lecture seule pour tous", "Le dossier devient caché"],
+      "choices": [
+        "Tout le monde a tous les droits",
+        "Le propriétaire a tous les droits, groupe et autres n'ont rien",
+        "Lecture seule pour tous",
+        "Le dossier devient caché"
+      ],
       "answer": 1,
       "explication": "7 = rwx pour le propriétaire, 0 = aucun droit pour le groupe, 0 = aucun pour les autres. Idéal pour un dossier privé."
     },
     {
-      "id": "lin-019", "niveau": 3, "type": "qcm",
+      "id": "lin-019",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande supprime un utilisateur ET son dossier personnel ?",
-      "choices": ["deluser nom", "userdel -r nom", "rm -rf /home/nom", "groupdel nom"],
+      "choices": [
+        "deluser nom",
+        "userdel -r nom",
+        "rm -rf /home/nom",
+        "groupdel nom"
+      ],
       "answer": 1,
       "explication": "userdel -r (ou deluser --remove-home) supprime le compte et son /home. deluser seul laisse le dossier orphelin."
     },
     {
-      "id": "lin-020", "niveau": 4, "type": "scenario",
+      "id": "lin-020",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Sur un serveur Debian :\nping 8.8.8.8 → OK\nping google.com → échec",
       "q": "Où est le problème ?",
-      "choices": ["La passerelle est mal configurée", "La résolution DNS — vérifier /etc/resolv.conf", "Le câble réseau est défectueux", "Le pare-feu bloque tout le trafic"],
+      "choices": [
+        "La passerelle est mal configurée",
+        "La résolution DNS — vérifier /etc/resolv.conf",
+        "Le câble réseau est défectueux",
+        "Le pare-feu bloque tout le trafic"
+      ],
       "answer": 1,
       "explication": "Le réseau et le routage fonctionnent (ping IP OK). Seule la résolution de noms échoue : c'est le DNS, 9 fois sur 10 dans /etc/resolv.conf."
     },
     {
-      "id": "lin-021", "niveau": 4, "type": "scenario",
+      "id": "lin-021",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Après passage en IP statique, la ligne dns-nameservers de /etc/network/interfaces semble ignorée : /etc/resolv.conf reste vide.",
       "q": "Pourquoi ?",
-      "choices": ["La syntaxe du fichier est forcément fausse", "Le paquet resolvconf n'est pas installé — cette ligne n'est prise en compte qu'avec lui", "Debian ne supporte pas le DNS statique", "Il faut redémarrer deux fois"],
+      "choices": [
+        "La syntaxe du fichier est forcément fausse",
+        "Le paquet resolvconf n'est pas installé — cette ligne n'est prise en compte qu'avec lui",
+        "Debian ne supporte pas le DNS statique",
+        "Il faut redémarrer deux fois"
+      ],
       "answer": 1,
       "explication": "Sans resolvconf, dns-nameservers est ignoré en silence. Solutions : installer resolvconf, ou écrire directement les nameserver dans /etc/resolv.conf."
     },
     {
-      "id": "lin-022", "niveau": 4, "type": "scenario",
+      "id": "lin-022",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Vous venez de passer eth0 de DHCP en statique dans /etc/network/interfaces, puis systemctl restart networking. Or « ip a » montre toujours l'ancienne adresse DHCP.",
       "q": "Que faire ?",
-      "choices": ["Réinstaller le système", "Vider l'adresse avec « ip addr flush dev eth0 » puis relancer le service réseau", "Changer de carte réseau", "Attendre l'expiration du bail sans rien faire"],
+      "choices": [
+        "Réinstaller le système",
+        "Vider l'adresse avec « ip addr flush dev eth0 » puis relancer le service réseau",
+        "Changer de carte réseau",
+        "Attendre l'expiration du bail sans rien faire"
+      ],
       "answer": 1,
       "explication": "Le bail DHCP reste attaché à l'interface. ip addr flush dev eth0 puis systemctl restart networking (ou un reboot) appliquent proprement la nouvelle configuration."
     }

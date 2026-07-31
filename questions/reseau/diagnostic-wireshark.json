@@ -1,13 +1,17 @@
 {
   "module": "Diagnostic & Wireshark",
-  "source": "Diagnostic-Reseau.md + Wireshark-Analyse-Trames.md",
   "questions": [
     {
       "id": "diag-001",
       "niveau": 1,
       "type": "libre",
       "q": "Sur quel port standard un serveur DNS écoute-t-il les requêtes ?",
-      "accept": ["53", "port 53", "53/udp", "udp 53"],
+      "accept": [
+        "53",
+        "port 53",
+        "53/udp",
+        "udp 53"
+      ],
       "explication": "Le port 53 (UDP ou TCP) est réservé au service DNS ; le client, lui, utilise un port source éphémère choisi dynamiquement."
     },
     {
@@ -43,7 +47,12 @@
       "niveau": 1,
       "type": "libre",
       "q": "Quelle adresse MAC de destination est utilisée pour une diffusion générale (broadcast) sur un réseau local ?",
-      "accept": ["ff:ff:ff:ff:ff:ff", "ff-ff-ff-ff-ff-ff", "ffffffffffff", "ff ff ff ff ff ff"],
+      "accept": [
+        "ff:ff:ff:ff:ff:ff",
+        "ff-ff-ff-ff-ff-ff",
+        "ffffffffffff",
+        "ff ff ff ff ff ff"
+      ],
       "explication": "L'adresse ff:ff:ff:ff:ff:ff est reçue par tous les hôtes du segment : les switchs diffusent la trame sur tous leurs ports."
     },
     {
@@ -94,7 +103,11 @@
       "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Videz le cache de résolution DNS de cette machine Windows.",
-      "accept": ["ipconfig /flushdns", "ipconfig/flushdns", "ipconfig -flushdns"],
+      "accept": [
+        "ipconfig /flushdns",
+        "ipconfig/flushdns",
+        "ipconfig -flushdns"
+      ],
       "output": "Configuration IP de Windows\n\nLe cache de résolution DNS a été vidé.",
       "explication": "ipconfig /flushdns force l'ordinateur à interroger de nouveau son serveur DNS au lieu de réutiliser les réponses stockées en mémoire locale."
     },
@@ -236,7 +249,11 @@
         "En cas de perte, leur réémission est plus lourde et pénalise la bande passante",
         "Elles ne fonctionnent que sur les réseaux Wi-Fi"
       ],
-      "answer": [0, 2, 3],
+      "answer": [
+        0,
+        2,
+        3
+      ],
       "explication": "Prévues pour les connexions haut débit, les Jumbo Frames diminuent le nombre de trames et le traitement CPU, mais la retransmission d'une trame perdue coûte d'autant plus cher qu'elle est grande."
     },
     {
@@ -251,7 +268,11 @@
         "Les connexions TCP actives",
         "La passerelle par défaut"
       ],
-      "answer": [1, 2, 4],
+      "answer": [
+        1,
+        2,
+        4
+      ],
       "explication": "ipconfig /all affiche IP, MAC, DNS et passerelle ; la table ARP s'obtient avec arp -a et les connexions actives avec netstat."
     },
     {
@@ -313,7 +334,12 @@
       "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Videz entièrement la table de cache ARP de cette machine Windows.",
-      "accept": ["arp -d *", "arp -d*", "arp -d", "arp /d *"],
+      "accept": [
+        "arp -d *",
+        "arp -d*",
+        "arp -d",
+        "arp /d *"
+      ],
       "explication": "arp -d * supprime toutes les entrées du cache ARP, ce qui force la machine à réinterroger le réseau pour retrouver les correspondances IP/MAC. La commande n'affiche rien en cas de succès."
     },
     {
@@ -378,10 +404,22 @@
       "type": "assoc",
       "q": "Associez chaque commande à son rôle.",
       "pairs": [
-        ["nslookup", "Interroger la résolution DNS d'un domaine"],
-        ["netstat", "Lister les connexions actives et les ports en écoute"],
-        ["arp -a", "Afficher la table ARP locale"],
-        ["tracert", "Visualiser le chemin saut par saut vers une destination"]
+        [
+          "nslookup",
+          "Interroger la résolution DNS d'un domaine"
+        ],
+        [
+          "netstat",
+          "Lister les connexions actives et les ports en écoute"
+        ],
+        [
+          "arp -a",
+          "Afficher la table ARP locale"
+        ],
+        [
+          "tracert",
+          "Visualiser le chemin saut par saut vers une destination"
+        ]
       ],
       "explication": "Chaque commande cible une couche différente du diagnostic : résolution de noms, transport, correspondances IP/MAC et routage."
     },
@@ -391,7 +429,13 @@
       "type": "terminal",
       "prompt": "tech@srv-deb:~$",
       "q": "Affichez la configuration IP des interfaces réseau de ce serveur Linux (équivalent de la commande ipconfig de Windows).",
-      "accept": ["ip a", "ip addr", "ip address", "ip addr show", "ip address show"],
+      "accept": [
+        "ip a",
+        "ip addr",
+        "ip address",
+        "ip addr show",
+        "ip address show"
+      ],
       "output": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 00:0c:29:4f:8a:1b brd ff:ff:ff:ff:ff:ff\n    inet 172.16.40.162/24 brd 172.16.40.255 scope global ens33\n       valid_lft forever preferred_lft forever",
       "explication": "Sous Linux, ip a remplace ipconfig ; de même, tracert devient traceroute."
     },

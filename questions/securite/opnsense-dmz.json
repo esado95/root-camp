@@ -1,207 +1,424 @@
 {
   "module": "OPNsense, pare-feu & DMZ",
-  "source": "Opnsense.md + Guide-TP-Infra-OPNsense.md",
   "questions": [
     {
-      "id": "opn-001", "niveau": 1, "type": "qcm",
+      "id": "opn-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Qu'est-ce qu'une DMZ (zone démilitarisée) ?",
-      "choices": ["Un réseau sans aucun pare-feu", "Une zone tampon entre le LAN et Internet où l'on expose des services", "Un VLAN réservé à l'administration", "Une zone où tout le trafic est systématiquement chiffré"],
+      "choices": [
+        "Un réseau sans aucun pare-feu",
+        "Une zone tampon entre le LAN et Internet où l'on expose des services",
+        "Un VLAN réservé à l'administration",
+        "Une zone où tout le trafic est systématiquement chiffré"
+      ],
       "answer": 1,
       "explication": "La DMZ sépare la zone sûre (LAN) de la zone non sûre (Internet) : on y place les serveurs accessibles depuis l'extérieur (web, mail...)."
     },
     {
-      "id": "opn-002", "niveau": 1, "type": "qcm",
+      "id": "opn-002",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle est la différence entre un IDS et un IPS ?",
-      "choices": ["L'IDS chiffre le trafic, l'IPS le compresse", "L'IDS détecte et alerte, l'IPS détecte et bloque automatiquement", "L'IPS analyse uniquement le trafic sortant", "L'IDS remplace le pare-feu, pas l'IPS"],
+      "choices": [
+        "L'IDS chiffre le trafic, l'IPS le compresse",
+        "L'IDS détecte et alerte, l'IPS détecte et bloque automatiquement",
+        "L'IPS analyse uniquement le trafic sortant",
+        "L'IDS remplace le pare-feu, pas l'IPS"
+      ],
       "answer": 1,
       "explication": "L'IDS (Intrusion Detection System) se contente d'alerter l'administrateur, tandis que l'IPS (Intrusion Prevention System) bloque aussi l'intrusion détectée."
     },
     {
-      "id": "opn-003", "niveau": 1, "type": "qcm",
+      "id": "opn-003",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Comment fonctionne un pare-feu stateful ?",
-      "choices": ["Il analyse chaque paquet indépendamment des autres", "Il suit l'état des connexions grâce à une table de sessions", "Il ne filtre que le trafic entrant", "Il bloque tous les paquets UDP par défaut"],
+      "choices": [
+        "Il analyse chaque paquet indépendamment des autres",
+        "Il suit l'état des connexions grâce à une table de sessions",
+        "Il ne filtre que le trafic entrant",
+        "Il bloque tous les paquets UDP par défaut"
+      ],
       "answer": 1,
       "explication": "Le mode stateful conserve le contexte complet de chaque connexion : c'est le standard des pare-feux modernes, plus sécurisé que le stateless."
     },
     {
-      "id": "opn-004", "niveau": 1, "type": "assoc",
+      "id": "opn-004",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque service OPNsense à son rôle.",
       "pairs": [
-        ["Kea DHCP", "Distribution automatique des adresses IP, passerelle et DNS"],
-        ["Suricata", "Détection et blocage d'intrusions par analyse de signatures"],
-        ["Monit", "Surveillance des services et redémarrage automatique en cas de panne"],
-        ["NTP", "Synchronisation de l'horloge avec des serveurs de temps de référence"]
+        [
+          "Kea DHCP",
+          "Distribution automatique des adresses IP, passerelle et DNS"
+        ],
+        [
+          "Suricata",
+          "Détection et blocage d'intrusions par analyse de signatures"
+        ],
+        [
+          "Monit",
+          "Surveillance des services et redémarrage automatique en cas de panne"
+        ],
+        [
+          "NTP",
+          "Synchronisation de l'horloge avec des serveurs de temps de référence"
+        ]
       ],
       "explication": "OPNsense regroupe ces services dans son interface web : Kea pour le DHCP, Suricata pour l'IDS/IPS, Monit pour la supervision interne et NTP pour l'heure."
     },
     {
-      "id": "opn-005", "niveau": 1, "type": "qcm",
+      "id": "opn-005",
+      "niveau": 1,
+      "type": "qcm",
       "q": "À quoi sert un portail captif ?",
-      "choices": ["À chiffrer les connexions VPN nomades", "À rediriger les utilisateurs vers une page d'authentification avant d'accorder l'accès à Internet", "À bloquer les adresses IP privées entrantes sur le WAN", "À capturer les paquets pour analyse réseau"],
+      "choices": [
+        "À chiffrer les connexions VPN nomades",
+        "À rediriger les utilisateurs vers une page d'authentification avant d'accorder l'accès à Internet",
+        "À bloquer les adresses IP privées entrantes sur le WAN",
+        "À capturer les paquets pour analyse réseau"
+      ],
       "answer": 1,
       "explication": "Le portail captif intercepte les connexions et impose une authentification ou l'acceptation de conditions : typique des réseaux Wi-Fi invités."
     },
     {
-      "id": "opn-007", "niveau": 1, "type": "libre",
+      "id": "opn-007",
+      "niveau": 1,
+      "type": "libre",
       "q": "Quel protocole est classiquement utilisé pour monter un tunnel VPN site-à-site entre deux pare-feux ?",
-      "accept": ["IPSec", "IP Sec", "VPN IPSec"],
+      "accept": [
+        "IPSec",
+        "IP Sec",
+        "VPN IPSec"
+      ],
       "explication": "Le VPN site-à-site repose sur IPSec : un tunnel permanent interconnecte deux sites distants, tandis que le VPN nomade utilise plutôt SSL."
     },
     {
-      "id": "opn-008", "niveau": 1, "type": "qcm",
+      "id": "opn-008",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Dans OPNsense, à quoi sert le service « Publication de routeur » (Router Advertisement) ?",
-      "choices": ["À annoncer les routes OSPF aux voisins", "À permettre l'autoconfiguration IPv6 des machines (SLAAC)", "À publier les règles NAT sur le réseau", "À diffuser l'adresse du portail captif"],
+      "choices": [
+        "À annoncer les routes OSPF aux voisins",
+        "À permettre l'autoconfiguration IPv6 des machines (SLAAC)",
+        "À publier les règles NAT sur le réseau",
+        "À diffuser l'adresse du portail captif"
+      ],
       "answer": 1,
       "explication": "Le Router Advertisement est l'équivalent du DHCP pour l'IPv6 : les machines configurent automatiquement leur adresse et trouvent leur route de sortie (SLAAC)."
     },
     {
-      "id": "opn-009", "niveau": 1, "type": "libre",
+      "id": "opn-009",
+      "niveau": 1,
+      "type": "libre",
       "q": "Dans quel format de fichier la configuration complète d'OPNsense est-elle sauvegardée ?",
-      "accept": ["XML", ".xml", "fichier XML", "format XML"],
+      "accept": [
+        "XML",
+        ".xml",
+        "fichier XML",
+        "format XML"
+      ],
       "explication": "La sauvegarde s'exporte en un seul fichier XML, ce qui permet une restauration rapide de toute la configuration en cas de crash."
     },
     {
-      "id": "opn-010", "niveau": 1, "type": "qcm",
+      "id": "opn-010",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Sur quelle couche du modèle OSI opère le filtrage applicatif ?",
-      "choices": ["Couche 3 (réseau)", "Couche 4 (transport)", "Couche 7 (application)", "Couche 2 (liaison de données)"],
+      "choices": [
+        "Couche 3 (réseau)",
+        "Couche 4 (transport)",
+        "Couche 7 (application)",
+        "Couche 2 (liaison de données)"
+      ],
       "answer": 2,
       "explication": "Le filtrage applicatif reconnaît les applications elles-mêmes (HTTP, DNS, YouTube...) sur la couche 7 : c'est plus fin qu'un simple filtrage par port."
     },
     {
-      "id": "opn-011", "niveau": 1, "type": "qcm",
+      "id": "opn-011",
+      "niveau": 1,
+      "type": "qcm",
       "q": "En quoi consiste la politique « deny all » sur un pare-feu ?",
-      "choices": ["Bloquer uniquement les flux entrants", "Tout bloquer par défaut et n'autoriser que les flux strictement nécessaires", "Refuser toutes les connexions non chiffrées", "Bloquer les flux en dehors des heures de bureau"],
+      "choices": [
+        "Bloquer uniquement les flux entrants",
+        "Tout bloquer par défaut et n'autoriser que les flux strictement nécessaires",
+        "Refuser toutes les connexions non chiffrées",
+        "Bloquer les flux en dehors des heures de bureau"
+      ],
       "answer": 1,
       "explication": "C'est le principe du moindre privilège appliqué au filtrage : chaque ouverture de flux doit être justifiée et tracée (ticket, mail, document)."
     },
     {
-      "id": "opn-012", "niveau": 1, "type": "assoc",
+      "id": "opn-012",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque zone réseau à sa description.",
       "pairs": [
-        ["LAN", "Réseau interne des postes utilisateurs"],
-        ["WAN", "Réseau externe, côté Internet"],
-        ["DMZ", "Zone intermédiaire exposant les serveurs publics"]
+        [
+          "LAN",
+          "Réseau interne des postes utilisateurs"
+        ],
+        [
+          "WAN",
+          "Réseau externe, côté Internet"
+        ],
+        [
+          "DMZ",
+          "Zone intermédiaire exposant les serveurs publics"
+        ]
       ],
       "explication": "Le pare-feu est placé entre ces zones : chaque flux qui transite de l'une à l'autre est analysé et filtré selon les règles définies."
     },
     {
-      "id": "opn-013", "niveau": 1, "type": "assoc",
+      "id": "opn-013",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque service de résolution ou d'adressage d'OPNsense à sa description.",
       "pairs": [
-        ["Unbound DNS", "Résolveur DNS principal avec cache et vérification DNSSEC"],
-        ["Dnsmasq", "Outil léger combinant relais DNS et serveur DHCP basique"],
-        ["OpenDNS", "Filtrage web via les serveurs DNS de Cisco, sans configuration avancée"],
-        ["DHCRelay", "Transfert des requêtes DHCP vers un serveur situé sur un autre réseau"]
+        [
+          "Unbound DNS",
+          "Résolveur DNS principal avec cache et vérification DNSSEC"
+        ],
+        [
+          "Dnsmasq",
+          "Outil léger combinant relais DNS et serveur DHCP basique"
+        ],
+        [
+          "OpenDNS",
+          "Filtrage web via les serveurs DNS de Cisco, sans configuration avancée"
+        ],
+        [
+          "DHCRelay",
+          "Transfert des requêtes DHCP vers un serveur situé sur un autre réseau"
+        ]
       ],
       "explication": "Unbound est le résolveur recommandé ; Dnsmasq est aujourd'hui souvent remplacé par le duo Kea DHCP + Unbound, plus performant."
     },
     {
-      "id": "opn-014", "niveau": 1, "type": "qcm",
+      "id": "opn-014",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle fonctionnalité d'un pare-feu permet de bloquer des catégories de sites web (réseaux sociaux, streaming) et de journaliser la navigation ?",
-      "choices": ["Le NAT sortant", "Le proxy avec filtrage web", "Le portail captif", "La table de sessions"],
+      "choices": [
+        "Le NAT sortant",
+        "Le proxy avec filtrage web",
+        "Le portail captif",
+        "La table de sessions"
+      ],
       "answer": 1,
       "explication": "Le proxy contrôle l'accès aux sites web par catégories ; sur OPNsense, il s'ajoute via le plugin Squid, le système étant modulaire."
     },
     {
-      "id": "opn-015", "niveau": 1, "type": "multi",
+      "id": "opn-015",
+      "niveau": 1,
+      "type": "multi",
       "q": "À quoi servent les logs d'un pare-feu ? (plusieurs réponses)",
-      "choices": ["Tracer les connexions autorisées et bloquées", "Répondre aux exigences d'audit et de conformité", "Accélérer le traitement des paquets", "Diagnostiquer les problèmes réseau et détecter les anomalies", "Remplacer les sauvegardes de configuration"],
-      "answer": [0, 1, 3],
+      "choices": [
+        "Tracer les connexions autorisées et bloquées",
+        "Répondre aux exigences d'audit et de conformité",
+        "Accélérer le traitement des paquets",
+        "Diagnostiquer les problèmes réseau et détecter les anomalies",
+        "Remplacer les sauvegardes de configuration"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
       "explication": "Les logs sont indispensables pour comprendre le comportement du pare-feu ; ils doivent être conservés selon une politique définie."
     },
     {
-      "id": "opn-016", "niveau": 2, "type": "qcm",
+      "id": "opn-016",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi place-t-on les serveurs accessibles depuis Internet (web, mail) en DMZ plutôt que dans le LAN ?",
-      "choices": ["Pour améliorer leurs performances réseau", "Pour qu'une compromission du serveur ne donne pas un accès direct au réseau interne", "Parce que la DMZ dispose de plus d'adresses IP", "Pour éviter d'avoir à configurer le NAT"],
+      "choices": [
+        "Pour améliorer leurs performances réseau",
+        "Pour qu'une compromission du serveur ne donne pas un accès direct au réseau interne",
+        "Parce que la DMZ dispose de plus d'adresses IP",
+        "Pour éviter d'avoir à configurer le NAT"
+      ],
       "answer": 1,
       "explication": "La DMZ cloisonne les services exposés : si un serveur est compromis, l'attaquant reste bloqué par le pare-feu avant d'atteindre le LAN."
     },
     {
-      "id": "opn-017", "niveau": 2, "type": "qcm",
+      "id": "opn-017",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Comment un pare-feu traite-t-il sa liste de règles de filtrage ?",
-      "choices": ["Il applique toutes les règles qui correspondent au paquet", "Il applique toujours la règle la plus restrictive, quel que soit son rang", "Il lit les règles de haut en bas et applique la première qui correspond", "Il choisit la règle la plus récente parmi celles qui correspondent"],
+      "choices": [
+        "Il applique toutes les règles qui correspondent au paquet",
+        "Il applique toujours la règle la plus restrictive, quel que soit son rang",
+        "Il lit les règles de haut en bas et applique la première qui correspond",
+        "Il choisit la règle la plus récente parmi celles qui correspondent"
+      ],
       "answer": 2,
       "explication": "Première correspondance gagne : si aucune règle ne correspond, c'est la politique par défaut qui s'applique (souvent deny all)."
     },
     {
-      "id": "opn-018", "niveau": 2, "type": "qcm",
+      "id": "opn-018",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Sur un pare-feu stateful, pourquoi n'a-t-on pas besoin de créer une règle pour le trafic de retour d'une connexion autorisée ?",
-      "choices": ["Parce que le trafic de retour est toujours chiffré", "Parce que la table de sessions reconnaît la connexion et autorise automatiquement les réponses", "Parce que le trafic de retour emprunte une autre interface", "Parce que le protocole TCP ne génère pas de trafic de retour"],
+      "choices": [
+        "Parce que le trafic de retour est toujours chiffré",
+        "Parce que la table de sessions reconnaît la connexion et autorise automatiquement les réponses",
+        "Parce que le trafic de retour emprunte une autre interface",
+        "Parce que le protocole TCP ne génère pas de trafic de retour"
+      ],
       "answer": 1,
       "explication": "C'est l'avantage majeur du stateful sur le stateless, où chaque réponse devrait être autorisée par une règle explicite."
     },
     {
-      "id": "opn-019", "niveau": 2, "type": "qcm",
+      "id": "opn-019",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Comment le PAT permet-il à plusieurs machines de partager une même adresse IP publique ?",
-      "choices": ["En attribuant à chaque machine une adresse MAC virtuelle", "En différenciant chaque connexion par un numéro de port unique", "En fragmentant les paquets de chaque machine", "En attribuant l'IP publique à chaque machine à tour de rôle"],
+      "choices": [
+        "En attribuant à chaque machine une adresse MAC virtuelle",
+        "En différenciant chaque connexion par un numéro de port unique",
+        "En fragmentant les paquets de chaque machine",
+        "En attribuant l'IP publique à chaque machine à tour de rôle"
+      ],
       "answer": 1,
       "explication": "Le PAT (Port Address Translation) traduit l'adresse IP ET le port : chaque connexion sortante reçoit un port source unique qui permet de router les réponses."
     },
     {
-      "id": "opn-020", "niveau": 2, "type": "qcm",
+      "id": "opn-020",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi une règle de pare-feu pour le DNS doit-elle autoriser à la fois TCP et UDP ?",
-      "choices": ["Le DNS n'utilise en réalité que TCP", "L'UDP sert aux requêtes standard et le DNS bascule sur TCP pour les réponses volumineuses", "TCP sert aux requêtes et UDP aux réponses", "Pour doubler la vitesse de résolution"],
+      "choices": [
+        "Le DNS n'utilise en réalité que TCP",
+        "L'UDP sert aux requêtes standard et le DNS bascule sur TCP pour les réponses volumineuses",
+        "TCP sert aux requêtes et UDP aux réponses",
+        "Pour doubler la vitesse de résolution"
+      ],
       "answer": 1,
       "explication": "Le DNS travaille principalement en UDP, mais passe en TCP quand la réponse est trop volumineuse : autoriser les deux protocoles est la bonne pratique."
     },
     {
-      "id": "opn-021", "niveau": 2, "type": "qcm",
+      "id": "opn-021",
+      "niveau": 2,
+      "type": "qcm",
       "q": "À quoi sert la règle « Anti-Lockout » générée automatiquement par OPNsense ?",
-      "choices": ["À bloquer les attaques par force brute sur l'interface web", "À garantir que l'administrateur garde l'accès à l'interface d'administration depuis le LAN, même si les règles LAN sont supprimées", "À verrouiller la configuration après plusieurs erreurs de connexion", "À interdire toute connexion SSH depuis le WAN"],
+      "choices": [
+        "À bloquer les attaques par force brute sur l'interface web",
+        "À garantir que l'administrateur garde l'accès à l'interface d'administration depuis le LAN, même si les règles LAN sont supprimées",
+        "À verrouiller la configuration après plusieurs erreurs de connexion",
+        "À interdire toute connexion SSH depuis le WAN"
+      ],
       "answer": 1,
       "explication": "Cette règle invisible et prioritaire évite que l'administrateur ne s'enferme dehors en modifiant les règles : c'est un accès de secours intégré."
     },
     {
-      "id": "opn-022", "niveau": 2, "type": "multi",
+      "id": "opn-022",
+      "niveau": 2,
+      "type": "multi",
       "q": "Quelles bonnes pratiques de sécurisation sont recommandées lors de l'installation d'OPNsense ? (plusieurs réponses)",
-      "choices": ["Modifier le port d'administration par défaut (ex. 22443 au lieu de 443)", "Créer des utilisateurs nominatifs avec des droits spécifiques", "Activer SSH en permanence pour tous les utilisateurs", "Partager le compte root entre les administrateurs", "N'activer SSH que si nécessaire"],
-      "answer": [0, 1, 4],
+      "choices": [
+        "Modifier le port d'administration par défaut (ex. 22443 au lieu de 443)",
+        "Créer des utilisateurs nominatifs avec des droits spécifiques",
+        "Activer SSH en permanence pour tous les utilisateurs",
+        "Partager le compte root entre les administrateurs",
+        "N'activer SSH que si nécessaire"
+      ],
+      "answer": [
+        0,
+        1,
+        4
+      ],
       "explication": "Changer le port d'administration réduit l'exposition, et les comptes nominatifs évitent l'usage du compte root partagé, intraçable en audit."
     },
     {
-      "id": "opn-023", "niveau": 2, "type": "qcm",
+      "id": "opn-023",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Dans une maquette où un switch L3 assure le routage inter-VLAN, pourquoi le port du switch vers OPNsense est-il configuré en mode access (VLAN de transit) plutôt qu'en trunk ?",
-      "choices": ["Parce qu'OPNsense ne supporte pas la norme 802.1Q", "Parce qu'OPNsense n'a besoin que du réseau de transit pour dialoguer avec le switch, qui route lui-même entre les VLAN", "Parce qu'un port trunk est plus lent qu'un port access", "Parce que le VLAN de transit ne peut pas être tagué"],
+      "choices": [
+        "Parce qu'OPNsense ne supporte pas la norme 802.1Q",
+        "Parce qu'OPNsense n'a besoin que du réseau de transit pour dialoguer avec le switch, qui route lui-même entre les VLAN",
+        "Parce qu'un port trunk est plus lent qu'un port access",
+        "Parce que le VLAN de transit ne peut pas être tagué"
+      ],
       "answer": 1,
       "explication": "OPNsense ne fait pas de routage inter-VLAN ici : un seul réseau de transit suffit, et aucun autre VLAN n'atteint le pare-feu par ce câble — plus simple et plus sûr."
     },
     {
-      "id": "opn-024", "niveau": 2, "type": "qcm",
+      "id": "opn-024",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi une horloge désynchronisée sur le pare-feu pose-t-elle problème ?",
-      "choices": ["Elle ralentit le débit des interfaces réseau", "Elle peut faire échouer des connexions sécurisées et fausser l'horodatage des logs", "Elle empêche le NAT de fonctionner", "Elle désactive automatiquement les règles de filtrage"],
+      "choices": [
+        "Elle ralentit le débit des interfaces réseau",
+        "Elle peut faire échouer des connexions sécurisées et fausser l'horodatage des logs",
+        "Elle empêche le NAT de fonctionner",
+        "Elle désactive automatiquement les règles de filtrage"
+      ],
       "answer": 1,
       "explication": "D'où l'intérêt du service NTP : il synchronise l'horloge du pare-feu avec des serveurs de référence et peut redistribuer l'heure aux machines locales."
     },
     {
-      "id": "opn-025", "niveau": 2, "type": "qcm",
+      "id": "opn-025",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quelle phrase résume correctement les deux grands types de NAT ?",
-      "choices": ["Un paquet qui sort est redirigé, un paquet qui entre est masqué", "Un paquet qui sort est masqué (NAT source), un paquet qui entre est redirigé (NAT destination)", "Le NAT ne s'applique qu'au trafic entrant", "NAT source et NAT destination désignent la même opération"],
+      "choices": [
+        "Un paquet qui sort est redirigé, un paquet qui entre est masqué",
+        "Un paquet qui sort est masqué (NAT source), un paquet qui entre est redirigé (NAT destination)",
+        "Le NAT ne s'applique qu'au trafic entrant",
+        "NAT source et NAT destination désignent la même opération"
+      ],
       "answer": 1,
       "explication": "En sortie, l'IP source privée est remplacée par l'IP publique (masquerading) ; en entrée, l'IP de destination publique est réécrite vers le serveur interne (port forward)."
     },
     {
-      "id": "opn-026", "niveau": 2, "type": "qcm",
+      "id": "opn-026",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Un client interne accède au site web interne hébergé en DMZ (port 80). Faut-il configurer du NAT pour ce flux ?",
-      "choices": ["Oui, un NAT source pour masquer le client", "Oui, un port forward sur l'interface WAN", "Non : c'est du routage pur, seule une règle Pass est nécessaire", "Oui, un double NAT"],
+      "choices": [
+        "Oui, un NAT source pour masquer le client",
+        "Oui, un port forward sur l'interface WAN",
+        "Non : c'est du routage pur, seule une règle Pass est nécessaire",
+        "Oui, un double NAT"
+      ],
       "answer": 2,
       "explication": "Le trafic reste entre réseaux internes routés par le pare-feu : ajouter du NAT ici serait inutile et source de bugs."
     },
     {
-      "id": "opn-027", "niveau": 2, "type": "qcm",
+      "id": "opn-027",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi faut-il configurer un relais DHCP (ip helper-address) quand le serveur DHCP n'est pas dans le même VLAN que les clients ?",
-      "choices": ["Parce que le serveur DHCP refuse les requêtes venant d'un autre sous-réseau", "Parce que les requêtes DHCP sont diffusées en broadcast et qu'un broadcast ne traverse pas un routeur", "Parce que le DHCP utilise un port bloqué par défaut entre VLAN", "Parce que le DHCP ne fonctionne qu'en IPv6 entre VLAN"],
+      "choices": [
+        "Parce que le serveur DHCP refuse les requêtes venant d'un autre sous-réseau",
+        "Parce que les requêtes DHCP sont diffusées en broadcast et qu'un broadcast ne traverse pas un routeur",
+        "Parce que le DHCP utilise un port bloqué par défaut entre VLAN",
+        "Parce que le DHCP ne fonctionne qu'en IPv6 entre VLAN"
+      ],
       "answer": 1,
       "explication": "Le relais écoute les broadcasts DHCP du VLAN client et les transmet en unicast au serveur DHCP distant : indispensable dans les infrastructures segmentées."
     },
     {
-      "id": "opn-028", "niveau": 2, "type": "qcm",
+      "id": "opn-028",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi dit-on qu'un pare-feu seul ne suffit pas à sécuriser un système d'information ?",
-      "choices": ["Parce qu'il ne filtre que le trafic UDP", "Parce qu'il doit s'intégrer dans une stratégie globale : défense en profondeur, segmentation, politique de mots de passe...", "Parce qu'il ne fonctionne qu'avec des adresses IP publiques", "Parce qu'il ne peut pas journaliser les connexions"],
+      "choices": [
+        "Parce qu'il ne filtre que le trafic UDP",
+        "Parce qu'il doit s'intégrer dans une stratégie globale : défense en profondeur, segmentation, politique de mots de passe...",
+        "Parce qu'il ne fonctionne qu'avec des adresses IP publiques",
+        "Parce qu'il ne peut pas journaliser les connexions"
+      ],
       "answer": 1,
       "explication": "Le pare-feu est une brique parmi d'autres : la défense en profondeur multiplie les couches de protection pour qu'aucune défaillance isolée ne soit fatale."
     },
     {
-      "id": "opn-029", "niveau": 3, "type": "ordre",
+      "id": "opn-029",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre le trajet d'une requête externe vers un site public hébergé en DMZ derrière un double NAT (maquette : FAI puis OPNsense, port 8080).",
       "steps": [
         "Le poste externe envoie sa requête vers l'IP publique du FAI (172.16.40.150:8080)",
@@ -213,7 +430,9 @@
       "explication": "Avec un double NAT, le port forward doit être configuré des deux côtés (FAI et OPNsense), et la redirection doit toujours être accompagnée d'une règle d'autorisation."
     },
     {
-      "id": "opn-030", "niveau": 3, "type": "ordre",
+      "id": "opn-030",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre le trajet d'un client interne (VLAN 10) qui accède à Internet dans une maquette switch L3 + OPNsense + routeur FAI.",
       "steps": [
         "Le PC client envoie le paquet à sa passerelle : la SVI de son VLAN sur le switch L3",
@@ -224,116 +443,227 @@
       "explication": "C'est une cascade de routes par défaut (switch → OPNsense → FAI) avec deux couches de masquage : le NAT sortant d'OPNsense puis le PAT du FAI."
     },
     {
-      "id": "opn-031", "niveau": 3, "type": "libre",
+      "id": "opn-031",
+      "niveau": 3,
+      "type": "libre",
       "q": "Combien d'hôtes utilisables offre un réseau en /28 ?",
-      "accept": ["14", "14 hôtes", "14 hotes"],
+      "accept": [
+        "14",
+        "14 hôtes",
+        "14 hotes"
+      ],
       "explication": "La formule est 2^(32−masque) − 2 : ici 2^4 − 2 = 14. C'est le principe du VLSM : dimensionner chaque sous-réseau au besoin réel."
     },
     {
-      "id": "opn-032", "niveau": 3, "type": "assoc",
+      "id": "opn-032",
+      "niveau": 3,
+      "type": "assoc",
       "q": "Associez chaque mode du NAT Outbound d'OPNsense à son comportement.",
       "pairs": [
-        ["automatic", "OPNsense génère seul les règles et ignore les règles manuelles"],
-        ["hybrid", "Règles automatiques et règles manuelles combinées"],
-        ["manual", "Uniquement les règles créées par l'administrateur"]
+        [
+          "automatic",
+          "OPNsense génère seul les règles et ignore les règles manuelles"
+        ],
+        [
+          "hybrid",
+          "Règles automatiques et règles manuelles combinées"
+        ],
+        [
+          "manual",
+          "Uniquement les règles créées par l'administrateur"
+        ]
       ],
       "explication": "Le mode hybrid est le bon choix quand on veut compléter les règles automatiques, par exemple pour masquer des réseaux joints par routes statiques."
     },
     {
-      "id": "opn-033", "niveau": 3, "type": "terminal",
+      "id": "opn-033",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "root@OPNsense:~ #",
       "q": "Depuis le shell d'OPNsense, affichez les règles NAT actives du pare-feu pf (redirections et NAT sortant).",
-      "accept": ["pfctl -sn", "pfctl -s nat"],
+      "accept": [
+        "pfctl -sn",
+        "pfctl -s nat"
+      ],
       "output": "no nat proto carp all\nnat on hn1 inet from 192.168.10.0/24 to any -> 192.168.0.20 port 1024:65535\nnat on hn1 inet from 192.168.50.0/29 to any -> 192.168.0.20 port 1024:65535\nnat on hn1 inet from 192.168.90.0/28 to any -> 192.168.0.20 port 1024:65535\nno rdr proto carp all\nrdr pass on hn1 inet proto tcp from any to 192.168.0.20 port = http-alt -> 10.0.0.1 port 8080",
       "explication": "pfctl -sn (ou pfctl -s nat) liste les règles NAT du pare-feu pf : les lignes « rdr » correspondent aux port forwards et les lignes « nat » au NAT sortant."
     },
     {
-      "id": "opn-034", "niveau": 3, "type": "qcm",
+      "id": "opn-034",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Vous voulez interdire la navigation web (HTTP/HTTPS) vers Internet tout en conservant une règle d'autorisation générale. Où placer la règle de blocage ?",
-      "choices": ["Au-dessus de la règle d'autorisation générale", "En dessous de la règle d'autorisation générale", "Peu importe, un blocage est toujours prioritaire sur une autorisation", "Sur l'interface WAN plutôt que sur l'interface LAN"],
+      "choices": [
+        "Au-dessus de la règle d'autorisation générale",
+        "En dessous de la règle d'autorisation générale",
+        "Peu importe, un blocage est toujours prioritaire sur une autorisation",
+        "Sur l'interface WAN plutôt que sur l'interface LAN"
+      ],
       "answer": 0,
       "explication": "Le pare-feu applique la première règle qui correspond : si l'autorisation générale est lue en premier, la règle de blocage n'est jamais atteinte."
     },
     {
-      "id": "opn-035", "niveau": 3, "type": "multi",
+      "id": "opn-035",
+      "niveau": 3,
+      "type": "multi",
       "q": "Sur quels critères une règle de filtrage classique se base-t-elle ? (plusieurs réponses)",
-      "choices": ["Adresse IP source et destination", "Port source et destination", "Protocole (TCP, UDP, ICMP)", "Nom de l'utilisateur connecté au poste", "Marque de la carte réseau"],
-      "answer": [0, 1, 2],
+      "choices": [
+        "Adresse IP source et destination",
+        "Port source et destination",
+        "Protocole (TCP, UDP, ICMP)",
+        "Nom de l'utilisateur connecté au poste",
+        "Marque de la carte réseau"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "Une règle définit une action (autoriser ou bloquer) à partir du triplet IP / port / protocole ; l'identité de l'utilisateur relève d'autres mécanismes."
     },
     {
-      "id": "opn-036", "niveau": 3, "type": "qcm",
+      "id": "opn-036",
+      "niveau": 3,
+      "type": "qcm",
       "q": "OPNsense doit joindre un VLAN interne (ex. 192.168.90.0/28) situé derrière un switch L3. Que faut-il configurer ?",
-      "choices": ["Rien : OPNsense découvre automatiquement les réseaux voisins", "Une gateway pointant vers la SVI du switch, puis une route statique vers ce VLAN via cette gateway", "Un port forward de l'interface LAN vers le VLAN", "Une règle NAT sortant dédiée à ce VLAN"],
+      "choices": [
+        "Rien : OPNsense découvre automatiquement les réseaux voisins",
+        "Une gateway pointant vers la SVI du switch, puis une route statique vers ce VLAN via cette gateway",
+        "Un port forward de l'interface LAN vers le VLAN",
+        "Une règle NAT sortant dédiée à ce VLAN"
+      ],
       "answer": 1,
       "explication": "OPNsense ne connaît que ses réseaux directement connectés : sans routes statiques de retour (System → Gateways puis System → Routes), les réponses ne reviennent jamais."
     },
     {
-      "id": "opn-037", "niveau": 3, "type": "qcm",
+      "id": "opn-037",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Sur un routeur Cisco faisant du NAT (rôle de FAI), quelle commande affiche les traductions en cours ?",
-      "choices": ["show ip nat translations", "show nat table", "show ip translations all", "debug nat sessions"],
+      "choices": [
+        "show ip nat translations",
+        "show nat table",
+        "show ip translations all",
+        "debug nat sessions"
+      ],
       "answer": 0,
       "explication": "Pendant un test de bout en bout, « show ip nat translations » doit montrer la ligne de traduction active : c'est la preuve que le NAT travaille."
     },
     {
-      "id": "opn-038", "niveau": 3, "type": "qcm",
+      "id": "opn-038",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Dans OPNsense, la règle par défaut « allow LAN net to any » suffit-elle à autoriser les VLAN internes joints par routes statiques ?",
-      "choices": ["Oui, LAN net englobe tous les réseaux internes", "Non : LAN net ne désigne que le réseau directement connecté à l'interface LAN (le transit)", "Oui, à condition d'activer le NAT sortant", "Non, car LAN net ne concerne que le trafic IPv6"],
+      "choices": [
+        "Oui, LAN net englobe tous les réseaux internes",
+        "Non : LAN net ne désigne que le réseau directement connecté à l'interface LAN (le transit)",
+        "Oui, à condition d'activer le NAT sortant",
+        "Non, car LAN net ne concerne que le trafic IPv6"
+      ],
       "answer": 1,
       "explication": "Les réseaux atteints par route statique ne font pas partie de « LAN net » : en filtrage fin, il faut une règle explicite pour chaque VLAN interne."
     },
     {
-      "id": "opn-039", "niveau": 3, "type": "qcm",
+      "id": "opn-039",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Vous testez un port forward avec « curl http://IP_WAN:8080 » exécuté depuis OPNsense lui-même : échec. Le même test depuis un poste externe fonctionne. Pourquoi ?",
-      "choices": ["Le port forward est mal configuré", "La réflexion NAT (NAT reflection) n'est pas active par défaut : le trafic qui rebondit sur sa propre IP WAN n'est pas réfléchi", "Le pare-feu bloque toujours ses propres requêtes", "curl n'est pas compatible avec le NAT"],
+      "choices": [
+        "Le port forward est mal configuré",
+        "La réflexion NAT (NAT reflection) n'est pas active par défaut : le trafic qui rebondit sur sa propre IP WAN n'est pas réfléchi",
+        "Le pare-feu bloque toujours ses propres requêtes",
+        "curl n'est pas compatible avec le NAT"
+      ],
       "answer": 1,
       "explication": "Ce test local ne prouve rien : un port forward se valide toujours depuis un vrai client externe, ou en activant la réflexion NAT."
     },
     {
-      "id": "opn-040", "niveau": 4, "type": "scenario",
+      "id": "opn-040",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Un poste du VLAN admin (192.168.90.1) tente d'accéder à Internet.\nSur OPNsense, la route de retour configurée est : 192.168.90.0/28 -> passerelle 192.168.0.251\nOr la SVI réelle du switch est 192.168.100.254, et l'adresse .251 n'existe pas.\nLe Live View montre que la requête ARRIVE bien au pare-feu, mais la connexion n'aboutit jamais.",
       "q": "Quelle est la cause du problème ?",
-      "choices": ["Le VLAN 90 n'existe pas sur le switch", "La passerelle de la route de retour n'existe pas : les réponses partent dans le vide", "Le FAI bloque le port 443", "Le poste n'a pas de serveur DNS configuré"],
+      "choices": [
+        "Le VLAN 90 n'existe pas sur le switch",
+        "La passerelle de la route de retour n'existe pas : les réponses partent dans le vide",
+        "Le FAI bloque le port 443",
+        "Le poste n'a pas de serveur DNS configuré"
+      ],
       "answer": 1,
       "explication": "Une route ne sert à rien si son next-hop n'est pas une adresse réelle et joignable sur un réseau directement connecté : l'aller passe, le retour se perd."
     },
     {
-      "id": "opn-041", "niveau": 4, "type": "scenario",
+      "id": "opn-041",
+      "niveau": 4,
+      "type": "scenario",
       "context": "NAT Outbound d'OPNsense en mode « automatic ».\nDes règles manuelles de masquage existent pour 192.168.90.0/28 (VLAN joint par route statique).\nUne capture sur le WAN montre des paquets sortants avec l'IP source 192.168.90.1, non traduite.\nLes clients du VLAN 90 n'ont pas d'accès Internet.",
       "q": "Quelle correction apporter ?",
-      "choices": ["Redémarrer le service de NAT", "Passer le NAT Outbound en mode hybrid pour que les règles manuelles soient prises en compte", "Ajouter une route par défaut sur le switch", "Créer un port forward pour le VLAN 90"],
+      "choices": [
+        "Redémarrer le service de NAT",
+        "Passer le NAT Outbound en mode hybrid pour que les règles manuelles soient prises en compte",
+        "Ajouter une route par défaut sur le switch",
+        "Créer un port forward pour le VLAN 90"
+      ],
       "answer": 1,
       "explication": "Le mode automatic ignore les règles manuelles et ne masque pas de façon fiable les réseaux joints par route statique ; le mode hybrid combine les deux."
     },
     {
-      "id": "opn-042", "niveau": 4, "type": "scenario",
+      "id": "opn-042",
+      "niveau": 4,
+      "type": "scenario",
       "context": "PS> curl.exe http://10.0.0.1:8080\nHTTP/1.1 400 Bad Request - Invalid Hostname",
       "q": "Que peut-on conclure de cette réponse du serveur IIS en DMZ ?",
-      "choices": ["Le pare-feu bloque le flux : il manque une règle Pass", "Le routage vers la DMZ est cassé", "La couche réseau fonctionne : c'est un problème applicatif de binding IIS (en-tête Host attendu)", "Le port 8080 est fermé sur le serveur"],
+      "choices": [
+        "Le pare-feu bloque le flux : il manque une règle Pass",
+        "Le routage vers la DMZ est cassé",
+        "La couche réseau fonctionne : c'est un problème applicatif de binding IIS (en-tête Host attendu)",
+        "Le port 8080 est fermé sur le serveur"
+      ],
       "answer": 2,
       "explication": "Une réponse HTTP, même une erreur 400, prouve que la connexion TCP a réussi : IIS refuse la requête car son site est bindé sur un nom d'hôte précis. Tester avec curl -H \"Host: www.monsite.fr\"."
     },
     {
-      "id": "opn-043", "niveau": 4, "type": "scenario",
+      "id": "opn-043",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Un port forward WAN:8080 -> 10.0.0.1:8080 est configuré sur OPNsense.\nLe Live View des logs montre le paquet correctement traduit, puis BLOQUÉ sur l'interface WAN.",
       "q": "Que manque-t-il à la configuration ?",
-      "choices": ["Une deuxième règle de NAT en sens inverse", "Une règle Pass sur l'interface WAN autorisant le trafic vers 10.0.0.1:8080", "Une route statique vers la DMZ", "Le passage du NAT Outbound en mode hybrid"],
+      "choices": [
+        "Une deuxième règle de NAT en sens inverse",
+        "Une règle Pass sur l'interface WAN autorisant le trafic vers 10.0.0.1:8080",
+        "Une route statique vers la DMZ",
+        "Le passage du NAT Outbound en mode hybrid"
+      ],
       "answer": 1,
       "explication": "Un port forward redirige mais n'autorise pas : sans règle Pass associée, le paquet est traduit puis jeté. Cocher « Add associated filter rule » lors de la création du Destination NAT."
     },
     {
-      "id": "opn-044", "niveau": 4, "type": "scenario",
+      "id": "opn-044",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Depuis un poste client, la table ARP contient bien l'adresse MAC de la passerelle,\nmais le ping vers un réseau distant échoue systématiquement.",
       "q": "À quel niveau faut-il chercher le problème ?",
-      "choices": ["Couche 1 : le câble est probablement débranché", "Couche 2 : le VLAN du poste est mal configuré", "Couche 3 et au-delà : route manquante, NAT ou règle de pare-feu", "Couche 7 : l'application de ping est défaillante"],
+      "choices": [
+        "Couche 1 : le câble est probablement débranché",
+        "Couche 2 : le VLAN du poste est mal configuré",
+        "Couche 3 et au-delà : route manquante, NAT ou règle de pare-feu",
+        "Couche 7 : l'application de ping est défaillante"
+      ],
       "answer": 2,
       "explication": "Une résolution ARP réussie prouve que le lien de couche 2 est bon : il faut chercher plus haut, côté routage, NAT ou filtrage."
     },
     {
-      "id": "opn-045", "niveau": 4, "type": "scenario",
+      "id": "opn-045",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Maquette de TP : l'interface WAN d'OPNsense est en réalité raccordée à un réseau privé (192.168.0.0/24),\net les clients « externes » viennent de 172.16.40.0/24.\nDes flux légitimes venant de ces clients sont rejetés sur le WAN alors qu'aucune règle Block n'apparaît dans la liste.",
       "q": "Quelle option par défaut d'OPNsense est en cause ?",
-      "choices": ["La règle Anti-Lockout", "Les options « Block private networks » et « Block bogon networks » sur l'interface WAN", "Le mode stateful du pare-feu", "La réflexion NAT désactivée"],
+      "choices": [
+        "La règle Anti-Lockout",
+        "Les options « Block private networks » et « Block bogon networks » sur l'interface WAN",
+        "Le mode stateful du pare-feu",
+        "La réflexion NAT désactivée"
+      ],
       "answer": 1,
       "explication": "OPNsense bloque par défaut les adresses privées et bogons entrantes sur le WAN : en maquette où le « WAN » est un réseau privé, il faut décocher ces options."
     }

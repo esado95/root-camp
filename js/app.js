@@ -299,7 +299,6 @@ async function loadBank() {
         q.themeName = theme.name;
         q.themeColor = theme.color;
         q.module = data.module;
-        q.src = data.source;
         BANK.push(q);
       }
     }
@@ -1185,7 +1184,6 @@ function finishQuestion(q, correct) {
         ${correct ? `✓ correct · +${pts} XP` : "✗ incorrect · la question part en révision"}
       </p>
       ${esc(q.explication)}
-      <span class="src">source : ${esc(q.src)}</span>
     </div>
     <button class="btn accent" id="next" style="margin-top:12px">
       ${last ? "Voir le résultat" : "Question suivante"} <i class="ti ti-arrow-right"></i>

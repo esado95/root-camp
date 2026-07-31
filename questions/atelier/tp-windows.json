@@ -1,6 +1,5 @@
 {
   "module": "TP Windows (PowerShell & CMD)",
-  "source": "fiches du cours TSSR",
   "questions": [
     {
       "id": "tpw-001",
@@ -13,28 +12,36 @@
         {
           "q": "Affichez la configuration IP complète du poste (adresse, bail, serveur DHCP).",
           "prompt": "C:\\>",
-          "accept": ["ipconfig /all"],
+          "accept": [
+            "ipconfig /all"
+          ],
           "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.105\n   Masque de sous-réseau. . . . . . : 255.255.255.0\n   Bail obtenu. . . . . . . . . . . : mercredi 29 juillet 2026 08:12:04\n   Serveur DHCP . . . . . . . . . . : 192.168.10.11\n   Passerelle par défaut. . . . . . : 192.168.10.254",
           "hint": "ipconfig seul ne suffit pas : il existe une option qui affiche la configuration complète, bail compris."
         },
         {
           "q": "Libérez le bail DHCP actuel du poste.",
           "prompt": "C:\\>",
-          "accept": ["ipconfig /release"],
+          "accept": [
+            "ipconfig /release"
+          ],
           "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 0.0.0.0\n   Masque de sous-réseau. . . . . . : 0.0.0.0\n   Passerelle par défaut. . . . . . :",
           "hint": "Toujours ipconfig, avec l'option qui « relâche » l'adresse louée."
         },
         {
           "q": "Demandez une nouvelle adresse au serveur DHCP (le poste relance le cycle DORA).",
           "prompt": "C:\\>",
-          "accept": ["ipconfig /renew"],
+          "accept": [
+            "ipconfig /renew"
+          ],
           "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.105\n   Masque de sous-réseau. . . . . . : 255.255.255.0\n   Passerelle par défaut. . . . . . : 192.168.10.254",
           "hint": "L'option ipconfig qui « renouvelle » le bail : Discover, Offer, Request, ACK."
         },
         {
           "q": "Vérifiez les dates du nouveau bail et l'identité du serveur DHCP.",
           "prompt": "C:\\>",
-          "accept": ["ipconfig /all"],
+          "accept": [
+            "ipconfig /all"
+          ],
           "output": "Carte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.105\n   Bail obtenu. . . . . . . . . . . : jeudi 30 juillet 2026 09:41:17\n   Bail expirant. . . . . . . . . . : vendredi 7 août 2026 09:41:17\n   Serveur DHCP . . . . . . . . . . : 192.168.10.11\n   Serveurs DNS . . . . . . . . . . : 192.168.10.11",
           "hint": "La même commande qu'à la première étape : comparez les dates de bail."
         }
@@ -52,21 +59,28 @@
         {
           "q": "Vérifiez que le service Serveur DHCP est bien démarré.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-Service DHCPServer", "Get-Service -Name DHCPServer"],
+          "accept": [
+            "Get-Service DHCPServer",
+            "Get-Service -Name DHCPServer"
+          ],
           "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  DHCPServer         Serveur DHCP",
           "hint": "Le cmdlet PowerShell qui interroge les services ; le service s'appelle DHCPServer."
         },
         {
           "q": "Listez les étendues IPv4 configurées et vérifiez leur état.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-DhcpServerv4Scope"],
+          "accept": [
+            "Get-DhcpServerv4Scope"
+          ],
           "output": "ScopeId         SubnetMask      Name           State    StartRange      EndRange        LeaseDuration\n-------         ----------      ----           -----    ----------      --------        -------------\n192.168.10.0    255.255.255.0   LAN-Principal  Active   192.168.10.100  192.168.10.200  8.00:00:00",
           "hint": "Un cmdlet Get- de la famille DhcpServer, version v4, qui porte sur les étendues (Scope)."
         },
         {
           "q": "Affichez les baux actifs de l'étendue 192.168.10.0.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-DhcpServerv4Lease -ScopeId 192.168.10.0"],
+          "accept": [
+            "Get-DhcpServerv4Lease -ScopeId 192.168.10.0"
+          ],
           "output": "IPAddress        ScopeId          ClientId             HostName    AddressState   LeaseExpiryTime\n---------        -------          --------             --------    ------------   ---------------\n192.168.10.105   192.168.10.0     00-15-5d-0a-12-3f    CLIENT-W    Active         07/08/2026 09:41:17",
           "hint": "Même famille de cmdlets, mais côté baux (Lease) ; il faut préciser l'étendue avec -ScopeId.",
           "error": "Get-DhcpServerv4Lease : Impossible de valider l'argument du paramètre « ScopeId ». Fournissez un identifiant d'étendue valide."
@@ -85,7 +99,9 @@
         {
           "q": "Forcez immédiatement la mise à jour des stratégies de groupe sur le poste.",
           "prompt": "C:\\>",
-          "accept": ["gpupdate /force"],
+          "accept": [
+            "gpupdate /force"
+          ],
           "output": "Mise à jour de la stratégie...\n\nLa mise à jour de la stratégie utilisateur s'est terminée sans erreur.\nLa mise à jour de la stratégie ordinateur s'est terminée sans erreur.",
           "hint": "La commande de mise à jour des GPO, avec l'option qui force la réapplication complète.",
           "error": "'gpupdat' n'est pas reconnu en tant que commande interne ou externe, un programme exécutable ou un fichier de commandes."
@@ -93,14 +109,18 @@
         {
           "q": "Affichez dans la console le résumé des GPO appliquées à ce poste et à l'utilisateur.",
           "prompt": "C:\\>",
-          "accept": ["gpresult /r"],
+          "accept": [
+            "gpresult /r"
+          ],
           "output": "DONNÉES UTILISATEUR\n-------------------\n    Objets Stratégie de groupe appliqués\n    -------------------------------------\n        Default Domain Policy\n        Fond-Ecran-Standard",
           "hint": "La commande de « résultat » des stratégies, avec l'option résumé (une seule lettre)."
         },
         {
           "q": "Générez un rapport HTML complet des stratégies appliquées dans C:\\rapport_gpo.html.",
           "prompt": "C:\\>",
-          "accept": ["gpresult /h C:\\rapport_gpo.html"],
+          "accept": [
+            "gpresult /h C:\\rapport_gpo.html"
+          ],
           "hint": "Même commande qu'à l'étape précédente, mais l'option change : h comme HTML, suivie du chemin du fichier."
         }
       ],
@@ -117,28 +137,36 @@
         {
           "q": "Testez la connectivité vers la passerelle par défaut.",
           "prompt": "C:\\>",
-          "accept": ["ping 192.168.10.254"],
+          "accept": [
+            "ping 192.168.10.254"
+          ],
           "output": "Envoi d'une requête 'Ping'  192.168.10.254 avec 32 octets de données :\nRéponse de 192.168.10.254 : octets=32 temps<1ms TTL=255\nRéponse de 192.168.10.254 : octets=32 temps<1ms TTL=255\n\nStatistiques Ping pour 192.168.10.254:\n    Paquets : envoyés = 4, reçus = 4, perdus = 0 (perte 0%)",
           "hint": "Le test de connectivité le plus classique, vers l'adresse de la passerelle."
         },
         {
           "q": "Affichez la table ARP pour vérifier la correspondance IP/MAC de la passerelle.",
           "prompt": "C:\\>",
-          "accept": ["arp -a"],
+          "accept": [
+            "arp -a"
+          ],
           "output": "Interface : 192.168.10.105 --- 0x6\n  Adresse Internet      Adresse physique      Type\n  192.168.10.11         00-15-5d-0a-12-01     dynamique\n  192.168.10.254        00-15-5d-0a-12-fe     dynamique\n  192.168.10.255        ff-ff-ff-ff-ff-ff     statique",
           "hint": "La commande porte le nom du protocole de résolution IP vers MAC, avec l'option qui affiche tout."
         },
         {
           "q": "Tracez le chemin emprunté saut par saut jusqu'à 8.8.8.8.",
           "prompt": "C:\\>",
-          "accept": ["tracert 8.8.8.8"],
+          "accept": [
+            "tracert 8.8.8.8"
+          ],
           "output": "Détermination de l'itinéraire vers 8.8.8.8 avec un maximum de 30 sauts.\n\n  1    <1 ms    <1 ms    <1 ms  192.168.10.254\n  2    12 ms    11 ms    12 ms  80.10.235.1\n  3    18 ms    17 ms    18 ms  dns.google [8.8.8.8]\n\nItinéraire déterminé.",
           "hint": "L'équivalent Windows de traceroute : le nom est contracté en 7 lettres."
         },
         {
           "q": "Affichez la table de routage locale pour confirmer la route par défaut.",
           "prompt": "C:\\>",
-          "accept": ["route print"],
+          "accept": [
+            "route print"
+          ],
           "output": "Itinéraires actifs :\nDestination réseau    Masque réseau     Adr. passerelle    Adr. interface   Métrique\n          0.0.0.0          0.0.0.0     192.168.10.254    192.168.10.105       25",
           "hint": "La commande route, suivie de l'action qui « imprime » la table."
         }
@@ -156,21 +184,28 @@
         {
           "q": "Lancez l'outil de partitionnement en ligne de commande.",
           "prompt": "C:\\>",
-          "accept": ["diskpart"],
+          "accept": [
+            "diskpart"
+          ],
           "output": "Microsoft DiskPart version 10.0.22621.1\n\nCopyright (C) Microsoft Corporation.\nSur l'ordinateur : CLIENT-W",
           "hint": "L'outil CLI de gestion des partitions, en un seul mot."
         },
         {
           "q": "Listez les disques pour repérer le nouveau disque de 20 Go.",
           "prompt": "DISKPART>",
-          "accept": ["list disk"],
+          "accept": [
+            "list disk"
+          ],
           "output": "  N° disque  Statut         Taille    Libre     Dyn  GPT\n  ---------  -------------  --------  --------  ---  ---\n  Disque 0   En ligne         60 G o       0 o\n  Disque 1   En ligne         20 G o      20 G o",
           "hint": "On « liste » les disques : deux mots anglais."
         },
         {
           "q": "Sélectionnez le disque 1 pour travailler dessus.",
           "prompt": "DISKPART>",
-          "accept": ["select disk 1", "sel disk 1"],
+          "accept": [
+            "select disk 1",
+            "sel disk 1"
+          ],
           "output": "Le disque 1 est maintenant le disque sélectionné.",
           "hint": "Dans diskpart, on sélectionne toujours l'objet avant d'agir dessus.",
           "error": "Le disque spécifié n'existe pas.\nAucun disque sélectionné."
@@ -178,21 +213,28 @@
         {
           "q": "Créez une partition principale occupant tout le disque.",
           "prompt": "DISKPART>",
-          "accept": ["create partition primary", "create part primary"],
+          "accept": [
+            "create partition primary",
+            "create part primary"
+          ],
           "output": "DiskPart a réussi à créer la partition spécifiée.",
           "hint": "Trois mots : l'action de création, l'objet partition, et son type principal (en anglais)."
         },
         {
           "q": "Formatez la partition en NTFS en formatage rapide.",
           "prompt": "DISKPART>",
-          "accept": ["format fs=ntfs quick"],
+          "accept": [
+            "format fs=ntfs quick"
+          ],
           "output": "  100 pour cent effectués\n\nDiskPart a formaté le volume avec succès.",
           "hint": "La commande format, en précisant le système de fichiers avec fs= et le mot-clé du mode rapide."
         },
         {
           "q": "Attribuez la lettre D à la nouvelle partition.",
           "prompt": "DISKPART>",
-          "accept": ["assign letter=D"],
+          "accept": [
+            "assign letter=D"
+          ],
           "output": "DiskPart a correctement assigné la lettre de lecteur ou le point de montage.",
           "hint": "On « assigne » une lettre : la syntaxe est letter=X."
         }
@@ -210,28 +252,39 @@
         {
           "q": "Testez la connectivité vers srv-web et observez l'adresse IP utilisée.",
           "prompt": "C:\\>",
-          "accept": ["ping srv-web", "ping srv-web.mondomaine.lan"],
+          "accept": [
+            "ping srv-web",
+            "ping srv-web.mondomaine.lan"
+          ],
           "output": "Envoi d'une requête 'ping' sur srv-web.mondomaine.lan [192.168.10.20] avec 32 octets de données :\nDélai d'attente de la demande dépassé.\nDélai d'attente de la demande dépassé.\n\nStatistiques Ping pour 192.168.10.20:\n    Paquets : envoyés = 4, reçus = 0, perdus = 4 (perte 100%)",
           "hint": "Un simple test de connectivité vers le nom du serveur : regardez bien quelle IP est résolue."
         },
         {
           "q": "Interrogez directement le serveur DNS pour connaître l'adresse actuelle de srv-web.mondomaine.lan.",
           "prompt": "C:\\>",
-          "accept": ["nslookup srv-web.mondomaine.lan", "nslookup srv-web"],
+          "accept": [
+            "nslookup srv-web.mondomaine.lan",
+            "nslookup srv-web"
+          ],
           "output": "Serveur :   srv-ad.mondomaine.lan\nAddress:  192.168.10.11\n\nNom :    srv-web.mondomaine.lan\nAddress:  192.168.10.30",
           "hint": "L'outil de résolution DNS qui interroge le serveur sans passer par le cache local du poste."
         },
         {
           "q": "Le serveur DNS renvoie la bonne IP : le poste utilise donc un cache périmé. Videz le cache DNS local.",
           "prompt": "C:\\>",
-          "accept": ["ipconfig /flushdns"],
+          "accept": [
+            "ipconfig /flushdns"
+          ],
           "output": "Configuration IP de Windows\n\nLe cache de résolution DNS a été vidé.",
           "hint": "Une option d'ipconfig : « flush » le cache DNS."
         },
         {
           "q": "Vérifiez que le poste résout désormais la nouvelle adresse et que srv-web répond.",
           "prompt": "C:\\>",
-          "accept": ["ping srv-web", "ping srv-web.mondomaine.lan"],
+          "accept": [
+            "ping srv-web",
+            "ping srv-web.mondomaine.lan"
+          ],
           "output": "Envoi d'une requête 'ping' sur srv-web.mondomaine.lan [192.168.10.30] avec 32 octets de données :\nRéponse de 192.168.10.30 : octets=32 temps<1ms TTL=128\nRéponse de 192.168.10.30 : octets=32 temps<1ms TTL=128\n\nStatistiques Ping pour 192.168.10.30:\n    Paquets : envoyés = 4, reçus = 4, perdus = 0 (perte 0%)",
           "hint": "Le même test qu'au départ : l'IP résolue doit avoir changé."
         }
@@ -249,35 +302,45 @@
         {
           "q": "Examinez la configuration IP complète du poste pour identifier l'anomalie.",
           "prompt": "C:\\>",
-          "accept": ["ipconfig /all"],
+          "accept": [
+            "ipconfig /all"
+          ],
           "output": "Carte Ethernet Ethernet0 :\n   Configuration automatique activée. . : Oui\n   Adresse IPv4 d'autoconfiguration . . : 169.254.37.12\n   Masque de sous-réseau. . . . . . . . : 255.255.0.0\n   Passerelle par défaut. . . . . . . . :\n   Serveur DHCP . . . . . . . . . . . . :",
           "hint": "La commande de diagnostic IP complète. Une adresse en 169.254.x.x doit vous alerter."
         },
         {
           "q": "L'adresse 169.254.x.x est une APIPA : le serveur DHCP n'a pas répondu. Confirmez qu'il est injoignable en le pinguant (192.168.10.11).",
           "prompt": "C:\\>",
-          "accept": ["ping 192.168.10.11"],
+          "accept": [
+            "ping 192.168.10.11"
+          ],
           "output": "Envoi d'une requête 'Ping'  192.168.10.11 avec 32 octets de données :\nPING : échec de la transmission. Échec général.\nPING : échec de la transmission. Échec général.\n\nStatistiques Ping pour 192.168.10.11:\n    Paquets : envoyés = 4, reçus = 0, perdus = 4 (perte 100%)",
           "hint": "Un test de connectivité vers l'adresse du serveur DHCP : avec une APIPA, il ne peut pas aboutir."
         },
         {
           "q": "L'administrateur serveur confirme que l'étendue DHCP avait été désactivée et vient de la réactiver. Libérez l'adresse APIPA actuelle.",
           "prompt": "C:\\>",
-          "accept": ["ipconfig /release"],
+          "accept": [
+            "ipconfig /release"
+          ],
           "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 0.0.0.0\n   Masque de sous-réseau. . . . . . : 0.0.0.0",
           "hint": "L'option d'ipconfig qui libère la configuration actuelle."
         },
         {
           "q": "Relancez une demande d'adresse auprès du serveur DHCP.",
           "prompt": "C:\\>",
-          "accept": ["ipconfig /renew"],
+          "accept": [
+            "ipconfig /renew"
+          ],
           "output": "Configuration IP de Windows\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.112\n   Masque de sous-réseau. . . . . . : 255.255.255.0\n   Passerelle par défaut. . . . . . : 192.168.10.254",
           "hint": "L'option d'ipconfig qui relance le cycle DORA."
         },
         {
           "q": "Vérifiez que le poste a bien reçu sa configuration du serveur DHCP (bail, DNS, passerelle).",
           "prompt": "C:\\>",
-          "accept": ["ipconfig /all"],
+          "accept": [
+            "ipconfig /all"
+          ],
           "output": "Carte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . . : 192.168.10.112\n   Bail obtenu. . . . . . . . . . . : jeudi 30 juillet 2026 10:05:33\n   Bail expirant. . . . . . . . . . : vendredi 7 août 2026 10:05:33\n   Serveur DHCP . . . . . . . . . . : 192.168.10.11\n   Serveurs DNS . . . . . . . . . . : 192.168.10.11\n   Passerelle par défaut. . . . . . : 192.168.10.254",
           "hint": "La commande de la première étape : cette fois, les lignes Serveur DHCP et Bail doivent être renseignées."
         }
@@ -295,27 +358,37 @@
         {
           "q": "Vérifiez que le service AD DS (NTDS) est démarré sur le contrôleur de domaine.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-Service NTDS", "Get-Service -Name NTDS"],
+          "accept": [
+            "Get-Service NTDS",
+            "Get-Service -Name NTDS"
+          ],
           "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  NTDS               Services de domaine Active Directory",
           "hint": "Le cmdlet qui interroge un service ; celui de l'annuaire s'appelle NTDS."
         },
         {
           "q": "Testez la localisation d'un contrôleur de domaine pour mondomaine.lan.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["nltest /dsgetdc:mondomaine.lan"],
+          "accept": [
+            "nltest /dsgetdc:mondomaine.lan"
+          ],
           "output": "Obtention du nom du contrôleur de domaine a échoué : État = 1355 0x54b\nERROR_NO_SUCH_DOMAIN",
           "hint": "L'outil nltest, avec l'option /dsgetdc: suivie du nom du domaine."
         },
         {
           "q": "L'erreur 1355 indique que les enregistrements SRV du domaine sont absents du DNS. Redémarrez le service qui les inscrit.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Restart-Service Netlogon", "Restart-Service -Name Netlogon"],
+          "accept": [
+            "Restart-Service Netlogon",
+            "Restart-Service -Name Netlogon"
+          ],
           "hint": "Un cmdlet Restart- ; le service qui enregistre les SRV du domaine dans le DNS s'appelle Netlogon."
         },
         {
           "q": "Vérifiez que le contrôleur de domaine est maintenant localisable.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["nltest /dsgetdc:mondomaine.lan"],
+          "accept": [
+            "nltest /dsgetdc:mondomaine.lan"
+          ],
           "output": "           Contrôleur de domaine : \\\\SRV-AD.mondomaine.lan\n                      Adresse : \\\\192.168.10.11\n            Nom de domaine : mondomaine.lan\n            Indicateurs : PDC GC DS LDAP KDC\nLa commande s'est terminée correctement.",
           "hint": "Le même test qu'à l'étape 2 : il doit maintenant renvoyer le nom et l'adresse du DC."
         }
@@ -355,13 +428,19 @@
         {
           "q": "Activez le compte, resté désactivé à la création.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Enable-ADAccount -Identity mmartin", "Enable-ADAccount mmartin"],
+          "accept": [
+            "Enable-ADAccount -Identity mmartin",
+            "Enable-ADAccount mmartin"
+          ],
           "hint": "Un cmdlet au verbe Enable- de la famille ADAccount, ciblé avec -Identity."
         },
         {
           "q": "Vérifiez le compte : la propriété Enabled doit valoir True.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-ADUser -Identity mmartin", "Get-ADUser mmartin"],
+          "accept": [
+            "Get-ADUser -Identity mmartin",
+            "Get-ADUser mmartin"
+          ],
           "output": "DistinguishedName : CN=Marie Martin,OU=Techniciens,DC=mondomaine,DC=lan\nEnabled           : True\nName              : Marie Martin\nObjectClass       : user\nSamAccountName    : mmartin\nUserPrincipalName :",
           "hint": "Le cmdlet Get- des utilisateurs AD, avec le SamAccountName comme identité."
         }
@@ -412,7 +491,10 @@
         {
           "q": "Vérifiez la liste des membres du groupe.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-ADGroupMember -Identity GG_Techniciens", "Get-ADGroupMember GG_Techniciens"],
+          "accept": [
+            "Get-ADGroupMember -Identity GG_Techniciens",
+            "Get-ADGroupMember GG_Techniciens"
+          ],
           "output": "distinguishedName : CN=Marie Martin,OU=Techniciens,DC=mondomaine,DC=lan\nname              : Marie Martin\nobjectClass       : user\nSamAccountName    : mmartin\n\nname              : Jean Dupont\nSamAccountName    : jdupont",
           "hint": "Le pendant Get- du cmdlet d'ajout de membres, sur la même identité de groupe."
         }
@@ -430,14 +512,20 @@
         {
           "q": "Vérifiez l'état du service Spooler.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-Service Spooler", "Get-Service -Name Spooler"],
+          "accept": [
+            "Get-Service Spooler",
+            "Get-Service -Name Spooler"
+          ],
           "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  Spooler            Spouleur d'impression",
           "hint": "Le cmdlet Get- des services ; le nom court du spouleur est Spooler."
         },
         {
           "q": "Le service tourne mais la file est bloquée : redémarrez-le.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Restart-Service Spooler", "Restart-Service -Name Spooler"],
+          "accept": [
+            "Restart-Service Spooler",
+            "Restart-Service -Name Spooler"
+          ],
           "hint": "Un seul cmdlet enchaîne l'arrêt puis la relance : le verbe Restart-.",
           "error": "Restart-Service : Impossible de trouver un service correspondant au nom « Spouleur »."
         },
@@ -453,7 +541,10 @@
         {
           "q": "Vérifiez l'état final du service.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-Service Spooler", "Get-Service -Name Spooler"],
+          "accept": [
+            "Get-Service Spooler",
+            "Get-Service -Name Spooler"
+          ],
           "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  Spooler            Spouleur d'impression",
           "hint": "La même vérification qu'au départ : Status doit afficher Running."
         }
@@ -506,7 +597,9 @@
         {
           "q": "Calculez la consommation CPU cumulée de tous les processus.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-Process | Measure-Object -Property CPU -Sum"],
+          "accept": [
+            "Get-Process | Measure-Object -Property CPU -Sum"
+          ],
           "output": "Count    : 87\nAverage  :\nSum      : 612,45\nMaximum  :\nMinimum  :\nProperty : CPU",
           "hint": "Le cmdlet qui « mesure » les objets du pipeline : précisez la propriété avec -Property et l'opération -Sum."
         }
@@ -524,7 +617,9 @@
         {
           "q": "Vérifiez l'étendue existante et son état.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-DhcpServerv4Scope"],
+          "accept": [
+            "Get-DhcpServerv4Scope"
+          ],
           "output": "ScopeId         SubnetMask      Name           State    StartRange      EndRange        LeaseDuration\n-------         ----------      ----           -----    ----------      --------        -------------\n192.168.10.0    255.255.255.0   LAN-Principal  Active   192.168.10.100  192.168.10.200  8.00:00:00",
           "hint": "Le cmdlet Get- de la famille DhcpServer, version v4, côté étendues (Scope)."
         },
@@ -550,14 +645,18 @@
         {
           "q": "Vérifiez la réservation créée sur l'étendue.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-DhcpServerv4Reservation -ScopeId 192.168.10.0"],
+          "accept": [
+            "Get-DhcpServerv4Reservation -ScopeId 192.168.10.0"
+          ],
           "output": "IPAddress       ScopeId         ClientId             Name        Type\n---------       -------         --------             ----        ----\n192.168.10.150  192.168.10.0    00-15-5d-0a-12-77    PRINT-01    Both",
           "hint": "Le pendant Get- du cmdlet de réservation, sur la même étendue."
         },
         {
           "q": "Vérifiez la plage d'exclusion.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-DhcpServerv4ExclusionRange -ScopeId 192.168.10.0"],
+          "accept": [
+            "Get-DhcpServerv4ExclusionRange -ScopeId 192.168.10.0"
+          ],
           "output": "ScopeId         StartRange        EndRange\n-------         ----------        --------\n192.168.10.0    192.168.10.100    192.168.10.110",
           "hint": "Le pendant Get- de l'exclusion, toujours avec -ScopeId."
         }
@@ -575,7 +674,10 @@
         {
           "q": "Affichez les 10 derniers événements du journal Système.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-EventLog -LogName System -Newest 10", "Get-EventLog System -Newest 10"],
+          "accept": [
+            "Get-EventLog -LogName System -Newest 10",
+            "Get-EventLog System -Newest 10"
+          ],
           "output": "Index Time           EntryType    Source                    InstanceID Message\n----- ----           ---------    ------                    ---------- -------\n 9821 juil. 30 06:52 Information  EventLog                        6005 Le service Journal des événements a démarré.\n 9820 juil. 30 06:52 Error        Kernel-Power                      41 Le système a redémarré sans s'arrêter correctement au préalable.\n 9812 juil. 29 23:58 Information  Service Control Manager         7036 Le service Serveur DHCP est entré dans l'état : arrêté.",
           "hint": "Le cmdlet classique de lecture des journaux : précisez le journal avec -LogName et le nombre d'événements avec -Newest."
         },
@@ -626,7 +728,10 @@
         {
           "q": "Des adresses 169.254.x.x (APIPA) signifient qu'aucun serveur DHCP ne répond. Sur SRV-DHCP, vérifiez l'état du service.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-Service DHCPServer", "Get-Service -Name DHCPServer"],
+          "accept": [
+            "Get-Service DHCPServer",
+            "Get-Service -Name DHCPServer"
+          ],
           "output": "Status   Name               DisplayName\n------   ----               -----------\nStopped  DHCPServer         Serveur DHCP",
           "hint": "Le cmdlet d'interrogation des services ; le rôle DHCP s'appelle DHCPServer."
         },
@@ -644,7 +749,10 @@
         {
           "q": "StartType Manual : le service ne se relance pas seul au démarrage. Démarrez-le immédiatement.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Start-Service DHCPServer", "Start-Service -Name DHCPServer"],
+          "accept": [
+            "Start-Service DHCPServer",
+            "Start-Service -Name DHCPServer"
+          ],
           "hint": "Le verbe qui démarre un service, appliqué à DHCPServer.",
           "error": "Start-Service : Impossible de trouver un service correspondant au nom « DHCP Server »."
         },
@@ -660,7 +768,10 @@
         {
           "q": "Vérifiez que le service est bien en cours d'exécution.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Get-Service DHCPServer", "Get-Service -Name DHCPServer"],
+          "accept": [
+            "Get-Service DHCPServer",
+            "Get-Service -Name DHCPServer"
+          ],
           "output": "Status   Name               DisplayName\n------   ----               -----------\nRunning  DHCPServer         Serveur DHCP",
           "hint": "La même commande qu'au début du diagnostic : Status doit maintenant afficher Running."
         }
@@ -678,7 +789,10 @@
         {
           "q": "Recherchez les comptes actuellement verrouillés dans le domaine.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Search-ADAccount -LockedOut", "Search-ADAccount -LockedOut -UsersOnly"],
+          "accept": [
+            "Search-ADAccount -LockedOut",
+            "Search-ADAccount -LockedOut -UsersOnly"
+          ],
           "output": "AccountExpirationDate :\nDistinguishedName     : CN=Marie Martin,OU=Techniciens,DC=mondomaine,DC=lan\nEnabled               : True\nLockedOut             : True\nName                  : Marie Martin\nSamAccountName        : mmartin",
           "hint": "Un cmdlet de recherche AD (verbe Search-) avec un commutateur dédié aux comptes verrouillés."
         },
@@ -696,7 +810,10 @@
         {
           "q": "Le verrouillage est confirmé et légitime (erreurs de saisie). Déverrouillez le compte.",
           "prompt": "PS C:\\Users\\admin>",
-          "accept": ["Unlock-ADAccount -Identity mmartin", "Unlock-ADAccount mmartin"],
+          "accept": [
+            "Unlock-ADAccount -Identity mmartin",
+            "Unlock-ADAccount mmartin"
+          ],
           "hint": "Le verbe qui « déverrouille », famille ADAccount, ciblé avec -Identity.",
           "error": "Unlock-ADAccount : Impossible de trouver un objet avec l'identité « marie.martin » sous : « DC=mondomaine,DC=lan »."
         },

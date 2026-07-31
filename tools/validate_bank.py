@@ -112,8 +112,6 @@ def main():
         if "module" not in data or "questions" not in data:
             errors.append(f"[{p.name}] champs module/questions manquants")
             continue
-        if not isinstance(data.get("source"), str) or not data["source"].strip():
-            errors.append(f"[{p.name}] champ source manquant (affiché dans chaque feedback)")
         by_level = {1: 0, 2: 0, 3: 0, 4: 0}
         by_type = {}
         for i, q in enumerate(data["questions"]):

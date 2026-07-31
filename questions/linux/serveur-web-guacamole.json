@@ -1,167 +1,336 @@
 {
   "module": "Linux — serveur web & Guacamole",
-  "source": "Linux-Web.md + Guacamole-Installation.md",
   "questions": [
     {
-      "id": "lweb-001", "niveau": 1, "type": "qcm",
+      "id": "lweb-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Que désigne l'acronyme LAMP ?",
-      "choices": ["Un logiciel unique de serveur web tout-en-un", "L'assemblage de quatre briques : Linux, Apache, MariaDB/MySQL et PHP", "Un protocole de communication entre serveur web et base de données", "Une distribution Linux spécialisée dans l'hébergement"],
+      "choices": [
+        "Un logiciel unique de serveur web tout-en-un",
+        "L'assemblage de quatre briques : Linux, Apache, MariaDB/MySQL et PHP",
+        "Un protocole de communication entre serveur web et base de données",
+        "Une distribution Linux spécialisée dans l'hébergement"
+      ],
       "answer": 1,
       "explication": "LAMP n'est pas un logiciel mais une pile : Linux fournit le socle, Apache sert les pages, PHP génère le contenu dynamique et MariaDB stocke les données. L'équivalent Windows s'appelle WAMP."
     },
     {
-      "id": "lweb-002", "niveau": 1, "type": "libre",
+      "id": "lweb-002",
+      "niveau": 1,
+      "type": "libre",
       "q": "Quel est le dossier racine par défaut où Apache sert ses fichiers sous Debian ?",
-      "accept": ["/var/www/html", "var/www/html", "/var/www/html/"],
+      "accept": [
+        "/var/www/html",
+        "var/www/html",
+        "/var/www/html/"
+      ],
       "explication": "Apache sert par défaut les fichiers de /var/www/html : c'est pourquoi taper l'IP du serveur juste après l'installation affiche déjà la page d'accueil d'Apache."
     },
     {
-      "id": "lweb-003", "niveau": 1, "type": "qcm",
+      "id": "lweb-003",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quel paquet permet à Apache d'exécuter du code PHP au lieu de renvoyer le fichier brut ?",
-      "choices": ["php-mysql", "libapache2-mod-php", "php-cli", "mariadb-server"],
+      "choices": [
+        "php-mysql",
+        "libapache2-mod-php",
+        "php-cli",
+        "mariadb-server"
+      ],
       "answer": 1,
       "explication": "libapache2-mod-php est le module de liaison entre Apache et PHP ; php-mysql, lui, permet à PHP de dialoguer avec MariaDB. Ces briques ne se parlent pas d'elles-mêmes."
     },
     {
-      "id": "lweb-004", "niveau": 1, "type": "libre",
+      "id": "lweb-004",
+      "niveau": 1,
+      "type": "libre",
       "q": "Sur quel port le démon guacd écoute-t-il par défaut ?",
-      "accept": ["4822"],
+      "accept": [
+        "4822"
+      ],
       "explication": "guacd écoute par défaut sur le port 4822 (déclaré dans /etc/guacamole/guacd.conf) : c'est sur ce port que la webapp Tomcat lui demande d'ouvrir les sessions RDP, SSH ou VNC."
     },
     {
-      "id": "lweb-005", "niveau": 1, "type": "qcm",
+      "id": "lweb-005",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quels sont les identifiants par défaut pour le premier accès à l'interface web de Guacamole ?",
-      "choices": ["admin / admin", "guacadmin / guacadmin", "root / (mot de passe vide)", "guacamole / guacamole"],
+      "choices": [
+        "admin / admin",
+        "guacadmin / guacadmin",
+        "root / (mot de passe vide)",
+        "guacamole / guacamole"
+      ],
       "answer": 1,
       "explication": "Le compte par défaut est guacadmin / guacadmin. Première action de sécurité : créer un nouveau compte administrateur solide puis supprimer ce compte connu de tous."
     },
     {
-      "id": "lweb-006", "niveau": 1, "type": "assoc",
+      "id": "lweb-006",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque chemin à son rôle.",
       "pairs": [
-        ["/etc/apache2/sites-available", "Fichiers .conf des sites configurés (disponibles)"],
-        ["/etc/apache2/sites-enabled", "Liens symboliques des sites réellement servis"],
-        ["/etc/apache2/ports.conf", "Ports écoutés par Apache (directives Listen)"],
-        ["/etc/bind/named.conf.local", "Déclaration des zones DNS"]
+        [
+          "/etc/apache2/sites-available",
+          "Fichiers .conf des sites configurés (disponibles)"
+        ],
+        [
+          "/etc/apache2/sites-enabled",
+          "Liens symboliques des sites réellement servis"
+        ],
+        [
+          "/etc/apache2/ports.conf",
+          "Ports écoutés par Apache (directives Listen)"
+        ],
+        [
+          "/etc/bind/named.conf.local",
+          "Déclaration des zones DNS"
+        ]
       ],
       "explication": "Apache ne lit que sites-enabled (des liens vers sites-available), ports.conf liste les ports écoutés, et named.conf.local est le « sommaire » des zones BIND9."
     },
     {
-      "id": "lweb-007", "niveau": 1, "type": "qcm",
+      "id": "lweb-007",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Depuis quelle version de Debian MariaDB est-il installé par défaut à la place de MySQL ?",
-      "choices": ["Debian 7 (Wheezy)", "Debian 9 (Stretch)", "Debian 10 (Buster)", "Debian 11 (Bullseye)"],
+      "choices": [
+        "Debian 7 (Wheezy)",
+        "Debian 9 (Stretch)",
+        "Debian 10 (Buster)",
+        "Debian 11 (Bullseye)"
+      ],
       "answer": 1,
       "explication": "Depuis Debian 9 (Stretch), le M de LAMP est MariaDB, un dérivé libre et compatible de MySQL."
     },
     {
-      "id": "lweb-008", "niveau": 1, "type": "qcm",
+      "id": "lweb-008",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Dans une installation Guacamole, quel est le rôle de Tomcat ?",
-      "choices": ["Compiler le moteur guacd depuis les sources", "Héberger la webapp Java (fichier .war) qui fournit l'interface web", "Stocker les comptes utilisateurs et les connexions", "Relayer directement les protocoles RDP, SSH et VNC vers les machines cibles"],
+      "choices": [
+        "Compiler le moteur guacd depuis les sources",
+        "Héberger la webapp Java (fichier .war) qui fournit l'interface web",
+        "Stocker les comptes utilisateurs et les connexions",
+        "Relayer directement les protocoles RDP, SSH et VNC vers les machines cibles"
+      ],
       "answer": 1,
       "explication": "La webapp Guacamole est une application Java : Tomcat est le serveur d'applications qui la déploie et la sert dans le navigateur. C'est guacd qui parle réellement RDP/SSH/VNC."
     },
     {
-      "id": "lweb-009", "niveau": 1, "type": "assoc",
+      "id": "lweb-009",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque brique de Guacamole à sa fonction.",
       "pairs": [
-        ["guacd (guacamole-server)", "Démon qui parle réellement RDP, SSH et VNC"],
-        ["Webapp (.war dans Tomcat)", "Interface web : page de login et liste des connexions"],
-        ["Base MariaDB", "Mémorise comptes, groupes et connexions créées"]
+        [
+          "guacd (guacamole-server)",
+          "Démon qui parle réellement RDP, SSH et VNC"
+        ],
+        [
+          "Webapp (.war dans Tomcat)",
+          "Interface web : page de login et liste des connexions"
+        ],
+        [
+          "Base MariaDB",
+          "Mémorise comptes, groupes et connexions créées"
+        ]
       ],
       "explication": "Guacamole n'est pas un logiciel unique mais trois briques : sans la base, il fonctionne mais oublie tout à chaque redémarrage."
     },
     {
-      "id": "lweb-010", "niveau": 1, "type": "libre",
+      "id": "lweb-010",
+      "niveau": 1,
+      "type": "libre",
       "q": "Sur quel port accède-t-on par défaut à l'interface web de Tomcat (et donc à Guacamole) ?",
-      "accept": ["8080"],
+      "accept": [
+        "8080"
+      ],
       "explication": "Tomcat écoute par défaut sur le port 8080 : on teste http://IP:8080/ pour Tomcat puis http://IP:8080/guacamole pour la webapp."
     },
     {
-      "id": "lweb-011", "niveau": 1, "type": "qcm",
+      "id": "lweb-011",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Pourquoi installe-t-on Tomcat dans le dossier /opt ?",
-      "choices": ["/opt est l'emplacement conventionnel des logiciels installés à la main, hors gestionnaire de paquets", "/opt est le seul dossier accessible en écriture par les services", "Tomcat exige ce chemin dans son code source", "/opt est automatiquement sauvegardé par Debian"],
+      "choices": [
+        "/opt est l'emplacement conventionnel des logiciels installés à la main, hors gestionnaire de paquets",
+        "/opt est le seul dossier accessible en écriture par les services",
+        "Tomcat exige ce chemin dans son code source",
+        "/opt est automatiquement sauvegardé par Debian"
+      ],
       "answer": 0,
       "explication": "Tomcat 9 n'étant plus dans les dépôts Debian récents, on le télécharge et on le décompresse à la main : /opt est la convention pour ce type d'installation manuelle."
     },
     {
-      "id": "lweb-012", "niveau": 2, "type": "qcm",
+      "id": "lweb-012",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Un fichier .conf placé dans sites-available ne met pas le site en ligne. Pourquoi ?",
-      "choices": ["Apache ne lit que le contenu de sites-enabled : il faut activer le site avec a2ensite, qui crée un lien symbolique", "Il faut redémarrer le serveur physique pour que le fichier soit détecté", "sites-available est réservé aux sauvegardes de configuration", "Le fichier doit d'abord être compilé en binaire"],
+      "choices": [
+        "Apache ne lit que le contenu de sites-enabled : il faut activer le site avec a2ensite, qui crée un lien symbolique",
+        "Il faut redémarrer le serveur physique pour que le fichier soit détecté",
+        "sites-available est réservé aux sauvegardes de configuration",
+        "Le fichier doit d'abord être compilé en binaire"
+      ],
       "answer": 0,
       "explication": "sites-available ne fait que lister les sites existants ; seuls les liens présents dans sites-enabled sont servis. Cette séparation permet de désactiver un site (a2dissite) sans supprimer sa configuration."
     },
     {
-      "id": "lweb-013", "niveau": 2, "type": "qcm",
+      "id": "lweb-013",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi ne définit-on pas de mot de passe root pour MariaDB sous Debian ?",
-      "choices": ["Le mot de passe est généré aléatoirement et stocké dans un fichier caché", "MariaDB s'appuie sur l'identité système : seul un utilisateur disposant des droits sudo peut se connecter en administrateur", "Le compte root de MariaDB est définitivement désactivé", "MariaDB ne gère pas de compte administrateur"],
+      "choices": [
+        "Le mot de passe est généré aléatoirement et stocké dans un fichier caché",
+        "MariaDB s'appuie sur l'identité système : seul un utilisateur disposant des droits sudo peut se connecter en administrateur",
+        "Le compte root de MariaDB est définitivement désactivé",
+        "MariaDB ne gère pas de compte administrateur"
+      ],
       "answer": 1,
       "explication": "C'est l'appartenance au système (sudo mariadb) qui fait office d'authentification, pas un mot de passe saisi. Pour le travail courant, on crée ensuite un utilisateur dédié avec des droits limités à sa base."
     },
     {
-      "id": "lweb-014", "niveau": 2, "type": "qcm",
+      "id": "lweb-014",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi faut-il installer Tomcat 9 et surtout pas Tomcat 10 pour Guacamole ?",
-      "choices": ["Tomcat 10 est devenu payant", "Tomcat 10 utilise le namespace jakarta.* alors que la webapp Guacamole est écrite pour javax.* : elle ne se déploie pas", "Tomcat 10 ne fonctionne pas sous Debian", "Tomcat 10 n'accepte plus les fichiers .war"],
+      "choices": [
+        "Tomcat 10 est devenu payant",
+        "Tomcat 10 utilise le namespace jakarta.* alors que la webapp Guacamole est écrite pour javax.* : elle ne se déploie pas",
+        "Tomcat 10 ne fonctionne pas sous Debian",
+        "Tomcat 10 n'accepte plus les fichiers .war"
+      ],
       "answer": 1,
       "explication": "Entre Tomcat 9 et 10, l'univers Java a renommé ses briques internes de javax.* vers jakarta.*. La webapp Guacamole utilise l'ancien nom : sous Tomcat 10 elle ne se déploie jamais."
     },
     {
-      "id": "lweb-015", "niveau": 2, "type": "qcm",
+      "id": "lweb-015",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quelle est la « règle d'or » des versions dans une installation Guacamole ?",
-      "choices": ["Toujours installer la version la plus ancienne, réputée plus stable", "Le serveur guacd, la webapp .war et l'extension JDBC doivent porter exactement le même numéro de version", "Seule la version de Tomcat doit correspondre à celle de Java", "Le connecteur MySQL doit avoir la même version que Guacamole"],
+      "choices": [
+        "Toujours installer la version la plus ancienne, réputée plus stable",
+        "Le serveur guacd, la webapp .war et l'extension JDBC doivent porter exactement le même numéro de version",
+        "Seule la version de Tomcat doit correspondre à celle de Java",
+        "Le connecteur MySQL doit avoir la même version que Guacamole"
+      ],
       "answer": 1,
       "explication": "Le mélange de versions (ex. serveur 1.6.0 avec webapp 1.5.5) est la cause numéro un des installations qui échouent. Seul le connecteur MySQL est indépendant de la version de Guacamole."
     },
     {
-      "id": "lweb-016", "niveau": 2, "type": "qcm",
+      "id": "lweb-016",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi un fichier de test contenant <?php phpinfo(); ?> ne doit-il jamais rester en production ?",
-      "choices": ["Il ralentit fortement le serveur", "Il expose des informations sensibles sur la configuration du serveur", "Il empêche Apache de redémarrer", "Il désactive le cache de PHP"],
+      "choices": [
+        "Il ralentit fortement le serveur",
+        "Il expose des informations sensibles sur la configuration du serveur",
+        "Il empêche Apache de redémarrer",
+        "Il désactive le cache de PHP"
+      ],
       "answer": 1,
       "explication": "phpinfo() affiche le tableau complet de la configuration PHP : utile pour vérifier que le serveur interprète le langage, mais précieux aussi pour un attaquant. On le supprime après le test."
     },
     {
-      "id": "lweb-017", "niveau": 2, "type": "qcm",
+      "id": "lweb-017",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi crée-t-on l'utilisateur de service tomcat avec l'option -s /bin/false ?",
-      "choices": ["Pour lui interdire toute connexion interactive : si la webapp est compromise, l'attaquant n'obtient qu'un compte limité sans shell", "Pour accélérer le démarrage de Tomcat", "Parce que Tomcat refuse de démarrer si son utilisateur possède un shell", "Pour économiser de la mémoire au démarrage"],
+      "choices": [
+        "Pour lui interdire toute connexion interactive : si la webapp est compromise, l'attaquant n'obtient qu'un compte limité sans shell",
+        "Pour accélérer le démarrage de Tomcat",
+        "Parce que Tomcat refuse de démarrer si son utilisateur possède un shell",
+        "Pour économiser de la mémoire au démarrage"
+      ],
       "answer": 0,
       "explication": "Faire tourner le serveur sous un compte de service sans droit de connexion (et non en root) limite les dégâts en cas de compromission de la webapp : c'est une bonne pratique de sécurité."
     },
     {
-      "id": "lweb-018", "niveau": 2, "type": "qcm",
+      "id": "lweb-018",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi installe-t-on le JDK (default-jdk) plutôt que le simple JRE pour faire tourner Tomcat ?",
-      "choices": ["Le JRE n'existe plus dans les dépôts Debian", "Tomcat a besoin d'outils de compilation Java pour transformer les pages de la webapp", "Le JDK est plus léger que le JRE", "Le JRE ne gère pas les connexions réseau"],
+      "choices": [
+        "Le JRE n'existe plus dans les dépôts Debian",
+        "Tomcat a besoin d'outils de compilation Java pour transformer les pages de la webapp",
+        "Le JDK est plus léger que le JRE",
+        "Le JRE ne gère pas les connexions réseau"
+      ],
       "answer": 1,
       "explication": "Le JRE ne sait qu'exécuter du Java ; Tomcat a besoin des outils de compilation du JDK. default-jdk est un méta-paquet qui tire la version recommandée (OpenJDK 17 sur Debian 12, 21 sur Debian 13)."
     },
     {
-      "id": "lweb-019", "niveau": 2, "type": "multi",
+      "id": "lweb-019",
+      "niveau": 2,
+      "type": "multi",
       "q": "Que fait le script mariadb-secure-installation (ou mysql_secure_installation) ? (plusieurs réponses)",
-      "choices": ["Il supprime les comptes anonymes", "Il supprime la base de test", "Il bloque la connexion distante du compte root", "Il chiffre les données stockées sur le disque", "Il crée automatiquement un utilisateur applicatif dédié"],
-      "answer": [0, 1, 2],
+      "choices": [
+        "Il supprime les comptes anonymes",
+        "Il supprime la base de test",
+        "Il bloque la connexion distante du compte root",
+        "Il chiffre les données stockées sur le disque",
+        "Il crée automatiquement un utilisateur applicatif dédié"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "Ce script verrouille la configuration par défaut : suppression des comptes anonymes et de la base de test, blocage de la connexion distante de root. Il ne chiffre rien et ne crée aucun utilisateur applicatif."
     },
     {
-      "id": "lweb-020", "niveau": 2, "type": "qcm",
+      "id": "lweb-020",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Un site intranet écoute sur le port 8080. Quel rôle joue le DNS quand un client ouvre http://intranet.exemple1.lan:8080 ?",
-      "choices": ["Le DNS résout le nom en IP et redirige aussi vers le port 8080", "Le DNS résout uniquement le nom vers l'adresse IP ; c'est le navigateur qui ajoute le port", "Le DNS doit contenir un enregistrement spécial déclarant le port", "Le DNS refuse de résoudre un nom utilisé avec un port non standard"],
+      "choices": [
+        "Le DNS résout le nom en IP et redirige aussi vers le port 8080",
+        "Le DNS résout uniquement le nom vers l'adresse IP ; c'est le navigateur qui ajoute le port",
+        "Le DNS doit contenir un enregistrement spécial déclarant le port",
+        "Le DNS refuse de résoudre un nom utilisé avec un port non standard"
+      ],
       "answer": 1,
       "explication": "Le DNS ne gère pas les ports : il traduit un nom en adresse IP, rien de plus. Le port fait partie de l'URL et c'est le navigateur qui l'utilise pour joindre Apache."
     },
     {
-      "id": "lweb-021", "niveau": 2, "type": "qcm",
+      "id": "lweb-021",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Dans l'unité systemd de guacd (Type=simple), pourquoi l'option -f est-elle indispensable dans ExecStart ?",
-      "choices": ["Elle force la recompilation du binaire à chaque démarrage", "Elle garde guacd au premier plan : sans elle, guacd passe en arrière-plan et systemd croit qu'il a planté", "Elle active la journalisation détaillée du démon", "Elle permet à guacd d'écouter sur toutes les interfaces réseau"],
+      "choices": [
+        "Elle force la recompilation du binaire à chaque démarrage",
+        "Elle garde guacd au premier plan : sans elle, guacd passe en arrière-plan et systemd croit qu'il a planté",
+        "Elle active la journalisation détaillée du démon",
+        "Elle permet à guacd d'écouter sur toutes les interfaces réseau"
+      ],
       "answer": 1,
       "explication": "Avec Type=simple, systemd doit pouvoir suivre le processus qu'il lance : -f (foreground) empêche guacd de se détacher en arrière-plan."
     },
     {
-      "id": "lweb-022", "niveau": 2, "type": "multi",
+      "id": "lweb-022",
+      "niveau": 2,
+      "type": "multi",
       "q": "Quelles règles faut-il respecter pour créer un alias IP eth0:0 dans /etc/network/interfaces ? (plusieurs réponses)",
-      "choices": ["Le nom doit dériver de la carte physique existante (eth0:0), pas un nom inventé", "Ajouter la ligne auto eth0:0, sinon l'interface est décrite mais jamais activée", "Ne pas déclarer de gateway ni de dns-nameservers sur l'alias", "Installer une deuxième carte réseau physique", "Placer l'alias dans un sous-réseau différent de celui de eth0"],
-      "answer": [0, 1, 2],
+      "choices": [
+        "Le nom doit dériver de la carte physique existante (eth0:0), pas un nom inventé",
+        "Ajouter la ligne auto eth0:0, sinon l'interface est décrite mais jamais activée",
+        "Ne pas déclarer de gateway ni de dns-nameservers sur l'alias",
+        "Installer une deuxième carte réseau physique",
+        "Placer l'alias dans un sous-réseau différent de celui de eth0"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "L'alias est une seconde IP rattachée à la carte existante : nom dérivé (eth0:0), ligne auto obligatoire, et pas de passerelle ni de DNS car eth0 les fournit déjà — en remettre créerait un conflit de route."
     },
     {
-      "id": "lweb-023", "niveau": 3, "type": "ordre",
+      "id": "lweb-023",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre les étapes pour mettre en ligne un nouveau site avec Apache.",
       "steps": [
         "Créer le fichier .conf du site dans /etc/apache2/sites-available",
@@ -172,7 +341,9 @@
       "explication": "On configure, on active, on valide, puis seulement on recharge : valider avant de recharger évite qu'une faute de frappe empêche Apache de redémarrer."
     },
     {
-      "id": "lweb-024", "niveau": 3, "type": "ordre",
+      "id": "lweb-024",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre les étapes de compilation et d'installation de guacamole-server (guacd).",
       "steps": [
         "Installer les bibliothèques de développement (build-essential, freerdp3-dev, libssh2-1-dev...)",
@@ -184,104 +355,204 @@
       "explication": "Sans make install, le binaire reste dans le dossier source et le service n'a rien à lancer ; ldconfig permet ensuite au système de trouver les bibliothèques fraîchement installées."
     },
     {
-      "id": "lweb-025", "niveau": 3, "type": "terminal",
+      "id": "lweb-025",
+      "niveau": 3,
+      "type": "terminal",
       "q": "Vous venez de modifier un VirtualHost. Validez la syntaxe de la configuration Apache avant de la recharger.",
       "prompt": "root@srv-deb:~#",
-      "accept": ["apache2ctl configtest", "sudo apache2ctl configtest", "apache2ctl -t", "sudo apache2ctl -t", "apachectl configtest", "apachectl -t"],
+      "accept": [
+        "apache2ctl configtest",
+        "sudo apache2ctl configtest",
+        "apache2ctl -t",
+        "sudo apache2ctl -t",
+        "apachectl configtest",
+        "apachectl -t"
+      ],
       "output": "Syntax OK",
       "explication": "apache2ctl configtest (équivalent de apache2ctl -t) indique le fichier et la ligne fautifs en cas d'erreur, bien plus parlant que le « Job failed » générique de systemctl."
     },
     {
-      "id": "lweb-026", "niveau": 3, "type": "qcm",
+      "id": "lweb-026",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Pour héberger un site Apache sur le port 8080, que faut-il faire ?",
-      "choices": ["Déclarer uniquement <VirtualHost *:8080> dans le fichier du site", "Ajouter Listen 8080 dans /etc/apache2/ports.conf ET déclarer le VirtualHost sur *:8080", "Ajouter le port 8080 dans l'enregistrement DNS du site", "Modifier uniquement le DocumentRoot du site"],
+      "choices": [
+        "Déclarer uniquement <VirtualHost *:8080> dans le fichier du site",
+        "Ajouter Listen 8080 dans /etc/apache2/ports.conf ET déclarer le VirtualHost sur *:8080",
+        "Ajouter le port 8080 dans l'enregistrement DNS du site",
+        "Modifier uniquement le DocumentRoot du site"
+      ],
       "answer": 1,
       "explication": "Deux conditions : Apache doit écouter le port (Listen dans ports.conf) et le VirtualHost doit être déclaré dessus. Le DNS, lui, ne gère pas les ports."
     },
     {
-      "id": "lweb-027", "niveau": 3, "type": "qcm",
+      "id": "lweb-027",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Comment réserver un site Apache 2.4 à la seule IP cliente 172.16.40.150 ?",
-      "choices": ["Placer Require ip 172.16.40.150 dans un bloc <Directory> pointant sur le même chemin que le DocumentRoot", "Écrire Require ip 172.16.40.150 directement sous ServerName, en vrac dans le VirtualHost", "Déclarer <VirtualHost 172.16.40.150:80> dans le fichier du site", "Ajouter l'IP du client dans le fichier /etc/hosts du serveur"],
+      "choices": [
+        "Placer Require ip 172.16.40.150 dans un bloc <Directory> pointant sur le même chemin que le DocumentRoot",
+        "Écrire Require ip 172.16.40.150 directement sous ServerName, en vrac dans le VirtualHost",
+        "Déclarer <VirtualHost 172.16.40.150:80> dans le fichier du site",
+        "Ajouter l'IP du client dans le fichier /etc/hosts du serveur"
+      ],
       "answer": 0,
       "explication": "Les directives d'accès (Require) doivent être dans un <Directory>, sinon Apache refuse de démarrer. L'IP dans <VirtualHost> désigne une IP du serveur, pas celle du client ; tout client non autorisé reçoit un 403."
     },
     {
-      "id": "lweb-028", "niveau": 3, "type": "terminal",
+      "id": "lweb-028",
+      "niveau": 3,
+      "type": "terminal",
       "q": "Le fichier exemple1.conf est prêt dans sites-available. Activez ce site dans Apache.",
       "prompt": "root@srv-deb:~#",
-      "accept": ["a2ensite exemple1.conf", "sudo a2ensite exemple1.conf", "a2ensite exemple1", "sudo a2ensite exemple1"],
+      "accept": [
+        "a2ensite exemple1.conf",
+        "sudo a2ensite exemple1.conf",
+        "a2ensite exemple1",
+        "sudo a2ensite exemple1"
+      ],
       "output": "Enabling site exemple1.\nTo activate the new configuration, you need to run:\n  systemctl reload apache2",
       "explication": "a2ensite (apache2 enable site) crée le lien symbolique de sites-available vers sites-enabled ; a2dissite fait l'inverse sans supprimer la configuration."
     },
     {
-      "id": "lweb-029", "niveau": 3, "type": "qcm",
+      "id": "lweb-029",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Vous hébergez intranet.exemple1.lan et siteweb.exemple1.lan. Combien de zones DNS faut-il créer dans BIND9 ?",
-      "choices": ["Deux zones : une par site", "Une seule zone exemple1.lan, les deux sites étant des enregistrements A à l'intérieur", "Trois zones : une par site plus une pour le domaine", "Aucune : les sous-domaines se déclarent directement dans named.conf.local"],
+      "choices": [
+        "Deux zones : une par site",
+        "Une seule zone exemple1.lan, les deux sites étant des enregistrements A à l'intérieur",
+        "Trois zones : une par site plus une pour le domaine",
+        "Aucune : les sous-domaines se déclarent directement dans named.conf.local"
+      ],
       "answer": 1,
       "explication": "Une zone correspond à un domaine, pas à un site : intranet et siteweb sont des hôtes du domaine exemple1.lan, donc de simples enregistrements A dans la même zone."
     },
     {
-      "id": "lweb-030", "niveau": 3, "type": "qcm",
+      "id": "lweb-030",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Après modification d'un fichier de zone BIND9, que faut-il faire pour que le changement soit pris en compte ?",
-      "choices": ["Redémarrer uniquement le service bind9", "Incrémenter le serial dans le fichier de zone, puis redémarrer bind9", "Vider le fichier /etc/resolv.conf des clients", "Recréer entièrement la zone dans named.conf.local"],
+      "choices": [
+        "Redémarrer uniquement le service bind9",
+        "Incrémenter le serial dans le fichier de zone, puis redémarrer bind9",
+        "Vider le fichier /etc/resolv.conf des clients",
+        "Recréer entièrement la zone dans named.conf.local"
+      ],
       "answer": 1,
       "explication": "Un serial non incrémenté est le piège classique : le changement reste invisible. La convention pratique est AAAAMMJJnn, et named-checkconf -z permet de valider avant de redémarrer."
     },
     {
-      "id": "lweb-031", "niveau": 3, "type": "qcm",
+      "id": "lweb-031",
+      "niveau": 3,
+      "type": "qcm",
       "q": "À quoi sert la commande : curl -H \"Host: allow.lan\" http://127.0.0.1 ?",
-      "choices": ["À tester un VirtualHost en court-circuitant la résolution DNS et le proxy", "À ajouter l'entrée allow.lan dans le fichier hosts", "À forcer Apache à recharger sa configuration", "À mesurer le temps de réponse du serveur web"],
+      "choices": [
+        "À tester un VirtualHost en court-circuitant la résolution DNS et le proxy",
+        "À ajouter l'entrée allow.lan dans le fichier hosts",
+        "À forcer Apache à recharger sa configuration",
+        "À mesurer le temps de réponse du serveur web"
+      ],
       "answer": 0,
       "explication": "En forçant l'en-tête Host vers la boucle locale, on vérifie qu'Apache sert le bon site sans dépendre du DNS ni d'un proxy d'entreprise qui bloquerait les noms .lan."
     },
     {
-      "id": "lweb-032", "niveau": 3, "type": "assoc",
+      "id": "lweb-032",
+      "niveau": 3,
+      "type": "assoc",
       "q": "Associez chaque fichier ou dossier de Guacamole à son contenu.",
       "pairs": [
-        ["/etc/guacamole/guacamole.properties", "Paramètres de connexion à la base MariaDB"],
-        ["/etc/guacamole/guacd.conf", "Adresse et port d'écoute du démon guacd"],
-        ["/etc/guacamole/extensions/", "Extension d'authentification JDBC (.jar)"],
-        ["/etc/guacamole/lib/", "Connecteur MySQL pour Java (.jar)"]
+        [
+          "/etc/guacamole/guacamole.properties",
+          "Paramètres de connexion à la base MariaDB"
+        ],
+        [
+          "/etc/guacamole/guacd.conf",
+          "Adresse et port d'écoute du démon guacd"
+        ],
+        [
+          "/etc/guacamole/extensions/",
+          "Extension d'authentification JDBC (.jar)"
+        ],
+        [
+          "/etc/guacamole/lib/",
+          "Connecteur MySQL pour Java (.jar)"
+        ]
       ],
       "explication": "guacamole.properties câble la webapp à la base (hôte, port 3306, base, utilisateur), guacd.conf déclare l'écoute du démon (0.0.0.0:4822) ; l'extension JDBC et le connecteur MySQL se complètent, l'un ne marche pas sans l'autre."
     },
     {
-      "id": "lweb-033", "niveau": 4, "type": "scenario",
+      "id": "lweb-033",
+      "niveau": 4,
+      "type": "scenario",
       "context": "systemctl status tomcat : active (running)\nhttp://192.168.1.50:8080/ affiche la page d'accueil de Tomcat.\nhttp://192.168.1.50:8080/guacamole renvoie : 404 - La ressource demandée n'est pas disponible.\nls -l /opt/tomcat/webapps/ :\n-rw-r--r-- 1 root root 31M guacamole.war\n(aucun dossier guacamole/ à côté)",
       "q": "Vous venez de déposer guacamole.war dans le dossier webapps de Tomcat. Quelle est la cause la plus probable de ce 404 ?",
-      "choices": ["Le fichier .war appartient à root : l'utilisateur tomcat ne peut ni le lire ni le déployer", "Tomcat 9 ne sait pas déployer les fichiers .war automatiquement", "Le port 8080 est bloqué par le pare-feu", "La base MariaDB n'est pas démarrée"],
+      "choices": [
+        "Le fichier .war appartient à root : l'utilisateur tomcat ne peut ni le lire ni le déployer",
+        "Tomcat 9 ne sait pas déployer les fichiers .war automatiquement",
+        "Le port 8080 est bloqué par le pare-feu",
+        "La base MariaDB n'est pas démarrée"
+      ],
       "answer": 0,
       "explication": "Tomcat tourne sous l'utilisateur tomcat : un .war déposé en root ne peut pas être déployé (l'absence du dossier guacamole/ le confirme). Solution : chown tomcat:tomcat sur le .war puis redémarrer Tomcat."
     },
     {
-      "id": "lweb-034", "niveau": 4, "type": "scenario",
+      "id": "lweb-034",
+      "niveau": 4,
+      "type": "scenario",
       "context": "error: 'codecs_free' is deprecated: [since 3.6.0] Use freerdp_client_codecs_free\ncc1: all warnings being treated as errors\nmake: *** Erreur 1",
       "q": "La compilation de guacamole-server 1.6.0 s'arrête net dans le module RDP avec ce message. Quelle est la solution ?",
-      "choices": ["Relancer ./configure avec CFLAGS=\"-Wno-deprecated-declarations\" pour supprimer l'avertissement que -Werror transforme en erreur", "Installer freerdp2-dev à la place de freerdp3-dev", "Repasser à Guacamole 1.5.5, compatible avec toutes les versions de FreeRDP", "Corriger manuellement le code source de FreeRDP"],
+      "choices": [
+        "Relancer ./configure avec CFLAGS=\"-Wno-deprecated-declarations\" pour supprimer l'avertissement que -Werror transforme en erreur",
+        "Installer freerdp2-dev à la place de freerdp3-dev",
+        "Repasser à Guacamole 1.5.5, compatible avec toutes les versions de FreeRDP",
+        "Corriger manuellement le code source de FreeRDP"
+      ],
       "answer": 0,
       "explication": "FreeRDP 3.6 déprécie d'anciennes fonctions encore utilisées par Guacamole : un simple avertissement, mais le mode -Werror le transforme en erreur bloquante. En supprimant l'avertissement, la compilation va au bout avec le RDP inclus."
     },
     {
-      "id": "lweb-035", "niveau": 4, "type": "scenario",
+      "id": "lweb-035",
+      "niveau": 4,
+      "type": "scenario",
       "context": "systemctl status guacd :\n   Active: failed (Result: exit-code)\n   Process: ExecStart=/usr/local/sbin/guacd -f (code=exited, status=203/EXEC)",
       "q": "Le service guacd échoue avec le statut 203/EXEC. Que signifie cette erreur ?",
-      "choices": ["systemd ne trouve pas le binaire à l'emplacement indiqué : make install n'a pas été exécuté ou le chemin ExecStart est faux", "guacd n'a pas les droits pour écouter sur le port 4822", "La base MariaDB refuse la connexion de guacd", "L'option -f est incompatible avec Type=simple"],
+      "choices": [
+        "systemd ne trouve pas le binaire à l'emplacement indiqué : make install n'a pas été exécuté ou le chemin ExecStart est faux",
+        "guacd n'a pas les droits pour écouter sur le port 4822",
+        "La base MariaDB refuse la connexion de guacd",
+        "L'option -f est incompatible avec Type=simple"
+      ],
       "answer": 0,
       "explication": "203/EXEC signifie que systemd n'a pas pu lancer l'exécutable. On vérifie avec which guacd et ls -l /usr/local/sbin/guacd : si le binaire est absent, il faut refaire make puis make install."
     },
     {
-      "id": "lweb-036", "niveau": 4, "type": "scenario",
+      "id": "lweb-036",
+      "niveau": 4,
+      "type": "scenario",
       "context": "sites-enabled contient :\n  default.conf  : <VirtualHost 172.16.40.151:80>\n  intranet.conf : <VirtualHost *:80> avec ServerName intranet.exemple1.lan\nLe client résout bien intranet.exemple1.lan en 172.16.40.151,\nmais il obtient toujours la page du site default.",
       "q": "Pourquoi le client tombe-t-il sur le site default alors que le VirtualHost intranet est activé et que le nom est bien résolu ?",
-      "choices": ["Une écoute sur IP explicite (172.16.40.151:80) est prioritaire sur le joker *:80 : le vhost default capture tout le trafic vers cette IP avant même la comparaison des ServerName", "Le fichier intranet.conf n'a pas été activé avec a2ensite", "Le ServerName est mal orthographié dans intranet.conf", "Le port 80 ne peut être utilisé que par un seul VirtualHost"],
+      "choices": [
+        "Une écoute sur IP explicite (172.16.40.151:80) est prioritaire sur le joker *:80 : le vhost default capture tout le trafic vers cette IP avant même la comparaison des ServerName",
+        "Le fichier intranet.conf n'a pas été activé avec a2ensite",
+        "Le ServerName est mal orthographié dans intranet.conf",
+        "Le port 80 ne peut être utilisé que par un seul VirtualHost"
+      ],
       "answer": 0,
       "explication": "Apache regroupe d'abord les VirtualHosts par adresse d'écoute, et IP:port bat *:port : les sites en *:80 deviennent invisibles pour cette IP. Solution : uniformiser tous les vhosts en *:80 pour qu'ils soient comparés par nom."
     },
     {
-      "id": "lweb-037", "niveau": 4, "type": "scenario",
+      "id": "lweb-037",
+      "niveau": 4,
+      "type": "scenario",
       "context": "named-checkzone exemple1.lan /etc/bind/db.exemple1.lan :\nzone exemple1.lan/IN: NS 'srv-web.exemple1.lan.exemple1.lan' (nom doublé)\nSOA record not at top of zone",
       "q": "La vérification de la zone échoue et les noms apparaissent doublés (exemple1.lan.exemple1.lan). Quelle est la cause ?",
-      "choices": ["Le point final a été oublié sur $ORIGIN ou sur un nom absolu : sans point, le nom est relatif et BIND lui ajoute l'origine une seconde fois", "Le serial du fichier de zone n'a pas été incrémenté", "La zone n'est pas déclarée dans named.conf.local", "Le TTL de la zone est trop court"],
+      "choices": [
+        "Le point final a été oublié sur $ORIGIN ou sur un nom absolu : sans point, le nom est relatif et BIND lui ajoute l'origine une seconde fois",
+        "Le serial du fichier de zone n'a pas été incrémenté",
+        "La zone n'est pas déclarée dans named.conf.local",
+        "Le TTL de la zone est trop court"
+      ],
       "answer": 0,
       "explication": "C'est la source d'erreur numéro un en DNS : un nom terminé par un point est absolu, un nom sans point se voit ajouter l'$ORIGIN. Il faut écrire $ORIGIN exemple1.lan. avec le point final."
     }

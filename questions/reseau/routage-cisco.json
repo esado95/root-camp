@@ -1,262 +1,523 @@
 {
   "module": "Routage & Cisco CLI",
-  "source": "Routage.md + Procedure-Reseau-Cisco.md",
   "questions": [
     {
-      "id": "rte-001", "niveau": 1, "type": "qcm",
+      "id": "rte-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Dans un routage « de proche en proche » (hop-by-hop), que connaît réellement un routeur ?",
-      "choices": ["Le chemin complet jusqu'à la destination", "Uniquement le voisin immédiat à qui transmettre le paquet", "La topologie de l'ensemble du réseau", "L'adresse MAC de la machine de destination finale"],
+      "choices": [
+        "Le chemin complet jusqu'à la destination",
+        "Uniquement le voisin immédiat à qui transmettre le paquet",
+        "La topologie de l'ensemble du réseau",
+        "L'adresse MAC de la machine de destination finale"
+      ],
       "answer": 1,
       "explication": "Un routeur ne connaît jamais le chemin entier : sa table lui indique seulement le prochain saut, et chaque routeur traversé répète la même décision."
     },
     {
-      "id": "rte-002", "niveau": 1, "type": "qcm",
+      "id": "rte-002",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Dans la table de routage d'un routeur Cisco, que désigne la lettre C devant une route ?",
-      "choices": ["Une route configurée manuellement", "Une route directement connectée", "Une route candidate par défaut", "Une route apprise par un protocole dynamique"],
+      "choices": [
+        "Une route configurée manuellement",
+        "Une route directement connectée",
+        "Une route candidate par défaut",
+        "Une route apprise par un protocole dynamique"
+      ],
       "answer": 1,
       "explication": "C signifie « connected » : le réseau est branché physiquement sur une interface du routeur et la route apparaît automatiquement dès que l'interface est configurée et active."
     },
     {
-      "id": "rte-003", "niveau": 1, "type": "qcm",
+      "id": "rte-003",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Comment note-t-on la route par défaut, aussi appelée « gateway of last resort » ?",
-      "choices": ["0.0.0.0/0", "255.255.255.255/32", "127.0.0.1/8", "192.168.0.0/16"],
+      "choices": [
+        "0.0.0.0/0",
+        "255.255.255.255/32",
+        "127.0.0.1/8",
+        "192.168.0.0/16"
+      ],
       "answer": 0,
       "explication": "La route 0.0.0.0/0 correspond à « n'importe quelle destination » : elle est utilisée en dernier recours quand aucune route plus précise ne correspond."
     },
     {
-      "id": "rte-004", "niveau": 1, "type": "qcm",
+      "id": "rte-004",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Qu'est-ce que la passerelle (gateway) d'un réseau local ?",
-      "choices": ["L'adresse IP du serveur DNS", "L'adresse IP de l'interface du routeur côté LAN", "La première adresse libre du réseau", "L'adresse de broadcast du réseau"],
+      "choices": [
+        "L'adresse IP du serveur DNS",
+        "L'adresse IP de l'interface du routeur côté LAN",
+        "La première adresse libre du réseau",
+        "L'adresse de broadcast du réseau"
+      ],
       "answer": 1,
       "explication": "La passerelle est l'adresse du matériel qui permet de sortir du réseau local : c'est l'IP de l'interface LAN du routeur."
     },
     {
-      "id": "rte-005", "niveau": 1, "type": "qcm",
+      "id": "rte-005",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Que désigne le « next hop » dans une route ?",
-      "choices": ["Le nombre total de routeurs à traverser", "L'adresse IP du routeur suivant sur le chemin", "L'interface de sortie du dernier routeur du chemin", "L'adresse du poste de destination"],
+      "choices": [
+        "Le nombre total de routeurs à traverser",
+        "L'adresse IP du routeur suivant sur le chemin",
+        "L'interface de sortie du dernier routeur du chemin",
+        "L'adresse du poste de destination"
+      ],
       "answer": 1,
       "explication": "Le next hop est l'adresse du routeur voisin par lequel transiter ; un « hop » (saut) correspond à la traversée d'un routeur."
     },
     {
-      "id": "rte-006", "niveau": 1, "type": "qcm",
+      "id": "rte-006",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Lequel de ces protocoles est un protocole de routage dynamique ?",
-      "choices": ["OSPF", "STP", "SSH", "DHCP"],
+      "choices": [
+        "OSPF",
+        "STP",
+        "SSH",
+        "DHCP"
+      ],
       "answer": 0,
       "explication": "OSPF, comme RIP et BGP, permet aux routeurs d'apprendre automatiquement les routes ; STP concerne les boucles de commutation, SSH l'administration et DHCP l'adressage."
     },
     {
-      "id": "rte-007", "niveau": 1, "type": "libre",
+      "id": "rte-007",
+      "niveau": 1,
+      "type": "libre",
       "q": "Quelle vitesse (en bauds) faut-il sélectionner dans MobaXterm pour une connexion console sur un routeur Cisco ?",
-      "accept": ["9600", "9600 baud", "9600 bauds"],
+      "accept": [
+        "9600",
+        "9600 baud",
+        "9600 bauds"
+      ],
       "explication": "9600 bauds est la vitesse série standard des équipements Cisco pour l'accès console."
     },
     {
-      "id": "rte-008", "niveau": 1, "type": "qcm",
+      "id": "rte-008",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Sur un équipement Cisco, que confère le niveau « privilege 15 » à un utilisateur ?",
-      "choices": ["Des droits en lecture seule", "Les droits maximum, équivalents au mode enable", "L'accès limité à la configuration DHCP", "Un accès limité dans le temps"],
+      "choices": [
+        "Des droits en lecture seule",
+        "Les droits maximum, équivalents au mode enable",
+        "L'accès limité à la configuration DHCP",
+        "Un accès limité dans le temps"
+      ],
       "answer": 1,
       "explication": "privilege 15 donne les droits maximum (mode enable direct), tandis que privilege 0 correspond aux droits minimum, en lecture seule."
     },
     {
-      "id": "rte-009", "niveau": 1, "type": "qcm",
+      "id": "rte-009",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Que sont les lignes VTY d'un routeur Cisco ?",
-      "choices": ["Des ports physiques dédiés à la console", "Des lignes virtuelles acceptant les connexions d'administration via le réseau (SSH ou Telnet)", "Des interfaces réseau supplémentaires", "Des files d'attente de paquets"],
+      "choices": [
+        "Des ports physiques dédiés à la console",
+        "Des lignes virtuelles acceptant les connexions d'administration via le réseau (SSH ou Telnet)",
+        "Des interfaces réseau supplémentaires",
+        "Des files d'attente de paquets"
+      ],
       "answer": 1,
       "explication": "VTY (Virtual TeleType) désigne des ports virtuels, sans existence physique, qui servent aux connexions d'administration passant par le réseau."
     },
     {
-      "id": "rte-010", "niveau": 1, "type": "assoc",
+      "id": "rte-010",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque type de route à sa caractéristique.",
       "pairs": [
-        ["Route C (connectée)", "Ajoutée automatiquement quand l'interface est configurée et active"],
-        ["Route S (statique)", "Saisie manuellement par l'administrateur"],
-        ["Route par défaut", "0.0.0.0/0, utilisée en dernier recours"],
-        ["Route dynamique", "Apprise via un protocole comme OSPF, RIP ou BGP"]
+        [
+          "Route C (connectée)",
+          "Ajoutée automatiquement quand l'interface est configurée et active"
+        ],
+        [
+          "Route S (statique)",
+          "Saisie manuellement par l'administrateur"
+        ],
+        [
+          "Route par défaut",
+          "0.0.0.0/0, utilisée en dernier recours"
+        ],
+        [
+          "Route dynamique",
+          "Apprise via un protocole comme OSPF, RIP ou BGP"
+        ]
       ],
       "explication": "Les routes connectées apparaissent seules, les statiques sont saisies à la main, les dynamiques sont échangées entre routeurs, et la route par défaut attrape tout le reste."
     },
     {
-      "id": "rte-011", "niveau": 2, "type": "qcm",
+      "id": "rte-011",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Que fait un routeur lorsqu'il reçoit un paquet dont la destination est absente de sa table de routage ?",
-      "choices": ["Il le diffuse en broadcast sur toutes ses interfaces", "Il détruit le paquet et renvoie un message ICMP « Destination Unreachable »", "Il le met en file d'attente jusqu'à trouver une route", "Il le renvoie à l'expéditeur sans aucun message"],
+      "choices": [
+        "Il le diffuse en broadcast sur toutes ses interfaces",
+        "Il détruit le paquet et renvoie un message ICMP « Destination Unreachable »",
+        "Il le met en file d'attente jusqu'à trouver une route",
+        "Il le renvoie à l'expéditeur sans aucun message"
+      ],
       "answer": 1,
       "explication": "Sans route correspondante, le paquet est détruit et l'expéditeur est prévenu par un message ICMP Destination Unreachable."
     },
     {
-      "id": "rte-012", "niveau": 2, "type": "qcm",
+      "id": "rte-012",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quel est l'effet d'un routeur sur les domaines de broadcast ?",
-      "choices": ["Il les fusionne en un seul grand domaine", "Chaque interface du routeur délimite un domaine de broadcast distinct", "Il n'a aucun effet : seul le switch les sépare", "Il supprime tout le trafic broadcast du réseau"],
+      "choices": [
+        "Il les fusionne en un seul grand domaine",
+        "Chaque interface du routeur délimite un domaine de broadcast distinct",
+        "Il n'a aucun effet : seul le switch les sépare",
+        "Il supprime tout le trafic broadcast du réseau"
+      ],
       "answer": 1,
       "explication": "Contrairement au switch, le routeur ne relaie pas les broadcasts : chaque interface constitue un domaine de broadcast séparé."
     },
     {
-      "id": "rte-013", "niveau": 2, "type": "qcm",
+      "id": "rte-013",
+      "niveau": 2,
+      "type": "qcm",
       "q": "À quoi sert le câble console d'un routeur Cisco ?",
-      "choices": ["À relier le routeur au switch pour le trafic du LAN", "À la configuration initiale de l'équipement, sans transporter de trafic réseau", "À alimenter électriquement le routeur", "À synchroniser deux routeurs entre eux"],
+      "choices": [
+        "À relier le routeur au switch pour le trafic du LAN",
+        "À la configuration initiale de l'équipement, sans transporter de trafic réseau",
+        "À alimenter électriquement le routeur",
+        "À synchroniser deux routeurs entre eux"
+      ],
       "answer": 1,
       "explication": "La liaison console (câble RJ45/DB9 ou RJ45/USB) donne un accès direct au CLI pour la configuration initiale ; elle ne transporte aucun trafic réseau."
     },
     {
-      "id": "rte-014", "niveau": 2, "type": "qcm",
+      "id": "rte-014",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi faut-il définir un nom de domaine (ip domain-name) avant de configurer SSH sur un routeur Cisco ?",
-      "choices": ["Pour que le routeur soit joignable par son nom DNS", "Parce qu'il est obligatoire pour générer les clés RSA", "Pour activer le serveur DHCP", "Pour rattacher le routeur au contrôleur de domaine"],
+      "choices": [
+        "Pour que le routeur soit joignable par son nom DNS",
+        "Parce qu'il est obligatoire pour générer les clés RSA",
+        "Pour activer le serveur DHCP",
+        "Pour rattacher le routeur au contrôleur de domaine"
+      ],
       "answer": 1,
       "explication": "La commande crypto key generate rsa exige qu'un nom de domaine soit défini : sans lui, les clés nécessaires à SSH ne peuvent pas être créées."
     },
     {
-      "id": "rte-015", "niveau": 2, "type": "multi",
+      "id": "rte-015",
+      "niveau": 2,
+      "type": "multi",
       "q": "Qu'apporte le chiffrement RSA lors d'une session SSH vers un routeur ? (plusieurs réponses)",
-      "choices": ["Il chiffre la session : un pirate qui intercepte les paquets ne voit que des données illisibles", "Il permet au PC de vérifier l'identité du routeur grâce à l'empreinte de sa clé", "Il accélère le débit de la connexion", "Il attribue automatiquement une adresse IP au PC", "Il supprime le besoin de mot de passe"],
-      "answer": [0, 1],
+      "choices": [
+        "Il chiffre la session : un pirate qui intercepte les paquets ne voit que des données illisibles",
+        "Il permet au PC de vérifier l'identité du routeur grâce à l'empreinte de sa clé",
+        "Il accélère le débit de la connexion",
+        "Il attribue automatiquement une adresse IP au PC",
+        "Il supprime le besoin de mot de passe"
+      ],
+      "answer": [
+        0,
+        1
+      ],
       "explication": "Contrairement à Telnet qui transmet tout en clair (mot de passe compris), RSA chiffre les échanges et permet d'authentifier le routeur dès la première connexion via l'empreinte de sa clé."
     },
     {
-      "id": "rte-016", "niveau": 2, "type": "qcm",
+      "id": "rte-016",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Que signifie la commande « line vty 0 4 » ?",
-      "choices": ["On configure les 4 premiers ports physiques du routeur", "On configure une plage de 5 connexions distantes simultanées (lignes 0 à 4)", "On limite la durée de session à 4 minutes", "On ouvre les ports TCP 0 à 4"],
+      "choices": [
+        "On configure les 4 premiers ports physiques du routeur",
+        "On configure une plage de 5 connexions distantes simultanées (lignes 0 à 4)",
+        "On limite la durée de session à 4 minutes",
+        "On ouvre les ports TCP 0 à 4"
+      ],
       "answer": 1,
       "explication": "« 0 4 » désigne les lignes virtuelles 0, 1, 2, 3 et 4, soit 5 connexions d'administration à distance possibles en même temps."
     },
     {
-      "id": "rte-017", "niveau": 2, "type": "qcm",
+      "id": "rte-017",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi faut-il exécuter « write memory » après une modification importante de la configuration ?",
-      "choices": ["Pour appliquer immédiatement la configuration", "Parce que sans sauvegarde, la configuration est perdue au redémarrage du routeur", "Pour envoyer la configuration au serveur DHCP", "Pour redémarrer les interfaces"],
+      "choices": [
+        "Pour appliquer immédiatement la configuration",
+        "Parce que sans sauvegarde, la configuration est perdue au redémarrage du routeur",
+        "Pour envoyer la configuration au serveur DHCP",
+        "Pour redémarrer les interfaces"
+      ],
       "answer": 1,
       "explication": "La configuration courante vit en mémoire vive : write memory la copie en NVRAM (startup-config) pour qu'elle soit rechargée au démarrage."
     },
     {
-      "id": "rte-018", "niveau": 2, "type": "multi",
+      "id": "rte-018",
+      "niveau": 2,
+      "type": "multi",
       "q": "À quelles conditions une route connectée (C) apparaît-elle dans la table de routage ? (plusieurs réponses)",
-      "choices": ["L'interface possède une adresse IP configurée", "L'interface est activée (no shutdown) et en état Up", "Une route statique a été saisie pour ce réseau", "Un protocole de routage dynamique est activé", "Un pool DHCP est configuré sur l'interface"],
-      "answer": [0, 1],
+      "choices": [
+        "L'interface possède une adresse IP configurée",
+        "L'interface est activée (no shutdown) et en état Up",
+        "Une route statique a été saisie pour ce réseau",
+        "Un protocole de routage dynamique est activé",
+        "Un pool DHCP est configuré sur l'interface"
+      ],
+      "answer": [
+        0,
+        1
+      ],
       "explication": "Une route connectée s'ajoute automatiquement dès que l'interface est configurée avec une IP et passée en état Up : aucune saisie manuelle ni protocole n'est nécessaire."
     },
     {
-      "id": "rte-019", "niveau": 2, "type": "qcm",
+      "id": "rte-019",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi exécuter « ip dhcp excluded-address » avec l'adresse de la passerelle avant de créer le pool DHCP ?",
-      "choices": ["Pour accélérer l'attribution des baux", "Pour éviter que l'adresse de la passerelle soit distribuée à un poste et crée un conflit d'adresse IP", "Pour réserver l'adresse au serveur DNS", "C'est obligatoire pour démarrer le service DHCP"],
+      "choices": [
+        "Pour accélérer l'attribution des baux",
+        "Pour éviter que l'adresse de la passerelle soit distribuée à un poste et crée un conflit d'adresse IP",
+        "Pour réserver l'adresse au serveur DNS",
+        "C'est obligatoire pour démarrer le service DHCP"
+      ],
       "answer": 1,
       "explication": "Sans exclusion, le serveur DHCP pourrait attribuer l'adresse du routeur à un client : les deux machines auraient la même IP et le LAN perdrait sa passerelle."
     },
     {
-      "id": "rte-020", "niveau": 2, "type": "qcm",
+      "id": "rte-020",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quel est l'effet de la commande « transport input ssh » sur les lignes VTY ?",
-      "choices": ["Elle autorise à la fois SSH et Telnet", "Elle n'accepte que les connexions SSH et refuse Telnet", "Elle redirige le trafic SSH vers le port console", "Elle active le serveur SSH sur le port 23"],
+      "choices": [
+        "Elle autorise à la fois SSH et Telnet",
+        "Elle n'accepte que les connexions SSH et refuse Telnet",
+        "Elle redirige le trafic SSH vers le port console",
+        "Elle active le serveur SSH sur le port 23"
+      ],
       "answer": 1,
       "explication": "Seul SSH est alors accepté en entrée sur les lignes virtuelles ; Telnet, qui transmet tout en clair, est refusé."
     },
     {
-      "id": "rte-021", "niveau": 1, "type": "qcm",
+      "id": "rte-021",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle convention d'adressage est couramment appliquée dans un LAN ?",
-      "choices": ["Les premières adresses pour les équipements réseau, les dernières pour les clients", "Les dernières adresses pour les équipements réseau, les premières pour les clients", "Des adresses choisies au hasard pour tous les équipements", "La même adresse pour le routeur et le switch"],
+      "choices": [
+        "Les premières adresses pour les équipements réseau, les dernières pour les clients",
+        "Les dernières adresses pour les équipements réseau, les premières pour les clients",
+        "Des adresses choisies au hasard pour tous les équipements",
+        "La même adresse pour le routeur et le switch"
+      ],
       "answer": 1,
       "explication": "Par convention, on réserve la fin de la plage aux équipements réseau (routeurs, switchs) et le début aux postes clients."
     },
     {
-      "id": "rte-022", "niveau": 3, "type": "terminal",
+      "id": "rte-022",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "Routeur(config-if)#",
       "q": "L'interface GigabitEthernet0/0 est administrativement désactivée (administratively down). Activez-la.",
-      "accept": ["no shutdown", "no shut"],
+      "accept": [
+        "no shutdown",
+        "no shut"
+      ],
       "output": "%LINK-3-UPDOWN: Interface GigabitEthernet0/0, changed state to up\n%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up",
       "explication": "Par défaut, une interface de routeur est administrativement désactivée : « no shutdown » la met en service."
     },
     {
-      "id": "rte-023", "niveau": 3, "type": "terminal",
+      "id": "rte-023",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "Routeur#",
       "q": "Affichez la table de routage complète du routeur.",
-      "accept": ["show ip route", "sh ip route"],
+      "accept": [
+        "show ip route",
+        "sh ip route"
+      ],
       "output": "Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       * - candidate default\n\nGateway of last resort is not set\n\nC    192.168.10.0/24 is directly connected, GigabitEthernet0/0\nC    10.0.0.0/24 is directly connected, GigabitEthernet0/1\nS    172.16.150.0/24 [1/0] via 10.0.0.2",
       "explication": "show ip route liste les routes connectées (C), statiques (S) et dynamiques connues du routeur."
     },
     {
-      "id": "rte-024", "niveau": 3, "type": "qcm",
+      "id": "rte-024",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle est la syntaxe correcte pour ajouter une route statique vers le réseau 192.168.110.0/24 via le voisin 10.0.0.2 ?",
-      "choices": ["ip route 192.168.110.0 255.255.255.0 10.0.0.2", "ip route 10.0.0.2 192.168.110.0 255.255.255.0", "ip route 192.168.110.0 10.0.0.2 255.255.255.0", "ip route 192.168.110.0/24 via 10.0.0.2"],
+      "choices": [
+        "ip route 192.168.110.0 255.255.255.0 10.0.0.2",
+        "ip route 10.0.0.2 192.168.110.0 255.255.255.0",
+        "ip route 192.168.110.0 10.0.0.2 255.255.255.0",
+        "ip route 192.168.110.0/24 via 10.0.0.2"
+      ],
       "answer": 0,
       "explication": "L'ordre des arguments est : réseau de destination, masque, puis adresse du next hop (le routeur voisin par lequel transiter)."
     },
     {
-      "id": "rte-025", "niveau": 3, "type": "ordre",
+      "id": "rte-025",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre habituel (procédure type) les étapes de configuration de l'interface LAN d'un routeur Cisco.",
-      "steps": ["enable", "configure terminal", "interface gigabitEthernet0/0", "ip address 192.168.1.1 255.255.255.0", "no shutdown"],
+      "steps": [
+        "enable",
+        "configure terminal",
+        "interface gigabitEthernet0/0",
+        "ip address 192.168.1.1 255.255.255.0",
+        "no shutdown"
+      ],
       "explication": "On passe d'abord en mode privilégié puis en configuration globale, on entre dans l'interface, on lui affecte une adresse et enfin on l'active."
     },
     {
-      "id": "rte-026", "niveau": 3, "type": "ordre",
+      "id": "rte-026",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre recommandé les étapes de mise en place de SSH sur un routeur Cisco.",
-      "steps": ["ip domain-name mondomaine.local", "username admin privilege 15 secret MonMotDePasse", "crypto key generate rsa", "ip ssh version 2", "line vty 0 4 puis login local et transport input ssh"],
+      "steps": [
+        "ip domain-name mondomaine.local",
+        "username admin privilege 15 secret MonMotDePasse",
+        "crypto key generate rsa",
+        "ip ssh version 2",
+        "line vty 0 4 puis login local et transport input ssh"
+      ],
       "explication": "Le nom de domaine est indispensable avant la génération des clés RSA ; on force ensuite la version 2 puis on restreint les lignes VTY au seul SSH."
     },
     {
-      "id": "rte-027", "niveau": 3, "type": "terminal",
+      "id": "rte-027",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "Routeur#",
       "q": "Affichez les baux DHCP actifs (les postes ayant obtenu une adresse IP).",
-      "accept": ["show ip dhcp binding", "sh ip dhcp binding"],
+      "accept": [
+        "show ip dhcp binding",
+        "sh ip dhcp binding"
+      ],
       "output": "Bindings from all pools not associated with VRF:\nIP address          Client-ID/              Lease expiration        Type\n                    Hardware address/\n                    User name\n192.168.10.1        0100.5056.ab12.34       Jul 31 2026 09:14 AM    Automatic\n192.168.10.2        0100.5056.cd56.78       Jul 31 2026 09:21 AM    Automatic",
       "explication": "show ip dhcp binding liste les adresses attribuées par le routeur ; show ip dhcp pool sert, lui, à vérifier la configuration du pool."
     },
     {
-      "id": "rte-028", "niveau": 3, "type": "qcm",
+      "id": "rte-028",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle séquence de commandes réinitialise complètement un routeur Cisco en supprimant sa configuration de démarrage ?",
-      "choices": ["erase startup-config puis reload", "delete running-config puis restart", "format flash puis shutdown", "clear config all puis reboot"],
+      "choices": [
+        "erase startup-config puis reload",
+        "delete running-config puis restart",
+        "format flash puis shutdown",
+        "clear config all puis reboot"
+      ],
       "answer": 0,
       "explication": "erase startup-config efface la configuration stockée en NVRAM, puis reload redémarre le routeur, qui repart alors avec une configuration vierge."
     },
     {
-      "id": "rte-029", "niveau": 3, "type": "assoc",
+      "id": "rte-029",
+      "niveau": 3,
+      "type": "assoc",
       "q": "Associez chaque commande de vérification à son rôle.",
       "pairs": [
-        ["show ip interface brief", "État UP/DOWN et adresses IP des interfaces"],
-        ["show ip route", "Contenu de la table de routage"],
-        ["show ip dhcp binding", "Baux DHCP actifs"],
-        ["ipconfig /all", "Configuration réseau complète d'un poste Windows"]
+        [
+          "show ip interface brief",
+          "État UP/DOWN et adresses IP des interfaces"
+        ],
+        [
+          "show ip route",
+          "Contenu de la table de routage"
+        ],
+        [
+          "show ip dhcp binding",
+          "Baux DHCP actifs"
+        ],
+        [
+          "ipconfig /all",
+          "Configuration réseau complète d'un poste Windows"
+        ]
       ],
       "explication": "Les trois premières commandes s'exécutent sur le routeur Cisco ; ipconfig /all s'exécute côté client Windows pour vérifier IP, passerelle et serveur DHCP reçus."
     },
     {
-      "id": "rte-030", "niveau": 3, "type": "qcm",
+      "id": "rte-030",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande est équivalente à « write memory » pour sauvegarder la configuration ?",
-      "choices": ["copy running-config startup-config", "copy startup-config running-config", "save config nvram", "backup running-config"],
+      "choices": [
+        "copy running-config startup-config",
+        "copy startup-config running-config",
+        "save config nvram",
+        "backup running-config"
+      ],
       "answer": 0,
       "explication": "Les deux copient la configuration courante vers la startup-config en NVRAM, lue au démarrage ; « copy startup-config running-config » ferait l'inverse."
     },
     {
-      "id": "rte-031", "niveau": 4, "type": "scenario",
+      "id": "rte-031",
+      "niveau": 4,
+      "type": "scenario",
       "context": "RX# show ip interface brief\nInterface              IP-Address       Status                  Protocol\nGigabitEthernet0/0     192.168.10.254   administratively down   down\nGigabitEthernet0/1     10.0.0.1         up                      up",
       "q": "Les postes du LAN ne joignent plus leur passerelle. D'après cette sortie, quelle action corrige le problème ?",
-      "choices": ["Entrer dans l'interface GigabitEthernet0/0 et lancer « no shutdown »", "Ajouter une route par défaut vers 10.0.0.2", "Configurer l'interface G0/0 en DHCP client", "Redémarrer le routeur avec « reload »"],
+      "choices": [
+        "Entrer dans l'interface GigabitEthernet0/0 et lancer « no shutdown »",
+        "Ajouter une route par défaut vers 10.0.0.2",
+        "Configurer l'interface G0/0 en DHCP client",
+        "Redémarrer le routeur avec « reload »"
+      ],
       "answer": 0,
       "explication": "L'état « administratively down » signifie que le port n'a pas été activé : il faut entrer dans l'interface et exécuter no shutdown."
     },
     {
-      "id": "rte-032", "niveau": 4, "type": "scenario",
+      "id": "rte-032",
+      "niveau": 4,
+      "type": "scenario",
       "context": "PC Admin → connexion SSH vers 192.168.10.254 :\n« Connection refused »\nSur le routeur : l'utilisateur (username ... privilege 15 secret ...) et les lignes VTY (login local, transport input ssh) sont bien configurés.",
       "q": "Quelle est la cause la plus probable de ce refus de connexion SSH ?",
-      "choices": ["Les clés RSA n'ont pas été générées (crypto key generate rsa)", "Le mot de passe de l'utilisateur est trop court", "Le pool DHCP n'est pas créé sur le routeur", "Le câble console est débranché"],
+      "choices": [
+        "Les clés RSA n'ont pas été générées (crypto key generate rsa)",
+        "Le mot de passe de l'utilisateur est trop court",
+        "Le pool DHCP n'est pas créé sur le routeur",
+        "Le câble console est débranché"
+      ],
       "answer": 0,
       "explication": "Sans clés RSA, le service SSH n'est pas actif et le routeur refuse la connexion ; le câble console n'intervient pas dans un accès SSH."
     },
     {
-      "id": "rte-033", "niveau": 4, "type": "scenario",
+      "id": "rte-033",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Depuis le terminal Windows natif :\nC:\\> ssh admin@192.168.10.254\nUnable to negotiate with 192.168.10.254: no matching key exchange method found (kex algorithm)",
       "q": "Pourquoi cette erreur apparaît-elle et quelle est la solution la plus simple ?",
-      "choices": ["Le routeur, sous IOS obsolète, ne propose que SHA-1, refusé par les clients SSH modernes : utiliser MobaXterm, qui négocie automatiquement ces anciens algorithmes", "Le mot de passe saisi est incorrect : le ressaisir", "Le port SSH du routeur est fermé : refaire le câblage", "Une route statique manque : ajouter une commande ip route"],
+      "choices": [
+        "Le routeur, sous IOS obsolète, ne propose que SHA-1, refusé par les clients SSH modernes : utiliser MobaXterm, qui négocie automatiquement ces anciens algorithmes",
+        "Le mot de passe saisi est incorrect : le ressaisir",
+        "Le port SSH du routeur est fermé : refaire le câblage",
+        "Une route statique manque : ajouter une commande ip route"
+      ],
       "answer": 0,
       "explication": "Les vieux IOS Cisco n'utilisent que SHA-1, bloqué par défaut par les clients SSH récents ; MobaXterm accepte de négocier ces algorithmes sans configuration manuelle."
     },
     {
-      "id": "rte-034", "niveau": 4, "type": "scenario",
+      "id": "rte-034",
+      "niveau": 4,
+      "type": "scenario",
       "context": "RX# ping 172.16.150.1\nSuccess rate is 0 percent (0/5)\nRX# show ip route\nC    192.168.10.0/24 is directly connected, GigabitEthernet0/0\nC    10.0.0.0/24 is directly connected, GigabitEthernet0/1",
       "q": "Le ping vers le LAN distant 172.16.150.0/24 échoue depuis le routeur. Que manque-t-il ?",
-      "choices": ["Une route statique : ip route 172.16.150.0 255.255.255.0 IP_NEXT_HOP", "Un pool DHCP pour le réseau 172.16.150.0", "La commande no shutdown sur la ligne console", "Un serveur DNS dans la configuration"],
+      "choices": [
+        "Une route statique : ip route 172.16.150.0 255.255.255.0 IP_NEXT_HOP",
+        "Un pool DHCP pour le réseau 172.16.150.0",
+        "La commande no shutdown sur la ligne console",
+        "Un serveur DNS dans la configuration"
+      ],
       "answer": 0,
       "explication": "La table ne contient que les routes connectées : sans route statique (ou dynamique) vers 172.16.150.0/24, le routeur détruit les paquets faute de destination connue."
     },
     {
-      "id": "rte-035", "niveau": 4, "type": "scenario",
+      "id": "rte-035",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Depuis le routeur R1 : ping vers le LAN distant → OK.\nDepuis un poste client du LAN de R1 (adresse IP et passerelle correctes, vérifiées avec ipconfig /all) : ping vers le même LAN distant → échec.\nLa route statique aller est bien présente sur R1.",
       "q": "Quelle cause faut-il vérifier en priorité ?",
-      "choices": ["Le routeur distant n'a pas de route de retour vers votre LAN", "Le masque de sous-réseau du poste client est trop grand", "Le switch bloque le protocole ICMP", "La passerelle du poste doit être l'adresse du routeur distant"],
+      "choices": [
+        "Le routeur distant n'a pas de route de retour vers votre LAN",
+        "Le masque de sous-réseau du poste client est trop grand",
+        "Le switch bloque le protocole ICMP",
+        "La passerelle du poste doit être l'adresse du routeur distant"
+      ],
       "answer": 0,
       "explication": "Le paquet du client atteint le LAN distant, mais la réponse ne peut pas revenir si le routeur distant ne connaît pas de route vers votre réseau : il faut se coordonner avec le groupe qui l'administre."
     }

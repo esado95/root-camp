@@ -1,201 +1,420 @@
 {
   "module": "ACL",
-  "source": "ACL.md",
   "questions": [
     {
-      "id": "acl-001", "niveau": 1, "type": "qcm",
+      "id": "acl-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Qu'est-ce qu'une ACL sur un routeur Cisco ?",
-      "choices": ["Une liste ordonnée de règles qui autorisent ou interdisent le passage des paquets IP", "Une table de correspondance entre adresses MAC et ports du switch", "Un protocole de routage dynamique sécurisé", "La liste des utilisateurs autorisés à se connecter au routeur"],
+      "choices": [
+        "Une liste ordonnée de règles qui autorisent ou interdisent le passage des paquets IP",
+        "Une table de correspondance entre adresses MAC et ports du switch",
+        "Un protocole de routage dynamique sécurisé",
+        "La liste des utilisateurs autorisés à se connecter au routeur"
+      ],
       "answer": 0,
       "explication": "Une ACL (Access Control List) est une liste ordonnée de règles permit/deny appliquée aux interfaces d'un routeur pour filtrer les paquets IP."
     },
     {
-      "id": "acl-002", "niveau": 1, "type": "qcm",
+      "id": "acl-002",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle plage de numéros identifie une ACL standard ?",
-      "choices": ["1 à 99 (et 1300 à 1999)", "100 à 199 (et 2000 à 2699)", "1 à 199", "200 à 299"],
+      "choices": [
+        "1 à 99 (et 1300 à 1999)",
+        "100 à 199 (et 2000 à 2699)",
+        "1 à 199",
+        "200 à 299"
+      ],
       "answer": 0,
       "explication": "Les ACL standard utilisent les numéros 1 à 99, avec la plage additionnelle 1300 à 1999."
     },
     {
-      "id": "acl-003", "niveau": 1, "type": "qcm",
+      "id": "acl-003",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle plage de numéros identifie une ACL étendue ?",
-      "choices": ["100 à 199 (et 2000 à 2699)", "1 à 99 (et 1300 à 1999)", "300 à 399", "1 à 999"],
+      "choices": [
+        "100 à 199 (et 2000 à 2699)",
+        "1 à 99 (et 1300 à 1999)",
+        "300 à 399",
+        "1 à 999"
+      ],
       "answer": 0,
       "explication": "Les ACL étendues utilisent les numéros 100 à 199, avec la plage additionnelle 2000 à 2699."
     },
     {
-      "id": "acl-004", "niveau": 1, "type": "qcm",
+      "id": "acl-004",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Sur quel critère une ACL standard filtre-t-elle le trafic ?",
-      "choices": ["Uniquement l'adresse IP source", "L'adresse source et le port de destination", "Uniquement l'adresse IP de destination", "Le protocole et le port"],
+      "choices": [
+        "Uniquement l'adresse IP source",
+        "L'adresse source et le port de destination",
+        "Uniquement l'adresse IP de destination",
+        "Le protocole et le port"
+      ],
       "answer": 0,
       "explication": "Une ACL standard ne regarde que l'adresse source du paquet : son filtrage est donc grossier, elle bloque ou autorise tout le trafic venant de cette source."
     },
     {
-      "id": "acl-005", "niveau": 1, "type": "multi",
+      "id": "acl-005",
+      "niveau": 1,
+      "type": "multi",
       "q": "Quels critères une ACL étendue peut-elle vérifier ? (plusieurs réponses)",
-      "choices": ["L'adresse IP source", "L'adresse IP de destination", "Le protocole (TCP, UDP, ICMP) et le port", "L'adresse MAC de la carte réseau", "Le nom de l'utilisateur connecté"],
-      "answer": [0, 1, 2],
+      "choices": [
+        "L'adresse IP source",
+        "L'adresse IP de destination",
+        "Le protocole (TCP, UDP, ICMP) et le port",
+        "L'adresse MAC de la carte réseau",
+        "Le nom de l'utilisateur connecté"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "L'ACL étendue vérifie la source, la destination, le protocole et le port, ce qui permet un filtrage très précis (ex. bloquer le Web mais laisser passer le ping)."
     },
     {
-      "id": "acl-006", "niveau": 1, "type": "qcm",
+      "id": "acl-006",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Comment appelle-t-on chaque règle individuelle qui compose une ACL ?",
-      "choices": ["Une ACE (Access Control Entry)", "Une ACE (Access Control Extension)", "Une ACR (Access Control Rule)", "Une ACS (Access Control Statement)"],
+      "choices": [
+        "Une ACE (Access Control Entry)",
+        "Une ACE (Access Control Extension)",
+        "Une ACR (Access Control Rule)",
+        "Une ACS (Access Control Statement)"
+      ],
       "answer": 0,
       "explication": "Une ACL est une suite d'ACE, Access Control Entries : chaque ligne permit ou deny est une entrée de contrôle d'accès."
     },
     {
-      "id": "acl-007", "niveau": 1, "type": "qcm",
+      "id": "acl-007",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle contrainte s'applique au nom d'une ACL nommée (alphanumérique) ?",
-      "choices": ["Il ne doit contenir ni espace ni ponctuation", "Il doit obligatoirement commencer par un chiffre", "Il est limité à 8 caractères", "Il doit être écrit entièrement en majuscules"],
+      "choices": [
+        "Il ne doit contenir ni espace ni ponctuation",
+        "Il doit obligatoirement commencer par un chiffre",
+        "Il est limité à 8 caractères",
+        "Il doit être écrit entièrement en majuscules"
+      ],
       "answer": 0,
       "explication": "Le nom d'une ACL nommée s'écrit sans espace ni ponctuation, par exemple : ip access-list extended list-srv."
     },
     {
-      "id": "acl-008", "niveau": 1, "type": "assoc",
+      "id": "acl-008",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque protocole applicatif à son port par défaut, tel qu'utilisé dans les ACL étendues.",
-      "pairs": [["HTTP", "80"], ["HTTPS", "443"], ["DNS", "53"]],
+      "pairs": [
+        [
+          "HTTP",
+          "80"
+        ],
+        [
+          "HTTPS",
+          "443"
+        ],
+        [
+          "DNS",
+          "53"
+        ]
+      ],
       "explication": "Une ACL étendue filtre par port avec le mot-clé eq : eq 80 pour HTTP, eq 443 pour HTTPS, eq 53 pour DNS."
     },
     {
-      "id": "acl-009", "niveau": 1, "type": "libre",
+      "id": "acl-009",
+      "niveau": 1,
+      "type": "libre",
       "q": "Dans une ACL Cisco, quel mot-clé permet de désigner une adresse IP unique (par exemple un serveur précis) ?",
-      "accept": ["host"],
+      "accept": [
+        "host"
+      ],
       "explication": "Le mot-clé host désigne une machine unique : access-list 10 permit host 192.168.99.50 équivaut à un masque wildcard 0.0.0.0."
     },
     {
-      "id": "acl-010", "niveau": 2, "type": "qcm",
+      "id": "acl-010",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Que devient un paquet qui ne correspond à aucune règle d'une ACL ?",
-      "choices": ["Il est rejeté par la règle deny ip any any implicite de fin de liste", "Il est transmis normalement", "Il est mis en file d'attente jusqu'à modification de l'ACL", "Il est renvoyé à l'expéditeur avec un message d'erreur"],
+      "choices": [
+        "Il est rejeté par la règle deny ip any any implicite de fin de liste",
+        "Il est transmis normalement",
+        "Il est mis en file d'attente jusqu'à modification de l'ACL",
+        "Il est renvoyé à l'expéditeur avec un message d'erreur"
+      ],
       "answer": 0,
       "explication": "Chaque ACL se termine par une règle invisible qui interdit tout le reste (deny ip any any) : tout paquet non explicitement autorisé est supprimé."
     },
     {
-      "id": "acl-011", "niveau": 2, "type": "qcm",
+      "id": "acl-011",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Une ACL ne contenant que des lignes deny est appliquée sur une interface. Quel est l'effet ?",
-      "choices": ["Tout le trafic est bloqué, y compris le trafic légitime", "Seul le trafic listé est bloqué, le reste passe librement", "Le routeur refuse d'appliquer l'ACL", "Le trafic est ralenti mais continue de passer"],
+      "choices": [
+        "Tout le trafic est bloqué, y compris le trafic légitime",
+        "Seul le trafic listé est bloqué, le reste passe librement",
+        "Le routeur refuse d'appliquer l'ACL",
+        "Le trafic est ralenti mais continue de passer"
+      ],
       "answer": 0,
       "explication": "Combinée au deny implicite de fin de liste, une ACL sans aucun permit bloque absolument tout : il faut au moins une ligne permit, souvent un permit ip any any final."
     },
     {
-      "id": "acl-012", "niveau": 2, "type": "qcm",
+      "id": "acl-012",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi place-t-on une ACL étendue au plus près de la source ?",
-      "choices": ["Pour éviter de faire voyager sur le réseau un paquet qui sera de toute façon bloqué à l'arrivée", "Parce que le routeur de destination ne supporte pas les ACL étendues", "Pour que la règle s'applique à toutes les destinations possibles", "Parce qu'une ACL étendue ne connaît pas l'adresse de destination"],
+      "choices": [
+        "Pour éviter de faire voyager sur le réseau un paquet qui sera de toute façon bloqué à l'arrivée",
+        "Parce que le routeur de destination ne supporte pas les ACL étendues",
+        "Pour que la règle s'applique à toutes les destinations possibles",
+        "Parce qu'une ACL étendue ne connaît pas l'adresse de destination"
+      ],
       "answer": 0,
       "explication": "L'ACL étendue connaît déjà la destination du trafic à bloquer : le supprimer dès la source évite de gaspiller de la bande passante inutilement."
     },
     {
-      "id": "acl-013", "niveau": 2, "type": "qcm",
+      "id": "acl-013",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi une ACL standard doit-elle être placée au plus près de la destination ?",
-      "choices": ["Ne vérifiant que la source, placée près de la source elle bloquerait cette source pour toutes les destinations", "Elle consomme trop de mémoire sur le premier routeur du chemin", "Elle filtre sur le port de destination, connu seulement à l'arrivée", "Le sens IN n'existe pas pour les ACL standard"],
+      "choices": [
+        "Ne vérifiant que la source, placée près de la source elle bloquerait cette source pour toutes les destinations",
+        "Elle consomme trop de mémoire sur le premier routeur du chemin",
+        "Elle filtre sur le port de destination, connu seulement à l'arrivée",
+        "Le sens IN n'existe pas pour les ACL standard"
+      ],
       "answer": 0,
       "explication": "Une ACL standard ne filtre que sur la source : placée trop tôt, elle couperait aussi l'accès à Internet et aux autres réseaux, pas seulement à la destination visée."
     },
     {
-      "id": "acl-014", "niveau": 2, "type": "qcm",
+      "id": "acl-014",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi recommande-t-on de filtrer en sens IN plutôt qu'en OUT quand c'est possible ?",
-      "choices": ["Un paquet rejeté dès son entrée dans le routeur n'a pas gaspillé de ressources processeur à être routé pour rien", "Le sens OUT ne permet pas de bloquer le trafic TCP", "Le sens IN est le seul compatible avec les ACL étendues", "Le filtrage IN chiffre les paquets rejetés"],
+      "choices": [
+        "Un paquet rejeté dès son entrée dans le routeur n'a pas gaspillé de ressources processeur à être routé pour rien",
+        "Le sens OUT ne permet pas de bloquer le trafic TCP",
+        "Le sens IN est le seul compatible avec les ACL étendues",
+        "Le filtrage IN chiffre les paquets rejetés"
+      ],
       "answer": 0,
       "explication": "En sens IN, le filtrage a lieu avant la décision de routage : un paquet condamné est supprimé immédiatement, sans consommer de CPU pour un routage inutile."
     },
     {
-      "id": "acl-015", "niveau": 2, "type": "multi",
+      "id": "acl-015",
+      "niveau": 2,
+      "type": "multi",
       "q": "Dans quels cas le sens OUT est-il principalement utilisé ? (plusieurs réponses)",
-      "choices": ["Sur le point de sortie commun du réseau, comme le port WAN vers Internet", "Avec une ACL standard placée au plus près de la destination", "Pour rejeter les paquets avant la décision de routage", "Pour économiser les ressources processeur du routeur"],
-      "answer": [0, 1],
+      "choices": [
+        "Sur le point de sortie commun du réseau, comme le port WAN vers Internet",
+        "Avec une ACL standard placée au plus près de la destination",
+        "Pour rejeter les paquets avant la décision de routage",
+        "Pour économiser les ressources processeur du routeur"
+      ],
+      "answer": [
+        0,
+        1
+      ],
       "explication": "Le sens OUT sert surtout sur un point de sortie commun (ex. port WAN) ou pour une ACL standard appliquée près de la destination ; le filtrage avant routage et l'économie de CPU sont au contraire les atouts du sens IN."
     },
     {
-      "id": "acl-016", "niveau": 2, "type": "qcm",
+      "id": "acl-016",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quel avantage pratique offre une ACL nommée par rapport à une ACL numérotée classique ?",
-      "choices": ["On entre dans un mode de configuration dédié et on ajoute les règles ligne après ligne sans répéter la commande access-list", "Elle ne possède pas de deny implicite en fin de liste", "Elle peut aussi filtrer les adresses MAC", "Elle est appliquée automatiquement à toutes les interfaces"],
+      "choices": [
+        "On entre dans un mode de configuration dédié et on ajoute les règles ligne après ligne sans répéter la commande access-list",
+        "Elle ne possède pas de deny implicite en fin de liste",
+        "Elle peut aussi filtrer les adresses MAC",
+        "Elle est appliquée automatiquement à toutes les interfaces"
+      ],
       "answer": 0,
       "explication": "Après ip access-list extended nom-liste, les règles s'ajoutent les unes après les autres sans redéclarer l'access-list à chaque ligne ; le deny implicite reste présent."
     },
     {
-      "id": "acl-017", "niveau": 2, "type": "assoc",
+      "id": "acl-017",
+      "niveau": 2,
+      "type": "assoc",
       "q": "Associez chaque notion à sa caractéristique.",
-      "pairs": [["ACL standard", "Se place au plus près de la destination"], ["ACL étendue", "Se place au plus près de la source"], ["Sens IN", "Filtrage avant la décision de routage"], ["Sens OUT", "Filtrage après la décision de routage"]],
+      "pairs": [
+        [
+          "ACL standard",
+          "Se place au plus près de la destination"
+        ],
+        [
+          "ACL étendue",
+          "Se place au plus près de la source"
+        ],
+        [
+          "Sens IN",
+          "Filtrage avant la décision de routage"
+        ],
+        [
+          "Sens OUT",
+          "Filtrage après la décision de routage"
+        ]
+      ],
       "explication": "L'ACL étendue se place près de la source car elle connaît la destination ; l'ACL standard près de la destination car elle ne vérifie que la source. IN filtre le paquet qui entre dans le routeur, OUT celui qui en sort."
     },
     {
-      "id": "acl-018", "niveau": 3, "type": "terminal",
+      "id": "acl-018",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "Routeur#",
       "q": "Affichez toutes les ACL configurées avec le nombre de correspondances (matchs) par règle.",
-      "accept": ["show access-lists", "show access-list", "sh access-lists", "sh access-list", "show ip access-lists"],
+      "accept": [
+        "show access-lists",
+        "show access-list",
+        "sh access-lists",
+        "sh access-list",
+        "show ip access-lists"
+      ],
       "output": "Extended IP access list 105\n    10 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq www (24 matches)\n    20 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 443 (7 matches)\n    30 permit ip any any (1382 matches)",
       "explication": "show access-lists liste toutes les ACL et le compteur de matchs de chaque règle, très utile pour vérifier qu'une règle se déclenche bien."
     },
     {
-      "id": "acl-019", "niveau": 3, "type": "terminal",
+      "id": "acl-019",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "Routeur(config-if)#",
       "q": "Appliquez l'ACL numéro 105 en entrée sur l'interface en cours de configuration.",
-      "accept": ["ip access-group 105 in"],
+      "accept": [
+        "ip access-group 105 in"
+      ],
       "explication": "Une ACL ne devient active qu'une fois associée à une interface et à un sens avec ip access-group numéro in|out."
     },
     {
-      "id": "acl-020", "niveau": 3, "type": "qcm",
+      "id": "acl-020",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande crée une ACL standard autorisant tout le réseau 192.168.10.0/24 ?",
-      "choices": ["access-list 10 permit 192.168.10.0 0.0.0.255", "access-list 10 permit 192.168.10.0 255.255.255.0", "access-list 110 permit 192.168.10.0 0.0.0.255", "access-list 10 permit ip 192.168.10.0 0.0.0.255"],
+      "choices": [
+        "access-list 10 permit 192.168.10.0 0.0.0.255",
+        "access-list 10 permit 192.168.10.0 255.255.255.0",
+        "access-list 110 permit 192.168.10.0 0.0.0.255",
+        "access-list 10 permit ip 192.168.10.0 0.0.0.255"
+      ],
       "answer": 0,
       "explication": "Une ACL standard porte un numéro de 1 à 99, utilise le masque wildcard (0.0.0.255 pour un /24) et ne précise pas de protocole."
     },
     {
-      "id": "acl-021", "niveau": 3, "type": "qcm",
+      "id": "acl-021",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle ligne interdit le trafic HTTP du réseau 192.168.10.0/24 vers le serveur 192.168.51.100 ?",
-      "choices": ["access-list 105 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 80", "access-list 105 deny udp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 80", "access-list 10 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 80", "access-list 105 deny tcp host 192.168.51.100 192.168.10.0 0.0.0.255 eq 80"],
+      "choices": [
+        "access-list 105 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 80",
+        "access-list 105 deny udp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 80",
+        "access-list 10 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 80",
+        "access-list 105 deny tcp host 192.168.51.100 192.168.10.0 0.0.0.255 eq 80"
+      ],
       "answer": 0,
       "explication": "HTTP fonctionne en TCP sur le port 80, le filtrage par port exige une ACL étendue (100 à 199), et la syntaxe place la source avant la destination."
     },
     {
-      "id": "acl-022", "niveau": 3, "type": "ordre",
+      "id": "acl-022",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre les étapes pour interdire l'accès Web du VLAN 10 vers un serveur tout en autorisant le reste du trafic.",
-      "steps": ["Créer les règles deny tcp vers le serveur pour les ports 80 et 443", "Terminer l'ACL par permit ip any any pour laisser passer le trafic légitime", "Entrer sur la sous-interface du VLAN source (interface fa0/0.10)", "Appliquer l'ACL avec ip access-group 105 in", "Vérifier les correspondances avec show access-lists"],
+      "steps": [
+        "Créer les règles deny tcp vers le serveur pour les ports 80 et 443",
+        "Terminer l'ACL par permit ip any any pour laisser passer le trafic légitime",
+        "Entrer sur la sous-interface du VLAN source (interface fa0/0.10)",
+        "Appliquer l'ACL avec ip access-group 105 in",
+        "Vérifier les correspondances avec show access-lists"
+      ],
       "explication": "On construit d'abord l'ACL complète (deny puis permit final), on l'applique ensuite au plus près de la source en sens IN, puis on vérifie les compteurs de matchs."
     },
     {
-      "id": "acl-023", "niveau": 3, "type": "qcm",
+      "id": "acl-023",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande permet de voir quelle ACL est appliquée en entrée (Inbound) ou en sortie (Outbound) sur l'interface fa0/0 ?",
-      "choices": ["show ip interface fa0/0", "show interfaces fa0/0", "show access-lists fa0/0", "show ip protocols"],
+      "choices": [
+        "show ip interface fa0/0",
+        "show interfaces fa0/0",
+        "show access-lists fa0/0",
+        "show ip protocols"
+      ],
       "answer": 0,
       "explication": "show ip interface affiche les ACL Inbound et Outbound de l'interface ; show interfaces ne montre que les statistiques physiques et show access-lists liste les règles sans indiquer l'interface."
     },
     {
-      "id": "acl-024", "niveau": 3, "type": "qcm",
+      "id": "acl-024",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande remet à zéro les compteurs de correspondances de l'ACL 105 ?",
-      "choices": ["clear ip access-list counters 105", "clear access-list 105", "reset ip access-list 105", "no ip access-list counters 105"],
+      "choices": [
+        "clear ip access-list counters 105",
+        "clear access-list 105",
+        "reset ip access-list 105",
+        "no ip access-list counters 105"
+      ],
       "answer": 0,
       "explication": "clear ip access-list counters remet les compteurs de matchs à zéro, ce qui facilite le suivi lors de nouveaux tests."
     },
     {
-      "id": "acl-025", "niveau": 4, "type": "scenario",
+      "id": "acl-025",
+      "niveau": 4,
+      "type": "scenario",
       "context": "access-list 120 deny tcp any host 192.168.51.100 eq 80\naccess-list 120 deny tcp any host 192.168.51.100 eq 443\n\ninterface fa0/0.10\n ip access-group 120 in",
       "q": "Depuis l'application de cette ACL, plus aucun poste du VLAN 10 ne peut communiquer avec les autres réseaux, même en ping ou en DNS. Pourquoi ?",
-      "choices": ["L'ACL ne contient que des deny : le deny ip any any implicite de fin de liste bloque tout le reste du trafic", "Le numéro 120 n'est pas valide pour une ACL étendue", "L'ACL aurait dû être appliquée en sens OUT", "Le mot-clé host est interdit dans une ACL étendue"],
+      "choices": [
+        "L'ACL ne contient que des deny : le deny ip any any implicite de fin de liste bloque tout le reste du trafic",
+        "Le numéro 120 n'est pas valide pour une ACL étendue",
+        "L'ACL aurait dû être appliquée en sens OUT",
+        "Le mot-clé host est interdit dans une ACL étendue"
+      ],
       "answer": 0,
       "explication": "Sans ligne permit, le deny implicite rejette tout le trafic non listé : il faut terminer par permit ip any any pour laisser passer le trafic légitime."
     },
     {
-      "id": "acl-026", "niveau": 4, "type": "scenario",
+      "id": "acl-026",
+      "niveau": 4,
+      "type": "scenario",
       "context": "access-list 20 deny 192.168.10.0 0.0.0.255\naccess-list 20 permit any\n\ninterface fa0/0.10\n ip access-group 20 in",
       "q": "Objectif : empêcher uniquement le réseau 192.168.10.0/24 d'atteindre le serveur 192.168.50.10. Résultat constaté : le VLAN 10 n'accède plus ni à Internet ni aux autres VLAN. Quelle est l'erreur ?",
-      "choices": ["L'ACL standard est placée près de la source : elle bloque le réseau 10 vers toutes les destinations, il fallait l'appliquer près de la destination en sens OUT", "Il manque le protocole tcp dans la première ligne", "Le masque wildcard 0.0.0.255 est incorrect pour un /24", "La ligne permit any est inutile car le permit est implicite en fin de liste"],
+      "choices": [
+        "L'ACL standard est placée près de la source : elle bloque le réseau 10 vers toutes les destinations, il fallait l'appliquer près de la destination en sens OUT",
+        "Il manque le protocole tcp dans la première ligne",
+        "Le masque wildcard 0.0.0.255 est incorrect pour un /24",
+        "La ligne permit any est inutile car le permit est implicite en fin de liste"
+      ],
       "answer": 0,
       "explication": "Une ACL standard ne vérifie que la source : appliquée à l'entrée du VLAN 10, elle coupe toutes ses communications. Il faut la placer sur l'interface du réseau de destination, en OUT."
     },
     {
-      "id": "acl-027", "niveau": 4, "type": "scenario",
+      "id": "acl-027",
+      "niveau": 4,
+      "type": "scenario",
       "context": "R1# show access-lists\nExtended IP access list 105\n    10 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq www\n    20 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 443\n    30 permit ip any any\n\nR1# show ip interface fa0/0.10 | include access list\n  Outgoing access list is not set\n  Inbound  access list is not set",
       "q": "L'ACL 105 est censée bloquer l'accès Web du VLAN 10, mais les utilisateurs y accèdent toujours et aucun compteur de match n'augmente. Quelle est la cause ?",
-      "choices": ["L'ACL est créée mais n'a jamais été appliquée à l'interface avec ip access-group", "Le deny implicite annule les lignes deny explicites", "Le mot-clé www n'existe pas, il faut obligatoirement écrire eq 80", "Une ACL numérotée 105 ne peut pas filtrer sur un port"],
+      "choices": [
+        "L'ACL est créée mais n'a jamais été appliquée à l'interface avec ip access-group",
+        "Le deny implicite annule les lignes deny explicites",
+        "Le mot-clé www n'existe pas, il faut obligatoirement écrire eq 80",
+        "Une ACL numérotée 105 ne peut pas filtrer sur un port"
+      ],
       "answer": 0,
       "explication": "Une ACL configurée n'a aucun effet tant qu'elle n'est pas associée à une interface et à un sens : show ip interface montre ici qu'aucune ACL n'est appliquée sur fa0/0.10."
     },
     {
-      "id": "acl-028", "niveau": 4, "type": "scenario",
+      "id": "acl-028",
+      "niveau": 4,
+      "type": "scenario",
       "context": "access-list 130 permit ip any any\naccess-list 130 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 80\n\ninterface fa0/0.10\n ip access-group 130 in",
       "q": "Le trafic HTTP vers le serveur 192.168.51.100 n'est jamais bloqué et le compteur de la ligne deny reste à zéro. Pourquoi ?",
-      "choices": ["Les règles sont évaluées dans l'ordre : le permit ip any any placé en premier intercepte tout le trafic avant la ligne deny", "Une ACL ne peut pas mélanger des lignes permit et deny", "Le sens IN ne permet pas de filtrer sur le port 80", "Le deny implicite est prioritaire sur les règles explicites"],
+      "choices": [
+        "Les règles sont évaluées dans l'ordre : le permit ip any any placé en premier intercepte tout le trafic avant la ligne deny",
+        "Une ACL ne peut pas mélanger des lignes permit et deny",
+        "Le sens IN ne permet pas de filtrer sur le port 80",
+        "Le deny implicite est prioritaire sur les règles explicites"
+      ],
       "answer": 0,
       "explication": "Une ACL est une liste ordonnée lue de haut en bas : la première règle correspondante s'applique. Les lignes deny spécifiques doivent donc précéder le permit ip any any final."
     }

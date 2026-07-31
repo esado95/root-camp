@@ -118,7 +118,7 @@ tools/validate_bank.py      validation structurelle de toute la banque
 - **Validateur automatique** : `python tools/validate_bank.py` — schéma des 8 types, bornes des
   réponses, unicité des 906 identifiants, cohérence du manifest ;
 - banque **versionnée** : mise à jour des questions sans vider le cache de personne ;
-- questions **sourcées** : chaque explication cite la fiche de cours d'origine.
+- questions **sourcées** : chaque question est reliée en interne à sa fiche de cours d'origine (traçabilité de la banque).
 
 ---
 

@@ -1,6 +1,5 @@
 {
   "module": "DNS, IIS & hébergement",
-  "source": "Procedure-DNS-IIS.md + Hebergement-Cours.md",
   "questions": [
     {
       "id": "iis-001",
@@ -22,10 +21,22 @@
       "type": "assoc",
       "q": "Associez chaque type d'hébergement à sa description.",
       "pairs": [
-        ["Mutualisé (partagé)", "Plusieurs sites cohabitent sur un même serveur"],
-        ["Dédié", "Serveur physique réservé à une seule entreprise"],
-        ["VPS", "Serveur virtualisé, souple et scalable"],
-        ["Cloud", "Infrastructure distante chez un prestataire"]
+        [
+          "Mutualisé (partagé)",
+          "Plusieurs sites cohabitent sur un même serveur"
+        ],
+        [
+          "Dédié",
+          "Serveur physique réservé à une seule entreprise"
+        ],
+        [
+          "VPS",
+          "Serveur virtualisé, souple et scalable"
+        ],
+        [
+          "Cloud",
+          "Infrastructure distante chez un prestataire"
+        ]
       ],
       "explication": "Le mutualisé est économique mais peu flexible, le dédié offre une liberté totale mais coûte cher, le VPS est un compromis virtualisé, et le cloud mise sur la scalabilité au prix d'une dépendance au fournisseur."
     },
@@ -62,7 +73,9 @@
       "niveau": 1,
       "type": "libre",
       "q": "Quel type d'enregistrement DNS associe un nom d'hôte à une adresse IPv6 ?",
-      "accept": ["AAAA"],
+      "accept": [
+        "AAAA"
+      ],
       "explication": "L'enregistrement AAAA est l'équivalent IPv6 de l'enregistrement A, qui lui associe un nom à une adresse IPv4."
     },
     {
@@ -98,7 +111,12 @@
       "niveau": 1,
       "type": "libre",
       "q": "Quel est le port par défaut d'un site HTTP dans IIS ?",
-      "accept": ["80", "port 80", "tcp 80", "80/tcp"],
+      "accept": [
+        "80",
+        "port 80",
+        "tcp 80",
+        "80/tcp"
+      ],
       "explication": "HTTP utilise le port TCP 80 par défaut, ce qui permet d'accéder au site sans préciser le port dans l'URL."
     },
     {
@@ -106,7 +124,11 @@
       "niveau": 1,
       "type": "libre",
       "q": "Dans quel répertoire IIS stocke-t-il par défaut les sites web sous Windows Server ?",
-      "accept": ["C:\\inetpub", "C:\\inetpub\\", "inetpub"],
+      "accept": [
+        "C:\\inetpub",
+        "C:\\inetpub\\",
+        "inetpub"
+      ],
       "explication": "C:\\inetpub\\ est le répertoire par défaut d'IIS : on y crée un sous-dossier par site (ex : C:\\inetpub\\intranet)."
     },
     {
@@ -129,9 +151,18 @@
       "type": "assoc",
       "q": "Associez chaque port TCP à son rôle.",
       "pairs": [
-        ["21", "Canal de contrôle FTP (commandes, authentification)"],
-        ["20", "Canal de données FTP (transfert des fichiers)"],
-        ["80", "HTTP par défaut"]
+        [
+          "21",
+          "Canal de contrôle FTP (commandes, authentification)"
+        ],
+        [
+          "20",
+          "Canal de données FTP (transfert des fichiers)"
+        ],
+        [
+          "80",
+          "HTTP par défaut"
+        ]
       ],
       "explication": "Le FTP en mode actif utilise deux connexions distinctes : le port 21 pour les commandes et le port 20 pour les données ; le web non chiffré passe par le port 80."
     },
@@ -147,7 +178,10 @@
         "CNAME",
         "PTR"
       ],
-      "answer": [0, 1],
+      "answer": [
+        0,
+        1
+      ],
       "explication": "Toute zone doit posséder un SOA, qui définit l'autorité sur la zone, et un NS, qui nomme le serveur faisant autorité. A, CNAME et PTR sont facultatifs."
     },
     {
@@ -170,10 +204,22 @@
       "type": "assoc",
       "q": "Associez chaque type de zone DNS à sa description.",
       "pairs": [
-        ["Zone directe primaire", "Traduit les noms en IP, en lecture/écriture"],
-        ["Zone directe secondaire", "Copie en lecture seule qui allège le trafic"],
-        ["Zone de stub", "Ne contient que les enregistrements NS, sert de pointeur"],
-        ["Zone inversée", "Traduit les adresses IP en noms"]
+        [
+          "Zone directe primaire",
+          "Traduit les noms en IP, en lecture/écriture"
+        ],
+        [
+          "Zone directe secondaire",
+          "Copie en lecture seule qui allège le trafic"
+        ],
+        [
+          "Zone de stub",
+          "Ne contient que les enregistrements NS, sert de pointeur"
+        ],
+        [
+          "Zone inversée",
+          "Traduit les adresses IP en noms"
+        ]
       ],
       "explication": "Seule la zone primaire est modifiable ; la secondaire en est une réplique en lecture seule, la stub ne garde que les NS, et la zone inversée sert à la résolution IP vers nom."
     },
@@ -259,7 +305,11 @@
         "L'adresse MAC du client",
         "Le TTL DNS"
       ],
-      "answer": [0, 1, 2],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "Une liaison IIS combine nom d'hôte, port et adresse IP : ce sont les trois façons de rendre un site accessible et de le différencier des autres."
     },
     {
@@ -421,7 +471,10 @@
       "niveau": 3,
       "type": "libre",
       "q": "Quel nom de fichier donner à la page d'accueil d'un site IIS pour éviter une erreur 403 à la racine du site ?",
-      "accept": ["index.html", "index.htm"],
+      "accept": [
+        "index.html",
+        "index.htm"
+      ],
       "explication": "IIS cherche un document par défaut nommé index.html (ou index.htm) quand on accède au dossier ; sans lui, il renvoie 403 car il refuse de lister le contenu."
     },
     {

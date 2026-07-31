@@ -1,190 +1,398 @@
 {
   "module": "Adressage IP & CIDR",
-  "source": "04_Reseau/Adressage-IP-CIDR.md + Classes-IP.md",
   "questions": [
     {
-      "id": "adr-001", "niveau": 1, "type": "qcm",
+      "id": "adr-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Que signifie l'acronyme CIDR ?",
-      "choices": ["Classless Inter-Domain Routing", "Classful Internet Domain Range", "Central IP Distribution Registry", "Common Internet Data Routing"],
+      "choices": [
+        "Classless Inter-Domain Routing",
+        "Classful Internet Domain Range",
+        "Central IP Distribution Registry",
+        "Common Internet Data Routing"
+      ],
       "answer": 0,
       "explication": "CIDR = Classless Inter-Domain Routing : notation flexible du masque de /0 à /32, qui remplace le système rigide des classes."
     },
     {
-      "id": "adr-002", "niveau": 1, "type": "libre",
+      "id": "adr-002",
+      "niveau": 1,
+      "type": "libre",
       "q": "Écrivez le masque /24 en notation décimale",
-      "accept": ["255.255.255.0"],
+      "accept": [
+        "255.255.255.0"
+      ],
       "explication": "/24 = 24 bits à 1 → trois octets pleins : 255.255.255.0."
     },
     {
-      "id": "adr-003", "niveau": 1, "type": "qcm",
+      "id": "adr-003",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Combien de bits contient un octet ?",
-      "choices": ["4", "8", "16", "32"],
+      "choices": [
+        "4",
+        "8",
+        "16",
+        "32"
+      ],
       "answer": 1,
       "explication": "1 octet = 8 bits. Une adresse IPv4 = 4 octets = 32 bits."
     },
     {
-      "id": "adr-004", "niveau": 1, "type": "qcm",
+      "id": "adr-004",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle est l'adresse de loopback IPv4 standard ?",
-      "choices": ["0.0.0.0", "127.0.0.1", "169.254.0.1", "255.255.255.255"],
+      "choices": [
+        "0.0.0.0",
+        "127.0.0.1",
+        "169.254.0.1",
+        "255.255.255.255"
+      ],
       "answer": 1,
       "explication": "127.0.0.1 (plage 127.0.0.0/8) teste la pile TCP/IP locale. En IPv6 : ::1."
     },
     {
-      "id": "adr-005", "niveau": 1, "type": "assoc",
+      "id": "adr-005",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque classe d'adresse à son masque par défaut",
-      "pairs": [["Classe A", "255.0.0.0 (/8)"], ["Classe B", "255.255.0.0 (/16)"], ["Classe C", "255.255.255.0 (/24)"], ["Classe D", "Multicast — pas de masque"]],
+      "pairs": [
+        [
+          "Classe A",
+          "255.0.0.0 (/8)"
+        ],
+        [
+          "Classe B",
+          "255.255.0.0 (/16)"
+        ],
+        [
+          "Classe C",
+          "255.255.255.0 (/24)"
+        ],
+        [
+          "Classe D",
+          "Multicast — pas de masque"
+        ]
+      ],
       "explication": "A = /8 (très grands réseaux), B = /16, C = /24 (LAN), D = multicast 224–239, E = expérimental."
     },
     {
-      "id": "adr-006", "niveau": 1, "type": "multi",
+      "id": "adr-006",
+      "niveau": 1,
+      "type": "multi",
       "q": "Quelles plages font partie des adresses privées RFC 1918 ? (plusieurs réponses)",
-      "choices": ["10.0.0.0/8", "169.254.0.0/16", "172.16.0.0/12", "192.168.0.0/16", "100.64.0.0/10"],
-      "answer": [0, 2, 3],
+      "choices": [
+        "10.0.0.0/8",
+        "169.254.0.0/16",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "100.64.0.0/10"
+      ],
+      "answer": [
+        0,
+        2,
+        3
+      ],
       "explication": "RFC 1918 : 10/8, 172.16/12, 192.168/16. 169.254/16 = APIPA (link-local), 100.64/10 = CGN opérateur."
     },
     {
-      "id": "adr-007", "niveau": 1, "type": "qcm",
+      "id": "adr-007",
+      "niveau": 1,
+      "type": "qcm",
       "q": "À quoi correspond l'adresse 255.255.255.255 ?",
-      "choices": ["Le masque de la classe A", "Le broadcast limité (tout le réseau local)", "Une adresse privée", "La passerelle par défaut"],
+      "choices": [
+        "Le masque de la classe A",
+        "Le broadcast limité (tout le réseau local)",
+        "Une adresse privée",
+        "La passerelle par défaut"
+      ],
       "answer": 1,
       "explication": "255.255.255.255 = broadcast limité, reçu par tous les hôtes du segment local. Utilisé par DHCP Discover, par exemple."
     },
     {
-      "id": "adr-008", "niveau": 1, "type": "assoc",
+      "id": "adr-008",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque type de communication à son exemple",
-      "pairs": [["Unicast", "Session SSH vers un serveur"], ["Broadcast", "Requête ARP / DHCP Discover"], ["Multicast", "Streaming vidéo vers un groupe"]],
+      "pairs": [
+        [
+          "Unicast",
+          "Session SSH vers un serveur"
+        ],
+        [
+          "Broadcast",
+          "Requête ARP / DHCP Discover"
+        ],
+        [
+          "Multicast",
+          "Streaming vidéo vers un groupe"
+        ]
+      ],
       "explication": "Unicast = 1→1, broadcast = 1→tous les hôtes du LAN, multicast = 1→groupe (classe D, 224–239)."
     },
     {
-      "id": "adr-009", "niveau": 2, "type": "qcm",
+      "id": "adr-009",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quel est le rôle du masque de sous-réseau ?",
-      "choices": ["Chiffrer les communications du réseau", "Séparer la partie réseau de la partie hôte d'une adresse IP", "Cacher l'adresse IP aux pirates", "Accélérer la transmission des paquets"],
+      "choices": [
+        "Chiffrer les communications du réseau",
+        "Séparer la partie réseau de la partie hôte d'une adresse IP",
+        "Cacher l'adresse IP aux pirates",
+        "Accélérer la transmission des paquets"
+      ],
       "answer": 1,
       "explication": "Le masque délimite NET ID et HOST ID. Il permet à la machine de savoir si la destination est locale ou s'il faut passer par la passerelle."
     },
     {
-      "id": "adr-010", "niveau": 2, "type": "multi",
+      "id": "adr-010",
+      "niveau": 2,
+      "type": "multi",
       "q": "Quelles adresses d'un sous-réseau ne peuvent PAS être assignées à un hôte ? (plusieurs réponses)",
-      "choices": ["L'adresse réseau (IDSR)", "La première adresse hôte", "L'adresse de broadcast", "L'adresse de la passerelle"],
-      "answer": [0, 2],
+      "choices": [
+        "L'adresse réseau (IDSR)",
+        "La première adresse hôte",
+        "L'adresse de broadcast",
+        "L'adresse de la passerelle"
+      ],
+      "answer": [
+        0,
+        2
+      ],
       "explication": "IDSR (tous bits hôte à 0) et broadcast (tous bits hôte à 1) sont réservés. La passerelle est un hôte comme un autre — son adresse est assignable (et assignée au routeur)."
     },
     {
-      "id": "adr-011", "niveau": 2, "type": "qcm",
+      "id": "adr-011",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quel est le wildcard mask correspondant au masque 255.255.255.0 ?",
-      "choices": ["255.255.255.255", "0.0.0.255", "0.0.255.255", "255.0.0.0"],
+      "choices": [
+        "255.255.255.255",
+        "0.0.0.255",
+        "0.0.255.255",
+        "255.0.0.0"
+      ],
       "answer": 1,
       "explication": "Wildcard = inverse du masque : masque + wildcard = 255.255.255.255. Utilisé dans les ACL Cisco."
     },
     {
-      "id": "adr-012", "niveau": 2, "type": "multi",
+      "id": "adr-012",
+      "niveau": 2,
+      "type": "multi",
       "q": "Quels paramètres sont indispensables à un poste pour naviguer sur Internet ? (plusieurs réponses)",
-      "choices": ["Adresse IP", "Masque de sous-réseau", "Passerelle par défaut", "Serveur DNS", "Adresse du serveur DHCP"],
-      "answer": [0, 1, 2, 3],
+      "choices": [
+        "Adresse IP",
+        "Masque de sous-réseau",
+        "Passerelle par défaut",
+        "Serveur DNS",
+        "Adresse du serveur DHCP"
+      ],
+      "answer": [
+        0,
+        1,
+        2,
+        3
+      ],
       "explication": "IP + masque + passerelle + DNS : les 4 paramètres que le DHCP distribue automatiquement. Connaître l'adresse du serveur DHCP n'est pas nécessaire pour naviguer."
     },
     {
-      "id": "adr-013", "niveau": 2, "type": "qcm",
+      "id": "adr-013",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi un broadcast ne sort-il jamais du réseau local ?",
-      "choices": ["Il est trop volumineux", "Les routeurs séparent les domaines de broadcast", "Les switchs le bloquent", "Le TTL est toujours à 1"],
+      "choices": [
+        "Il est trop volumineux",
+        "Les routeurs séparent les domaines de broadcast",
+        "Les switchs le bloquent",
+        "Le TTL est toujours à 1"
+      ],
       "answer": 1,
       "explication": "Chaque routeur est une frontière de domaine de broadcast — c'est pour cela qu'il faut un relais DHCP entre sous-réseaux."
     },
     {
-      "id": "adr-014", "niveau": 2, "type": "qcm",
+      "id": "adr-014",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quand un poste envoie-t-il un paquet à sa passerelle par défaut ?",
-      "choices": ["Pour toutes les communications", "Quand l'IP de destination est hors de son sous-réseau", "Uniquement pour les requêtes DNS", "Quand le DHCP est indisponible"],
+      "choices": [
+        "Pour toutes les communications",
+        "Quand l'IP de destination est hors de son sous-réseau",
+        "Uniquement pour les requêtes DNS",
+        "Quand le DHCP est indisponible"
+      ],
       "answer": 1,
       "explication": "Grâce au masque, le poste compare : destination locale → envoi direct (ARP) ; destination externe → envoi à la passerelle (routeur)."
     },
     {
-      "id": "adr-015", "niveau": 2, "type": "qcm",
+      "id": "adr-015",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quel avantage principal le CIDR apporte-t-il par rapport au système classful ?",
-      "choices": ["Des adresses plus courtes", "Un masque de longueur variable, adapté au besoin réel", "La suppression des masques", "Des débits plus élevés"],
+      "choices": [
+        "Des adresses plus courtes",
+        "Un masque de longueur variable, adapté au besoin réel",
+        "La suppression des masques",
+        "Des débits plus élevés"
+      ],
       "answer": 1,
       "explication": "Le classful impose /8, /16 ou /24 selon le premier octet — rigide et gaspilleur. Le CIDR taille le réseau au plus juste (/0 à /32)."
     },
     {
-      "id": "adr-016", "niveau": 3, "type": "libre",
+      "id": "adr-016",
+      "niveau": 3,
+      "type": "libre",
       "q": "Écrivez le masque /26 en notation décimale",
-      "accept": ["255.255.255.192"],
+      "accept": [
+        "255.255.255.192"
+      ],
       "explication": "/26 → dernier octet = 11000000 = 192. Blocs de 64 adresses, 62 hôtes utilisables."
     },
     {
-      "id": "adr-017", "niveau": 3, "type": "libre",
+      "id": "adr-017",
+      "niveau": 3,
+      "type": "libre",
       "q": "Quelle est l'adresse réseau (IDSR) de 192.168.51.22/24 ?",
-      "accept": ["192.168.51.0", "192.168.51.0/24"],
+      "accept": [
+        "192.168.51.0",
+        "192.168.51.0/24"
+      ],
       "explication": "AND logique entre IP et masque : les bits hôte passent à 0 → 192.168.51.0. Broadcast : 192.168.51.255."
     },
     {
-      "id": "adr-018", "niveau": 3, "type": "qcm",
+      "id": "adr-018",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle est l'adresse de broadcast de 192.168.51.22/22 ?",
-      "choices": ["192.168.51.255", "192.168.55.255", "192.168.48.255", "192.168.255.255"],
+      "choices": [
+        "192.168.51.255",
+        "192.168.55.255",
+        "192.168.48.255",
+        "192.168.255.255"
+      ],
       "answer": 0,
       "explication": "/22 → blocs de 4 dans le 3e octet : réseau 192.168.48.0, plage 48.0 → 51.255. Broadcast = 192.168.51.255."
     },
     {
-      "id": "adr-019", "niveau": 3, "type": "libre",
+      "id": "adr-019",
+      "niveau": 3,
+      "type": "libre",
       "q": "Combien d'hôtes utilisables dans un sous-réseau /26 ? (nombre)",
-      "accept": ["62"],
+      "accept": [
+        "62"
+      ],
       "explication": "6 bits hôte → 2^6 = 64 adresses − 2 (IDSR + broadcast) = 62 hôtes."
     },
     {
-      "id": "adr-020", "niveau": 3, "type": "qcm",
+      "id": "adr-020",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle est l'adresse réseau (IDSR) de 152.96.145.22/19 ?",
-      "choices": ["152.96.145.0", "152.96.128.0", "152.96.0.0", "152.96.144.0"],
+      "choices": [
+        "152.96.145.0",
+        "152.96.128.0",
+        "152.96.0.0",
+        "152.96.144.0"
+      ],
       "answer": 1,
       "explication": "/19 → blocs de 32 dans le 3e octet : 128 ≤ 145 < 160 → réseau 152.96.128.0, broadcast 152.96.159.255."
     },
     {
-      "id": "adr-021", "niveau": 3, "type": "libre",
+      "id": "adr-021",
+      "niveau": 3,
+      "type": "libre",
       "q": "Quel est le wildcard mask du masque 255.255.252.0 (/22) ?",
-      "accept": ["0.0.3.255"],
+      "accept": [
+        "0.0.3.255"
+      ],
       "explication": "Wildcard = 255.255.255.255 − masque : 255−252 = 3 → 0.0.3.255."
     },
     {
-      "id": "adr-022", "niveau": 3, "type": "qcm",
+      "id": "adr-022",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Combien d'hôtes utilisables dans un sous-réseau /29 ?",
-      "choices": ["8", "6", "14", "4"],
+      "choices": [
+        "8",
+        "6",
+        "14",
+        "4"
+      ],
       "answer": 1,
       "explication": "3 bits hôte → 2^3 = 8 adresses − 2 = 6 hôtes. Typique pour un petit segment d'interconnexion."
     },
     {
-      "id": "adr-023", "niveau": 3, "type": "qcm",
+      "id": "adr-023",
+      "niveau": 3,
+      "type": "qcm",
       "q": "L'adresse 172.20.14.5 est-elle privée ou publique ?",
-      "choices": ["Publique", "Privée (RFC 1918)", "APIPA", "Multicast"],
+      "choices": [
+        "Publique",
+        "Privée (RFC 1918)",
+        "APIPA",
+        "Multicast"
+      ],
       "answer": 1,
       "explication": "172.16.0.0/12 couvre 172.16.0.0 → 172.31.255.255 : 172.20.x.x est dedans → privée, non routable sur Internet."
     },
     {
-      "id": "adr-024", "niveau": 4, "type": "scenario",
+      "id": "adr-024",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Poste : 192.168.1.50/24, passerelle : (vide)\nping 192.168.1.10 → OK\nping 8.8.8.8 → échec",
       "q": "Quelle est la cause ?",
-      "choices": ["Le DNS est mal configuré", "La passerelle par défaut est absente — impossible de sortir du réseau local", "Le masque est incorrect", "Le serveur 8.8.8.8 est en panne"],
+      "choices": [
+        "Le DNS est mal configuré",
+        "La passerelle par défaut est absente — impossible de sortir du réseau local",
+        "Le masque est incorrect",
+        "Le serveur 8.8.8.8 est en panne"
+      ],
       "answer": 1,
       "explication": "Le réseau local fonctionne (ping voisin OK). Sans passerelle, aucun paquet ne peut quitter le sous-réseau. Le DNS n'est pas en cause : 8.8.8.8 est déjà une IP."
     },
     {
-      "id": "adr-025", "niveau": 4, "type": "scenario",
+      "id": "adr-025",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Deux postes branchés sur le même switch :\nPoste A : 192.168.10.5/24\nPoste B : 192.168.11.5/24\nA ne peut pas pinguer B.",
       "q": "Pourquoi ?",
-      "choices": ["Le switch est défectueux", "Ils sont dans des sous-réseaux différents et aucun routeur ne les relie", "Le pare-feu Windows bloque tout ping", "Il faut un serveur DNS pour pinguer"],
+      "choices": [
+        "Le switch est défectueux",
+        "Ils sont dans des sous-réseaux différents et aucun routeur ne les relie",
+        "Le pare-feu Windows bloque tout ping",
+        "Il faut un serveur DNS pour pinguer"
+      ],
       "answer": 1,
       "explication": "10.x et 11.x en /24 = deux sous-réseaux distincts. Même câblés sur le même switch, il faut un routeur (ou revoir l'adressage) pour communiquer."
     },
     {
-      "id": "adr-026", "niveau": 4, "type": "scenario",
+      "id": "adr-026",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Un poste est configuré 192.168.1.20 avec le masque 255.255.0.0 au lieu de 255.255.255.0 comme le reste du réseau.",
       "q": "Quel symptôme risque d'apparaître ?",
-      "choices": ["Le poste n'aura plus d'adresse IP", "Il croira que 192.168.x.x est entièrement local et n'utilisera pas sa passerelle pour ces destinations", "Le débit sera divisé par deux", "Le DHCP refusera de renouveler son bail"],
+      "choices": [
+        "Le poste n'aura plus d'adresse IP",
+        "Il croira que 192.168.x.x est entièrement local et n'utilisera pas sa passerelle pour ces destinations",
+        "Le débit sera divisé par deux",
+        "Le DHCP refusera de renouveler son bail"
+      ],
       "answer": 1,
       "explication": "Avec /16, tout 192.168.0.0/16 semble local : le poste tente l'ARP direct au lieu de router — les hôtes 192.168.autre-sous-réseau deviennent injoignables."
     },
     {
-      "id": "adr-027", "niveau": 4, "type": "scenario",
+      "id": "adr-027",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Sur un poste : ping 127.0.0.1 → échec total.",
       "q": "Qu'est-ce que cela indique ?",
-      "choices": ["Le câble réseau est débranché", "La pile TCP/IP locale est défaillante — problème logiciel sur le poste", "Le serveur DHCP est injoignable", "Le routeur bloque l'ICMP"],
+      "choices": [
+        "Le câble réseau est débranché",
+        "La pile TCP/IP locale est défaillante — problème logiciel sur le poste",
+        "Le serveur DHCP est injoignable",
+        "Le routeur bloque l'ICMP"
+      ],
       "answer": 1,
       "explication": "Le loopback ne quitte jamais la machine : son échec signifie que la pile TCP/IP elle-même est cassée. Ni le câble, ni le réseau, ni le DHCP ne sont en cause."
     }

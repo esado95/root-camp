@@ -1,6 +1,5 @@
 {
   "module": "TP Cisco IOS",
-  "source": "fiches du cours TSSR",
   "questions": [
     {
       "id": "tpc-001",
@@ -13,40 +12,65 @@
         {
           "q": "Passez en mode de configuration globale.",
           "prompt": "Switch#",
-          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "accept": [
+            "configure terminal",
+            "conf t",
+            "config t",
+            "conf term"
+          ],
           "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
           "hint": "La commande complète est « configure terminal », presque toujours abrégée en deux mots."
         },
         {
           "q": "Créez le VLAN numéro 10.",
           "prompt": "Switch(config)#",
-          "accept": ["vlan 10"],
+          "accept": [
+            "vlan 10"
+          ],
           "hint": "Un seul mot-clé suivi du numéro : la commande crée le VLAN et entre dans son mode de configuration.",
           "error": "% Invalid input detected at '^' marker."
         },
         {
           "q": "Donnez à ce VLAN le nom COMPTA.",
           "prompt": "Switch(config-vlan)#",
-          "accept": ["name COMPTA"],
+          "accept": [
+            "name COMPTA"
+          ],
           "hint": "Depuis le mode config-vlan, un mot-clé de quatre lettres attribue le nom lisible."
         },
         {
           "q": "Entrez dans la configuration du port FastEthernet 0/1.",
           "prompt": "Switch(config-vlan)#",
-          "accept": ["interface fastEthernet 0/1", "interface fastEthernet0/1", "interface fa0/1", "int fa0/1", "int fa 0/1", "int fastethernet 0/1"],
+          "accept": [
+            "interface fastEthernet 0/1",
+            "interface fastEthernet0/1",
+            "interface fa0/1",
+            "int fa0/1",
+            "int fa 0/1",
+            "int fastethernet 0/1"
+          ],
           "hint": "Pas besoin de repasser par exit : la commande interface fonctionne depuis n'importe quel sous-mode de configuration."
         },
         {
           "q": "Forcez ce port en mode access.",
           "prompt": "Switch(config-if)#",
-          "accept": ["switchport mode access", "sw mode access", "swi mode access"],
+          "accept": [
+            "switchport mode access",
+            "sw mode access",
+            "swi mode access"
+          ],
           "hint": "La commande commence par switchport mode.",
           "error": "% Invalid input detected at '^' marker."
         },
         {
           "q": "Rattachez le port au VLAN 10.",
           "prompt": "Switch(config-if)#",
-          "accept": ["switchport access vlan 10", "sw access vlan 10", "sw acc vlan 10", "switchport acc vlan 10"],
+          "accept": [
+            "switchport access vlan 10",
+            "sw access vlan 10",
+            "sw acc vlan 10",
+            "switchport acc vlan 10"
+          ],
           "hint": "switchport access, suivi du mot-clé vlan et du numéro."
         }
       ],
@@ -63,39 +87,67 @@
         {
           "q": "Passez du mode utilisateur au mode privilégié.",
           "prompt": "Router>",
-          "accept": ["enable", "en", "ena"],
+          "accept": [
+            "enable",
+            "en",
+            "ena"
+          ],
           "hint": "Le chevron > indique le mode utilisateur : une commande de six lettres donne les pleins droits de consultation."
         },
         {
           "q": "Entrez en mode de configuration globale.",
           "prompt": "Router#",
-          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "accept": [
+            "configure terminal",
+            "conf t",
+            "config t",
+            "conf term"
+          ],
           "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
           "hint": "L'abréviation usuelle tient en deux mots de quatre lettres et une lettre."
         },
         {
           "q": "Renommez le routeur en R1.",
           "prompt": "Router(config)#",
-          "accept": ["hostname R1", "host R1"],
+          "accept": [
+            "hostname R1",
+            "host R1"
+          ],
           "hint": "Le nom d'hôte se définit avec une commande qui change immédiatement l'invite."
         },
         {
           "q": "Entrez dans la configuration de l'interface GigabitEthernet 0/0.",
           "prompt": "R1(config)#",
-          "accept": ["interface gigabitEthernet 0/0", "interface gigabitEthernet0/0", "interface g0/0", "int g0/0", "int gi0/0", "int gig 0/0", "int g 0/0"],
+          "accept": [
+            "interface gigabitEthernet 0/0",
+            "interface gigabitEthernet0/0",
+            "interface g0/0",
+            "int g0/0",
+            "int gi0/0",
+            "int gig 0/0",
+            "int g 0/0"
+          ],
           "hint": "La commande interface accepte le nom abrégé du port (g0/0)."
         },
         {
           "q": "Attribuez l'adresse 192.168.10.254 avec un masque /24.",
           "prompt": "R1(config-if)#",
-          "accept": ["ip address 192.168.10.254 255.255.255.0", "ip add 192.168.10.254 255.255.255.0", "ip addr 192.168.10.254 255.255.255.0"],
+          "accept": [
+            "ip address 192.168.10.254 255.255.255.0",
+            "ip add 192.168.10.254 255.255.255.0",
+            "ip addr 192.168.10.254 255.255.255.0"
+          ],
           "hint": "ip address attend l'adresse puis le masque en notation décimale complète.",
           "error": "% Incomplete command."
         },
         {
           "q": "Activez l'interface.",
           "prompt": "R1(config-if)#",
-          "accept": ["no shutdown", "no shut", "no sh"],
+          "accept": [
+            "no shutdown",
+            "no shut",
+            "no sh"
+          ],
           "output": "%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up\n%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up",
           "hint": "Les interfaces Cisco sont désactivées par défaut : il faut annuler leur état shutdown."
         }
@@ -113,13 +165,18 @@
         {
           "q": "Définissez le nom de domaine lab.lan, indispensable avant de générer les clés.",
           "prompt": "R1(config)#",
-          "accept": ["ip domain-name lab.lan", "ip domain name lab.lan"],
+          "accept": [
+            "ip domain-name lab.lan",
+            "ip domain name lab.lan"
+          ],
           "hint": "Sans nom de domaine, la génération des clés RSA refuse de se lancer. La commande commence par ip domain."
         },
         {
           "q": "Générez les clés RSA (répondre 2048 à la question posée).",
           "prompt": "R1(config)#",
-          "accept": ["crypto key generate rsa"],
+          "accept": [
+            "crypto key generate rsa"
+          ],
           "output": "The name for the keys will be: R1.lab.lan\nChoose the size of the key modulus in the range of 360 to 2048 for your\n  General Purpose Keys. Choosing a key modulus greater than 512 may take\n  a few minutes.\n\nHow many bits in the modulus [512]: 2048\n% Generating 2048 bit RSA keys, keys will be non-exportable...[OK]",
           "hint": "La commande commence par crypto.",
           "error": "% Invalid input detected at '^' marker."
@@ -127,25 +184,33 @@
         {
           "q": "Forcez l'utilisation de SSH version 2.",
           "prompt": "R1(config)#",
-          "accept": ["ip ssh version 2"],
+          "accept": [
+            "ip ssh version 2"
+          ],
           "hint": "Trois mots-clés et un chiffre : on impose la version du protocole SSH."
         },
         {
           "q": "Entrez dans la configuration des 5 lignes d'accès distant.",
           "prompt": "R1(config)#",
-          "accept": ["line vty 0 4"],
+          "accept": [
+            "line vty 0 4"
+          ],
           "hint": "Les accès réseau passent par les lignes virtuelles vty, numérotées de 0 à 4."
         },
         {
           "q": "Activez l'authentification sur la base d'utilisateurs locale.",
           "prompt": "R1(config-line)#",
-          "accept": ["login local"],
+          "accept": [
+            "login local"
+          ],
           "hint": "Deux mots : la connexion doit vérifier les comptes créés avec username."
         },
         {
           "q": "N'autorisez que le protocole SSH sur ces lignes.",
           "prompt": "R1(config-line)#",
-          "accept": ["transport input ssh"],
+          "accept": [
+            "transport input ssh"
+          ],
           "hint": "La commande transport input limite les protocoles acceptés en entrée (Telnet est ainsi banni)."
         }
       ],
@@ -162,33 +227,48 @@
         {
           "q": "Passez en mode de configuration globale.",
           "prompt": "R1#",
-          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "accept": [
+            "configure terminal",
+            "conf t",
+            "config t",
+            "conf term"
+          ],
           "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
           "hint": "Toujours la même porte d'entrée avant de modifier la configuration."
         },
         {
           "q": "Ajoutez la route statique vers le LAN de R2.",
           "prompt": "R1(config)#",
-          "accept": ["ip route 192.168.20.0 255.255.255.0 10.0.0.2"],
+          "accept": [
+            "ip route 192.168.20.0 255.255.255.0 10.0.0.2"
+          ],
           "hint": "ip route attend le réseau de destination, son masque, puis l'adresse du routeur voisin (next-hop).",
           "error": "% Incomplete command."
         },
         {
           "q": "Ajoutez une route par défaut passant elle aussi par R2.",
           "prompt": "R1(config)#",
-          "accept": ["ip route 0.0.0.0 0.0.0.0 10.0.0.2"],
+          "accept": [
+            "ip route 0.0.0.0 0.0.0.0 10.0.0.2"
+          ],
           "hint": "La route par défaut s'écrit avec un réseau et un masque entièrement à zéro."
         },
         {
           "q": "Revenez directement au mode privilégié.",
           "prompt": "R1(config)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Une commande de trois lettres ramène au mode privilégié depuis n'importe quel sous-mode (exit ne fait que remonter d'un niveau)."
         },
         {
           "q": "Affichez la table de routage pour vérifier vos routes.",
           "prompt": "R1#",
-          "accept": ["show ip route", "sh ip route", "sh ip ro"],
+          "accept": [
+            "show ip route",
+            "sh ip route",
+            "sh ip ro"
+          ],
           "output": "Codes: C - connected, S - static, * - candidate default\nGateway of last resort is 10.0.0.2 to network 0.0.0.0\n\nC    10.0.0.0/30 is directly connected, GigabitEthernet0/1\nC    192.168.10.0/24 is directly connected, GigabitEthernet0/0\nS    192.168.20.0/24 [1/0] via 10.0.0.2\nS*   0.0.0.0/0 [1/0] via 10.0.0.2",
           "hint": "Une commande show affiche les routes connectées (C) et statiques (S)."
         }
@@ -206,38 +286,51 @@
         {
           "q": "Excluez l'adresse de la passerelle de la distribution DHCP.",
           "prompt": "R1(config)#",
-          "accept": ["ip dhcp excluded-address 192.168.10.254"],
+          "accept": [
+            "ip dhcp excluded-address 192.168.10.254"
+          ],
           "hint": "Sans exclusion, le pool pourrait distribuer l'adresse du routeur lui-même. La commande commence par ip dhcp excluded."
         },
         {
           "q": "Créez le pool DHCP nommé LAN10.",
           "prompt": "R1(config)#",
-          "accept": ["ip dhcp pool LAN10"],
+          "accept": [
+            "ip dhcp pool LAN10"
+          ],
           "hint": "ip dhcp pool suivi du nom crée le pool et entre dans son mode de configuration."
         },
         {
           "q": "Définissez le réseau distribué par ce pool.",
           "prompt": "R1(dhcp-config)#",
-          "accept": ["network 192.168.10.0 255.255.255.0"],
+          "accept": [
+            "network 192.168.10.0 255.255.255.0"
+          ],
           "hint": "Un mot-clé, le réseau, puis le masque complet.",
           "error": "% Invalid input detected at '^' marker."
         },
         {
           "q": "Annoncez la passerelle par défaut aux clients.",
           "prompt": "R1(dhcp-config)#",
-          "accept": ["default-router 192.168.10.254"],
+          "accept": [
+            "default-router 192.168.10.254"
+          ],
           "hint": "Le mot-clé évoque un « routeur par défaut »."
         },
         {
           "q": "Revenez au mode privilégié.",
           "prompt": "R1(dhcp-config)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Retour direct au mode privilégié en une commande."
         },
         {
           "q": "Vérifiez qu'un poste a obtenu un bail DHCP.",
           "prompt": "R1#",
-          "accept": ["show ip dhcp binding", "sh ip dhcp binding"],
+          "accept": [
+            "show ip dhcp binding",
+            "sh ip dhcp binding"
+          ],
           "output": "IP address       Client-ID/              Lease expiration        Type\n                 Hardware address\n192.168.10.1     0060.2F84.4AB1          --                      Automatic",
           "hint": "Une commande show liste les associations IP / adresse MAC distribuées."
         }
@@ -255,38 +348,62 @@
         {
           "q": "Créez la sous-interface dédiée au VLAN 10 sur fa0/0.",
           "prompt": "R1(config)#",
-          "accept": ["interface fastEthernet 0/0.10", "interface fa0/0.10", "int fa0/0.10", "int fa 0/0.10"],
+          "accept": [
+            "interface fastEthernet 0/0.10",
+            "interface fa0/0.10",
+            "int fa0/0.10",
+            "int fa 0/0.10"
+          ],
           "hint": "Une sous-interface se note interface_physique.numéro — par convention on reprend le numéro du VLAN."
         },
         {
           "q": "Associez cette sous-interface aux trames tagguées du VLAN 10.",
           "prompt": "R1(config-subif)#",
-          "accept": ["encapsulation dot1Q 10", "encapsulation dot1q 10", "encap dot1q 10"],
+          "accept": [
+            "encapsulation dot1Q 10",
+            "encapsulation dot1q 10",
+            "encap dot1q 10"
+          ],
           "hint": "Il faut déclarer la norme de taggage 802.1Q suivie du numéro de VLAN. La commande commence par encapsulation.",
           "error": "% Invalid input detected at '^' marker."
         },
         {
           "q": "Attribuez l'adresse de passerelle du VLAN 10.",
           "prompt": "R1(config-subif)#",
-          "accept": ["ip address 192.168.10.254 255.255.255.0", "ip add 192.168.10.254 255.255.255.0"],
+          "accept": [
+            "ip address 192.168.10.254 255.255.255.0",
+            "ip add 192.168.10.254 255.255.255.0"
+          ],
           "hint": "Même syntaxe que sur une interface physique : adresse puis masque complet."
         },
         {
           "q": "Activez la sous-interface.",
           "prompt": "R1(config-subif)#",
-          "accept": ["no shutdown", "no shut", "no sh"],
+          "accept": [
+            "no shutdown",
+            "no shut",
+            "no sh"
+          ],
           "hint": "Comme toute interface Cisco, elle doit être activée explicitement."
         },
         {
           "q": "Revenez au mode privilégié.",
           "prompt": "R1(config-subif)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Une seule commande suffit, sans enchaîner les exit."
         },
         {
           "q": "Sauvegardez la configuration en NVRAM.",
           "prompt": "R1#",
-          "accept": ["write memory", "write", "wr", "copy running-config startup-config", "copy run start"],
+          "accept": [
+            "write memory",
+            "write",
+            "wr",
+            "copy running-config startup-config",
+            "copy run start"
+          ],
           "output": "Building configuration...\n[OK]",
           "hint": "Sans cette étape, tout est perdu au redémarrage : running-config doit être copiée vers startup-config."
         }
@@ -304,40 +421,65 @@
         {
           "q": "Vérifiez l'état des interfaces du routeur.",
           "prompt": "R1#",
-          "accept": ["show ip interface brief", "show ip int brief", "sh ip int brief", "sh ip int br"],
+          "accept": [
+            "show ip interface brief",
+            "show ip int brief",
+            "sh ip int brief",
+            "sh ip int br"
+          ],
           "output": "Interface              IP-Address      OK? Method Status                Protocol\nGigabitEthernet0/0     192.168.10.254  YES manual administratively down down\nGigabitEthernet0/1     10.0.0.1        YES manual up                    up",
           "hint": "Une commande show résume l'état et l'adresse de toutes les interfaces en un tableau."
         },
         {
           "q": "G0/0 est « administratively down » : passez en configuration globale pour corriger.",
           "prompt": "R1#",
-          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "accept": [
+            "configure terminal",
+            "conf t",
+            "config t",
+            "conf term"
+          ],
           "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
           "hint": "L'état administratively down se corrige dans la configuration de l'interface."
         },
         {
           "q": "Entrez dans la configuration de l'interface fautive.",
           "prompt": "R1(config)#",
-          "accept": ["interface gigabitEthernet 0/0", "interface g0/0", "int g0/0", "int gi0/0", "int g 0/0"],
+          "accept": [
+            "interface gigabitEthernet 0/0",
+            "interface g0/0",
+            "int g0/0",
+            "int gi0/0",
+            "int g 0/0"
+          ],
           "hint": "C'est l'interface LAN, celle qui porte la passerelle 192.168.10.254."
         },
         {
           "q": "Réactivez l'interface.",
           "prompt": "R1(config-if)#",
-          "accept": ["no shutdown", "no shut", "no sh"],
+          "accept": [
+            "no shutdown",
+            "no shut",
+            "no sh"
+          ],
           "output": "%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up\n%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up",
           "hint": "administratively down = interface volontairement coupée ; une commande annule cet état."
         },
         {
           "q": "Revenez au mode privilégié.",
           "prompt": "R1(config-if)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Retour direct en une commande de trois lettres."
         },
         {
           "q": "Confirmez qu'un poste a de nouveau obtenu un bail DHCP.",
           "prompt": "R1#",
-          "accept": ["show ip dhcp binding", "sh ip dhcp binding"],
+          "accept": [
+            "show ip dhcp binding",
+            "sh ip dhcp binding"
+          ],
           "output": "IP address       Client-ID/              Lease expiration        Type\n                 Hardware address\n192.168.10.1     00E0.F7AA.1B02          --                      Automatic",
           "hint": "La même commande show qui liste les baux distribués par le routeur."
         }
@@ -355,27 +497,46 @@
         {
           "q": "Examinez le mode switchport du port d'interconnexion fa0/24.",
           "prompt": "Switch#",
-          "accept": ["show interfaces fastEthernet 0/24 switchport", "show interfaces fa0/24 switchport", "sh int fa0/24 switchport", "sh int fa0/24 sw"],
+          "accept": [
+            "show interfaces fastEthernet 0/24 switchport",
+            "show interfaces fa0/24 switchport",
+            "sh int fa0/24 switchport",
+            "sh int fa0/24 sw"
+          ],
           "output": "Name: Fa0/24\nSwitchport: Enabled\nAdministrative Mode: static access\nOperational Mode: static access\nAccess Mode VLAN: 1 (default)",
           "hint": "show interfaces … switchport affiche le mode administratif d'un port donné."
         },
         {
           "q": "Le lien inter-switch est resté en mode access : passez en configuration globale.",
           "prompt": "Switch#",
-          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "accept": [
+            "configure terminal",
+            "conf t",
+            "config t",
+            "conf term"
+          ],
           "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
           "hint": "Un port access ne transporte qu'un seul VLAN : il faut reconfigurer le port d'interconnexion."
         },
         {
           "q": "Entrez dans la configuration du port d'interconnexion.",
           "prompt": "Switch(config)#",
-          "accept": ["interface fastEthernet 0/24", "interface fa0/24", "int fa0/24", "int fa 0/24"],
+          "accept": [
+            "interface fastEthernet 0/24",
+            "interface fa0/24",
+            "int fa0/24",
+            "int fa 0/24"
+          ],
           "hint": "C'est le port qui relie ce switch à Sw-Central."
         },
         {
           "q": "Basculez ce port en mode trunk.",
           "prompt": "Switch(config-if)#",
-          "accept": ["switchport mode trunk", "sw mode trunk", "swi mode trunk"],
+          "accept": [
+            "switchport mode trunk",
+            "sw mode trunk",
+            "swi mode trunk"
+          ],
           "output": "%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/24, changed state to down\n%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/24, changed state to up",
           "hint": "Un lien entre deux switchs doit transporter les trames tagguées de plusieurs VLANs : c'est le rôle du mode trunk.",
           "error": "% Invalid input detected at '^' marker."
@@ -383,13 +544,19 @@
         {
           "q": "Revenez au mode privilégié.",
           "prompt": "Switch(config-if)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Retour direct au mode privilégié."
         },
         {
           "q": "Vérifiez que le trunk est bien monté.",
           "prompt": "Switch#",
-          "accept": ["show interfaces trunk", "sh int trunk", "show interface trunk"],
+          "accept": [
+            "show interfaces trunk",
+            "sh int trunk",
+            "show interface trunk"
+          ],
           "output": "Port        Mode         Encapsulation  Status        Native vlan\nFa0/24      on           802.1q         trunking      1\n\nPort        Vlans allowed on trunk\nFa0/24      1-1005",
           "hint": "Une commande show dédiée liste les ports en trunking et les VLANs autorisés."
         }
@@ -407,39 +574,59 @@
         {
           "q": "Créez la règle qui interdit le trafic HTTP du VLAN 10 vers le serveur.",
           "prompt": "R1(config)#",
-          "accept": ["access-list 105 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 80", "access-list 105 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq www", "access-list 105 deny tcp 192.168.10.0 0.0.0.255 192.168.51.100 0.0.0.0 eq 80"],
+          "accept": [
+            "access-list 105 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq 80",
+            "access-list 105 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq www",
+            "access-list 105 deny tcp 192.168.10.0 0.0.0.255 192.168.51.100 0.0.0.0 eq 80"
+          ],
           "hint": "ACL étendue (numéro 100-199) : protocole tcp, réseau source avec son masque générique (wildcard) inversé, mot-clé host devant l'adresse du serveur, puis eq 80 pour le port.",
           "error": "% Invalid input detected at '^' marker."
         },
         {
           "q": "Ajoutez la règle qui autorise tout le reste du trafic.",
           "prompt": "R1(config)#",
-          "accept": ["access-list 105 permit ip any any"],
+          "accept": [
+            "access-list 105 permit ip any any"
+          ],
           "hint": "Sans cette ligne, le deny implicite de fin de liste bloquerait tout, y compris le ping."
         },
         {
           "q": "Entrez dans la sous-interface du VLAN source.",
           "prompt": "R1(config)#",
-          "accept": ["interface fastEthernet 0/0.10", "interface fa0/0.10", "int fa0/0.10", "int fa 0/0.10"],
+          "accept": [
+            "interface fastEthernet 0/0.10",
+            "interface fa0/0.10",
+            "int fa0/0.10",
+            "int fa 0/0.10"
+          ],
           "hint": "Une ACL étendue se place au plus près de la source : la sous-interface du VLAN 10 créée pour le router-on-a-stick."
         },
         {
           "q": "Appliquez l'ACL 105 en entrée sur cette sous-interface.",
           "prompt": "R1(config-subif)#",
-          "accept": ["ip access-group 105 in"],
+          "accept": [
+            "ip access-group 105 in"
+          ],
           "hint": "ip access-group associe une ACL à l'interface ; le sens in filtre les paquets au moment où ils entrent dans le routeur.",
           "error": "% Incomplete command."
         },
         {
           "q": "Revenez au mode privilégié.",
           "prompt": "R1(config-subif)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Retour direct en une commande de trois lettres."
         },
         {
           "q": "Vérifiez l'ACL et ses compteurs de correspondances.",
           "prompt": "R1#",
-          "accept": ["show access-lists", "sh access-lists", "show access-list", "sh access-list"],
+          "accept": [
+            "show access-lists",
+            "sh access-lists",
+            "show access-list",
+            "sh access-list"
+          ],
           "output": "Extended IP access list 105\n    10 deny tcp 192.168.10.0 0.0.0.255 host 192.168.51.100 eq www (8 match(es))\n    20 permit ip any any (42 match(es))",
           "hint": "Une commande show dédiée liste chaque règle avec son nombre de correspondances (matches)."
         }
@@ -457,38 +644,60 @@
         {
           "q": "Entrez dans la configuration de l'interface LAN.",
           "prompt": "R1(config)#",
-          "accept": ["interface gigabitEthernet 0/0", "interface gigabitEthernet0/0", "interface g0/0", "int g0/0", "int gi0/0", "int g 0/0"],
+          "accept": [
+            "interface gigabitEthernet 0/0",
+            "interface gigabitEthernet0/0",
+            "interface g0/0",
+            "int g0/0",
+            "int gi0/0",
+            "int g 0/0"
+          ],
           "hint": "C'est l'interface reliée au réseau interne, celle du côté du serveur."
         },
         {
           "q": "Marquez cette interface côté réseau privé.",
           "prompt": "R1(config-if)#",
-          "accept": ["ip nat inside"],
+          "accept": [
+            "ip nat inside"
+          ],
           "hint": "Prérequis systématique de tout NAT : ip nat suivi du mot-clé désignant l'intérieur du réseau.",
           "error": "% Incomplete command."
         },
         {
           "q": "Passez directement à l'interface WAN.",
           "prompt": "R1(config-if)#",
-          "accept": ["interface gigabitEthernet 0/1", "interface gigabitEthernet0/1", "interface g0/1", "int g0/1", "int gi0/1", "int g 0/1"],
+          "accept": [
+            "interface gigabitEthernet 0/1",
+            "interface gigabitEthernet0/1",
+            "interface g0/1",
+            "int g0/1",
+            "int gi0/1",
+            "int g 0/1"
+          ],
           "hint": "La commande interface fonctionne depuis n'importe quel sous-mode de configuration."
         },
         {
           "q": "Marquez-la côté réseau public.",
           "prompt": "R1(config-if)#",
-          "accept": ["ip nat outside"],
+          "accept": [
+            "ip nat outside"
+          ],
           "hint": "Même commande que pour l'intérieur, avec le mot-clé opposé."
         },
         {
           "q": "Revenez en configuration globale.",
           "prompt": "R1(config-if)#",
-          "accept": ["exit"],
+          "accept": [
+            "exit"
+          ],
           "hint": "exit remonte d'un seul niveau — end irait trop loin, la commande suivante se tape en mode config global."
         },
         {
           "q": "Créez la translation statique du serveur vers son adresse publique.",
           "prompt": "R1(config)#",
-          "accept": ["ip nat inside source static 192.168.51.100 203.0.113.10"],
+          "accept": [
+            "ip nat inside source static 192.168.51.100 203.0.113.10"
+          ],
           "hint": "ip nat inside source static, suivi de l'adresse privée puis de l'adresse publique.",
           "error": "% Incomplete command."
         }
@@ -506,34 +715,52 @@
         {
           "q": "Créez l'ACL standard n°1 qui désigne le réseau à traduire.",
           "prompt": "R1(config)#",
-          "accept": ["access-list 1 permit 192.168.10.0 0.0.0.255"],
+          "accept": [
+            "access-list 1 permit 192.168.10.0 0.0.0.255"
+          ],
           "hint": "ACL standard (1-99) : permit suivi du réseau puis de son masque générique inversé (un /24 s'écrit 0.0.0.255).",
           "error": "% Invalid input detected at '^' marker."
         },
         {
           "q": "Activez la traduction en surcharge sur l'interface publique.",
           "prompt": "R1(config)#",
-          "accept": ["ip nat inside source list 1 interface gigabitEthernet 0/1 overload", "ip nat inside source list 1 interface gigabitEthernet0/1 overload", "ip nat inside source list 1 interface g0/1 overload", "ip nat inside source list 1 int g0/1 overload"],
+          "accept": [
+            "ip nat inside source list 1 interface gigabitEthernet 0/1 overload",
+            "ip nat inside source list 1 interface gigabitEthernet0/1 overload",
+            "ip nat inside source list 1 interface g0/1 overload",
+            "ip nat inside source list 1 int g0/1 overload"
+          ],
           "hint": "ip nat inside source list relie l'ACL à l'interface de sortie ; le mot-clé final active le partage d'adresse par les ports (PAT).",
           "error": "% Incomplete command."
         },
         {
           "q": "Revenez au mode privilégié.",
           "prompt": "R1(config)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Retour direct au mode privilégié en une commande."
         },
         {
           "q": "Affichez les traductions actives (un poste navigue déjà).",
           "prompt": "R1#",
-          "accept": ["show ip nat translations", "sh ip nat translations", "sh ip nat trans", "show ip nat trans"],
+          "accept": [
+            "show ip nat translations",
+            "sh ip nat translations",
+            "sh ip nat trans",
+            "show ip nat trans"
+          ],
           "output": "Pro  Inside global        Inside local         Outside local        Outside global\nicmp 203.0.113.1:5       192.168.10.1:5       8.8.8.8:5            8.8.8.8:5\ntcp  203.0.113.1:1024    192.168.10.2:49152   198.51.100.20:80     198.51.100.20:80",
           "hint": "La commande show du NAT affiche les colonnes Inside/Outside Local/Global."
         },
         {
           "q": "Contrôlez les statistiques et les interfaces NAT.",
           "prompt": "R1#",
-          "accept": ["show ip nat statistics", "sh ip nat statistics", "sh ip nat stat"],
+          "accept": [
+            "show ip nat statistics",
+            "sh ip nat statistics",
+            "sh ip nat stat"
+          ],
           "output": "Total active translations: 2 (0 static, 2 dynamic; 2 extended)\nPeak translations: 2\nOutside interfaces:\n  GigabitEthernet0/1\nInside interfaces:\n  GigabitEthernet0/0\nHits: 18  Misses: 2",
           "hint": "L'autre commande show du NAT résume compteurs et interfaces inside/outside."
         }
@@ -551,40 +778,65 @@
         {
           "q": "Passez en mode de configuration globale.",
           "prompt": "Sw-Central#",
-          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "accept": [
+            "configure terminal",
+            "conf t",
+            "config t",
+            "conf term"
+          ],
           "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
           "hint": "Toujours la même porte d'entrée avant de modifier la configuration."
         },
         {
           "q": "Entrez dans la configuration du port d'interconnexion.",
           "prompt": "Sw-Central(config)#",
-          "accept": ["interface fastEthernet 0/24", "interface fa0/24", "int fa0/24", "int fa 0/24"],
+          "accept": [
+            "interface fastEthernet 0/24",
+            "interface fa0/24",
+            "int fa0/24",
+            "int fa 0/24"
+          ],
           "hint": "C'est le port qui relie Sw-Central au nouveau switch d'étage."
         },
         {
           "q": "Basculez ce port en mode trunk.",
           "prompt": "Sw-Central(config-if)#",
-          "accept": ["switchport mode trunk", "sw mode trunk", "swi mode trunk"],
+          "accept": [
+            "switchport mode trunk",
+            "sw mode trunk",
+            "swi mode trunk"
+          ],
           "output": "%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/24, changed state to down\n%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/24, changed state to up",
           "hint": "Un lien entre deux switchs transporte les trames tagguées 802.1Q : c'est le rôle du mode trunk."
         },
         {
           "q": "Restreignez le trunk aux seuls VLANs 10, 11 et 99.",
           "prompt": "Sw-Central(config-if)#",
-          "accept": ["switchport trunk allowed vlan 10,11,99", "sw trunk allowed vlan 10,11,99", "swi trunk allowed vlan 10,11,99"],
+          "accept": [
+            "switchport trunk allowed vlan 10,11,99",
+            "sw trunk allowed vlan 10,11,99",
+            "swi trunk allowed vlan 10,11,99"
+          ],
           "hint": "switchport trunk suivi du mot-clé qui « autorise », puis la liste des VLANs séparés par des virgules sans espaces.",
           "error": "% Invalid input detected at '^' marker."
         },
         {
           "q": "Revenez au mode privilégié.",
           "prompt": "Sw-Central(config-if)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Retour direct en une commande de trois lettres."
         },
         {
           "q": "Vérifiez le trunk et sa liste de VLANs autorisés.",
           "prompt": "Sw-Central#",
-          "accept": ["show interfaces trunk", "show interface trunk", "sh int trunk", "sh interfaces trunk"],
+          "accept": [
+            "show interfaces trunk",
+            "show interface trunk",
+            "sh int trunk",
+            "sh interfaces trunk"
+          ],
           "output": "Port        Mode         Encapsulation  Status        Native vlan\nFa0/24      on           802.1q         trunking      1\n\nPort        Vlans allowed on trunk\nFa0/24      10,11,99",
           "hint": "La commande show dédiée aux trunks affiche mode, encapsulation, VLAN natif et VLANs autorisés."
         }
@@ -602,38 +854,61 @@
         {
           "q": "Protégez le passage en mode privilégié avec le mot de passe chiffré C1sco!23.",
           "prompt": "Sw-Etage(config)#",
-          "accept": ["enable secret C1sco!23"],
+          "accept": [
+            "enable secret C1sco!23"
+          ],
           "hint": "Deux mots-clés puis le mot de passe : secret stocke une empreinte chiffrée, contrairement à password qui reste en clair."
         },
         {
           "q": "Entrez dans la configuration du port du secrétariat.",
           "prompt": "Sw-Etage(config)#",
-          "accept": ["interface fastEthernet 0/2", "interface fa0/2", "int fa0/2", "int fa 0/2"],
+          "accept": [
+            "interface fastEthernet 0/2",
+            "interface fa0/2",
+            "int fa0/2",
+            "int fa 0/2"
+          ],
           "hint": "C'est le port fa0/2 indiqué dans l'audit."
         },
         {
           "q": "Forcez le port en mode access statique, prérequis du port-security.",
           "prompt": "Sw-Etage(config-if)#",
-          "accept": ["switchport mode access", "sw mode access", "swi mode access"],
+          "accept": [
+            "switchport mode access",
+            "sw mode access",
+            "swi mode access"
+          ],
           "hint": "Un port resté en négociation dynamique fait rejeter les commandes port-security."
         },
         {
           "q": "Activez la sécurité de port sur cette interface.",
           "prompt": "Sw-Etage(config-if)#",
-          "accept": ["switchport port-security", "sw port-security", "swi port-security"],
+          "accept": [
+            "switchport port-security",
+            "sw port-security",
+            "swi port-security"
+          ],
           "hint": "Le mot-clé port-security seul, sans option, active la fonction.",
           "error": "Command rejected: FastEthernet0/2 is a dynamic port."
         },
         {
           "q": "Limitez le port à une seule adresse MAC.",
           "prompt": "Sw-Etage(config-if)#",
-          "accept": ["switchport port-security maximum 1", "sw port-security maximum 1", "switchport port-security max 1"],
+          "accept": [
+            "switchport port-security maximum 1",
+            "sw port-security maximum 1",
+            "switchport port-security max 1"
+          ],
           "hint": "Une option de port-security fixe le nombre maximum d'adresses MAC admises."
         },
         {
           "q": "Faites apprendre et mémoriser automatiquement l'adresse MAC du poste.",
           "prompt": "Sw-Etage(config-if)#",
-          "accept": ["switchport port-security mac-address sticky", "sw port-security mac-address sticky", "swi port-security mac-address sticky"],
+          "accept": [
+            "switchport port-security mac-address sticky",
+            "sw port-security mac-address sticky",
+            "swi port-security mac-address sticky"
+          ],
           "hint": "L'option mac-address avec le mot-clé « collant » (en anglais) inscrit la MAC apprise dans la running-config."
         }
       ],
@@ -650,34 +925,53 @@
         {
           "q": "Affichez les ACL configurées et leurs compteurs.",
           "prompt": "R1#",
-          "accept": ["show access-lists", "sh access-lists", "show access-list", "sh access-list"],
+          "accept": [
+            "show access-lists",
+            "sh access-lists",
+            "show access-list",
+            "sh access-list"
+          ],
           "output": "Extended IP access list 101\n    10 deny ip any 192.168.10.0 0.0.0.255 (12 match(es))\n    20 deny ip any 192.168.11.0 0.0.0.255 (7 match(es))",
           "hint": "Regardez ce que contient la liste… et surtout ce qu'elle ne contient pas : que devient un paquet qui ne correspond à aucune règle ?"
         },
         {
           "q": "Aucune ligne permit : tout finit sur le deny implicite. Passez en configuration globale.",
           "prompt": "R1#",
-          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "accept": [
+            "configure terminal",
+            "conf t",
+            "config t",
+            "conf term"
+          ],
           "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
           "hint": "La correction se fait dans la configuration globale, là où se déclarent les ACL numérotées."
         },
         {
           "q": "Ajoutez la règle manquante qui autorise tout le reste du trafic.",
           "prompt": "R1(config)#",
-          "accept": ["access-list 101 permit ip any any"],
+          "accept": [
+            "access-list 101 permit ip any any"
+          ],
           "hint": "Une ACL numérotée se complète en répétant access-list 101 suivi de la règle la plus large ; elle s'ajoute en fin de liste, après les deny.",
           "error": "% Incomplete command."
         },
         {
           "q": "Revenez au mode privilégié.",
           "prompt": "R1(config)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Retour direct en une commande de trois lettres."
         },
         {
           "q": "Vérifiez que la nouvelle règle est en place et matche du trafic.",
           "prompt": "R1#",
-          "accept": ["show access-lists", "sh access-lists", "show access-list", "sh access-list"],
+          "accept": [
+            "show access-lists",
+            "sh access-lists",
+            "show access-list",
+            "sh access-list"
+          ],
           "output": "Extended IP access list 101\n    10 deny ip any 192.168.10.0 0.0.0.255 (12 match(es))\n    20 deny ip any 192.168.11.0 0.0.0.255 (7 match(es))\n    30 permit ip any any (3 match(es))",
           "hint": "La même commande show qu'au diagnostic : la ligne 30 doit apparaître et compter des correspondances."
         }
@@ -695,40 +989,67 @@
         {
           "q": "Affichez les statistiques NAT pour contrôler la configuration.",
           "prompt": "R1#",
-          "accept": ["show ip nat statistics", "sh ip nat statistics", "sh ip nat stat"],
+          "accept": [
+            "show ip nat statistics",
+            "sh ip nat statistics",
+            "sh ip nat stat"
+          ],
           "output": "Total active translations: 0 (0 static, 0 dynamic; 0 extended)\nPeak translations: 0\nOutside interfaces:\nInside interfaces:\nHits: 0  Misses: 0",
           "hint": "Comparez les lignes Inside/Outside interfaces avec le prérequis systématique de tout NAT."
         },
         {
           "q": "Les lignes Inside/Outside sont vides : le routeur ignore quel côté traduire. Passez en configuration globale.",
           "prompt": "R1#",
-          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "accept": [
+            "configure terminal",
+            "conf t",
+            "config t",
+            "conf term"
+          ],
           "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
           "hint": "Le marquage des interfaces se fait dans leur configuration respective."
         },
         {
           "q": "Entrez dans la configuration de l'interface LAN.",
           "prompt": "R1(config)#",
-          "accept": ["interface gigabitEthernet 0/0", "interface gigabitEthernet0/0", "interface g0/0", "int g0/0", "int gi0/0", "int g 0/0"],
+          "accept": [
+            "interface gigabitEthernet 0/0",
+            "interface gigabitEthernet0/0",
+            "interface g0/0",
+            "int g0/0",
+            "int gi0/0",
+            "int g 0/0"
+          ],
           "hint": "Le côté privé, celui des postes du LAN."
         },
         {
           "q": "Déclarez-la côté réseau privé.",
           "prompt": "R1(config-if)#",
-          "accept": ["ip nat inside"],
+          "accept": [
+            "ip nat inside"
+          ],
           "hint": "ip nat suivi du mot-clé désignant l'intérieur du réseau.",
           "error": "% Incomplete command."
         },
         {
           "q": "Passez directement à l'interface WAN.",
           "prompt": "R1(config-if)#",
-          "accept": ["interface gigabitEthernet 0/1", "interface gigabitEthernet0/1", "interface g0/1", "int g0/1", "int gi0/1", "int g 0/1"],
+          "accept": [
+            "interface gigabitEthernet 0/1",
+            "interface gigabitEthernet0/1",
+            "interface g0/1",
+            "int g0/1",
+            "int gi0/1",
+            "int g 0/1"
+          ],
           "hint": "La commande interface fonctionne depuis n'importe quel sous-mode de configuration."
         },
         {
           "q": "Déclarez-la côté réseau public.",
           "prompt": "R1(config-if)#",
-          "accept": ["ip nat outside"],
+          "accept": [
+            "ip nat outside"
+          ],
           "hint": "Même commande que pour l'intérieur, avec le mot-clé opposé."
         }
       ],
@@ -745,40 +1066,66 @@
         {
           "q": "Examinez les paramètres du trunk local.",
           "prompt": "Sw-Etage#",
-          "accept": ["show interfaces trunk", "show interface trunk", "sh int trunk", "sh interfaces trunk"],
+          "accept": [
+            "show interfaces trunk",
+            "show interface trunk",
+            "sh int trunk",
+            "sh interfaces trunk"
+          ],
           "output": "Port        Mode         Encapsulation  Status        Native vlan\nFa0/24      on           802.1q         trunking      99\n\nPort        Vlans allowed on trunk\nFa0/24      10,11,99",
           "hint": "Comparez le VLAN natif local à celui annoncé par Sw-Central dans le message CDP."
         },
         {
           "q": "Le VLAN natif local (99) diffère de celui de Sw-Central (1) : passez en configuration globale.",
           "prompt": "Sw-Etage#",
-          "accept": ["configure terminal", "conf t", "config t", "conf term"],
+          "accept": [
+            "configure terminal",
+            "conf t",
+            "config t",
+            "conf term"
+          ],
           "output": "Enter configuration commands, one per line.  End with CNTL/Z.",
           "hint": "Le VLAN natif se corrige dans la configuration du port trunk concerné."
         },
         {
           "q": "Entrez dans la configuration du port trunk.",
           "prompt": "Sw-Etage(config)#",
-          "accept": ["interface fastEthernet 0/24", "interface fa0/24", "int fa0/24", "int fa 0/24"],
+          "accept": [
+            "interface fastEthernet 0/24",
+            "interface fa0/24",
+            "int fa0/24",
+            "int fa 0/24"
+          ],
           "hint": "C'est le port d'interconnexion cité dans le message d'alerte."
         },
         {
           "q": "Alignez le VLAN natif sur celui de Sw-Central.",
           "prompt": "Sw-Etage(config-if)#",
-          "accept": ["switchport trunk native vlan 1", "sw trunk native vlan 1", "swi trunk native vlan 1"],
+          "accept": [
+            "switchport trunk native vlan 1",
+            "sw trunk native vlan 1",
+            "swi trunk native vlan 1"
+          ],
           "hint": "switchport trunk suivi du mot-clé du VLAN « natif » et du numéro utilisé par le voisin.",
           "error": "% Invalid input detected at '^' marker."
         },
         {
           "q": "Revenez au mode privilégié.",
           "prompt": "Sw-Etage(config-if)#",
-          "accept": ["end"],
+          "accept": [
+            "end"
+          ],
           "hint": "Retour direct en une commande de trois lettres."
         },
         {
           "q": "Vérifiez que le VLAN natif est désormais cohérent.",
           "prompt": "Sw-Etage#",
-          "accept": ["show interfaces trunk", "show interface trunk", "sh int trunk", "sh interfaces trunk"],
+          "accept": [
+            "show interfaces trunk",
+            "show interface trunk",
+            "sh int trunk",
+            "sh interfaces trunk"
+          ],
           "output": "Port        Mode         Encapsulation  Status        Native vlan\nFa0/24      on           802.1q         trunking      1\n\nPort        Vlans allowed on trunk\nFa0/24      10,11,99",
           "hint": "La même commande show qu'au diagnostic : la colonne Native vlan doit afficher la même valeur que côté Sw-Central."
         }

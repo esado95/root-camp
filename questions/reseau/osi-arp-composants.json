@@ -1,13 +1,17 @@
 {
   "module": "Modèle OSI, ARP & composants",
-  "source": "Modele-OSI.md + ARP-Adresse-MAC.md + Composants-Reseau.md",
   "questions": [
     {
       "id": "osi-001",
       "niveau": 1,
       "type": "qcm",
       "q": "Combien de couches compte le modèle OSI ?",
-      "choices": ["4", "5", "6", "7"],
+      "choices": [
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
       "answer": 3,
       "explication": "Le modèle OSI compte 7 couches, de la couche 1 (Physique) à la couche 7 (Application). Créé dans les années 70, il n'a pas changé depuis sa création."
     },
@@ -17,10 +21,22 @@
       "type": "assoc",
       "q": "Associez chaque couche du modèle OSI à son rôle.",
       "pairs": [
-        ["Physique", "Transmettre les bits bruts sur le support"],
-        ["Transport", "Assurer un transport fiable de bout en bout"],
-        ["Session", "Établir, gérer et terminer les sessions"],
-        ["Présentation", "Traduire, chiffrer et compresser les données"]
+        [
+          "Physique",
+          "Transmettre les bits bruts sur le support"
+        ],
+        [
+          "Transport",
+          "Assurer un transport fiable de bout en bout"
+        ],
+        [
+          "Session",
+          "Établir, gérer et terminer les sessions"
+        ],
+        [
+          "Présentation",
+          "Traduire, chiffrer et compresser les données"
+        ]
       ],
       "explication": "Chaque couche a un rôle précis : la 1 transmet les bits, la 4 fiabilise le transport (TCP/UDP), la 5 gère tout ce qui est lié au compte utilisateur sur l'application, la 6 met en forme les données."
     },
@@ -30,10 +46,22 @@
       "type": "assoc",
       "q": "Associez chaque protocole ou technologie à sa couche OSI.",
       "pairs": [
-        ["HTTP", "Couche 7 — Application"],
-        ["TCP", "Couche 4 — Transport"],
-        ["IP", "Couche 3 — Réseau"],
-        ["Ethernet", "Couche 2 — Liaison de données"]
+        [
+          "HTTP",
+          "Couche 7 — Application"
+        ],
+        [
+          "TCP",
+          "Couche 4 — Transport"
+        ],
+        [
+          "IP",
+          "Couche 3 — Réseau"
+        ],
+        [
+          "Ethernet",
+          "Couche 2 — Liaison de données"
+        ]
       ],
       "explication": "HTTP, FTP et DNS sont des services de la couche Application ; TCP/UDP et les ports relèvent du Transport ; IP du Réseau ; Ethernet et les adresses MAC de la Liaison de données."
     },
@@ -56,7 +84,12 @@
       "niveau": 1,
       "type": "libre",
       "q": "Quelle adresse MAC de destination est utilisée pour diffuser une trame en broadcast (par exemple un ARP Request) ?",
-      "accept": ["FF:FF:FF:FF:FF:FF", "FF-FF-FF-FF-FF-FF", "FFFFFFFFFFFF", "FF FF FF FF FF FF"],
+      "accept": [
+        "FF:FF:FF:FF:FF:FF",
+        "FF-FF-FF-FF-FF-FF",
+        "FFFFFFFFFFFF",
+        "FF FF FF FF FF FF"
+      ],
       "explication": "FF:FF:FF:FF:FF:FF est l'adresse MAC de broadcast : la trame est reçue et traitée par toutes les machines du réseau local."
     },
     {
@@ -99,7 +132,11 @@
         "Elle transporte les données sous forme de signaux électriques",
         "Elle doit être torsadée pour éviter les interférences"
       ],
-      "answer": [0, 1, 2],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "La fibre transporte de la lumière (et non de l'électricité) dans un fil de verre fragile ; elle équipe notamment les câbles sous-marins, et un prisme sépare les channels du flux multimode."
     },
     {
@@ -121,7 +158,12 @@
       "niveau": 1,
       "type": "qcm",
       "q": "Quel organisme gère le GAN (Internet) et détermine les AS (Autonomous Systems) ?",
-      "choices": ["IEEE", "ICANN", "IANA", "IETF"],
+      "choices": [
+        "IEEE",
+        "ICANN",
+        "IANA",
+        "IETF"
+      ],
       "answer": 2,
       "explication": "L'IANA gère Internet à l'échelle mondiale et détermine un AS (Autonomous System) par pays."
     },
@@ -131,10 +173,22 @@
       "type": "assoc",
       "q": "Associez chaque PDU (unité de données) à sa couche OSI.",
       "pairs": [
-        ["Segment", "Couche 4 — Transport"],
-        ["Paquet", "Couche 3 — Réseau"],
-        ["Trame", "Couche 2 — Liaison de données"],
-        ["Bits", "Couche 1 — Physique"]
+        [
+          "Segment",
+          "Couche 4 — Transport"
+        ],
+        [
+          "Paquet",
+          "Couche 3 — Réseau"
+        ],
+        [
+          "Trame",
+          "Couche 2 — Liaison de données"
+        ],
+        [
+          "Bits",
+          "Couche 1 — Physique"
+        ]
       ],
       "explication": "En descendant les couches, la donnée prend un nom différent à chaque niveau : segment (4), paquet (3), trame (2), puis bits (1) transmis sur le support."
     },
@@ -269,8 +323,18 @@
       "niveau": 2,
       "type": "multi",
       "q": "Parmi ces équipements, lesquels sont des périphériques intermédiaires ? (plusieurs réponses)",
-      "choices": ["Routeur", "Imprimante IP", "Switch", "Pare-feu", "Téléphone IP"],
-      "answer": [0, 2, 3],
+      "choices": [
+        "Routeur",
+        "Imprimante IP",
+        "Switch",
+        "Pare-feu",
+        "Téléphone IP"
+      ],
+      "answer": [
+        0,
+        2,
+        3
+      ],
       "explication": "Les périphériques intermédiaires acheminent les données : routeur, switch, pare-feu (matériel ou virtuel comme pfSense). Les périphériques finaux (PC, imprimante IP, téléphone IP) sont les sources et destinations."
     },
     {
@@ -293,7 +357,11 @@
       "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Affichez la table ARP de la machine Windows.",
-      "accept": ["arp -a", "arp /a", "arp -g"],
+      "accept": [
+        "arp -a",
+        "arp /a",
+        "arp -g"
+      ],
       "output": "Interface : 192.168.1.10 --- 0x4\n  Adresse Internet      Adresse physique      Type\n  192.168.1.1           50-6f-0c-23-a1-b4     dynamique\n  192.168.1.20          aa-bb-cc-11-22-33     dynamique\n  192.168.1.255         ff-ff-ff-ff-ff-ff     statique\n  224.0.0.22            01-00-5e-00-00-16     statique",
       "explication": "arp -a (ou arp -g) affiche le cache ARP local, c'est-à-dire les correspondances IP/MAC connues de la machine."
     },
@@ -302,7 +370,12 @@
       "niveau": 3,
       "type": "qcm",
       "q": "Dans l'adresse MAC 3C:97:0E:1A:2B:3C, quelle partie identifie le fabricant ?",
-      "choices": ["3C:97:0E", "1A:2B:3C", "3C uniquement", "0E:1A:2B"],
+      "choices": [
+        "3C:97:0E",
+        "1A:2B:3C",
+        "3C uniquement",
+        "0E:1A:2B"
+      ],
       "answer": 0,
       "explication": "Les 3 premiers octets forment l'OUI, l'identifiant du fabricant ; les 3 derniers octets identifient la carte réseau elle-même."
     },
@@ -338,7 +411,12 @@
       "niveau": 3,
       "type": "qcm",
       "q": "On remplace un hub par un switch 12 ports. Combien de domaines de collision obtient-on ?",
-      "choices": ["1", "2", "12", "24"],
+      "choices": [
+        "1",
+        "2",
+        "12",
+        "24"
+      ],
       "answer": 2,
       "explication": "Chaque port d'un switch constitue son propre domaine de collision, soit 12 ici, alors qu'un hub ne forme qu'un seul domaine partagé par tous les ports."
     },
@@ -361,7 +439,12 @@
       "niveau": 3,
       "type": "libre",
       "q": "À quelle couche OSI (numéro) appartiennent les ports TCP et UDP ?",
-      "accept": ["4", "couche 4", "transport", "couche transport"],
+      "accept": [
+        "4",
+        "couche 4",
+        "transport",
+        "couche transport"
+      ],
       "explication": "Les ports relèvent de la couche 4 (Transport), aux côtés de TCP et UDP."
     },
     {

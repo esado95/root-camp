@@ -1,51 +1,99 @@
 {
   "module": "AD en pratique (REA)",
-  "source": "Depannage-Active-Directory.md + Procedure-Active-Directory.md + Evaluation-Rea-Win1.md + Evaluation-Rea-Win1-Synthese.md + Evaluation-Rea-Win2.md",
   "questions": [
     {
-      "id": "adp-001", "niveau": 1, "type": "qcm",
+      "id": "adp-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quel rôle faut-il installer sur le serveur avant de pouvoir le promouvoir en contrôleur de domaine ?",
-      "choices": ["Services de domaine Active Directory (AD DS)", "Serveur DNS uniquement", "Services Bureau à distance", "Services de fichiers et de stockage"],
+      "choices": [
+        "Services de domaine Active Directory (AD DS)",
+        "Serveur DNS uniquement",
+        "Services Bureau à distance",
+        "Services de fichiers et de stockage"
+      ],
       "answer": 0,
       "explication": "On installe d'abord le rôle AD DS via le Gestionnaire de serveur ; la promotion en contrôleur de domaine est ensuite proposée via le drapeau de notification, et l'assistant ajoute automatiquement le rôle DNS."
     },
     {
-      "id": "adp-002", "niveau": 1, "type": "multi",
+      "id": "adp-002",
+      "niveau": 1,
+      "type": "multi",
       "q": "Quelles règles le nom de domaine du TP (ex. entreprise.lan) devait-il respecter ? (plusieurs réponses)",
-      "choices": ["Être écrit en minuscules", "Se terminer par le suffixe .lan", "Ne pas contenir d'espace", "Contenir au moins un chiffre", "Commencer obligatoirement par www"],
-      "answer": [0, 1, 2],
+      "choices": [
+        "Être écrit en minuscules",
+        "Se terminer par le suffixe .lan",
+        "Ne pas contenir d'espace",
+        "Contenir au moins un chiffre",
+        "Commencer obligatoirement par www"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
       "explication": "La consigne impose un nom en minuscules, sans espace ni caractère spécial, terminé par .lan : un suffixe local qui évite tout conflit avec un domaine Internet réel."
     },
     {
-      "id": "adp-003", "niveau": 2, "type": "qcm",
+      "id": "adp-003",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi configure-t-on 127.0.0.1 (ou sa propre IP) comme serveur DNS préféré sur le futur contrôleur de domaine ?",
-      "choices": ["Pour accélérer la navigation Internet du serveur", "Parce que le serveur hébergera lui-même la zone DNS du domaine et doit s'interroger en priorité", "Parce que la passerelle refuse les requêtes DNS des serveurs", "Pour empêcher les clients d'utiliser ce serveur comme DNS"],
+      "choices": [
+        "Pour accélérer la navigation Internet du serveur",
+        "Parce que le serveur hébergera lui-même la zone DNS du domaine et doit s'interroger en priorité",
+        "Parce que la passerelle refuse les requêtes DNS des serveurs",
+        "Pour empêcher les clients d'utiliser ce serveur comme DNS"
+      ],
       "answer": 1,
       "explication": "L'assistant de promotion installe le rôle DNS sur le serveur : il devient le résolveur de référence du domaine et doit donc se consulter lui-même."
     },
     {
-      "id": "adp-004", "niveau": 1, "type": "qcm",
+      "id": "adp-004",
+      "niveau": 1,
+      "type": "qcm",
       "q": "À quoi sert le mot de passe DSRM demandé lors de la promotion en contrôleur de domaine ?",
-      "choices": ["À protéger l'accès à la console ADUC", "À démarrer le serveur en mode de restauration des services d'annuaire pour réparer l'AD", "À chiffrer les mots de passe des utilisateurs du domaine", "À sécuriser l'accès RDP au serveur"],
+      "choices": [
+        "À protéger l'accès à la console ADUC",
+        "À démarrer le serveur en mode de restauration des services d'annuaire pour réparer l'AD",
+        "À chiffrer les mots de passe des utilisateurs du domaine",
+        "À sécuriser l'accès RDP au serveur"
+      ],
       "answer": 1,
       "explication": "Le mot de passe DSRM (Directory Services Restore Mode) sert aux opérations de maintenance ou de restauration de l'annuaire : il doit être fort et ne jamais être oublié."
     },
     {
-      "id": "adp-005", "niveau": 1, "type": "qcm",
+      "id": "adp-005",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Après la promotion du serveur en contrôleur de domaine, que devient le compte administrateur local ?",
-      "choices": ["Il est supprimé définitivement", "Il est désactivé au profit du compte administrateur du domaine, qui conserve le même mot de passe", "Il reste utilisable en parallèle du compte du domaine", "Il est automatiquement renommé en Invité"],
+      "choices": [
+        "Il est supprimé définitivement",
+        "Il est désactivé au profit du compte administrateur du domaine, qui conserve le même mot de passe",
+        "Il reste utilisable en parallèle du compte du domaine",
+        "Il est automatiquement renommé en Invité"
+      ],
       "answer": 1,
       "explication": "Un contrôleur de domaine n'utilise plus de base de comptes locaux : on ouvre désormais la session avec nom_domaine\\administrateur."
     },
     {
-      "id": "adp-006", "niveau": 1, "type": "qcm",
+      "id": "adp-006",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Après la promotion, dans quelle unité d'organisation d'ADUC le contrôleur de domaine apparaît-il automatiquement ?",
-      "choices": ["Computers", "Domain Controllers", "Users", "Builtin"],
+      "choices": [
+        "Computers",
+        "Domain Controllers",
+        "Users",
+        "Builtin"
+      ],
       "answer": 1,
       "explication": "La promotion place automatiquement le serveur dans l'OU Domain Controllers : vérifier sa présence à cet endroit fait partie des contrôles post-installation."
     },
     {
-      "id": "adp-007", "niveau": 3, "type": "ordre",
+      "id": "adp-007",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre les grandes étapes du TP de mise en place d'un domaine Active Directory.",
       "steps": [
         "Passer le serveur en IP fixe et le renommer",
@@ -57,32 +105,62 @@
       "explication": "L'adressage fixe et le nommage se font toujours avant l'installation d'AD DS ; le client ne peut joindre le domaine qu'une fois son DNS pointé vers le contrôleur de domaine."
     },
     {
-      "id": "adp-008", "niveau": 1, "type": "assoc",
+      "id": "adp-008",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque outil ou raccourci à son usage dans le TP.",
       "pairs": [
-        ["ncpa.cpl", "Configurer les cartes réseau"],
-        ["sysdm.cpl", "Renommer la machine et joindre le domaine"],
-        ["Utilisateurs et ordinateurs Active Directory (ADUC)", "Gérer les OU, utilisateurs et groupes"],
-        ["Gestion de stratégie de groupe (GPMC)", "Créer et lier les GPO"]
+        [
+          "ncpa.cpl",
+          "Configurer les cartes réseau"
+        ],
+        [
+          "sysdm.cpl",
+          "Renommer la machine et joindre le domaine"
+        ],
+        [
+          "Utilisateurs et ordinateurs Active Directory (ADUC)",
+          "Gérer les OU, utilisateurs et groupes"
+        ],
+        [
+          "Gestion de stratégie de groupe (GPMC)",
+          "Créer et lier les GPO"
+        ]
       ],
       "explication": "Ces quatre outils couvrent l'essentiel du TP : configuration réseau, jonction au domaine, gestion des objets de l'annuaire et stratégies de groupe."
     },
     {
-      "id": "adp-009", "niveau": 2, "type": "qcm",
+      "id": "adp-009",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Un client n'arrive pas à joindre le domaine. Quelle est la cause dans 99 % des cas ?",
-      "choices": ["Le pare-feu du serveur bloque le port Kerberos", "Le DNS du client ne pointe pas vers le contrôleur de domaine (mais vers la passerelle ou 8.8.8.8)", "Le compte administrateur du domaine est expiré", "Le client et le serveur n'ont pas le même masque de sous-réseau"],
+      "choices": [
+        "Le pare-feu du serveur bloque le port Kerberos",
+        "Le DNS du client ne pointe pas vers le contrôleur de domaine (mais vers la passerelle ou 8.8.8.8)",
+        "Le compte administrateur du domaine est expiré",
+        "Le client et le serveur n'ont pas le même masque de sous-réseau"
+      ],
       "answer": 1,
       "explication": "Sans le contrôleur de domaine comme serveur DNS, le client ne peut pas résoudre les enregistrements du domaine et la jonction échoue : c'est l'erreur numéro 1 en TP comme en évaluation."
     },
     {
-      "id": "adp-010", "niveau": 1, "type": "qcm",
+      "id": "adp-010",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Dans quel conteneur d'ADUC un poste client fraîchement joint au domaine apparaît-il par défaut ?",
-      "choices": ["Domain Controllers", "Users", "Computers", "Builtin"],
+      "choices": [
+        "Domain Controllers",
+        "Users",
+        "Computers",
+        "Builtin"
+      ],
       "answer": 2,
       "explication": "Un ordinateur qui rejoint le domaine est créé par défaut dans le conteneur Computers ; on le déplace ensuite dans une OU pour lui appliquer des GPO."
     },
     {
-      "id": "adp-011", "niveau": 3, "type": "ordre",
+      "id": "adp-011",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Un client ne parvient pas à joindre le domaine. Remettez dans l'ordre les vérifications à effectuer.",
       "steps": [
         "Depuis le client, tester la connectivité avec un ping vers l'IP du serveur",
@@ -93,49 +171,96 @@
       "explication": "On remonte dans l'ordre : réseau, configuration DNS du client, résolution du domaine, puis service AD DS côté serveur. Si le ping échoue alors que le réseau est bon, penser à activer la règle de pare-feu « Demande d'écho ICMPv4 » sur la cible."
     },
     {
-      "id": "adp-012", "niveau": 1, "type": "multi",
+      "id": "adp-012",
+      "niveau": 1,
+      "type": "multi",
       "q": "Quels formats de nom d'ouverture de session sont valides pour un utilisateur de domaine ? (plusieurs réponses)",
-      "choices": ["MONDOMAINE\\jdupont", "jdupont@mondomaine.lan", "jdupont@192.168.10.10", "jdupont\\MONDOMAINE"],
-      "answer": [0, 1],
+      "choices": [
+        "MONDOMAINE\\jdupont",
+        "jdupont@mondomaine.lan",
+        "jdupont@192.168.10.10",
+        "jdupont\\MONDOMAINE"
+      ],
+      "answer": [
+        0,
+        1
+      ],
       "explication": "Deux formats sont acceptés : DOMAINE\\utilisateur (NetBIOS) et utilisateur@domaine.lan (UPN). Un mauvais format de login est une cause classique d'échec de connexion."
     },
     {
-      "id": "adp-013", "niveau": 3, "type": "qcm",
+      "id": "adp-013",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Un poste affiche « la relation d'approbation entre cette station de travail et le domaine principal a échoué ». Que faire ?",
-      "choices": ["Réinstaller Windows sur le poste", "Faire passer le poste en groupe de travail, redémarrer, puis le refaire joindre le domaine", "Supprimer puis recréer le compte de l'utilisateur dans ADUC", "Redémarrer le contrôleur de domaine"],
+      "choices": [
+        "Réinstaller Windows sur le poste",
+        "Faire passer le poste en groupe de travail, redémarrer, puis le refaire joindre le domaine",
+        "Supprimer puis recréer le compte de l'utilisateur dans ADUC",
+        "Redémarrer le contrôleur de domaine"
+      ],
       "answer": 1,
       "explication": "La sortie vers un groupe de travail suivie d'une nouvelle jonction resynchronise le compte d'ordinateur et rétablit la relation d'approbation avec le domaine."
     },
     {
-      "id": "adp-014", "niveau": 3, "type": "terminal",
+      "id": "adp-014",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Le compte AD de jdupont est verrouillé après trop de tentatives de mot de passe erronées. Déverrouillez-le avec la cmdlet PowerShell dédiée.",
-      "accept": ["Unlock-ADAccount -Identity jdupont", "Unlock-ADAccount -Identity \"jdupont\"", "Unlock-ADAccount -Identity 'jdupont'", "Unlock-ADAccount jdupont"],
+      "accept": [
+        "Unlock-ADAccount -Identity jdupont",
+        "Unlock-ADAccount -Identity \"jdupont\"",
+        "Unlock-ADAccount -Identity 'jdupont'",
+        "Unlock-ADAccount jdupont"
+      ],
       "explication": "Unlock-ADAccount déverrouille le compte sans afficher de sortie en cas de succès ; à ne pas confondre avec Enable-ADAccount, qui réactive un compte désactivé."
     },
     {
-      "id": "adp-015", "niveau": 1, "type": "qcm",
+      "id": "adp-015",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Sans intervention manuelle, à quelle fréquence les GPO sont-elles rafraîchies sur les postes clients ?",
-      "choices": ["Toutes les 5 minutes", "Environ toutes les 90 minutes", "Une fois par 24 heures", "Uniquement au redémarrage du poste"],
+      "choices": [
+        "Toutes les 5 minutes",
+        "Environ toutes les 90 minutes",
+        "Une fois par 24 heures",
+        "Uniquement au redémarrage du poste"
+      ],
       "answer": 1,
       "explication": "Le rafraîchissement automatique des stratégies a lieu environ toutes les 90 minutes ; en TP, on force l'application avec gpupdate /force pour ne pas attendre."
     },
     {
-      "id": "adp-017", "niveau": 3, "type": "qcm",
+      "id": "adp-017",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande génère un rapport HTML détaillant les GPO réellement appliquées à un poste ?",
-      "choices": ["gpupdate /force", "gpresult /h C:\\rapport.html", "Get-GPO -All", "gpedit.msc"],
+      "choices": [
+        "gpupdate /force",
+        "gpresult /h C:\\rapport.html",
+        "Get-GPO -All",
+        "gpedit.msc"
+      ],
       "answer": 1,
       "explication": "gpresult /h produit un rapport lisible dans le navigateur : c'est l'outil de référence pour comprendre pourquoi une GPO ne s'applique pas ou laquelle en écrase une autre. Get-GPO -All ne fait que lister les GPO du domaine."
     },
     {
-      "id": "adp-018", "niveau": 2, "type": "qcm",
+      "id": "adp-018",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Une GPO liée au domaine et une GPO liée à une OU définissent le même paramètre avec des valeurs opposées. Laquelle s'applique et pourquoi ?",
-      "choices": ["Celle du domaine, car le domaine est au-dessus de l'OU", "Celle de l'OU, car l'ordre d'application est Locale, Site, Domaine puis OU et la dernière appliquée l'emporte", "Aucune : le conflit désactive les deux GPO", "Celle qui a été créée en premier"],
+      "choices": [
+        "Celle du domaine, car le domaine est au-dessus de l'OU",
+        "Celle de l'OU, car l'ordre d'application est Locale, Site, Domaine puis OU et la dernière appliquée l'emporte",
+        "Aucune : le conflit désactive les deux GPO",
+        "Celle qui a été créée en premier"
+      ],
       "answer": 1,
       "explication": "Règle LSDOU : les stratégies s'appliquent de la locale vers l'OU ; en cas de conflit, la dernière écrite — celle de l'OU — gagne."
     },
     {
-      "id": "adp-019", "niveau": 2, "type": "multi",
+      "id": "adp-019",
+      "niveau": 2,
+      "type": "multi",
       "q": "Quelles affirmations sur les GPO sont exactes ? (plusieurs réponses)",
       "choices": [
         "Il ne faut jamais modifier directement la Default Domain Policy",
@@ -144,40 +269,74 @@
         "Dans GPMC, une icône avec un point d'exclamation bleu signale une OU qui bloque l'héritage",
         "Une GPO ne peut être liée qu'à une seule OU à la fois"
       ],
-      "answer": [0, 1, 3],
+      "answer": [
+        0,
+        1,
+        3
+      ],
       "explication": "On crée toujours une GPO dédiée plutôt que de toucher la Default Domain Policy ; la liaison se fait par glisser-déposer sur l'OU cible, et le blocage d'héritage se repère à son icône dans GPMC."
     },
     {
-      "id": "adp-020", "niveau": 4, "type": "scenario",
+      "id": "adp-020",
+      "niveau": 4,
+      "type": "scenario",
       "context": "GPO « Fond d'écran imposé » (paramètres utilisateur) liée à l'OU Ordinateurs_Paris.\nLe compte jdupont est rangé dans l'OU Utilisateurs_Paris.\ngpupdate /force exécuté sur le poste : aucun effet.",
       "q": "Pourquoi cette GPO ne s'applique-t-elle pas à jdupont ?",
-      "choices": ["Le délai de rafraîchissement de 90 minutes n'est pas écoulé", "Une GPO à paramètres utilisateur doit être liée à l'OU contenant le compte utilisateur, pas celle des ordinateurs", "Il faut redémarrer le contrôleur de domaine après chaque liaison", "Le fond d'écran ne peut pas être géré par GPO"],
+      "choices": [
+        "Le délai de rafraîchissement de 90 minutes n'est pas écoulé",
+        "Une GPO à paramètres utilisateur doit être liée à l'OU contenant le compte utilisateur, pas celle des ordinateurs",
+        "Il faut redémarrer le contrôleur de domaine après chaque liaison",
+        "Le fond d'écran ne peut pas être géré par GPO"
+      ],
       "answer": 1,
       "explication": "Les paramètres utilisateur suivent l'emplacement du compte utilisateur dans l'annuaire : la GPO doit être liée à Utilisateurs_Paris. Le rapport gpresult /h permet de confirmer ce type d'erreur de liaison."
     },
     {
-      "id": "adp-021", "niveau": 2, "type": "qcm",
+      "id": "adp-021",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Lors d'un accès réseau à un dossier partagé, comment se combinent les autorisations de partage et les autorisations NTFS ?",
-      "choices": ["Les autorisations de partage l'emportent toujours", "Les autorisations NTFS l'emportent toujours", "La plus restrictive des deux s'applique", "Elles se cumulent pour donner le maximum de droits"],
+      "choices": [
+        "Les autorisations de partage l'emportent toujours",
+        "Les autorisations NTFS l'emportent toujours",
+        "La plus restrictive des deux s'applique",
+        "Elles se cumulent pour donner le maximum de droits"
+      ],
       "answer": 2,
       "explication": "Le plus restrictif gagne : la bonne pratique consiste à donner un partage large (Contrôle total au groupe de domaine local) et à affiner les droits côté NTFS."
     },
     {
-      "id": "adp-022", "niveau": 2, "type": "qcm",
+      "id": "adp-022",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Un utilisateur devrait avoir accès à un dossier, mais un « Refuser » explicite est posé sur l'un de ses groupes. Quel est le résultat ?",
-      "choices": ["L'autorisation la plus permissive l'emporte", "Le refus explicite prime sur toutes les autorisations", "L'accès est accordé en lecture seule", "Windows ignore les refus hérités des groupes"],
+      "choices": [
+        "L'autorisation la plus permissive l'emporte",
+        "Le refus explicite prime sur toutes les autorisations",
+        "L'accès est accordé en lecture seule",
+        "Windows ignore les refus hérités des groupes"
+      ],
       "answer": 1,
       "explication": "Un refus explicite l'emporte sur tout : c'est ce qu'il faut chercher dans l'onglet Sécurité avancée quand un accès reste bloqué malgré des droits en apparence corrects."
     },
     {
-      "id": "adp-023", "niveau": 1, "type": "qcm",
+      "id": "adp-023",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quel est l'effet du caractère $ ajouté à la fin d'un nom de partage (ex. Direction$) ?",
-      "choices": ["Le partage passe en lecture seule", "Le partage est masqué lors de l'exploration du réseau", "Le contenu du partage est chiffré", "Le partage est réservé aux administrateurs"],
+      "choices": [
+        "Le partage passe en lecture seule",
+        "Le partage est masqué lors de l'exploration du réseau",
+        "Le contenu du partage est chiffré",
+        "Le partage est réservé aux administrateurs"
+      ],
       "answer": 1,
       "explication": "Le $ cache le partage du voisinage réseau ; il reste accessible en saisissant son chemin UNC complet, par exemple \\\\SRV-AD\\Direction$."
     },
     {
-      "id": "adp-024", "niveau": 3, "type": "ordre",
+      "id": "adp-024",
+      "niveau": 3,
+      "type": "ordre",
       "q": "AGDLP : remettez dans l'ordre les étapes pour donner à un service l'accès à un partage.",
       "steps": [
         "Créer le groupe global de métier (ex. GG_Direction) et y ajouter les utilisateurs",
@@ -188,136 +347,266 @@
       "explication": "AGDLP : les comptes (A) entrent dans un groupe global (G) de métier, lui-même membre d'un groupe de domaine local (DL) de ressource, seul détenteur des permissions (P)."
     },
     {
-      "id": "adp-025", "niveau": 2, "type": "qcm",
+      "id": "adp-025",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi attribuer des droits NTFS directement à un compte utilisateur est-il considéré comme une faute grave en TP ?",
-      "choices": ["Cela ralentit le serveur de fichiers", "Cela rend la gestion ingérable : la méthode AGDLP impose de passer par les groupes (utilisateur, groupe global, groupe de domaine local, permissions)", "C'est techniquement impossible sous Windows Server", "Les droits individuels expirent automatiquement au bout de 30 jours"],
+      "choices": [
+        "Cela ralentit le serveur de fichiers",
+        "Cela rend la gestion ingérable : la méthode AGDLP impose de passer par les groupes (utilisateur, groupe global, groupe de domaine local, permissions)",
+        "C'est techniquement impossible sous Windows Server",
+        "Les droits individuels expirent automatiquement au bout de 30 jours"
+      ],
       "answer": 1,
       "explication": "Les permissions ne s'accordent qu'à des groupes : l'arrivée ou le départ d'un collaborateur se gère alors par une simple appartenance de groupe, sans toucher aux ACL."
     },
     {
-      "id": "adp-026", "niveau": 2, "type": "qcm",
+      "id": "adp-026",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Vous devez déléguer la réinitialisation des mots de passe à l'équipe helpdesk. Quelle est la bonne méthode ?",
-      "choices": ["Accorder l'autorisation à chaque technicien individuellement sur tout le domaine", "Créer un groupe de sécurité (ex. GG_Helpdesk) et lui déléguer l'autorisation sur une OU spécifique, jamais sur l'OU des comptes administrateurs", "Ajouter les techniciens au groupe Admins du domaine", "Communiquer le mot de passe DSRM à l'équipe helpdesk"],
+      "choices": [
+        "Accorder l'autorisation à chaque technicien individuellement sur tout le domaine",
+        "Créer un groupe de sécurité (ex. GG_Helpdesk) et lui déléguer l'autorisation sur une OU spécifique, jamais sur l'OU des comptes administrateurs",
+        "Ajouter les techniciens au groupe Admins du domaine",
+        "Communiquer le mot de passe DSRM à l'équipe helpdesk"
+      ],
       "answer": 1,
       "explication": "La délégation de contrôle passe toujours par un groupe de sécurité et cible une OU précise ; l'OU contenant les comptes administrateurs ne doit jamais être déléguée."
     },
     {
-      "id": "adp-027", "niveau": 4, "type": "scenario",
+      "id": "adp-027",
+      "niveau": 4,
+      "type": "scenario",
       "context": "14h00 : jdupont est ajouté au groupe GG_Direction dans ADUC (AGDLP correctement en place).\n14h05 : sur le client, la session de jdupont est ouverte depuis 9h00 ; l'accès à \\\\SRV-AD\\Direction$ est toujours refusé.",
       "q": "Que manque-t-il pour que l'accès fonctionne ?",
-      "choices": ["Attendre la réplication entre les contrôleurs de domaine", "Fermer puis rouvrir la session de jdupont : le jeton d'accès n'intègre les nouveaux groupes qu'à l'ouverture de session", "Redémarrer le serveur de fichiers", "Relancer gpupdate /force sur le client"],
+      "choices": [
+        "Attendre la réplication entre les contrôleurs de domaine",
+        "Fermer puis rouvrir la session de jdupont : le jeton d'accès n'intègre les nouveaux groupes qu'à l'ouverture de session",
+        "Redémarrer le serveur de fichiers",
+        "Relancer gpupdate /force sur le client"
+      ],
       "answer": 1,
       "explication": "Le jeton d'accès est construit à l'ouverture de session : toute nouvelle appartenance de groupe exige une déconnexion/reconnexion pour être prise en compte. C'est un piège classique des TP."
     },
     {
-      "id": "adp-028", "niveau": 3, "type": "qcm",
+      "id": "adp-028",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Les enregistrements SRV du domaine ont disparu de la zone DNS et les jonctions échouent. Quel service faut-il redémarrer sur le contrôleur de domaine pour les réinscrire ?",
-      "choices": ["DNS Server", "Netlogon", "DHCP Server", "DFS Replication"],
+      "choices": [
+        "DNS Server",
+        "Netlogon",
+        "DHCP Server",
+        "DFS Replication"
+      ],
       "answer": 1,
       "explication": "Restart-Service Netlogon force le contrôleur de domaine à réenregistrer ses enregistrements SRV dans la zone DNS, indispensables aux clients pour localiser le domaine."
     },
     {
-      "id": "adp-029", "niveau": 1, "type": "terminal",
+      "id": "adp-029",
+      "niveau": 1,
+      "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Ce poste client Windows résout encore l'ancienne adresse IP d'un serveur. Videz son cache DNS.",
-      "accept": ["ipconfig /flushdns", "ipconfig/flushdns"],
+      "accept": [
+        "ipconfig /flushdns",
+        "ipconfig/flushdns"
+      ],
       "output": "Configuration IP de Windows\n\nLe cache de résolution DNS a été vidé.",
       "explication": "ipconfig /flushdns supprime les résolutions mémorisées : indispensable quand le client résout encore une ancienne adresse IP."
     },
     {
-      "id": "adp-030", "niveau": 3, "type": "assoc",
+      "id": "adp-030",
+      "niveau": 3,
+      "type": "assoc",
       "q": "Associez chaque commande de diagnostic Active Directory à son rôle.",
       "pairs": [
-        ["netdom query fsmo", "Lister les rôles FSMO du domaine"],
-        ["dcdiag /v", "Tester la santé du contrôleur de domaine"],
-        ["nltest /dsgetdc:mondomaine.lan", "Vérifier qu'un contrôleur de domaine est localisable"],
-        ["repadmin /replsummary", "Contrôler l'état de la réplication entre DC"]
+        [
+          "netdom query fsmo",
+          "Lister les rôles FSMO du domaine"
+        ],
+        [
+          "dcdiag /v",
+          "Tester la santé du contrôleur de domaine"
+        ],
+        [
+          "nltest /dsgetdc:mondomaine.lan",
+          "Vérifier qu'un contrôleur de domaine est localisable"
+        ],
+        [
+          "repadmin /replsummary",
+          "Contrôler l'état de la réplication entre DC"
+        ]
       ],
       "explication": "Ces commandes forment la trousse de diagnostic AD ; repadmin /syncall /AdeP force ensuite la réplication, et net share vérifie que SYSVOL et NETLOGON sont bien partagés."
     },
     {
-      "id": "adp-032", "niveau": 3, "type": "terminal",
+      "id": "adp-032",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "C:\\Windows\\System32>",
       "q": "Pendant l'installation de Windows 11, l'assistant exige un compte Microsoft alors que la VM n'a pas d'accès Internet. Vous avez ouvert l'invite de commandes avec Shift+F10 : contournez cette obligation pour pouvoir créer un compte local.",
-      "accept": ["oobe\\bypassnro", "oobe/bypassnro", "bypassnro"],
+      "accept": [
+        "oobe\\bypassnro",
+        "oobe/bypassnro",
+        "bypassnro"
+      ],
       "explication": "oobe\\bypassnro redémarre la machine et relance l'assistant d'installation en autorisant la création d'un compte local : indispensable pour les VM de TP sans accès Internet."
     },
     {
-      "id": "adp-033", "niveau": 1, "type": "assoc",
+      "id": "adp-033",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque service à son port.",
       "pairs": [
-        ["Serveur DHCP (écoute des requêtes)", "UDP 67"],
-        ["Client DHCP (réception des réponses)", "UDP 68"],
-        ["DNS", "Port 53"],
-        ["FTP (canal de contrôle)", "TCP 21"]
+        [
+          "Serveur DHCP (écoute des requêtes)",
+          "UDP 67"
+        ],
+        [
+          "Client DHCP (réception des réponses)",
+          "UDP 68"
+        ],
+        [
+          "DNS",
+          "Port 53"
+        ],
+        [
+          "FTP (canal de contrôle)",
+          "TCP 21"
+        ]
       ],
       "explication": "DHCP fonctionne en UDP (67 côté serveur, 68 côté client) ; le FTP utilise TCP 21 pour les commandes et TCP 20 pour les données, HTTP restant sur TCP 80 et HTTPS sur 443."
     },
     {
-      "id": "adp-034", "niveau": 1, "type": "qcm",
+      "id": "adp-034",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Vers quoi pointe un enregistrement DNS de type CNAME ?",
-      "choices": ["Vers une adresse IPv4", "Vers un autre nom d'hôte (alias)", "Vers un serveur de messagerie", "Vers une adresse MAC"],
+      "choices": [
+        "Vers une adresse IPv4",
+        "Vers un autre nom d'hôte (alias)",
+        "Vers un serveur de messagerie",
+        "Vers une adresse MAC"
+      ],
       "answer": 1,
       "explication": "Le CNAME est un alias qui renvoie vers un nom (ex. intranet vers www.entreprise.lan) ; c'est l'enregistrement A qui traduit finalement le nom en adresse IP."
     },
     {
-      "id": "adp-035", "niveau": 2, "type": "qcm",
+      "id": "adp-035",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Quelle est la conséquence de l'oubli de l'option 006 (serveurs DNS) dans une étendue DHCP ?",
-      "choices": ["Les clients n'obtiennent aucune adresse IP", "Les clients reçoivent une IP mais ne peuvent résoudre aucun nom : jonction au domaine et accès aux sites par nom impossibles", "Les clients passent en adresse APIPA", "La passerelle par défaut n'est plus distribuée"],
+      "choices": [
+        "Les clients n'obtiennent aucune adresse IP",
+        "Les clients reçoivent une IP mais ne peuvent résoudre aucun nom : jonction au domaine et accès aux sites par nom impossibles",
+        "Les clients passent en adresse APIPA",
+        "La passerelle par défaut n'est plus distribuée"
+      ],
       "answer": 1,
       "explication": "L'option 006 communique l'adresse du serveur DNS aux clients ; sans elle, l'adressage fonctionne mais toute résolution de nom échoue. L'option 003 distribue, elle, la passerelle."
     },
     {
-      "id": "adp-036", "niveau": 2, "type": "qcm",
+      "id": "adp-036",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Comment adresser correctement un serveur ou un routeur sur un réseau où un DHCP distribue les adresses ?",
-      "choices": ["Le laisser en DHCP dynamique pour centraliser la gestion", "Lui donner une IP fixe, puis exclure cette adresse de l'étendue DHCP", "Lui donner une IP fixe prise dans la plage distribuée, sans autre action", "Le laisser en APIPA pour éviter tout conflit"],
+      "choices": [
+        "Le laisser en DHCP dynamique pour centraliser la gestion",
+        "Lui donner une IP fixe, puis exclure cette adresse de l'étendue DHCP",
+        "Lui donner une IP fixe prise dans la plage distribuée, sans autre action",
+        "Le laisser en APIPA pour éviter tout conflit"
+      ],
       "answer": 1,
       "explication": "Un équipement d'infrastructure ne doit jamais dépendre du DHCP ; son IP fixe doit être exclue de l'étendue, sinon le serveur risque de la distribuer à un client et de provoquer un conflit d'adresse IP."
     },
     {
-      "id": "adp-037", "niveau": 4, "type": "scenario",
+      "id": "adp-037",
+      "niveau": 4,
+      "type": "scenario",
       "context": "C:\\> ipconfig\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . : 169.254.37.112\n   Masque de sous-réseau . . . . . : 255.255.0.0\n   Passerelle par défaut . . . . . :",
       "q": "Sur le client de TP, censé être en DHCP, vous obtenez cette sortie. Que révèle-t-elle ?",
-      "choices": ["Le serveur DHCP a distribué une adresse de son étendue", "Le client s'est auto-attribué une adresse APIPA : il n'a reçu aucune réponse du serveur DHCP", "Le client subit un conflit d'adresse IP", "Le DNS du client est mal configuré"],
+      "choices": [
+        "Le serveur DHCP a distribué une adresse de son étendue",
+        "Le client s'est auto-attribué une adresse APIPA : il n'a reçu aucune réponse du serveur DHCP",
+        "Le client subit un conflit d'adresse IP",
+        "Le DNS du client est mal configuré"
+      ],
       "answer": 1,
       "explication": "Une adresse en 169.254.x.x (APIPA, non routable) prouve l'échec du dialogue DHCP : vérifier que l'étendue est activée, que le serveur est autorisé et que les VM partagent le même commutateur virtuel."
     },
     {
-      "id": "adp-038", "niveau": 4, "type": "scenario",
+      "id": "adp-038",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Console DHCP : le filtre « Autoriser » est activé, mais la liste des adresses MAC est vide.\nSur tous les clients : ipconfig affiche des adresses en 169.254.x.x.",
       "q": "Depuis l'activation des filtres DHCP, plus aucun client n'obtient d'adresse IP. Pourquoi ?",
-      "choices": ["L'activation du filtre a désactivé l'étendue", "Le filtre Autoriser activé mais vide bloque toute distribution : aucune adresse MAC n'est en liste blanche", "Le filtre Exclure est prioritaire sur l'étendue", "Les baux des clients n'ont pas encore expiré"],
+      "choices": [
+        "L'activation du filtre a désactivé l'étendue",
+        "Le filtre Autoriser activé mais vide bloque toute distribution : aucune adresse MAC n'est en liste blanche",
+        "Le filtre Exclure est prioritaire sur l'étendue",
+        "Les baux des clients n'ont pas encore expiré"
+      ],
       "answer": 1,
       "explication": "Le filtre Autoriser fonctionne en liste blanche : activé à vide, il rejette toutes les machines. Il faut y inscrire les MAC des clients ou le désactiver ; en cas de conflit entre filtres, Exclure reste prioritaire."
     },
     {
-      "id": "adp-039", "niveau": 2, "type": "qcm",
+      "id": "adp-039",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Avant de créer de nouveaux sites dans IIS, pourquoi arrête-t-on le « Default Web Site » ?",
-      "choices": ["Il consomme inutilement de la mémoire", "Pour éviter un conflit de liaison sur le port 80 avec les nouveaux sites", "Parce qu'il est vulnérable aux attaques", "Pour libérer le port 443"],
+      "choices": [
+        "Il consomme inutilement de la mémoire",
+        "Pour éviter un conflit de liaison sur le port 80 avec les nouveaux sites",
+        "Parce qu'il est vulnérable aux attaques",
+        "Pour libérer le port 443"
+      ],
       "answer": 1,
       "explication": "Le site par défaut occupe déjà le port 80 : un nouveau site sans nom d'hôte sur ce même port entrerait en conflit avec lui et ne pourrait pas démarrer correctement."
     },
     {
-      "id": "adp-041", "niveau": 4, "type": "scenario",
+      "id": "adp-041",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Sur le client :\nhttp://www.entreprise.lan --> le site s'affiche\nhttp://192.168.10.10 --> page introuvable\nLiaison IIS du site : port 80, nom d'hôte « www.entreprise.lan ».",
       "q": "Pourquoi le site répond-il au nom mais pas à l'adresse IP ?",
-      "choices": ["Le DNS ne fait pas la résolution inverse", "Un nom d'hôte est renseigné dans la liaison : le site ne répond qu'aux requêtes portant exactement ce nom", "Le pare-feu filtre les accès par adresse IP", "Il manque un enregistrement CNAME pour l'adresse IP"],
+      "choices": [
+        "Le DNS ne fait pas la résolution inverse",
+        "Un nom d'hôte est renseigné dans la liaison : le site ne répond qu'aux requêtes portant exactement ce nom",
+        "Le pare-feu filtre les accès par adresse IP",
+        "Il manque un enregistrement CNAME pour l'adresse IP"
+      ],
       "answer": 1,
       "explication": "Quand le champ nom d'hôte d'une liaison IIS est rempli, IIS compare l'en-tête Host de la requête : pour répondre aussi à l'IP, il faut laisser le nom d'hôte vide ou ajouter une seconde liaison."
     },
     {
-      "id": "adp-042", "niveau": 4, "type": "scenario",
+      "id": "adp-042",
+      "niveau": 4,
+      "type": "scenario",
       "context": "Navigateur client : HTTP Error 403 - Forbidden\nLe site pointe vers C:\\inetpub\\site_principal, qui contient un fichier « index.html.txt ».",
       "q": "Quelle est la cause la plus probable de cette erreur 403 ?",
-      "choices": ["Le port 80 est fermé sur le pare-feu", "La page d'accueil est mal nommée : IIS ne trouve pas de fichier index.html, l'extension .txt étant masquée par Windows", "L'enregistrement DNS www est manquant", "Le disque du serveur est plein"],
+      "choices": [
+        "Le port 80 est fermé sur le pare-feu",
+        "La page d'accueil est mal nommée : IIS ne trouve pas de fichier index.html, l'extension .txt étant masquée par Windows",
+        "L'enregistrement DNS www est manquant",
+        "Le disque du serveur est plein"
+      ],
       "answer": 1,
       "explication": "Une 403 signale l'absence de page par défaut (index.html) ou une authentification anonyme désactivée ; il faut afficher les extensions de fichiers pour repérer les doubles extensions du type index.html.txt."
     },
     {
-      "id": "adp-043", "niveau": 4, "type": "scenario",
+      "id": "adp-043",
+      "niveau": 4,
+      "type": "scenario",
       "context": "FileZilla :\nCommande : STOR rapport.docx\nRéponse : 550 Access is denied.\nDans IIS, l'autorisation « Écriture » est bien cochée pour le site FTP.",
       "q": "Le téléversement échoue malgré l'écriture activée dans IIS. Quelle est la cause la plus probable ?",
-      "choices": ["Le port 21 est bloqué par le pare-feu du serveur", "Les droits NTFS du dossier physique n'accordent pas la modification : le plus restrictif entre NTFS et IIS l'emporte", "Le mode passif n'est pas activé dans FileZilla", "Le fichier dépasse la taille maximale autorisée par IIS"],
+      "choices": [
+        "Le port 21 est bloqué par le pare-feu du serveur",
+        "Les droits NTFS du dossier physique n'accordent pas la modification : le plus restrictif entre NTFS et IIS l'emporte",
+        "Le mode passif n'est pas activé dans FileZilla",
+        "Le fichier dépasse la taille maximale autorisée par IIS"
+      ],
       "answer": 1,
       "explication": "L'erreur 550 en dépôt traduit presque toujours le conflit NTFS/IIS : accorder Modification/Écriture dans l'onglet Sécurité du dossier physique (ex. C:\\inetpub\\monFTP), car les deux niveaux de droits doivent correspondre."
     }

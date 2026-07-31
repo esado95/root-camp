@@ -1,6 +1,5 @@
 {
   "module": "Zabbix & SNMP",
-  "source": "Supervision.md",
   "questions": [
     {
       "id": "sup-001",
@@ -22,9 +21,18 @@
       "type": "assoc",
       "q": "Associez chaque terme à sa définition.",
       "pairs": [
-        ["Monitoring", "Terme générique qui regroupe la supervision et la métrologie"],
-        ["Supervision", "Vérifie l'état d'un service à l'instant T et génère des alertes en cas d'incident"],
-        ["Métrologie", "Mesure et conserve des valeurs chiffrées pour suivre l'évolution d'une charge"]
+        [
+          "Monitoring",
+          "Terme générique qui regroupe la supervision et la métrologie"
+        ],
+        [
+          "Supervision",
+          "Vérifie l'état d'un service à l'instant T et génère des alertes en cas d'incident"
+        ],
+        [
+          "Métrologie",
+          "Mesure et conserve des valeurs chiffrées pour suivre l'évolution d'une charge"
+        ]
       ],
       "explication": "Le monitoring est le terme parapluie : la supervision constate l'état instantané, la métrologie trace l'évolution dans le temps (CPU, mémoire, trafic)."
     },
@@ -47,7 +55,12 @@
       "niveau": 1,
       "type": "libre",
       "q": "Sur quel port UDP un serveur de supervision envoie-t-il ses requêtes SNMP vers un agent ?",
-      "accept": ["161", "udp 161", "udp/161", "port 161"],
+      "accept": [
+        "161",
+        "udp 161",
+        "udp/161",
+        "port 161"
+      ],
       "explication": "Les requêtes SNMP (Get, Walk...) arrivent sur l'agent en UDP 161 ; le port UDP 162 est réservé aux traps envoyés par les équipements."
     },
     {
@@ -97,7 +110,13 @@
       "niveau": 1,
       "type": "libre",
       "q": "Quelle version de SNMP faut-il utiliser pour bénéficier de l'authentification, du chiffrement et du contrôle d'intégrité ?",
-      "accept": ["snmpv3", "v3", "snmp v3", "3", "version 3"],
+      "accept": [
+        "snmpv3",
+        "v3",
+        "snmp v3",
+        "3",
+        "version 3"
+      ],
       "explication": "SNMPv3 est la version la plus sécurisée : elle ajoute l'authentification, le chiffrement et l'intégrité, et elle est recommandée en production."
     },
     {
@@ -120,9 +139,18 @@
       "type": "assoc",
       "q": "Associez chaque mode SNMPv3 à son niveau de sécurité.",
       "pairs": [
-        ["noAuthNoPriv", "Ni authentification ni chiffrement : sécurité faible"],
-        ["authNoPriv", "Authentification sans chiffrement : sécurité moyenne"],
-        ["authPriv", "Authentification et chiffrement : sécurité élevée"]
+        [
+          "noAuthNoPriv",
+          "Ni authentification ni chiffrement : sécurité faible"
+        ],
+        [
+          "authNoPriv",
+          "Authentification sans chiffrement : sécurité moyenne"
+        ],
+        [
+          "authPriv",
+          "Authentification et chiffrement : sécurité élevée"
+        ]
       ],
       "explication": "SNMPv3 se décline en trois niveaux selon que l'on active l'authentification et le chiffrement ; authPriv est le mode recommandé en production."
     },
@@ -152,7 +180,11 @@
         "Elle dépend entièrement de la configuration des équipements",
         "C'est une approche proactive qui détecte rapidement une panne"
       ],
-      "answer": [0, 2, 4],
+      "answer": [
+        0,
+        2,
+        4
+      ],
       "explication": "En supervision active, c'est le superviseur qui pose les questions (ping, HTTP, vérification de service) ; la remontée spontanée d'alertes (logs, traps) relève de la supervision passive."
     },
     {
@@ -181,7 +213,11 @@
         "Le contrôle d'intégrité des données",
         "Le basculement automatique des échanges en TCP"
       ],
-      "answer": [0, 1, 3],
+      "answer": [
+        0,
+        1,
+        3
+      ],
       "explication": "SNMPv3 apporte trois garanties : authentification, chiffrement (confidentialité) et intégrité des données, ce qui le rend adapté aux environnements de production."
     },
     {
@@ -259,9 +295,18 @@
       "type": "assoc",
       "q": "Associez chaque objet Zabbix à son rôle.",
       "pairs": [
-        ["Item", "Donnée élémentaire collectée sur un hôte (ex : charge CPU)"],
-        ["Trigger", "Expression qui évalue les données et passe à l'état Problème quand un seuil est franchi"],
-        ["Action", "Réaction automatique à un événement, comme l'envoi d'une notification"]
+        [
+          "Item",
+          "Donnée élémentaire collectée sur un hôte (ex : charge CPU)"
+        ],
+        [
+          "Trigger",
+          "Expression qui évalue les données et passe à l'état Problème quand un seuil est franchi"
+        ],
+        [
+          "Action",
+          "Réaction automatique à un événement, comme l'envoi d'une notification"
+        ]
       ],
       "explication": "La chaîne Zabbix suit la logique de l'alerting : l'item mesure, le trigger détecte l'incident, l'action notifie."
     },
@@ -284,7 +329,12 @@
       "niveau": 3,
       "type": "libre",
       "q": "Comment s'appelle le mode SNMPv3 qui active à la fois l'authentification et le chiffrement ?",
-      "accept": ["authpriv", "authPriv", "auth priv", "auth-priv"],
+      "accept": [
+        "authpriv",
+        "authPriv",
+        "auth priv",
+        "auth-priv"
+      ],
       "explication": "authPriv (authentification + privacy) est le mode au niveau de sécurité élevé, recommandé en production ; authNoPriv authentifie sans chiffrer, noAuthNoPriv ne protège rien."
     },
     {

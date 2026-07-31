@@ -1,41 +1,77 @@
 {
   "module": "Windows — système & outils",
-  "source": "BIOS-UEFI-Boot.md + Commandes-Windows.md + Observateur-Evenements.md + Partitions-Disques.md + Registre-Windows.md + Systemes-de-Fichiers.md + Utilisateurs-Groupes-Windows.md + Windows-Services-MsConfig.md",
   "questions": [
     {
-      "id": "win-001", "niveau": 1, "type": "qcm",
+      "id": "win-001",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle caractéristique correspond au BIOS « Legacy » par rapport à l'UEFI ?",
-      "choices": ["Interface graphique pilotable à la souris", "Architecture 16 bits avec interface en mode texte", "Prise en charge du Secure Boot", "Gestion native des disques de plus de 2,2 To"],
+      "choices": [
+        "Interface graphique pilotable à la souris",
+        "Architecture 16 bits avec interface en mode texte",
+        "Prise en charge du Secure Boot",
+        "Gestion native des disques de plus de 2,2 To"
+      ],
       "answer": 1,
       "explication": "Le BIOS, apparu dans les années 80, fonctionne en 16 bits avec une interface texte sans souris ; l'UEFI apporte une interface graphique 32/64 bits et le remplace progressivement depuis l'époque de Windows 7."
     },
     {
-      "id": "win-002", "niveau": 1, "type": "qcm",
+      "id": "win-002",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle fonctionnalité de sécurité au démarrage est propre à l'UEFI ?",
-      "choices": ["Secure Boot", "Le POST", "BitLocker", "Le mot de passe de session Windows"],
+      "choices": [
+        "Secure Boot",
+        "Le POST",
+        "BitLocker",
+        "Le mot de passe de session Windows"
+      ],
       "answer": 0,
       "explication": "L'UEFI intègre le Secure Boot, qui sécurise la chaîne de démarrage ; le BIOS Legacy n'offre qu'une sécurité basique et un démarrage plus lent."
     },
     {
-      "id": "win-003", "niveau": 1, "type": "qcm",
+      "id": "win-003",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle est la taille maximale de disque gérée par un partitionnement MBR ?",
-      "choices": ["512 Go", "2,2 To", "4 To", "16 To"],
+      "choices": [
+        "512 Go",
+        "2,2 To",
+        "4 To",
+        "16 To"
+      ],
       "answer": 1,
       "explication": "Le MBR est limité à 2,2 To : au-delà, il faut passer en GPT (associé à l'UEFI), qui n'a pratiquement pas de limite de taille."
     },
     {
-      "id": "win-004", "niveau": 1, "type": "assoc",
+      "id": "win-004",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque élément à sa caractéristique.",
       "pairs": [
-        ["MBR", "4 partitions principales maximum"],
-        ["GPT", "128 partitions maximum"],
-        ["BIOS", "Hyper-V Génération 1"],
-        ["UEFI", "Hyper-V Génération 2"]
+        [
+          "MBR",
+          "4 partitions principales maximum"
+        ],
+        [
+          "GPT",
+          "128 partitions maximum"
+        ],
+        [
+          "BIOS",
+          "Hyper-V Génération 1"
+        ],
+        [
+          "UEFI",
+          "Hyper-V Génération 2"
+        ]
       ],
       "explication": "Le couple BIOS/MBR (max 4 partitions, VM Gen 1) s'oppose au couple UEFI/GPT (max 128 partitions, VM Gen 2)."
     },
     {
-      "id": "win-005", "niveau": 2, "type": "ordre",
+      "id": "win-005",
+      "niveau": 2,
+      "type": "ordre",
       "q": "Remettez dans l'ordre les étapes de la séquence de démarrage d'un PC sous Windows.",
       "steps": [
         "PowerGood : l'alimentation se stabilise",
@@ -47,128 +83,254 @@
       "explication": "La séquence va du matériel vers le logiciel : alimentation stable, autotest matériel, lecture du secteur de boot, chargeur d'amorçage, puis noyau Windows avant l'ouverture de session."
     },
     {
-      "id": "win-006", "niveau": 2, "type": "qcm",
+      "id": "win-006",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Que se passe-t-il si le POST détecte une erreur matérielle au démarrage ?",
-      "choices": ["Windows démarre en mode sans échec", "La carte mère émet des bips d'erreur", "Le BIOS réinstalle automatiquement les pilotes", "L'écran affiche directement le bureau"],
+      "choices": [
+        "Windows démarre en mode sans échec",
+        "La carte mère émet des bips d'erreur",
+        "Le BIOS réinstalle automatiquement les pilotes",
+        "L'écran affiche directement le bureau"
+      ],
       "answer": 1,
       "explication": "Le POST (Power-On Self Test) vérifie le matériel avant tout chargement de l'OS : en cas de problème, il le signale par une séquence de bips."
     },
     {
-      "id": "win-007", "niveau": 2, "type": "qcm",
+      "id": "win-007",
+      "niveau": 2,
+      "type": "qcm",
       "q": "À quoi sert une partition étendue sur un disque MBR ?",
-      "choices": ["À héberger le chargeur de démarrage", "À contourner la limite des 4 partitions en accueillant des partitions logiques", "À accélérer les accès au disque", "À chiffrer les données du disque"],
+      "choices": [
+        "À héberger le chargeur de démarrage",
+        "À contourner la limite des 4 partitions en accueillant des partitions logiques",
+        "À accélérer les accès au disque",
+        "À chiffrer les données du disque"
+      ],
       "answer": 1,
       "explication": "La partition étendue est un conteneur spécial que l'on divise en partitions logiques, ce qui contourne la limite des 4 partitions principales du MBR."
     },
     {
-      "id": "win-008", "niveau": 2, "type": "qcm",
+      "id": "win-008",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Qu'indique le marquage « active » d'une partition ?",
-      "choices": ["Elle est défragmentée régulièrement", "Elle contient le chargeur de démarrage (NTLDR/BOOTMGR)", "Elle est la partition la plus récente du disque", "Elle est réservée aux données utilisateur"],
+      "choices": [
+        "Elle est défragmentée régulièrement",
+        "Elle contient le chargeur de démarrage (NTLDR/BOOTMGR)",
+        "Elle est la partition la plus récente du disque",
+        "Elle est réservée aux données utilisateur"
+      ],
       "answer": 1,
       "explication": "La partition active est celle où le firmware va chercher le chargeur d'amorçage (NTLDR ou BOOTMGR) pour lancer l'OS."
     },
     {
-      "id": "win-009", "niveau": 1, "type": "qcm",
+      "id": "win-009",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle est la taille maximale d'un fichier sur une partition FAT32 ?",
-      "choices": ["2 Go", "4 Go", "64 Go", "Illimitée"],
+      "choices": [
+        "2 Go",
+        "4 Go",
+        "64 Go",
+        "Illimitée"
+      ],
       "answer": 1,
       "explication": "FAT32 (1996) est limité à 4 Go par fichier ; c'est son principal inconvénient face à NTFS, qui accepte des fichiers bien plus volumineux."
     },
     {
-      "id": "win-010", "niveau": 1, "type": "assoc",
+      "id": "win-010",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque système de fichiers à sa description.",
       "pairs": [
-        ["FAT32", "Compatibilité multi-OS maximale, non journalisé"],
-        ["NTFS", "Standard Windows : journalisé, ACL et quotas"],
-        ["ext3", "ext2 auquel on a ajouté la journalisation"],
-        ["ext4", "Standard Linux actuel, fichiers jusqu'à 1 Eo"]
+        [
+          "FAT32",
+          "Compatibilité multi-OS maximale, non journalisé"
+        ],
+        [
+          "NTFS",
+          "Standard Windows : journalisé, ACL et quotas"
+        ],
+        [
+          "ext3",
+          "ext2 auquel on a ajouté la journalisation"
+        ],
+        [
+          "ext4",
+          "Standard Linux actuel, fichiers jusqu'à 1 Eo"
+        ]
       ],
       "explication": "FAT32 sert aux clés USB et aux échanges multi-OS, NTFS aux disques Windows, et ext4 (2006) a succédé à ext3/ext2 comme standard Linux avec une anti-fragmentation native."
     },
     {
-      "id": "win-011", "niveau": 2, "type": "qcm",
+      "id": "win-011",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi NTFS est-il préféré à FAT32 pour le disque système d'un poste Windows ?",
-      "choices": ["Il est lisible par tous les systèmes d'exploitation", "Il est journalisé et gère les ACL et les quotas", "Il limite les fichiers à 4 Go", "Il ne se fragmente jamais"],
+      "choices": [
+        "Il est lisible par tous les systèmes d'exploitation",
+        "Il est journalisé et gère les ACL et les quotas",
+        "Il limite les fichiers à 4 Go",
+        "Il ne se fragmente jamais"
+      ],
       "answer": 1,
       "explication": "NTFS apporte la journalisation, les permissions fines (ACL) et les quotas ; avec son unité d'allocation de 512 octets contre 4 Ko pour FAT32, il est aussi plus rapide, mais moins compatible hors Windows."
     },
     {
-      "id": "win-012", "niveau": 4, "type": "scenario",
+      "id": "win-012",
+      "niveau": 4,
+      "type": "scenario",
       "q": "La clé USB dispose pourtant de 32 Go libres. Quelle est la cause de l'erreur ?",
       "context": "Copie de WS2022.iso (6 Go) vers E:\\ (clé USB)...\nErreur : le fichier est trop volumineux pour le système de fichiers de destination.",
-      "choices": ["La clé USB est défectueuse", "La clé est formatée en FAT32, qui limite chaque fichier à 4 Go", "Le fichier ISO est corrompu", "Windows bloque les fichiers de plus de 4 Go sur les supports USB"],
+      "choices": [
+        "La clé USB est défectueuse",
+        "La clé est formatée en FAT32, qui limite chaque fichier à 4 Go",
+        "Le fichier ISO est corrompu",
+        "Windows bloque les fichiers de plus de 4 Go sur les supports USB"
+      ],
       "answer": 1,
       "explication": "L'espace libre ne fait rien à l'affaire : FAT32 refuse tout fichier de plus de 4 Go. Il faut reformater la clé en NTFS pour copier cette ISO de 6 Go."
     },
     {
-      "id": "win-013", "niveau": 1, "type": "qcm",
+      "id": "win-013",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle ruche du registre contient la configuration matérielle et logicielle globale de la machine ?",
-      "choices": ["HKEY_CURRENT_USER", "HKEY_LOCAL_MACHINE", "HKEY_CLASSES_ROOT", "HKEY_USERS"],
+      "choices": [
+        "HKEY_CURRENT_USER",
+        "HKEY_LOCAL_MACHINE",
+        "HKEY_CLASSES_ROOT",
+        "HKEY_USERS"
+      ],
       "answer": 1,
       "explication": "HKLM regroupe la configuration valable pour toute la machine, quel que soit l'utilisateur connecté ; HKCU ne concerne que la session active."
     },
     {
-      "id": "win-014", "niveau": 1, "type": "assoc",
+      "id": "win-014",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque ruche du registre à son contenu.",
       "pairs": [
-        ["HKEY_CLASSES_ROOT", "Associations d'extensions de fichiers"],
-        ["HKEY_CURRENT_USER", "Paramètres de la session active"],
-        ["HKEY_USERS", "Profils de tous les utilisateurs"],
-        ["HKEY_CURRENT_CONFIG", "Configuration matérielle courante"]
+        [
+          "HKEY_CLASSES_ROOT",
+          "Associations d'extensions de fichiers"
+        ],
+        [
+          "HKEY_CURRENT_USER",
+          "Paramètres de la session active"
+        ],
+        [
+          "HKEY_USERS",
+          "Profils de tous les utilisateurs"
+        ],
+        [
+          "HKEY_CURRENT_CONFIG",
+          "Configuration matérielle courante"
+        ]
       ],
       "explication": "Cinq ruches structurent le registre : HKCR (extensions), HKCU (session en cours), HKLM (machine), HKU (tous les profils) et HKCC (matériel courant, lien vers HKLM\\Config)."
     },
     {
-      "id": "win-015", "niveau": 2, "type": "qcm",
+      "id": "win-015",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Pourquoi le registre Windows finit-il par contenir des clés « orphelines » ?",
-      "choices": ["Windows en crée à chaque démarrage", "Des logiciels désinstallés laissent leurs clés derrière eux", "Le registre se fragmente comme un disque dur", "Les mises à jour Windows suppriment des ruches entières"],
+      "choices": [
+        "Windows en crée à chaque démarrage",
+        "Des logiciels désinstallés laissent leurs clés derrière eux",
+        "Le registre se fragmente comme un disque dur",
+        "Les mises à jour Windows suppriment des ruches entières"
+      ],
       "answer": 1,
       "explication": "Beaucoup de désinstallations sont incomplètes : les clés du logiciel restent dans le registre et le polluent au fil du temps."
     },
     {
-      "id": "win-016", "niveau": 3, "type": "qcm",
+      "id": "win-016",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Dans quelle clé du registre configure-t-on un message d'avertissement affiché avant l'ouverture de session (valeurs LegalNoticeCaption et LegalNoticeText) ?",
-      "choices": ["HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "HKCU\\Control Panel\\Desktop", "HKLM\\SYSTEM\\CurrentControlSet\\Services", "HKCR\\.txt"],
+      "choices": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+        "HKCU\\Control Panel\\Desktop",
+        "HKLM\\SYSTEM\\CurrentControlSet\\Services",
+        "HKCR\\.txt"
+      ],
       "answer": 0,
       "explication": "C'est dans la clé Winlogon de HKLM que LegalNoticeCaption (le titre) et LegalNoticeText (le message) définissent la bannière légale affichée avant la connexion."
     },
     {
-      "id": "win-017", "niveau": 3, "type": "terminal",
+      "id": "win-017",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Sauvegardez la clé de registre HKLM\\SOFTWARE\\MonApp dans le fichier C:\\backup.reg.",
-      "accept": ["reg export HKLM\\SOFTWARE\\MonApp C:\\backup.reg", "reg export \"HKLM\\SOFTWARE\\MonApp\" \"C:\\backup.reg\"", "reg export HKLM\\SOFTWARE\\MonApp C:\\backup.reg /y", "reg.exe export HKLM\\SOFTWARE\\MonApp C:\\backup.reg"],
+      "accept": [
+        "reg export HKLM\\SOFTWARE\\MonApp C:\\backup.reg",
+        "reg export \"HKLM\\SOFTWARE\\MonApp\" \"C:\\backup.reg\"",
+        "reg export HKLM\\SOFTWARE\\MonApp C:\\backup.reg /y",
+        "reg.exe export HKLM\\SOFTWARE\\MonApp C:\\backup.reg"
+      ],
       "output": "L'opération a réussi.",
       "explication": "reg export sauvegarde une clé dans un fichier .reg, que l'on restaure ensuite avec reg import : réflexe indispensable avant toute modification du registre."
     },
     {
-      "id": "win-018", "niveau": 2, "type": "qcm",
+      "id": "win-018",
+      "niveau": 2,
+      "type": "qcm",
       "q": "À quoi sert la console MMC (mmc.exe) ?",
-      "choices": ["À éditer le registre en mode texte", "À créer une console personnalisée regroupant plusieurs snap-ins (services, événements, disques...)", "À surveiller les performances en temps réel", "À gérer uniquement les comptes utilisateurs"],
+      "choices": [
+        "À éditer le registre en mode texte",
+        "À créer une console personnalisée regroupant plusieurs snap-ins (services, événements, disques...)",
+        "À surveiller les performances en temps réel",
+        "À gérer uniquement les comptes utilisateurs"
+      ],
       "answer": 1,
       "explication": "MMC permet d'assembler plusieurs snap-ins (eventvwr, services.msc, diskmgmt.msc...) dans une console unique, enregistrée en .msc pour un accès rapide."
     },
     {
-      "id": "win-019", "niveau": 1, "type": "libre",
+      "id": "win-019",
+      "niveau": 1,
+      "type": "libre",
       "q": "Quel nom saisir dans Exécuter (Win + R) pour ouvrir l'Observateur d'événements ?",
-      "accept": ["eventvwr.msc", "eventvwr"],
+      "accept": [
+        "eventvwr.msc",
+        "eventvwr"
+      ],
       "explication": "eventvwr.msc ouvre l'Observateur d'événements, la console centrale d'analyse des journaux Windows."
     },
     {
-      "id": "win-020", "niveau": 1, "type": "qcm",
+      "id": "win-020",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quel est le niveau de gravité le plus élevé dans l'Observateur d'événements ?",
-      "choices": ["Erreur", "Critique", "Avertissement", "Information"],
+      "choices": [
+        "Erreur",
+        "Critique",
+        "Avertissement",
+        "Information"
+      ],
       "answer": 1,
       "explication": "L'échelle va de Information à Critique en passant par Avertissement et Erreur ; s'y ajoutent les événements Succès/Échec d'audit pour la sécurité."
     },
     {
-      "id": "win-021", "niveau": 2, "type": "qcm",
+      "id": "win-021",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Dans l'Observateur d'événements, à quoi servent les « Abonnements » ?",
-      "choices": ["À recevoir les notifications de mises à jour Windows", "À collecter de façon centralisée les événements d'autres machines du réseau", "À filtrer les journaux par mot-clé", "À purger automatiquement les anciens journaux"],
+      "choices": [
+        "À recevoir les notifications de mises à jour Windows",
+        "À collecter de façon centralisée les événements d'autres machines du réseau",
+        "À filtrer les journaux par mot-clé",
+        "À purger automatiquement les anciens journaux"
+      ],
       "answer": 1,
       "explication": "Les abonnements permettent la collecte centralisée d'événements provenant de machines distantes, pratique pour superviser un parc depuis un seul poste."
     },
     {
-      "id": "win-022", "niveau": 2, "type": "ordre",
+      "id": "win-022",
+      "niveau": 2,
+      "type": "ordre",
       "q": "Remettez dans l'ordre la démarche d'analyse d'une erreur dans l'Observateur d'événements.",
       "steps": [
         "Relever l'ID de l'événement",
@@ -178,152 +340,301 @@
       "explication": "On part de l'ID (facilement cherchable sur le web), on identifie la source, puis on lit le descriptif détaillé pour remonter à la cause."
     },
     {
-      "id": "win-023", "niveau": 1, "type": "assoc",
+      "id": "win-023",
+      "niveau": 1,
+      "type": "assoc",
       "q": "Associez chaque ID d'événement Windows à sa signification.",
       "pairs": [
-        ["41", "Arrêt inattendu du système (kernel-power)"],
-        ["6005", "Démarrage du service de journal (= boot)"],
-        ["4624", "Ouverture de session réussie"],
-        ["4740", "Compte verrouillé"]
+        [
+          "41",
+          "Arrêt inattendu du système (kernel-power)"
+        ],
+        [
+          "6005",
+          "Démarrage du service de journal (= boot)"
+        ],
+        [
+          "4624",
+          "Ouverture de session réussie"
+        ],
+        [
+          "4740",
+          "Compte verrouillé"
+        ]
       ],
       "explication": "Les ID 41/6005/6006/7036 vivent dans le journal Système, tandis que 4624/4625/4740 concernent le journal Sécurité (audit des sessions)."
     },
     {
-      "id": "win-024", "niveau": 3, "type": "qcm",
+      "id": "win-024",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Que fait la commande wevtutil qe System /c:10 /f:text ?",
-      "choices": ["Elle efface les 10 derniers événements du journal Système", "Elle affiche les 10 derniers événements du journal Système au format texte", "Elle exporte le journal Système complet vers un fichier", "Elle crée 10 vues personnalisées"],
+      "choices": [
+        "Elle efface les 10 derniers événements du journal Système",
+        "Elle affiche les 10 derniers événements du journal Système au format texte",
+        "Elle exporte le journal Système complet vers un fichier",
+        "Elle crée 10 vues personnalisées"
+      ],
       "answer": 1,
       "explication": "wevtutil qe interroge (query events) un journal en CLI ; l'équivalent PowerShell est Get-EventLog -LogName System -Newest 10."
     },
     {
-      "id": "win-025", "niveau": 4, "type": "scenario",
+      "id": "win-025",
+      "niveau": 4,
+      "type": "scenario",
       "q": "Que s'est-il passé à 14h31 sur ce poste ?",
       "context": "Journal Système :\nID 6006 — 08:59 — Arrêt du service de journal des événements\nID 6005 — 09:02 — Démarrage du service de journal des événements\nID 41 — 14:31 — Kernel-Power : le système a redémarré sans s'arrêter proprement",
-      "choices": ["Un redémarrage planifié par Windows Update", "Un arrêt propre demandé par l'utilisateur", "Un crash ou une coupure d'alimentation (arrêt inattendu)", "Une simple mise en veille"],
+      "choices": [
+        "Un redémarrage planifié par Windows Update",
+        "Un arrêt propre demandé par l'utilisateur",
+        "Un crash ou une coupure d'alimentation (arrêt inattendu)",
+        "Une simple mise en veille"
+      ],
       "answer": 2,
       "explication": "L'ID 41 signale un arrêt inattendu (crash, coupure de courant), contrairement au cycle propre du matin, encadré par les ID 6006 (arrêt) et 6005 (démarrage)."
     },
     {
-      "id": "win-026", "niveau": 4, "type": "scenario",
+      "id": "win-026",
+      "niveau": 4,
+      "type": "scenario",
       "q": "Comment interpréter cette séquence d'événements ?",
       "context": "Journal Sécurité :\nID 4625 — Échec d'ouverture de session — compte jdupont (8 occurrences en 2 minutes)\nID 4740 — Le compte jdupont a été verrouillé",
-      "choices": ["L'utilisateur a simplement changé son mot de passe", "Des échecs répétés (mot de passe erroné ou attaque par force brute) ont déclenché le verrouillage du compte", "Le compte a expiré normalement", "Le service de journal des événements a redémarré"],
+      "choices": [
+        "L'utilisateur a simplement changé son mot de passe",
+        "Des échecs répétés (mot de passe erroné ou attaque par force brute) ont déclenché le verrouillage du compte",
+        "Le compte a expiré normalement",
+        "Le service de journal des événements a redémarré"
+      ],
       "answer": 1,
       "explication": "Une rafale d'ID 4625 suivie d'un ID 4740 trahit des tentatives de connexion échouées jusqu'au seuil de verrouillage : mot de passe oublié... ou attaque par force brute à investiguer."
     },
     {
-      "id": "win-027", "niveau": 2, "type": "qcm",
+      "id": "win-027",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Qu'est-ce qui caractérise un service Windows ?",
-      "choices": ["Un programme avec une fenêtre visible pour l'utilisateur", "Un processus système en tâche de fond, sans interface utilisateur", "Une application lancée uniquement à la demande de l'utilisateur", "Un pilote matériel chargé par le BIOS"],
+      "choices": [
+        "Un programme avec une fenêtre visible pour l'utilisateur",
+        "Un processus système en tâche de fond, sans interface utilisateur",
+        "Une application lancée uniquement à la demande de l'utilisateur",
+        "Un pilote matériel chargé par le BIOS"
+      ],
       "answer": 1,
       "explication": "Un service tourne en arrière-plan sans interface et contrôle ports et protocoles pour les applications ; on le gère via services.msc."
     },
     {
-      "id": "win-028", "niveau": 2, "type": "assoc",
+      "id": "win-028",
+      "niveau": 2,
+      "type": "assoc",
       "q": "Associez chaque type de démarrage d'un service à son comportement.",
       "pairs": [
-        ["Automatique", "Lancé dès le démarrage de Windows"],
-        ["Automatique (début différé)", "Lancé après les services critiques"],
-        ["Manuel (déclencheur)", "Démarré par un événement, ex. insertion d'une clé USB"],
-        ["Désactivé", "Empêché de démarrer"]
+        [
+          "Automatique",
+          "Lancé dès le démarrage de Windows"
+        ],
+        [
+          "Automatique (début différé)",
+          "Lancé après les services critiques"
+        ],
+        [
+          "Manuel (déclencheur)",
+          "Démarré par un événement, ex. insertion d'une clé USB"
+        ],
+        [
+          "Désactivé",
+          "Empêché de démarrer"
+        ]
       ],
       "explication": "Le type de démarrage se règle dans les propriétés du service (services.msc) ; s'y ajoute le type Manuel simple, lancé à la demande d'un programme ou de l'utilisateur."
     },
     {
-      "id": "win-029", "niveau": 2, "type": "multi",
+      "id": "win-029",
+      "niveau": 2,
+      "type": "multi",
       "q": "Quels modes Safe Boot de msconfig démarrent SANS accès réseau ? (plusieurs réponses)",
-      "choices": ["Safe Boot : Minimal", "Safe Boot : Autre shell (invite de commandes)", "Safe Boot : Réseau", "Démarrage normal"],
-      "answer": [0, 1],
+      "choices": [
+        "Safe Boot : Minimal",
+        "Safe Boot : Autre shell (invite de commandes)",
+        "Safe Boot : Réseau",
+        "Démarrage normal"
+      ],
+      "answer": [
+        0,
+        1
+      ],
       "explication": "Minimal (interface graphique sécurisée) et Autre shell (invite de commandes seule) démarrent sans réseau ; seul le mode Safe Boot : Réseau active la pile réseau."
     },
     {
-      "id": "win-030", "niveau": 3, "type": "qcm",
+      "id": "win-030",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quel fichier est créé lorsqu'on active l'option « Journaliser le démarrage » dans msconfig ?",
-      "choices": ["%SystemRoot%\\Ntbtlog.txt", "C:\\boot.log", "%SystemRoot%\\bootfail.log", "C:\\Windows\\setup.log"],
+      "choices": [
+        "%SystemRoot%\\Ntbtlog.txt",
+        "C:\\boot.log",
+        "%SystemRoot%\\bootfail.log",
+        "C:\\Windows\\setup.log"
+      ],
       "answer": 0,
       "explication": "L'option consigne le chargement des pilotes dans %SystemRoot%\\Ntbtlog.txt, précieux pour identifier un pilote qui bloque le démarrage."
     },
     {
-      "id": "win-031", "niveau": 3, "type": "qcm",
+      "id": "win-031",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande empêche définitivement un service de démarrer ?",
-      "choices": ["sc stop <service>", "sc config <service> start=disabled", "sc query <service>", "net stop <service>"],
+      "choices": [
+        "sc stop <service>",
+        "sc config <service> start=disabled",
+        "sc query <service>",
+        "net stop <service>"
+      ],
       "answer": 1,
       "explication": "sc stop n'arrête le service que pour la session en cours ; sc config ... start=disabled modifie son type de démarrage pour l'empêcher de se relancer."
     },
     {
-      "id": "win-032", "niveau": 4, "type": "scenario",
+      "id": "win-032",
+      "niveau": 4,
+      "type": "scenario",
       "q": "Quel mode de démarrage de msconfig permet de confirmer qu'un élément tiers est en cause ?",
       "context": "Un poste devient instable dès l'ouverture de session, depuis l'installation d'un utilitaire tiers qui se lance au démarrage.",
-      "choices": ["Démarrage normal", "Démarrage Diagnostic", "Démarrage sélectif avec tous les services cochés", "L'option Vidéo de base"],
+      "choices": [
+        "Démarrage normal",
+        "Démarrage Diagnostic",
+        "Démarrage sélectif avec tous les services cochés",
+        "L'option Vidéo de base"
+      ],
       "answer": 1,
       "explication": "Le démarrage Diagnostic ne charge que les pilotes et services de base : si le poste redevient stable, un élément tiers du démarrage est bien en cause, à isoler ensuite via le démarrage sélectif."
     },
     {
-      "id": "win-033", "niveau": 4, "type": "scenario",
+      "id": "win-033",
+      "niveau": 4,
+      "type": "scenario",
       "q": "Quel mode de démarrage choisir dans msconfig ?",
       "context": "Un PC infecté doit être démarré dans un environnement minimal tout en conservant l'accès à Internet pour télécharger un outil de désinfection.",
-      "choices": ["Safe Boot : Minimal", "Safe Boot : Autre shell", "Safe Boot : Réseau", "Démarrage normal"],
+      "choices": [
+        "Safe Boot : Minimal",
+        "Safe Boot : Autre shell",
+        "Safe Boot : Réseau",
+        "Démarrage normal"
+      ],
       "answer": 2,
       "explication": "Safe Boot : Réseau charge l'environnement minimal du mode sans échec en y ajoutant la pile réseau, ce que Minimal et Autre shell n'offrent pas."
     },
     {
-      "id": "win-034", "niveau": 2, "type": "qcm",
+      "id": "win-034",
+      "niveau": 2,
+      "type": "qcm",
       "q": "À quoi sert une IRQ (Interrupt Request) ?",
-      "choices": ["À allouer de la mémoire aux programmes", "À signaler au processeur qu'un périphérique demande son attention", "À cadencer l'horloge de la carte mère", "À chiffrer les échanges avec les périphériques"],
+      "choices": [
+        "À allouer de la mémoire aux programmes",
+        "À signaler au processeur qu'un périphérique demande son attention",
+        "À cadencer l'horloge de la carte mère",
+        "À chiffrer les échanges avec les périphériques"
+      ],
       "answer": 1,
       "explication": "Les IRQ sont des signaux hiérarchisés (256 adresses, le clavier occupant l'IRQ 1) qui interrompent le CPU ; l'ordonnanceur peut alors réajuster les priorités en temps réel."
     },
     {
-      "id": "win-035", "niveau": 1, "type": "qcm",
+      "id": "win-035",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle est la particularité du compte Invité sous Windows ?",
-      "choices": ["Il peut installer des logiciels", "Il n'a pratiquement aucun droit et pas de profil personnel", "Il possède les mêmes droits qu'un compte standard", "Il est activé par défaut sur tous les postes"],
+      "choices": [
+        "Il peut installer des logiciels",
+        "Il n'a pratiquement aucun droit et pas de profil personnel",
+        "Il possède les mêmes droits qu'un compte standard",
+        "Il est activé par défaut sur tous les postes"
+      ],
       "answer": 1,
       "explication": "L'Invité est le compte le plus restreint : quasiment aucun droit et pas de profil « Mes Documents », contrairement aux comptes Standard et Administrateur."
     },
     {
-      "id": "win-036", "niveau": 1, "type": "qcm",
+      "id": "win-036",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Qu'est-ce que la base SAM (Security Account Manager) ?",
-      "choices": ["La base des pilotes matériels installés", "La base locale des comptes et des mots de passe hashés", "Le journal des connexions réseau", "La base des stratégies de groupe d'un domaine"],
+      "choices": [
+        "La base des pilotes matériels installés",
+        "La base locale des comptes et des mots de passe hashés",
+        "Le journal des connexions réseau",
+        "La base des stratégies de groupe d'un domaine"
+      ],
       "answer": 1,
       "explication": "La SAM stocke localement les comptes et les mots de passe sous forme hashée ; elle convient à un petit nombre de postes, hors domaine Active Directory."
     },
     {
-      "id": "win-037", "niveau": 1, "type": "libre",
+      "id": "win-037",
+      "niveau": 1,
+      "type": "libre",
       "q": "Quelle console graphique gère les utilisateurs et groupes locaux ? (nom à saisir dans Exécuter)",
-      "accept": ["lusrmgr.msc", "lusrmgr"],
+      "accept": [
+        "lusrmgr.msc",
+        "lusrmgr"
+      ],
       "explication": "lusrmgr.msc ouvre la console Utilisateurs et groupes locaux ; en CLI, les équivalents sont net user et net localgroup."
     },
     {
-      "id": "win-038", "niveau": 2, "type": "qcm",
+      "id": "win-038",
+      "niveau": 2,
+      "type": "qcm",
       "q": "Après avoir créé un compte pour un nouvel arrivant, quelle bonne pratique appliquer concernant son mot de passe ?",
-      "choices": ["Lui communiquer un mot de passe définitif par e-mail", "Cocher « L'utilisateur doit changer de mot de passe à la prochaine ouverture de session »", "Conserver le mot de passe dans un fichier partagé de l'équipe", "Réutiliser le même mot de passe pour tous les nouveaux comptes"],
+      "choices": [
+        "Lui communiquer un mot de passe définitif par e-mail",
+        "Cocher « L'utilisateur doit changer de mot de passe à la prochaine ouverture de session »",
+        "Conserver le mot de passe dans un fichier partagé de l'équipe",
+        "Réutiliser le même mot de passe pour tous les nouveaux comptes"
+      ],
       "answer": 1,
       "explication": "Pour des raisons légales et de sécurité, un administrateur ne doit pas connaître les mots de passe des utilisateurs : on force le changement à la première connexion (équivalent CLI : net user <nom> /logonpasswordchg:yes)."
     },
     {
-      "id": "win-039", "niveau": 3, "type": "qcm",
+      "id": "win-039",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Quelle commande ajoute l'utilisateur « paul » au groupe local des administrateurs ?",
-      "choices": ["net user paul /admin", "net localgroup Administrateurs paul /add", "net group Administrateurs paul /add", "whoami /groups paul"],
+      "choices": [
+        "net user paul /admin",
+        "net localgroup Administrateurs paul /add",
+        "net group Administrateurs paul /add",
+        "whoami /groups paul"
+      ],
       "answer": 1,
       "explication": "net localgroup agit sur les groupes locaux de la machine (net group est réservé aux groupes de domaine) ; whoami /all affiche les informations de la session courante."
     },
     {
-      "id": "win-040", "niveau": 3, "type": "terminal",
+      "id": "win-040",
+      "niveau": 3,
+      "type": "terminal",
       "prompt": "PS C:\\Users\\admin>",
       "q": "Affichez la liste des comptes utilisateurs locaux de la machine.",
-      "accept": ["net user", "net users", "get-localuser"],
+      "accept": [
+        "net user",
+        "net users",
+        "get-localuser"
+      ],
       "output": "Comptes d'utilisateurs de \\\\PC-ADMIN\n\n-------------------------------------------------------------------------------\nAdministrateur           admin                    DefaultAccount\nInvité                   paul                     WDAGUtilityAccount\nLa commande s'est terminée correctement.",
       "explication": "net user sans argument liste les comptes locaux ; suivie d'un nom et de /add ou /delete, elle crée ou supprime un compte. En PowerShell, Get-LocalUser rend le même service."
     },
     {
-      "id": "win-041", "niveau": 1, "type": "qcm",
+      "id": "win-041",
+      "niveau": 1,
+      "type": "qcm",
       "q": "Quelle commande CLI affiche un récapitulatif complet du système (OS, RAM, CPU, réseau, domaine) ?",
-      "choices": ["hostname", "systeminfo", "winver", "msinfo32"],
+      "choices": [
+        "hostname",
+        "systeminfo",
+        "winver",
+        "msinfo32"
+      ],
       "answer": 1,
       "explication": "systeminfo fournit ce récapitulatif directement en console ; winver et msinfo32 sont des outils graphiques, et hostname n'affiche que le nom de la machine."
     },
     {
-      "id": "win-042", "niveau": 3, "type": "ordre",
+      "id": "win-042",
+      "niveau": 3,
+      "type": "ordre",
       "q": "Remettez dans l'ordre les commandes diskpart pour préparer un disque vierge jusqu'à obtenir un lecteur D: utilisable.",
       "steps": [
         "list disk",
@@ -335,24 +646,49 @@
       "explication": "On repère d'abord le disque (list disk), on le sélectionne, puis on enchaîne création de la partition principale, formatage NTFS rapide et attribution de la lettre."
     },
     {
-      "id": "win-043", "niveau": 3, "type": "qcm",
+      "id": "win-043",
+      "niveau": 3,
+      "type": "qcm",
       "q": "Que fait la commande chkdsk C: /f /r ?",
-      "choices": ["Elle défragmente le volume C:", "Elle vérifie le disque, corrige les erreurs et récupère les secteurs défectueux", "Elle formate rapidement le volume C:", "Elle libère de l'espace disque en supprimant les fichiers temporaires"],
+      "choices": [
+        "Elle défragmente le volume C:",
+        "Elle vérifie le disque, corrige les erreurs et récupère les secteurs défectueux",
+        "Elle formate rapidement le volume C:",
+        "Elle libère de l'espace disque en supprimant les fichiers temporaires"
+      ],
       "answer": 1,
       "explication": "chkdsk contrôle l'intégrité du volume : /f corrige les erreurs du système de fichiers et /r localise les secteurs défectueux pour récupérer les données lisibles."
     },
     {
-      "id": "win-044", "niveau": 3, "type": "multi",
+      "id": "win-044",
+      "niveau": 3,
+      "type": "multi",
       "q": "Quelles commandes servent à vérifier ou réparer les fichiers système et l'image Windows ? (plusieurs réponses)",
-      "choices": ["sfc /scannow", "DISM /Online /Cleanup-Image /RestoreHealth", "defrag C:", "fsutil volume diskfree C:", "winver"],
-      "answer": [0, 1],
+      "choices": [
+        "sfc /scannow",
+        "DISM /Online /Cleanup-Image /RestoreHealth",
+        "defrag C:",
+        "fsutil volume diskfree C:",
+        "winver"
+      ],
+      "answer": [
+        0,
+        1
+      ],
       "explication": "sfc /scannow vérifie et répare les fichiers système, tandis que DISM /RestoreHealth répare l'image Windows elle-même ; on lance d'ailleurs souvent DISM quand sfc échoue."
     },
     {
-      "id": "win-045", "niveau": 4, "type": "scenario",
+      "id": "win-045",
+      "niveau": 4,
+      "type": "scenario",
       "q": "Quelle est la conséquence de cette dernière commande ?",
       "context": "DISKPART> select disk 1\nLe disque 1 est maintenant le disque sélectionné.\nDISKPART> clean",
-      "choices": ["Seule la première partition du disque 1 est supprimée", "Toutes les partitions et les données du disque 1 sont effacées", "Le disque 1 est simplement défragmenté", "La corbeille du disque 1 est vidée"],
+      "choices": [
+        "Seule la première partition du disque 1 est supprimée",
+        "Toutes les partitions et les données du disque 1 sont effacées",
+        "Le disque 1 est simplement défragmenté",
+        "La corbeille du disque 1 est vidée"
+      ],
       "answer": 1,
       "explication": "clean supprime toute la structure de partitionnement du disque sélectionné : il faut toujours vérifier avec list disk que le bon disque est sélectionné avant de la lancer."
     }
