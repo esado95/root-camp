@@ -335,7 +335,7 @@
       "id": "opn-023",
       "niveau": 2,
       "type": "qcm",
-      "q": "Dans une maquette où un switch L3 assure le routage inter-VLAN, pourquoi le port du switch vers OPNsense est-il configuré en mode access (VLAN de transit) plutôt qu'en trunk ?",
+      "q": "Dans une infrastructure où un switch L3 assure le routage inter-VLAN, pourquoi le port du switch vers OPNsense est-il configuré en mode access (VLAN de transit) plutôt qu'en trunk ?",
       "choices": [
         "Parce qu'OPNsense ne supporte pas la norme 802.1Q",
         "Parce qu'OPNsense n'a besoin que du réseau de transit pour dialoguer avec le switch, qui route lui-même entre les VLAN",
@@ -419,7 +419,7 @@
       "id": "opn-029",
       "niveau": 3,
       "type": "ordre",
-      "q": "Remettez dans l'ordre le trajet d'une requête externe vers un site public hébergé en DMZ derrière un double NAT (maquette : FAI puis OPNsense, port 8080).",
+      "q": "Remettez dans l'ordre le trajet d'une requête externe vers un site public hébergé en DMZ derrière un double NAT (plateforme de test : routeur FAI puis OPNsense, port 8080).",
       "steps": [
         "Le poste externe envoie sa requête vers l'IP publique du FAI (172.16.40.150:8080)",
         "Le routeur FAI applique son NAT statique et redirige vers le WAN d'OPNsense (192.168.0.20:8080)",
@@ -433,7 +433,7 @@
       "id": "opn-030",
       "niveau": 3,
       "type": "ordre",
-      "q": "Remettez dans l'ordre le trajet d'un client interne (VLAN 10) qui accède à Internet dans une maquette switch L3 + OPNsense + routeur FAI.",
+      "q": "Remettez dans l'ordre le trajet d'un client interne (VLAN 10) qui accède à Internet dans une infrastructure switch L3 + OPNsense + routeur FAI.",
       "steps": [
         "Le PC client envoie le paquet à sa passerelle : la SVI de son VLAN sur le switch L3",
         "Le switch, qui ne connaît pas la destination, suit sa route par défaut vers OPNsense via le réseau de transit",
@@ -656,7 +656,7 @@
       "id": "opn-045",
       "niveau": 4,
       "type": "scenario",
-      "context": "Maquette de TP : l'interface WAN d'OPNsense est en réalité raccordée à un réseau privé (192.168.0.0/24),\net les clients « externes » viennent de 172.16.40.0/24.\nDes flux légitimes venant de ces clients sont rejetés sur le WAN alors qu'aucune règle Block n'apparaît dans la liste.",
+      "context": "Sur une plateforme de test, l'interface WAN d'OPNsense est en réalité raccordée à un réseau privé (192.168.0.0/24),\net les clients « externes » viennent de 172.16.40.0/24.\nDes flux légitimes venant de ces clients sont rejetés sur le WAN alors qu'aucune règle Block n'apparaît dans la liste.",
       "q": "Quelle option par défaut d'OPNsense est en cause ?",
       "choices": [
         "La règle Anti-Lockout",
@@ -665,7 +665,7 @@
         "La réflexion NAT désactivée"
       ],
       "answer": 1,
-      "explication": "OPNsense bloque par défaut les adresses privées et bogons entrantes sur le WAN : en maquette où le « WAN » est un réseau privé, il faut décocher ces options."
+      "explication": "OPNsense bloque par défaut les adresses privées et bogons entrantes sur le WAN : sur une plateforme de test où le « WAN » est un réseau privé, il faut décocher ces options."
     }
   ]
 }

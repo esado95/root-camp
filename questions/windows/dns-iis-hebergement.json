@@ -241,7 +241,7 @@
       "id": "iis-016",
       "niveau": 2,
       "type": "qcm",
-      "q": "Dans le FQDN « www.cours.com. », que représente le point final ?",
+      "q": "Dans le FQDN « www.exemple.com. », que représente le point final ?",
       "choices": [
         "La racine du DNS, souvent invisible à l'usage",
         "Le TLD du domaine",
@@ -450,7 +450,7 @@
         "Modifier le masque de sous-réseau du serveur"
       ],
       "answer": 0,
-      "explication": "Dans le TP, on ajoute une deuxième carte réseau en 192.168.10.200 sur SRV-IIS, on lie le site à cette IP et on crée une nouvelle zone DNS (intranetip.lan) avec l'hôte www."
+      "explication": "Concrètement, on ajoute une deuxième carte réseau (ou une seconde adresse IP, ex : 192.168.10.200) au serveur web, on lie le site à cette adresse dans IIS et on crée une zone DNS dédiée (ex : intranetip.lan) avec l'hôte www."
     },
     {
       "id": "iis-031",

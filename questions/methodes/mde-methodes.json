@@ -1,5 +1,5 @@
 {
-  "module": "MDE & méthodes",
+  "module": "Méthodes & employabilité",
   "questions": [
     {
       "id": "mde-001",
@@ -70,7 +70,7 @@
       "id": "mde-005",
       "niveau": 1,
       "type": "multi",
-      "q": "Selon les recommandations MDE, quelles informations sont incontournables sur un CV ? (plusieurs réponses)",
+      "q": "Selon les bonnes pratiques de rédaction de CV, quelles informations sont incontournables ? (plusieurs réponses)",
       "choices": [
         "La photo",
         "Le permis et le véhicule (mobilité)",
@@ -186,7 +186,7 @@
       "id": "mde-013",
       "niveau": 2,
       "type": "qcm",
-      "q": "En cas de stress lors d'un oral, quel geste simple est conseillé ?",
+      "q": "En cas de stress lors d'une présentation orale ou d'un entretien, quel geste simple est conseillé ?",
       "choices": [
         "Tenir un stylo pour occuper ses mains",
         "Croiser les bras pour se contenir",
@@ -303,7 +303,7 @@
       "id": "mde-021",
       "niveau": 3,
       "type": "qcm",
-      "q": "Comment formuler une compétence sur un CV selon les recommandations MDE ?",
+      "q": "Comment bien formuler une compétence sur un CV ?",
       "choices": [
         "Avec un verbe d'action, par exemple « Administrer un parc de serveurs Windows »",
         "Par un simple mot-clé, par exemple « Windows »",
@@ -331,7 +331,7 @@
       "id": "mde-023",
       "niveau": 3,
       "type": "qcm",
-      "q": "Un stagiaire écrit le prompt : « Tu es un formateur réseau expérimenté. Explique-moi le protocole DHCP sous forme de tableau. » Quel élément CRAFT manque parmi les suivants ?",
+      "q": "Un technicien débutant écrit le prompt : « Tu es un formateur réseau expérimenté. Explique-moi le protocole DHCP sous forme de tableau. » Quel élément CRAFT manque parmi les suivants ?",
       "choices": [
         "Le Contexte (qui est le demandeur, sa situation)",
         "Le Rôle",
@@ -391,7 +391,7 @@
       "niveau": 4,
       "type": "scenario",
       "context": "Extrait d'un CV :\nÀ propos : rigoureux, motivé, sérieux, autonome\nLangues : Français natif, Anglais B1\nCompétences : Linux (Base), Réseau (Base), Windows, VMware, GLPI, Zabbix, Wireshark, Cisco...",
-      "q": "Quelle série de corrections est conforme aux recommandations MDE ?",
+      "q": "Quelle série de corrections est conforme aux bonnes pratiques de rédaction de CV ?",
       "choices": [
         "Rédiger l'« À propos » en vraies phrases, supprimer « Français natif » et les mentions « Base », réduire la liste de compétences",
         "Ajouter encore des compétences pour montrer la polyvalence du profil",

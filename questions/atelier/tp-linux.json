@@ -1,5 +1,5 @@
 {
-  "module": "TP Linux (Bash)",
+  "module": "Linux en pratique (Bash)",
   "questions": [
     {
       "id": "tpl-001",
@@ -400,7 +400,7 @@
       "type": "tp",
       "shell": "bash",
       "q": "Analysez les tentatives de connexion SSH échouées dans les logs",
-      "context": "Le formateur signale des tentatives de connexion suspectes sur srv-deb.\nLes journaux d'authentification se trouvent dans /var/log/auth.log.",
+      "context": "L'équipe sécurité signale des tentatives de connexion suspectes sur srv-deb.\nLes journaux d'authentification se trouvent dans /var/log/auth.log.",
       "steps": [
         {
           "q": "Placez-vous dans le dossier des journaux système",
@@ -536,7 +536,7 @@
       "type": "tp",
       "shell": "bash",
       "q": "Installez le serveur web Apache sur srv-web et prouvez qu'il répond",
-      "context": "srv-web (Debian 12) doit héberger l'intranet de la promo.\nVous êtes connecté avec votre compte tech (sudo disponible).",
+      "context": "srv-web (Debian 12) doit héberger l'intranet de l'entreprise.\nVous êtes connecté avec votre compte tech (sudo disponible).",
       "steps": [
         {
           "q": "Mettez à jour le cache des paquets",
@@ -771,7 +771,7 @@
       "type": "tp",
       "shell": "bash",
       "q": "Traquez les fichiers volumineux et les erreurs applicatives sur srv-deb",
-      "context": "Avant l'audit mensuel, le formateur demande un état des lieux de /var :\nfichiers de plus de 100 Mo, fichiers modifiés dans l'heure, et volume d'erreurs de l'application.",
+      "context": "Avant l'audit mensuel, votre responsable demande un état des lieux de /var :\nfichiers de plus de 100 Mo, fichiers modifiés dans l'heure, et volume d'erreurs de l'application.",
       "steps": [
         {
           "q": "Listez les fichiers de plus de 100 Mo présents sous /var",
@@ -829,7 +829,7 @@
       "type": "tp",
       "shell": "bash",
       "q": "Appliquez les permissions spéciales au dépôt collaboratif /srv/depot",
-      "context": "/srv/depot (root:stagiaire, droits 770) accueille les rendus de toute la promo.\nObjectif : les fichiers créés doivent hériter du groupe stagiaire, et chacun ne doit pouvoir supprimer que ses propres fichiers.",
+      "context": "/srv/depot (root:stagiaire, droits 770) accueille les dépôts de tous les membres du groupe stagiaire.\nObjectif : les fichiers créés doivent hériter du groupe stagiaire, et chacun ne doit pouvoir supprimer que ses propres fichiers.",
       "steps": [
         {
           "q": "Observez d'abord un exemple célèbre de droit spécial : la commande passwd",

@@ -311,7 +311,7 @@
         "Pour activer le mode simulation"
       ],
       "answer": 0,
-      "explication": "Répondre « yes » lancerait l'assistant de configuration pas à pas, peu adapté aux TP : on répond toujours « no » pour garder la main et taper ses commandes soi-même."
+      "explication": "Répondre « yes » lancerait l'assistant de configuration pas à pas, trop limité pour une configuration précise : on répond toujours « no » pour garder la main et taper ses commandes soi-même."
     },
     {
       "id": "cis-023",
@@ -330,7 +330,7 @@
       "id": "cis-024",
       "niveau": 3,
       "type": "ordre",
-      "q": "Remettez dans l'ordre les grandes étapes d'un TP réseau sous Packet Tracer.",
+      "q": "Remettez dans l'ordre les grandes étapes de la construction d'un réseau sous Packet Tracer.",
       "steps": [
         "Placer les équipements (routeurs, switchs, PC)",
         "Câbler avec le bon type de câble",

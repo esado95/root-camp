@@ -1,5 +1,5 @@
 {
-  "module": "AD en pratique (REA)",
+  "module": "Active Directory en pratique",
   "questions": [
     {
       "id": "adp-001",
@@ -19,7 +19,7 @@
       "id": "adp-002",
       "niveau": 1,
       "type": "multi",
-      "q": "Quelles règles le nom de domaine du TP (ex. entreprise.lan) devait-il respecter ? (plusieurs réponses)",
+      "q": "Quelles règles un nom de domaine Active Directory interne (ex. entreprise.lan) doit-il respecter selon les bonnes pratiques ? (plusieurs réponses)",
       "choices": [
         "Être écrit en minuscules",
         "Se terminer par le suffixe .lan",
@@ -32,7 +32,7 @@
         1,
         2
       ],
-      "explication": "La consigne impose un nom en minuscules, sans espace ni caractère spécial, terminé par .lan : un suffixe local qui évite tout conflit avec un domaine Internet réel."
+      "explication": "La bonne pratique impose un nom en minuscules, sans espace ni caractère spécial, terminé par .lan : un suffixe local qui évite tout conflit avec un domaine Internet réel."
     },
     {
       "id": "adp-003",
@@ -94,7 +94,7 @@
       "id": "adp-007",
       "niveau": 3,
       "type": "ordre",
-      "q": "Remettez dans l'ordre les grandes étapes du TP de mise en place d'un domaine Active Directory.",
+      "q": "Remettez dans l'ordre les grandes étapes de la mise en place d'un domaine Active Directory.",
       "steps": [
         "Passer le serveur en IP fixe et le renommer",
         "Installer le rôle AD DS depuis le Gestionnaire de serveur",
@@ -108,7 +108,7 @@
       "id": "adp-008",
       "niveau": 1,
       "type": "assoc",
-      "q": "Associez chaque outil ou raccourci à son usage dans le TP.",
+      "q": "Associez chaque outil ou raccourci à son usage dans l'administration d'un domaine.",
       "pairs": [
         [
           "ncpa.cpl",
@@ -127,7 +127,7 @@
           "Créer et lier les GPO"
         ]
       ],
-      "explication": "Ces quatre outils couvrent l'essentiel du TP : configuration réseau, jonction au domaine, gestion des objets de l'annuaire et stratégies de groupe."
+      "explication": "Ces quatre outils couvrent l'essentiel du quotidien d'un administrateur : configuration réseau, jonction au domaine, gestion des objets de l'annuaire et stratégies de groupe."
     },
     {
       "id": "adp-009",
@@ -141,7 +141,7 @@
         "Le client et le serveur n'ont pas le même masque de sous-réseau"
       ],
       "answer": 1,
-      "explication": "Sans le contrôleur de domaine comme serveur DNS, le client ne peut pas résoudre les enregistrements du domaine et la jonction échoue : c'est l'erreur numéro 1 en TP comme en évaluation."
+      "explication": "Sans le contrôleur de domaine comme serveur DNS, le client ne peut pas résoudre les enregistrements du domaine et la jonction échoue : c'est l'erreur de configuration numéro 1 sur le terrain."
     },
     {
       "id": "adp-010",
@@ -227,7 +227,7 @@
         "Uniquement au redémarrage du poste"
       ],
       "answer": 1,
-      "explication": "Le rafraîchissement automatique des stratégies a lieu environ toutes les 90 minutes ; en TP, on force l'application avec gpupdate /force pour ne pas attendre."
+      "explication": "Le rafraîchissement automatique des stratégies a lieu environ toutes les 90 minutes ; en pratique, on force l'application avec gpupdate /force pour ne pas attendre."
     },
     {
       "id": "adp-017",
@@ -350,7 +350,7 @@
       "id": "adp-025",
       "niveau": 2,
       "type": "qcm",
-      "q": "Pourquoi attribuer des droits NTFS directement à un compte utilisateur est-il considéré comme une faute grave en TP ?",
+      "q": "Pourquoi attribuer des droits NTFS directement à un compte utilisateur est-il considéré comme une faute grave en entreprise ?",
       "choices": [
         "Cela ralentit le serveur de fichiers",
         "Cela rend la gestion ingérable : la méthode AGDLP impose de passer par les groupes (utilisateur, groupe global, groupe de domaine local, permissions)",
@@ -387,7 +387,7 @@
         "Relancer gpupdate /force sur le client"
       ],
       "answer": 1,
-      "explication": "Le jeton d'accès est construit à l'ouverture de session : toute nouvelle appartenance de groupe exige une déconnexion/reconnexion pour être prise en compte. C'est un piège classique des TP."
+      "explication": "Le jeton d'accès est construit à l'ouverture de session : toute nouvelle appartenance de groupe exige une déconnexion/reconnexion pour être prise en compte. C'est un piège classique de l'administration Windows."
     },
     {
       "id": "adp-028",
@@ -452,7 +452,7 @@
         "oobe/bypassnro",
         "bypassnro"
       ],
-      "explication": "oobe\\bypassnro redémarre la machine et relance l'assistant d'installation en autorisant la création d'un compte local : indispensable pour les VM de TP sans accès Internet."
+      "explication": "oobe\\bypassnro redémarre la machine et relance l'assistant d'installation en autorisant la création d'un compte local : indispensable pour les machines virtuelles sans accès Internet."
     },
     {
       "id": "adp-033",
@@ -526,7 +526,7 @@
       "niveau": 4,
       "type": "scenario",
       "context": "C:\\> ipconfig\n\nCarte Ethernet Ethernet0 :\n   Adresse IPv4. . . . . . . . . . : 169.254.37.112\n   Masque de sous-réseau . . . . . : 255.255.0.0\n   Passerelle par défaut . . . . . :",
-      "q": "Sur le client de TP, censé être en DHCP, vous obtenez cette sortie. Que révèle-t-elle ?",
+      "q": "Sur un poste client censé être configuré en DHCP, vous obtenez cette sortie. Que révèle-t-elle ?",
       "choices": [
         "Le serveur DHCP a distribué une adresse de son étendue",
         "Le client s'est auto-attribué une adresse APIPA : il n'a reçu aucune réponse du serveur DHCP",

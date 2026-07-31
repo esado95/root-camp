@@ -96,15 +96,15 @@
       "id": "virt-007",
       "niveau": 2,
       "type": "qcm",
-      "q": "En TP, pourquoi faut-il éviter un commutateur externe pour héberger un serveur DHCP de test ?",
+      "q": "Un technicien monte un serveur DHCP de test dans une VM Hyper-V. Pourquoi doit-il éviter de la connecter à un commutateur externe ?",
       "choices": [
         "Le service DHCP ne fonctionne pas sur un switch externe",
-        "Le serveur distribuerait des adresses IP à tout le réseau réel de la salle",
+        "Le serveur distribuerait des adresses IP à tout le réseau réel de l'entreprise",
         "Le switch externe est trop lent pour le DHCP",
         "Le DHCP nécessite obligatoirement un accès internet"
       ],
       "answer": 1,
-      "explication": "Relié au réseau physique, le DHCP de test polluerait le réseau de l'école en répondant aux vraies machines : on utilise toujours un switch privé ou interne pour ce type de TP."
+      "explication": "Relié au réseau physique, le DHCP de test polluerait le réseau de production en répondant aux vraies machines : on utilise toujours un switch privé ou interne pour ce type de test."
     },
     {
       "id": "virt-008",

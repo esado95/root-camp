@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "updated": "2026-07-30",
   "themes": [
     {
@@ -9,7 +9,11 @@
       "color": "#FB923C",
       "sub": "CPU · RAM · RAID · assemblage",
       "modules": [
-        { "id": "hardware", "name": "Matériel & RAID", "file": "materiel/materiel-raid.json" }
+        {
+          "id": "hardware",
+          "name": "Matériel & RAID",
+          "file": "materiel/materiel-raid.json"
+        }
       ]
     },
     {
@@ -19,13 +23,41 @@
       "color": "#38BDF8",
       "sub": "OSI · IPv4 · VLAN · routage",
       "modules": [
-        { "id": "osi", "name": "Modèle OSI, ARP & composants", "file": "reseau/osi-arp-composants.json" },
-        { "id": "adressage", "name": "Adressage IP & CIDR", "file": "reseau/adressage-ip.json" },
-        { "id": "dhcp", "name": "DHCP", "file": "reseau/dhcp.json" },
-        { "id": "vlan", "name": "VLAN & segmentation", "file": "reseau/vlan-segmentation.json" },
-        { "id": "routage", "name": "Routage & Cisco CLI", "file": "reseau/routage-cisco.json" },
-        { "id": "packet-tracer", "name": "Packet Tracer & IOS de base", "file": "reseau/packet-tracer.json" },
-        { "id": "diagnostic", "name": "Diagnostic & Wireshark", "file": "reseau/diagnostic-wireshark.json" }
+        {
+          "id": "osi",
+          "name": "Modèle OSI, ARP & composants",
+          "file": "reseau/osi-arp-composants.json"
+        },
+        {
+          "id": "adressage",
+          "name": "Adressage IP & CIDR",
+          "file": "reseau/adressage-ip.json"
+        },
+        {
+          "id": "dhcp",
+          "name": "DHCP",
+          "file": "reseau/dhcp.json"
+        },
+        {
+          "id": "vlan",
+          "name": "VLAN & segmentation",
+          "file": "reseau/vlan-segmentation.json"
+        },
+        {
+          "id": "routage",
+          "name": "Routage & Cisco CLI",
+          "file": "reseau/routage-cisco.json"
+        },
+        {
+          "id": "packet-tracer",
+          "name": "Packet Tracer & IOS de base",
+          "file": "reseau/packet-tracer.json"
+        },
+        {
+          "id": "diagnostic",
+          "name": "Diagnostic & Wireshark",
+          "file": "reseau/diagnostic-wireshark.json"
+        }
       ]
     },
     {
@@ -35,12 +67,36 @@
       "color": "#60A5FA",
       "sub": "AD · GPO · WDS · IIS",
       "modules": [
-        { "id": "windows-systeme", "name": "Windows — système & outils", "file": "windows/windows-systeme.json" },
-        { "id": "ad", "name": "Active Directory", "file": "windows/active-directory.json" },
-        { "id": "ad-pratique", "name": "AD en pratique (REA)", "file": "windows/ad-pratique.json" },
-        { "id": "gpo", "name": "GPO", "file": "windows/gpo.json" },
-        { "id": "wds", "name": "Déploiement WDS", "file": "windows/wds.json" },
-        { "id": "dns-iis", "name": "DNS, IIS & hébergement", "file": "windows/dns-iis-hebergement.json" }
+        {
+          "id": "windows-systeme",
+          "name": "Windows — système & outils",
+          "file": "windows/windows-systeme.json"
+        },
+        {
+          "id": "ad",
+          "name": "Active Directory",
+          "file": "windows/active-directory.json"
+        },
+        {
+          "id": "ad-pratique",
+          "name": "Active Directory en pratique",
+          "file": "windows/ad-pratique.json"
+        },
+        {
+          "id": "gpo",
+          "name": "GPO",
+          "file": "windows/gpo.json"
+        },
+        {
+          "id": "wds",
+          "name": "Déploiement WDS",
+          "file": "windows/wds.json"
+        },
+        {
+          "id": "dns-iis",
+          "name": "DNS, IIS & hébergement",
+          "file": "windows/dns-iis-hebergement.json"
+        }
       ]
     },
     {
@@ -50,9 +106,21 @@
       "color": "#FBBF24",
       "sub": "commandes · scripts · services",
       "modules": [
-        { "id": "linux-base", "name": "Linux — bases & administration", "file": "linux/linux-base.json" },
-        { "id": "linux-admin", "name": "Linux — administration & LPIC-1", "file": "linux/administration-lpic1.json" },
-        { "id": "linux-web", "name": "Linux — serveur web & Guacamole", "file": "linux/serveur-web-guacamole.json" }
+        {
+          "id": "linux-base",
+          "name": "Linux — bases & administration",
+          "file": "linux/linux-base.json"
+        },
+        {
+          "id": "linux-admin",
+          "name": "Linux — administration & LPIC-1",
+          "file": "linux/administration-lpic1.json"
+        },
+        {
+          "id": "linux-web",
+          "name": "Linux — serveur web & Guacamole",
+          "file": "linux/serveur-web-guacamole.json"
+        }
       ]
     },
     {
@@ -62,8 +130,16 @@
       "color": "#A78BFA",
       "sub": "hyperviseurs · cluster · SAN",
       "modules": [
-        { "id": "hyperv", "name": "Hyper-V & clusters", "file": "virtualisation/hyper-v-clusters.json" },
-        { "id": "proxmox", "name": "Infrastructure — études de cas", "file": "virtualisation/proxmox-ceph.json" }
+        {
+          "id": "hyperv",
+          "name": "Hyper-V & clusters",
+          "file": "virtualisation/hyper-v-clusters.json"
+        },
+        {
+          "id": "proxmox",
+          "name": "Infrastructure — études de cas",
+          "file": "virtualisation/proxmox-ceph.json"
+        }
       ]
     },
     {
@@ -73,9 +149,21 @@
       "color": "#F87171",
       "sub": "ACL · NAT · DMZ · pare-feu",
       "modules": [
-        { "id": "nat-pat", "name": "NAT & PAT", "file": "securite/nat-pat.json" },
-        { "id": "acl", "name": "ACL", "file": "securite/acl.json" },
-        { "id": "opnsense", "name": "OPNsense, pare-feu & DMZ", "file": "securite/opnsense-dmz.json" }
+        {
+          "id": "nat-pat",
+          "name": "NAT & PAT",
+          "file": "securite/nat-pat.json"
+        },
+        {
+          "id": "acl",
+          "name": "ACL",
+          "file": "securite/acl.json"
+        },
+        {
+          "id": "opnsense",
+          "name": "OPNsense, pare-feu & DMZ",
+          "file": "securite/opnsense-dmz.json"
+        }
       ]
     },
     {
@@ -85,7 +173,11 @@
       "color": "#63D471",
       "sub": "Zabbix · SNMP · journaux",
       "modules": [
-        { "id": "zabbix", "name": "Zabbix & SNMP", "file": "supervision/zabbix-snmp.json" }
+        {
+          "id": "zabbix",
+          "name": "Zabbix & SNMP",
+          "file": "supervision/zabbix-snmp.json"
+        }
       ]
     },
     {
@@ -95,7 +187,11 @@
       "color": "#EC4899",
       "sub": "PowerShell · Python",
       "modules": [
-        { "id": "powershell-python", "name": "PowerShell & Python", "file": "scripts/powershell-python.json" }
+        {
+          "id": "powershell-python",
+          "name": "PowerShell & Python",
+          "file": "scripts/powershell-python.json"
+        }
       ]
     },
     {
@@ -106,9 +202,21 @@
       "sub": "mini-TP guidés · IOS · Bash · PowerShell",
       "intro": "Ici, pas de QCM : uniquement des mini-TP en terminal simulé — vous tapez de vraies commandes IOS, Bash et PowerShell. De la pratique pure : l'Atelier démarre directement au niveau 3 (procédures guidées) et culmine au niveau 4 (diagnostics de panne). XP doublés, Tab pour compléter, ↑ pour l'historique.",
       "modules": [
-        { "id": "tp-cisco", "name": "TP Cisco IOS", "file": "atelier/tp-cisco.json" },
-        { "id": "tp-linux", "name": "TP Linux (Bash)", "file": "atelier/tp-linux.json" },
-        { "id": "tp-windows", "name": "TP Windows (PowerShell & CMD)", "file": "atelier/tp-windows.json" }
+        {
+          "id": "tp-cisco",
+          "name": "Cisco IOS en pratique",
+          "file": "atelier/tp-cisco.json"
+        },
+        {
+          "id": "tp-linux",
+          "name": "Linux en pratique (Bash)",
+          "file": "atelier/tp-linux.json"
+        },
+        {
+          "id": "tp-windows",
+          "name": "Windows en pratique (PowerShell & CMD)",
+          "file": "atelier/tp-windows.json"
+        }
       ]
     },
     {
@@ -116,9 +224,13 @@
       "name": "Méthodes",
       "icon": "ti ti-briefcase",
       "color": "#94A3B8",
-      "sub": "MDE · IA · méthodologie",
+      "sub": "emploi · IA · méthodologie",
       "modules": [
-        { "id": "mde", "name": "MDE & méthodes", "file": "methodes/mde-methodes.json" }
+        {
+          "id": "mde",
+          "name": "Méthodes & employabilité",
+          "file": "methodes/mde-methodes.json"
+        }
       ]
     }
   ]

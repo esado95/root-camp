@@ -432,7 +432,7 @@ function showBienvenue() {
     <h1 style="margin-bottom:14px">Bienvenue sur Root Camp</h1>
     <div class="feedback" style="margin-top:0">
       De <b>stagiaire</b> à <b style="color:var(--cyan)">root@tssr</b> : révisez tout le programme TSSR
-      en répondant à des questions générées depuis les cours de la promo.
+      (Technicien Supérieur Systèmes et Réseaux) — réseaux, Windows, Linux, sécurité, virtualisation, supervision.
     </div>
     <div class="level-list" style="margin-top:14px">
       <div class="level-row" style="cursor:default">
@@ -484,7 +484,7 @@ function showRules() {
 
     <p class="section-title"># le principe</p>
     <div class="feedback" style="margin-top:0">
-      Chaque thème (Réseaux, Windows/AD, Linux...) regroupe des questions générées à partir des fiches du cours TSSR.
+      Chaque thème (Réseaux, Windows/AD, Linux...) regroupe des questions qui couvrent le référentiel TSSR.
       Vous choisissez un thème puis un niveau : chaque session propose jusqu'à ${SESSION_SIZE} questions,
       avec la correction et l'explication après chaque réponse. Interrompez quand vous voulez :
       la session est sauvegardée après chaque question, et la carte
@@ -924,7 +924,11 @@ function renderOrdre(q) {
   });
 }
 
-function normalize(t) { return t.toLowerCase().trim().replace(/\s+/g, " "); }
+function normalize(t) {
+  return t.toLowerCase().trim()
+    .replace(/\s*\+\s*/g, "+")
+    .replace(/\s+/g, " ");
+}
 
 function renderLibre(q) {
   const input = $("#libre");
