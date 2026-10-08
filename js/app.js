@@ -431,7 +431,7 @@ function showBienvenue() {
   screen.innerHTML = `
     <h1 style="margin-bottom:14px">Bienvenue sur Root Camp</h1>
     <div class="feedback" style="margin-top:0">
-      De <b>stagiaire</b> à <b style="color:var(--cyan)">root@tssr</b> : révisez tout le programme TSSR
+      De <b>stagiaire</b> à <b style="color:var(--cyan)">root@tssr</b> : révisez les notions TSSR
       (Technicien Supérieur Systèmes et Réseaux) — réseaux, Windows, Linux, sécurité, virtualisation, supervision.
     </div>
     <div class="level-list" style="margin-top:14px">
@@ -448,15 +448,15 @@ function showBienvenue() {
       <div class="level-row" style="cursor:default">
         <div class="lvl" style="background:#2DD4BF22; color:#2DD4BF"><i class="ti ti-flask"></i></div>
         <div><h3>Atelier TP — terminal simulé</h3>
-        <p>tapez de vraies commandes IOS, Bash et PowerShell, avec leurs sorties</p></div>
+        <p>entraînez-vous aux commandes IOS, Bash et PowerShell avec des sorties simulées</p></div>
       </div>
       <div class="level-row" style="cursor:default">
         <div class="lvl" style="background:#63D47122; color:var(--green)"><i class="ti ti-cloud"></i></div>
         <div><h3>Compte facultatif</h3>
-        <p>pseudo + mot de passe (onglet Profil) : synchronisation PC/téléphone et classement du groupe — sinon, tout reste local</p></div>
+        <p>pseudo + mot de passe (onglet Profil) : synchronisation PC/téléphone et classement ; en mode invité, la progression reste dans ce navigateur</p></div>
       </div>
     </div>
-    <p class="comment" style="margin-top:12px"># astuce : répondez au clavier — touches 1-4 ou A-D, Entrée pour continuer</p>
+    <p class="comment" style="margin-top:12px"># astuce : sélectionnez une proposition avec 1-9 ou A-E, puis utilisez Entrée pour valider ou continuer</p>
     <div style="display:flex; gap:10px; margin-top:14px">
       <button class="btn" id="bv-regles" style="flex:1"><i class="ti ti-book-2"></i> Les règles en détail</button>
       <button class="btn accent" id="bv-go" style="flex:1"><i class="ti ti-player-play"></i> C'est parti</button>
@@ -484,63 +484,80 @@ function showRules() {
 
     <p class="section-title"># le principe</p>
     <div class="feedback" style="margin-top:0">
-      Chaque thème (Réseaux, Windows/AD, Linux...) regroupe des questions qui couvrent le référentiel TSSR.
-      Vous choisissez un thème puis un niveau : chaque session propose jusqu'à ${SESSION_SIZE} questions,
-      avec la correction et l'explication après chaque réponse. Interrompez quand vous voulez :
-      la session est sauvegardée après chaque question, et la carte
-      <b style="color:var(--amber)">« Reprendre »</b> sur l'accueil vous remet exactement où vous étiez —
-      comme un point de contrôle dans un jeu (examens exclus, chrono oblige).
+      <p>Root Camp propose des questions et des exercices sur les systèmes et réseaux :
+      réseaux, Windows/AD, Linux, sécurité, virtualisation et supervision.
+      Choisissez un thème puis un niveau. Une session contient jusqu'à ${SESSION_SIZE} questions,
+      avec une correction et une explication après chaque réponse.</p>
+      <p style="margin-top:8px">Après chaque question terminée, vos résultats et la position dans la session sont enregistrés.
+      La carte <b style="color:var(--amber)">« Reprendre »</b> sur l'accueil ouvre la prochaine question.
+      Les étapes d'un exercice inachevé ne sont pas conservées. Un examen chronométré ne peut pas être repris.</p>
     </div>
 
     <p class="section-title"># les 4 niveaux de difficulté</p>
     ${lvRows}
     <div class="feedback">
       Chaque thème démarre à son premier niveau disponible. Pour débloquer le niveau suivant :
-      donner au moins ${UNLOCK_MIN_ATTEMPTS} réponses au niveau en cours avec
-      <b style="color:var(--green)">${Math.round(UNLOCK_RATE * 100)} % de réussite</b>.
+      répondez au moins ${UNLOCK_MIN_ATTEMPTS} fois au niveau en cours, avec un taux de réussite
+      <b style="color:var(--green)">d'au moins ${Math.round(UNLOCK_RATE * 100)} %</b>.
+      Les tentatives répétées comptent dans ce total. Une réponse incorrecte ne rapporte aucun XP.
     </div>
 
     <p class="section-title"># les types de questions</p>
     <div class="feedback" style="margin-top:0">
       <p style="margin-bottom:6px"><i class="ti ti-list-check" style="color:var(--cyan)"></i> <b>QCM</b> — une seule bonne réponse</p>
-      <p style="margin-bottom:6px"><i class="ti ti-checkbox" style="color:var(--cyan)"></i> <b>Choix multiples</b> — cochez toutes les bonnes réponses, puis validez</p>
-      <p style="margin-bottom:6px"><i class="ti ti-arrows-left-right" style="color:var(--cyan)"></i> <b>Association</b> — reliez chaque élément de gauche à sa correspondance à droite</p>
-      <p style="margin-bottom:6px"><i class="ti ti-sort-ascending-numbers" style="color:var(--cyan)"></i> <b>Remise en ordre</b> — cliquez les étapes dans le bon ordre</p>
-      <p style="margin-bottom:6px"><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Champ libre</b> — tapez la réponse exacte (valeur ou commande)</p>
-      <p style="margin-bottom:6px"><i class="ti ti-stethoscope" style="color:var(--cyan)"></i> <b>Scénario</b> — une situation réelle à diagnostiquer, comme le jour J</p>
-      <p style="margin-bottom:6px"><i class="ti ti-terminal" style="color:var(--cyan)"></i> <b>Terminal simulé</b> — tapez la commande dans une vraie console : si elle est juste, son résultat s'affiche comme en réel</p>
-      <p style="margin-bottom:6px"><i class="ti ti-flask" style="color:var(--cyan)"></i> <b>Mini-TP</b> — une session guidée en plusieurs étapes (IOS, Bash, PowerShell) : le prompt évolue comme en vrai, indice après une erreur, <b>XP doublés</b></p>
-      <p><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Au clavier</b> — touches 1-4 ou A-D pour répondre, Entrée pour valider et passer à la suite ; dans le terminal : Tab complète le mot en cours, flèches ↑/↓ pour l'historique</p>
+      <p style="margin-bottom:6px"><i class="ti ti-checkbox" style="color:var(--cyan)"></i> <b>Choix multiples</b> — cochez toutes les bonnes réponses et aucune autre, puis validez ; aucun point partiel</p>
+      <p style="margin-bottom:6px"><i class="ti ti-arrows-left-right" style="color:var(--cyan)"></i> <b>Association</b> — reliez toutes les paires sans erreur pour réussir la question</p>
+      <p style="margin-bottom:6px"><i class="ti ti-sort-ascending-numbers" style="color:var(--cyan)"></i> <b>Remise en ordre</b> — sélectionnez toutes les étapes dans le bon ordre, sans erreur</p>
+      <p style="margin-bottom:6px"><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Champ libre</b> — saisissez la valeur ou la commande demandée</p>
+      <p style="margin-bottom:6px"><i class="ti ti-stethoscope" style="color:var(--cyan)"></i> <b>Scénario</b> — analysez la situation décrite et choisissez le diagnostic ou l'action adaptés</p>
+      <p style="margin-bottom:6px"><i class="ti ti-terminal" style="color:var(--cyan)"></i> <b>Terminal simulé</b> — saisissez la commande demandée ; une réponse correcte affiche une sortie d'exemple. Les commandes ne sont pas exécutées sur une machine</p>
+      <p style="margin-bottom:6px"><i class="ti ti-flask" style="color:var(--cyan)"></i> <b>Exercice guidé</b> — enchaînez les étapes dans un terminal simulé IOS, Bash ou PowerShell. Un indice, lorsqu'il est prévu, apparaît après la première erreur ; la solution apparaît après trois erreurs sur une étape. Terminez toutes les étapes sans erreur pour obtenir les <b>XP doublés</b></p>
+      <p><i class="ti ti-keyboard" style="color:var(--cyan)"></i> <b>Au clavier</b> — 1-9 ou A-E sélectionnent une proposition ; Entrée valide ou passe à la suite. Dans le terminal, Tab complète le mot en cours. Dans les exercices guidés, ↑/↓ parcourent l'historique des commandes</p>
+    </div>
+
+    <p class="section-title"># atelier de commandes</p>
+    <div class="feedback" style="margin-top:0">
+      L'Atelier TP devient accessible lorsque le niveau 3 est débloqué dans les thèmes
+      <b>Réseaux, Linux et Windows/AD</b>. Il regroupe les exercices guidés en plusieurs étapes.
     </div>
 
     <p class="section-title"># examen blanc</p>
     <div class="feedback" style="margin-top:0">
-      Quatre paliers : le palier N se débloque quand le niveau N est validé dans chaque thème,
-      et n'interroge que les niveaux déjà travaillés (palier 1 = fondamentaux seuls, palier 4 = tout).
-      ${EXAM_SIZE} questions (hors Atelier TP), ${EXAM_MINUTES} minutes chrono, aucune correction pendant l'épreuve.
-      Les bonnes réponses rapportent <b style="color:var(--cyan)">le double d'XP</b>.
-      À la fin : le corrigé de vos erreurs et des questions non traitées. Seuil de réussite : 60 %.
+      <p>Quatre paliers donnent accès à des examens progressifs. Pour ouvrir un palier,
+      validez le niveau correspondant dans chaque thème concerné : au moins ${UNLOCK_MIN_ATTEMPTS} réponses
+      et ${Math.round(UNLOCK_RATE * 100)} % de réussite, après avoir débloqué ce niveau.
+      Le palier 1 utilise le niveau 1 ; les autres paliers mélangent les niveaux 1 à celui du palier.</p>
+      <p style="margin-top:8px">Chaque examen contient ${EXAM_SIZE} questions en ${EXAM_MINUTES} minutes :
+      QCM, choix multiples, champs libres, scénarios et commandes de terminal.
+      La correction est masquée pendant l'épreuve. Les bonnes réponses rapportent
+      <b style="color:var(--cyan)">le double d'XP</b>.</p>
+      <p style="margin-top:8px">À la fin, consultez le corrigé des erreurs et des questions non traitées.
+      Les questions non traitées comptent comme incorrectes dans le score de l'examen.
+      Le seuil de réussite est de <b>60 %</b>.</p>
     </div>
 
     <p class="section-title"># révision (à revoir)</p>
     <div class="feedback" style="margin-top:0">
       Chaque erreur envoie la question dans la pile « à revoir ».
       Pour l'en sortir : <b style="color:var(--amber)">2 bonnes réponses d'affilée</b> sur cette question.
-      Le principe : on retravaille ce qu'on rate, pas ce qu'on sait déjà.
+      Une nouvelle erreur remet ce compteur à zéro. Retrouvez ces questions dans l'onglet « À revoir ».
     </div>
 
     <p class="section-title"># grades et classement</p>
     <div class="feedback" style="margin-top:0">
-      L'XP cumulé fait monter votre grade : de <b>stagiaire</b> à <b style="color:var(--cyan)">root@tssr</b> (7 échelons —
-      détail dans l'onglet Profil). Les examens blancs et les mini-TP rapportent le double d'XP.
-      Créez un compte (pseudo + mot de passe, onglet Profil) pour apparaître dans le <b>classement du groupe</b>
-      et synchroniser votre progression entre PC et téléphone. Sans compte, tout reste enregistré localement.
+      <p>Votre XP cumulé détermine votre grade. Les ${GRADES.length} grades et leurs seuils
+      sont visibles dans l'onglet Profil. Les examens blancs et les exercices guidés réussis
+      rapportent le double des points indiqués pour leur niveau.</p>
+      <p style="margin-top:8px">En mode invité, votre progression est enregistrée dans ce navigateur.
+      Un compte (pseudo et mot de passe, onglet Profil) permet de participer au <b>classement</b>
+      et de retrouver votre progression sur PC ou téléphone avec le même compte.
+      Vérifiez l'indicateur de synchronisation avant de changer d'appareil.</p>
     </div>
 
     <p class="section-title"># badges</p>
     <div class="feedback" style="margin-top:0">
-      ${BADGES.length} badges à débloquer : maîtrise d'un module, régularité, exploits...
-      La collection complète est visible dans l'onglet Profil.
+      ${BADGES.length} badges récompensent votre progression, votre régularité et vos réussites.
+      Leurs conditions et votre collection sont visibles dans l'onglet Profil.
     </div>
 
     <button class="btn accent" id="rules-go" style="width:100%; text-align:center; padding:12px; margin-top:16px">

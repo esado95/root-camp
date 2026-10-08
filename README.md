@@ -4,7 +4,7 @@
 
 # 🏕️ Root Camp
 
-**De stagiaire à `root@tssr` — le jeu de révision de la promo TSSR**
+**De stagiaire à `root@tssr` — le jeu de révision des systèmes et réseaux**
 
 [![Démo en ligne](https://img.shields.io/badge/▶_jouer-esado95.github.io%2Froot--camp-63D471?style=for-the-badge)](https://esado95.github.io/root-camp/)
 
@@ -21,12 +21,12 @@
 
 ## ✨ Le concept
 
-Réviser le titre professionnel **TSSR** (Technicien Supérieur Systèmes et Réseaux) en jouant :
-les cours de la promo sont transformés en **957 questions**, un **terminal simulé** fait taper de
-vraies commandes Cisco/Bash/PowerShell, et le **classement de promo** entretient la motivation.
-Chaque question corrigée affiche une explication. Les nouvelles questions conservent aussi une référence au cours dans leur champ `source`.
+Réviser les systèmes et réseaux avec **957 questions**, des exercices guidés et un **terminal simulé**
+pour pratiquer les commandes Cisco/Bash/PowerShell. Chaque question corrigée affiche une explication.
+Les énoncés sont autonomes ; les références utilisées pour leur maintenance sont conservées séparément
+dans `docs/course-sources.json` et ne sont pas chargées par l'application.
 
-## 📚 Mise à jour des cours
+## 📚 Mise à jour de la banque
 
 La banque v10 ajoute **64 questions** sur VPN, HA réseau, Veeam, AWS et NAS Synology,
 avec quatre niveaux par module. Voir [les sources et le détail des changements](docs/course-refresh-2026-10.md).
@@ -70,9 +70,9 @@ flowchart LR
 | ⏱️ **Examens blancs** | 4 paliers progressifs, 20 questions / 20 min, aucune fuite d'indice pendant l'épreuve, corrigé complet à la fin |
 | 🔁 **Révision espacée** | chaque erreur part en pile « à revoir », sortie après 2 bonnes réponses d'affilée |
 | 💾 **Checkpoint** | session sauvegardée à chaque question — on reprend plus tard, même sur un autre appareil |
-| 🏆 **Gamification** | XP, 7 grades, 8 badges, classement de promo en temps réel |
+| 🏆 **Gamification** | XP, 7 grades, 8 badges, classement en ligne |
 | ☁️ **Comptes synchronisés** | pseudo + mot de passe, progression PC ↔ téléphone, mode invité 100 % local |
-| ⌨️ **Accessible** | réponses au clavier (1-4 / A-D / Entrée), focus visible, ARIA |
+| ⌨️ **Accessible** | sélection au clavier (1-9 / A-E), validation et suite avec Entrée, focus visible, ARIA |
 
 ## 🏗️ Architecture
 
