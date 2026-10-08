@@ -155,8 +155,10 @@ h1 { font-size: 19px; font-weight: 600; margin-bottom: 2px; }
   display: inline-flex; align-items: center; gap: 5px;
 }
 
-.qhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 10px; }
-.qmeta { font-family: var(--mono); font-size: 12px; }
+.qhead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 10px; }
+.qhead #quit { flex-shrink: 0; white-space: nowrap; }
+.qmeta { flex: 1; min-width: 0; overflow-wrap: anywhere; font-family: var(--mono); font-size: 12px; }
+#timer { flex: 0 0 auto; white-space: nowrap; }
 .progress { height: 6px; background: var(--panel); border-radius: 3px; margin-bottom: 16px; overflow: hidden; }
 .progress div { height: 100%; border-radius: 3px; transition: width .3s; }
 
