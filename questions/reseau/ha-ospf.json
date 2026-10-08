@@ -13,14 +13,13 @@
         "Protocole de redondance de passerelle"
       ],
       "answer": 2,
-      "explication": "OSPF est un protocole à état de liens. Les routeurs partagent des informations de topologie et calculent les chemins ; son interopérabilité repose sur un standard ouvert.",
-      "source": "TP_HA_OSPF_2026_Sujet.docx — Présentation"
+      "explication": "OSPF est un protocole à état de liens. Les routeurs partagent des informations de topologie et calculent les chemins ; son interopérabilité repose sur un standard ouvert."
     },
     {
       "id": "ha-net-002",
       "niveau": 1,
       "type": "qcm",
-      "q": "Dans le TP OSPF multi-area, quelle zone forme le backbone ?",
+      "q": "Dans une architecture OSPF multi-area, quelle zone forme le backbone ?",
       "choices": [
         "Area 0",
         "La zone ayant le plus grand numéro",
@@ -28,8 +27,7 @@
         "La zone du serveur DNS"
       ],
       "answer": 0,
-      "explication": "L’area 0 est le backbone OSPF. Dans la topologie du TP, les autres zones sont reliées à ce backbone via des routeurs de bordure de zone.",
-      "source": "TP_HA_OSPF_2026_Sujet.docx — Partie 3 — OSPF Multi-Area"
+      "explication": "L’area 0 est le backbone OSPF. Les autres zones y sont reliées par des routeurs de bordure de zone (ABR)."
     },
     {
       "id": "ha-net-003",
@@ -43,8 +41,7 @@
         "Une duplication de tous les paquets vers Internet"
       ],
       "answer": 1,
-      "explication": "L’agrégation regroupe des interfaces physiques compatibles dans un lien logique. Elle répartit les flux et permet de continuer avec les liens restants lorsqu’un membre tombe.",
-      "source": "TP_HA_Agregation_Liens_FHRP_2026_Sujet_FR.docx — Phase 1 — Agrégation"
+      "explication": "L’agrégation regroupe des interfaces physiques compatibles dans un lien logique. Elle répartit les flux et permet de continuer avec les liens restants lorsqu’un membre tombe."
     },
     {
       "id": "ha-net-004",
@@ -58,8 +55,7 @@
         "L’adresse IP virtuelle du groupe HSRP"
       ],
       "answer": 3,
-      "explication": "Les clients utilisent l’IP virtuelle du groupe HSRP. Les routeurs peuvent changer de rôle actif sans nécessiter de modifier cette passerelle sur chaque poste.",
-      "source": "TP_HA_Agregation_Liens_FHRP_2026_Sujet_FR.docx — Phase 2 — Redondance de passerelle"
+      "explication": "Les clients utilisent l’IP virtuelle du groupe HSRP. Les routeurs peuvent changer de rôle actif sans nécessiter de modifier cette passerelle sur chaque poste."
     },
     {
       "id": "ha-net-005",
@@ -76,8 +72,7 @@
         0,
         2
       ],
-      "explication": "Au moins une extrémité doit lancer la négociation : active/active et active/passive conviennent. Passive/passive ne l’initie pas ; le mode on impose un canal statique sans LACP.",
-      "source": "TP_HA_Agregation_Liens_FHRP_2026_Sujet_FR.docx — Phase 1 — Négociation de l’agrégation"
+      "explication": "Au moins une extrémité doit lancer la négociation : active/active et active/passive conviennent. Passive/passive ne l’initie pas ; le mode on impose un canal statique sans LACP."
     },
     {
       "id": "ha-net-006",
@@ -98,8 +93,7 @@
           "Changement de chemin dans la topologie routée"
         ]
       ],
-      "explication": "LACP agrège les liens, HSRP protège la passerelle des postes et OSPF recalcule les chemins de routage. Ces mécanismes traitent des éléments différents de la continuité réseau.",
-      "source": "TP_HA_Agregation_Liens_FHRP_2026_Sujet_FR.docx — Phase 3 — Agrégation et redondance"
+      "explication": "LACP agrège les liens, HSRP protège la passerelle des postes et OSPF recalcule les chemins de routage. Ces mécanismes traitent des éléments différents de la continuité réseau."
     },
     {
       "id": "ha-net-007",
@@ -113,14 +107,13 @@
         "Pour supprimer obligatoirement ce réseau des annonces"
       ],
       "answer": 2,
-      "explication": "Une interface passive n’émet pas de Hello OSPF et ne forme pas de voisinage. Son réseau peut rester annoncé si l’interface participe au processus OSPF.",
-      "source": "TP_HA_OSPF_2026_Sujet.docx — Partie 2 — Éviter les échanges inutiles"
+      "explication": "Une interface passive n’émet pas de Hello OSPF et ne forme pas de voisinage. Son réseau peut rester annoncé si l’interface participe au processus OSPF."
     },
     {
       "id": "ha-net-008",
       "niveau": 2,
       "type": "qcm",
-      "q": "Que signifie la convergence après la rupture d’un lien dans le TP OSPF ?",
+      "q": "Que signifie la convergence OSPF après la rupture d’un lien ?",
       "choices": [
         "La copie du fichier de configuration vers un NAS",
         "L’adaptation des routes à la nouvelle topologie",
@@ -128,8 +121,7 @@
         "Le chiffrement du paquet par un VPN"
       ],
       "answer": 1,
-      "explication": "Après détection du changement, les routeurs mettent à jour leurs informations de topologie et recalculent leurs routes. La convergence désigne ce retour à une vision et à des chemins cohérents.",
-      "source": "TP_HA_OSPF_2026_Sujet.docx — Partie 2 — Bascule et vocabulaire"
+      "explication": "Après détection du changement, les routeurs mettent à jour leurs informations de topologie et recalculent leurs routes. La convergence désigne ce retour à une vision et à des chemins cohérents."
     },
     {
       "id": "ha-net-009",
@@ -142,8 +134,7 @@
         "sh ip ospf neighbor"
       ],
       "output": "Neighbor ID     Pri   State           Dead Time   Address         Interface\n2.2.2.2           1   FULL/DR         00:00:32    10.0.12.2       GigabitEthernet0/0",
-      "explication": "show ip ospf neighbor permet de contrôler les voisinages et leurs états. L’affichage ci-dessous représente un voisinage établi dans le lab simulé.",
-      "source": "TP_HA_OSPF_2026_Sujet.docx — Partie 1 — Vérification de la configuration"
+      "explication": "show ip ospf neighbor permet de contrôler les voisinages et leurs états. La sortie simulée ci-dessous représente un voisinage établi."
     },
     {
       "id": "ha-net-010",
@@ -155,8 +146,7 @@
         "default-information originate"
       ],
       "output": "",
-      "explication": "default-information originate diffuse la route par défaut existante dans OSPF. Sans always, le routeur ne l’annonce normalement pas si cette route est absente de sa table.",
-      "source": "TP_HA_OSPF_2026_Sujet.docx — Partie 2 — Propager la route par défaut"
+      "explication": "default-information originate diffuse la route par défaut existante dans OSPF. Sans always, le routeur ne l’annonce normalement pas si cette route est absente de sa table."
     },
     {
       "id": "ha-net-011",
@@ -168,8 +158,7 @@
         "channel-group 1 mode active"
       ],
       "output": "",
-      "explication": "channel-group 1 mode active active la négociation LACP sur les interfaces sélectionnées. Les paramètres de vitesse, de duplex et de trunk doivent être compatibles.",
-      "source": "TP_HA_Agregation_Liens_FHRP_2026_Sujet_FR.docx — Phase 1 — Configuration LACP"
+      "explication": "channel-group 1 mode active active la négociation LACP sur les interfaces sélectionnées. Les paramètres de vitesse, de duplex et de trunk doivent être compatibles."
     },
     {
       "id": "ha-net-012",
@@ -181,8 +170,7 @@
         "standby 10 ip 192.168.10.254"
       ],
       "output": "",
-      "explication": "standby 10 ip 192.168.10.254 définit l’adresse virtuelle du groupe 10. Le routeur partenaire doit utiliser la même adresse virtuelle pour ce groupe.",
-      "source": "TP_HA_Agregation_Liens_FHRP_2026_Sujet_FR.docx — Phase 2 — Configuration HSRP"
+      "explication": "standby 10 ip 192.168.10.254 définit l’adresse virtuelle du groupe 10. Le routeur partenaire doit utiliser la même adresse virtuelle pour ce groupe."
     },
     {
       "id": "ha-net-013",
@@ -197,8 +185,7 @@
         "Aucun côté n’initie la négociation LACP"
       ],
       "answer": 3,
-      "explication": "Deux côtés passifs attendent chacun une demande de l’autre. Passer au moins un côté en active permet d’initier la négociation, sous réserve des autres paramètres compatibles.",
-      "source": "TP_HA_Agregation_Liens_FHRP_2026_Sujet_FR.docx — Phase 1 — Dépannage LACP"
+      "explication": "Deux côtés passifs attendent chacun une demande de l’autre. Passer au moins un côté en active permet d’initier la négociation, sous réserve des autres paramètres compatibles."
     },
     {
       "id": "ha-net-014",
@@ -213,15 +200,14 @@
         "Le VLAN doit porter le numéro du processus OSPF"
       ],
       "answer": 0,
-      "explication": "Sur ce lien, les deux interfaces voisines doivent appartenir à la même area. Le TP utilise des zones cohérentes par segment ; des area différentes empêchent le voisinage.",
-      "source": "TP_HA_OSPF_2026_Sujet.docx — Partie 3 — OSPF Multi-Area"
+      "explication": "Sur ce lien, les deux interfaces voisines doivent appartenir à la même area. Des areas différentes empêchent l’établissement du voisinage OSPF."
     },
     {
       "id": "ha-net-015",
       "niveau": 4,
       "type": "scenario",
       "q": "Quelle option manque si R1 doit reprendre automatiquement le rôle actif ?",
-      "context": "R1 a la priorité HSRP 110 et R2 la priorité 100. Après une panne de R1, R2 devient actif. R1 revient, mais reste standby ; la préemption est désactivée.",
+      "context": "Dans le groupe HSRP 10, R1 a la priorité 110 et R2 la priorité 100. Après une panne de R1, R2 devient actif. R1 revient, mais reste standby ; la préemption est désactivée.",
       "choices": [
         "ip helper-address",
         "standby 10 preempt sur R1",
@@ -229,8 +215,7 @@
         "no ip routing"
       ],
       "answer": 1,
-      "explication": "standby 10 preempt permet au routeur de priorité supérieure de reprendre le rôle actif. Augmenter la priorité ne suffit pas à déloger un actif déjà en service sans préemption.",
-      "source": "TP_HA_Agregation_Liens_FHRP_2026_Sujet_FR.docx — Phase 2 — Priorité et retour du routeur"
+      "explication": "standby 10 preempt permet au routeur de priorité supérieure de reprendre le rôle actif. Augmenter la priorité ne suffit pas à déloger un actif déjà en service sans préemption."
     },
     {
       "id": "ha-net-016",
@@ -245,8 +230,7 @@
         "R2 doit obligatoirement être serveur DHCP"
       ],
       "answer": 2,
-      "explication": "Les postes doivent viser la passerelle virtuelle 192.168.10.254. Une passerelle physique de R1 devient indisponible à sa panne ; HSRP ne réécrit pas la configuration des clients.",
-      "source": "TP_HA_Agregation_Liens_FHRP_2026_Sujet_FR.docx — Phase 2 — Test du basculement"
+      "explication": "Les postes doivent viser la passerelle virtuelle 192.168.10.254. Une passerelle physique de R1 devient indisponible à sa panne ; HSRP ne réécrit pas la configuration des clients."
     }
   ]
 }

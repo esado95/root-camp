@@ -92,8 +92,7 @@
         "IP Sec",
         "VPN IPSec"
       ],
-      "explication": "IPsec est couramment utilisé pour relier deux sites par un tunnel sécurisé. OpenVPN peut également réaliser du site-à-site ; l’accès nomade peut utiliser OpenVPN ou IPsec selon la configuration. Le type de connexion ne se déduit donc pas du seul protocole.",
-      "source": "2.8.0 - Cours - OpenVPN - Explications des différents types_V2024.docx — VPN Site-to-Site ; documentation Netgate OpenVPN"
+      "explication": "IPsec est couramment utilisé pour relier deux sites par un tunnel sécurisé. OpenVPN peut également réaliser du site-à-site ; l’accès nomade peut utiliser OpenVPN ou IPsec selon la configuration. Le type de connexion ne se déduit donc pas du seul protocole."
     },
     {
       "id": "opn-008",

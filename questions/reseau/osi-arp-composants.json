@@ -537,7 +537,7 @@
       "id": "osi-036",
       "niveau": 4,
       "type": "scenario",
-      "q": "Un stagiaire relie deux switchs récents avec un câble droit et s'étonne que le lien fonctionne : son cours indiquait qu'il fallait un câble croisé entre équipements de même type. Pourquoi cela fonctionne-t-il ?",
+      "q": "Un technicien relie deux switchs récents avec un câble droit. Le lien fonctionne alors qu’un câble croisé était traditionnellement nécessaire entre équipements de même type. Quelle fonctionnalité explique ce résultat ?",
       "choices": [
         "Depuis les années 2000, les ports s'adaptent automatiquement grâce à l'auto MDI-X",
         "Les switchs récents n'utilisent plus les fils de cuivre du câble",

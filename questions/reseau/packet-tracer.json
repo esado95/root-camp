@@ -515,7 +515,7 @@
       "niveau": 4,
       "type": "scenario",
       "context": "Router> configure terminal\n              ^\n% Invalid input detected at '^' marker.",
-      "q": "Un stagiaire tente de configurer le routeur mais la commande est rejetée. Pourquoi ?",
+      "q": "Un technicien tente de configurer le routeur mais la commande est rejetée. Pourquoi ?",
       "choices": [
         "La commande s'écrit « config terminal » sans e",
         "Il est en mode utilisateur : il doit d'abord taper enable",

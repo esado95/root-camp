@@ -5,7 +5,7 @@
       "id": "aws-001",
       "niveau": 1,
       "type": "qcm",
-      "q": "Quel est le rôle d’Amazon VPC dans le TP AWS ?",
+      "q": "Quel est le rôle d’Amazon VPC ?",
       "choices": [
         "Héberger uniquement les mots de passe utilisateurs",
         "Créer un réseau virtuel pour les ressources cloud",
@@ -13,14 +13,13 @@
         "Remplacer le serveur Apache"
       ],
       "answer": 1,
-      "explication": "Le VPC définit un réseau virtuel isolé pour les ressources AWS. On y crée les sous-réseaux et les tables de routage ; il ne constitue pas à lui seul une application Web.",
-      "source": "TP Cloud AWS 2026.docx — Amazon VPC"
+      "explication": "Le VPC définit un réseau virtuel isolé pour les ressources AWS. On y crée les sous-réseaux et les tables de routage ; il ne constitue pas à lui seul une application Web."
     },
     {
       "id": "aws-002",
       "niveau": 1,
       "type": "qcm",
-      "q": "Quel service du TP fournit les machines virtuelles du serveur Web et de la base de données ?",
+      "q": "Quel service AWS fournit les machines virtuelles lorsqu’on héberge soi-même un serveur Web et une base de données ?",
       "choices": [
         "Amazon S3",
         "Amazon SNS",
@@ -28,8 +27,7 @@
         "Amazon Route 53 uniquement"
       ],
       "answer": 2,
-      "explication": "Amazon EC2 fournit les instances de calcul. Dans ce TP, la base est installée sur une instance EC2 ; RDS est présenté séparément comme service de base de données géré.",
-      "source": "TP Cloud AWS 2026.docx — Amazon EC2 et déploiement de la database"
+      "explication": "Amazon EC2 fournit les instances de calcul. Une base peut être installée et administrée sur une instance EC2 ; RDS fournit, lui, un service de base de données géré."
     },
     {
       "id": "aws-003",
@@ -43,14 +41,13 @@
         "Un moteur SQL installé sur le client"
       ],
       "answer": 0,
-      "explication": "S3 est un stockage objet organisé en buckets. Il ne correspond pas directement à un disque système de VM ni à une base de données relationnelle.",
-      "source": "TP Cloud AWS 2026.docx — Amazon S3"
+      "explication": "S3 est un stockage objet organisé en buckets. Il ne correspond pas directement à un disque système de VM ni à une base de données relationnelle."
     },
     {
       "id": "aws-004",
       "niveau": 1,
       "type": "assoc",
-      "q": "Associez les modèles cloud aux exemples discutés dans le cours.",
+      "q": "Associez les modèles cloud aux exemples de services correspondants.",
       "pairs": [
         [
           "IaaS",
@@ -58,15 +55,14 @@
         ],
         [
           "PaaS",
-          "Base de données gérée comme RDS dans la classification du cours"
+          "Plateforme applicative gérée comme AWS Elastic Beanstalk"
         ],
         [
           "SaaS",
-          "Application fournie et utilisée via un navigateur"
+          "Application prête à l’emploi gérée par le fournisseur"
         ]
       ],
-      "explication": "En IaaS, le client administre notamment le système invité. En PaaS, le fournisseur gère la plateforme ; en SaaS, il fournit une application prête à utiliser.",
-      "source": "TP Cloud AWS 2026.docx — IaaS, PaaS et SaaS"
+      "explication": "En IaaS, le client administre notamment le système invité. En PaaS, le fournisseur gère la plateforme ; en SaaS, il fournit une application prête à utiliser."
     },
     {
       "id": "aws-005",
@@ -81,14 +77,13 @@
         "L’équipe qui administre le système de l’instance EC2"
       ],
       "answer": 3,
-      "explication": "Sur EC2, le client reste responsable du système d’exploitation invité et de ses mises à jour. AWS protège l’infrastructure sous-jacente ; ce partage varie selon le service utilisé.",
-      "source": "TP Cloud AWS 2026.docx — Responsabilités partagées"
+      "explication": "Sur EC2, le client reste responsable du système d’exploitation invité et de ses mises à jour. AWS protège l’infrastructure sous-jacente ; ce partage varie selon le service utilisé."
     },
     {
       "id": "aws-006",
       "niveau": 2,
       "type": "multi",
-      "q": "Pour joindre en IPv4 l’instance Web depuis Internet, quels éléments sont nécessaires en plus d’un service actif et de filtres autorisant le flux ?",
+      "q": "Pour joindre directement en IPv4 une instance Web depuis Internet, quels éléments sont nécessaires en plus d’un service actif et de filtres autorisant le flux ?",
       "choices": [
         "Une adresse IPv4 publique pour l’instance",
         "Une route Internet du sous-réseau via une Internet Gateway",
@@ -99,14 +94,13 @@
         0,
         1
       ],
-      "explication": "L’instance doit disposer d’une adresse IPv4 publique et son sous-réseau d’une route vers une Internet Gateway attachée au VPC. Les règles de sécurité restent indispensables.",
-      "source": "TP Cloud AWS 2026.docx — Fondations Cloud & Réseau"
+      "explication": "L’instance doit disposer d’une adresse IPv4 publique et son sous-réseau d’une route vers une Internet Gateway attachée au VPC. Les règles de sécurité restent indispensables."
     },
     {
       "id": "aws-007",
       "niveau": 2,
       "type": "qcm",
-      "q": "À quoi sert une NAT Gateway publique pour l’instance privée du lab ?",
+      "q": "À quoi sert une NAT Gateway publique pour une instance dans un sous-réseau privé ?",
       "choices": [
         "Ouvrir automatiquement MySQL à tous les internautes",
         "Remplacer toutes les règles de sécurité",
@@ -114,14 +108,13 @@
         "Attribuer un domaine Active Directory"
       ],
       "answer": 2,
-      "explication": "Elle permet d’initier des connexions IPv4 vers Internet sans attribuer d’IP publique à l’instance privée. Elle ne rend pas cette instance directement joignable depuis Internet.",
-      "source": "Guide_TP_Cloud_AWS_2026.docx — Sortie Internet du sous-réseau privé"
+      "explication": "Elle permet d’initier des connexions IPv4 vers Internet sans attribuer d’IP publique à l’instance privée. Elle ne rend pas cette instance directement joignable depuis Internet."
     },
     {
       "id": "aws-008",
       "niveau": 2,
       "type": "qcm",
-      "q": "Quelle source choisir pour limiter SSH au lieu de formation dans le TP ?",
+      "q": "Quelle source IPv4 choisir pour limiter l’accès SSH à l’unique IP publique d’un bureau ?",
       "choices": [
         "0.0.0.0/0",
         "L’IP publique autorisée avec un masque /32",
@@ -129,8 +122,7 @@
         "Le nom de l’autorité de certification OpenVPN"
       ],
       "answer": 1,
-      "explication": "Le TP limite SSH à l’IP publique du lieu de formation, en /32 pour une seule IPv4. Une règle 0.0.0.0/0 autoriserait toute adresse IPv4 et ne respecterait pas ce périmètre.",
-      "source": "TP Cloud AWS 2026.docx — Security Group du serveur Web"
+      "explication": "Une source /32 désigne une seule adresse IPv4, ici l’IP publique autorisée du bureau. Une règle 0.0.0.0/0 autoriserait toute adresse IPv4 et ne respecterait pas ce périmètre."
     },
     {
       "id": "aws-009",
@@ -140,28 +132,27 @@
       "accept": [
         "0.0.0.0/0"
       ],
-      "explication": "0.0.0.0/0 représente toutes les destinations IPv4. Dans le subnet public du TP, cette route pointe vers l’Internet Gateway ; la route locale du VPC reste distincte.",
-      "source": "TP Cloud AWS 2026.docx — Table de routage et Internet Gateway"
+      "explication": "0.0.0.0/0 représente toutes les destinations IPv4. Pour un sous-réseau public connecté à Internet, cette route pointe vers l’Internet Gateway ; la route locale du VPC reste distincte."
     },
     {
       "id": "aws-010",
       "niveau": 3,
       "type": "terminal",
-      "q": "Connectez-vous en SSH à l’instance Debian du lab 198.51.100.10 avec l’utilisateur admin et la clé lab.pem.",
+      "caseSensitive": true,
+      "q": "Connectez-vous en SSH à l’instance Debian 198.51.100.10 avec l’utilisateur admin et la clé privée locale lab.pem.",
       "prompt": "$",
       "accept": [
         "ssh -i lab.pem admin@198.51.100.10",
         "ssh admin@198.51.100.10 -i lab.pem"
       ],
       "output": "admin@web:~$",
-      "explication": "Le TP précise l’utilisateur admin pour son image Debian. L’option -i choisit le fichier de clé locale ; cet exemple utilise une adresse de documentation et une clé fictive.",
-      "source": "TP Cloud AWS 2026.docx — Connexion SSH à l’instance EC2"
+      "explication": "L’utilisateur demandé est admin. L’option -i choisit le fichier de clé locale ; -I désigne une bibliothèque PKCS#11 et n’est pas équivalente. La casse de la commande et des noms est conservée. Cet exemple utilise une adresse de documentation et une clé fictive."
     },
     {
       "id": "aws-011",
       "niveau": 3,
       "type": "qcm",
-      "q": "Quelle configuration limite l’accès MySQL de la base privée à la seule instance Web associée à SG_WEB ?",
+      "q": "Quelle configuration limite l’accès MySQL de la base privée aux instances Web associées au groupe SG_WEB ?",
       "choices": [
         "Autoriser tous les ports depuis 0.0.0.0/0",
         "Ajouter une IP publique à la base et ouvrir SSH à tous",
@@ -169,14 +160,13 @@
         "Supprimer le Security Group de la base"
       ],
       "answer": 2,
-      "explication": "Le Security Group de la base autorise le port MySQL depuis SG_WEB. Référencer le groupe source limite le flux aux interfaces autorisées ; les groupes doivent aussi permettre les flux sortants nécessaires.",
-      "source": "TP Cloud AWS 2026.docx — Security Group de la base de données"
+      "explication": "Le Security Group de la base autorise le port MySQL depuis SG_WEB. Référencer le groupe source limite le flux aux interfaces autorisées ; les groupes doivent aussi permettre les flux sortants nécessaires."
     },
     {
       "id": "aws-012",
       "niveau": 3,
       "type": "qcm",
-      "q": "Le TP demande une alarme sur la RAM de Debian EC2. Quel élément faut-il configurer pour collecter cette métrique ?",
+      "q": "Pour déclencher une alarme sur l’utilisation de la RAM d’une instance Debian EC2, quel élément faut-il configurer pour collecter cette métrique ?",
       "choices": [
         "L’agent CloudWatch configuré pour collecter la mémoire",
         "Uniquement une nouvelle Internet Gateway",
@@ -184,15 +174,14 @@
         "Une règle entrante sur tous les ports"
       ],
       "answer": 0,
-      "explication": "La mémoire utilisée dans le système invité n’est pas une métrique EC2 standard. Le TP installe et configure l’agent CloudWatch pour publier notamment mem_used_percent, avec les permissions nécessaires.",
-      "source": "Guide_TP_Cloud_AWS_2026.docx — Agent CloudWatch"
+      "explication": "La mémoire utilisée dans le système invité n’est pas une métrique EC2 standard. L’agent CloudWatch doit être installé et configuré pour publier notamment mem_used_percent, avec les permissions nécessaires."
     },
     {
       "id": "aws-013",
       "niveau": 4,
       "type": "scenario",
       "q": "Quel défaut du réseau explique ce symptôme ?",
-      "context": "Le service SSH est actif et les filtres autorisent l’IP du client. L’instance a une IPv4 publique. La table du subnet ne contient que la route locale 10.0.0.0/16.",
+      "context": "La connexion SSH depuis Internet échoue. Le service SSH est actif et les filtres autorisent l’IP du client. L’instance a une IPv4 publique. La table du subnet ne contient que la route locale 10.0.0.0/16.",
       "choices": [
         "Le nom de l’instance est trop court",
         "Le volume doit obligatoirement être en RAID 1",
@@ -200,8 +189,7 @@
         "EC2 interdit le protocole SSH"
       ],
       "answer": 2,
-      "explication": "Une IP publique et un Security Group autorisant SSH ne suffisent pas. La table associée au subnet public doit diriger le trafic Internet vers l’Internet Gateway.",
-      "source": "TP Cloud AWS 2026.docx — Route par défaut indispensable"
+      "explication": "Une IP publique et un Security Group autorisant SSH ne suffisent pas. La table associée au subnet public doit diriger le trafic Internet vers l’Internet Gateway."
     },
     {
       "id": "aws-014",
@@ -216,30 +204,28 @@
         "Supprimer l’agent CloudWatch fonctionnel"
       ],
       "answer": 0,
-      "explication": "La notification nécessite que l’alarme utilise le bon topic SNS et que l’abonnement email soit confirmé. Une métrique présente ne valide pas à elle seule l’envoi des messages.",
-      "source": "Guide_TP_Cloud_AWS_2026.docx — SNS et alarmes CloudWatch"
+      "explication": "La notification nécessite que l’alarme utilise le bon topic SNS et que l’abonnement email soit confirmé. Une métrique présente ne valide pas à elle seule l’envoi des messages."
     },
     {
       "id": "aws-015",
       "niveau": 4,
       "type": "scenario",
-      "q": "Quel contrôle faut-il encore faire lors du nettoyage du lab ?",
-      "context": "Toutes les instances EC2 ont été arrêtées. La NAT Gateway du lab et son Elastic IP sont encore présentes alors que le lab est terminé.",
+      "q": "Quel contrôle faut-il encore faire lors du nettoyage d’un environnement AWS devenu inutile ?",
+      "context": "Toutes les instances EC2 ont été arrêtées. Une NAT Gateway et son Elastic IP sont encore présentes alors que cet environnement n’est plus utilisé.",
       "choices": [
         "Attendre : arrêter EC2 supprime forcément la NAT Gateway",
-        "Inventorier puis supprimer les ressources de lab restantes selon la procédure",
+        "Inventorier puis supprimer les ressources inutilisées selon la procédure",
         "Créer une deuxième NAT Gateway pour réduire les coûts",
         "Ouvrir tous les ports pour accélérer le nettoyage"
       ],
       "answer": 1,
-      "explication": "Le nettoyage concerne toutes les ressources créées, notamment la NAT Gateway et les adresses allouées. Arrêter les seules VM ne supprime pas ces ressources ni tous leurs coûts associés.",
-      "source": "Guide_TP_Cloud_AWS_2026.docx — Résilience et nettoyage"
+      "explication": "Le nettoyage concerne toutes les ressources créées, notamment la NAT Gateway et les adresses allouées. Arrêter les seules VM ne supprime pas ces ressources ni tous leurs coûts associés."
     },
     {
       "id": "aws-016",
       "niveau": 4,
       "type": "qcm",
-      "q": "Quel est l’intérêt de créer une AMI du serveur Web configuré avant la fin du TP ?",
+      "q": "Quel est l’intérêt de créer une AMI d’un serveur Web configuré ?",
       "choices": [
         "Garantir que toutes les données futures seront sauvegardées chaque minute",
         "Supprimer la responsabilité de mettre à jour Debian",
@@ -247,8 +233,7 @@
         "Disposer d’une image pour redéployer une instance du serveur"
       ],
       "answer": 3,
-      "explication": "L’AMI permet de lancer une nouvelle instance à partir de cette configuration et des volumes inclus. Elle ne sauvegarde pas automatiquement tout le VPC, les données externes ni tous les changements futurs.",
-      "source": "TP Cloud AWS 2026.docx — Résilience — Création d’une AMI"
+      "explication": "L’AMI permet de lancer une nouvelle instance à partir de cette configuration et des volumes inclus. Elle ne sauvegarde pas automatiquement tout le VPC, les données externes ni tous les changements futurs."
     }
   ]
 }

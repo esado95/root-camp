@@ -13,8 +13,7 @@
         "À remplacer le contrôleur de domaine"
       ],
       "answer": 1,
-      "explication": "Le repository est le stockage où le job écrit ses sauvegardes. Identifier cet emplacement est nécessaire pour contrôler l’espace disponible et la protection des copies.",
-      "source": "TP Veeam.docx — Sauvegarde du serveur de fichiers"
+      "explication": "Le repository est le stockage où le job écrit ses sauvegardes. Identifier cet emplacement est nécessaire pour contrôler l’espace disponible et la protection des copies."
     },
     {
       "id": "vbr-002",
@@ -28,14 +27,13 @@
         "La durée ou le nombre de points de restauration conservés"
       ],
       "answer": 3,
-      "explication": "La rétention fixe l’historique conservé, en durée ou en points selon le job. Elle doit correspondre au besoin de restauration et à la capacité du repository.",
-      "source": "TP Veeam.docx — Questions de synthèse — Rétention"
+      "explication": "La rétention fixe l’historique conservé, en durée ou en points selon le job. Elle doit correspondre au besoin de restauration et à la capacité du repository."
     },
     {
       "id": "vbr-003",
       "niveau": 1,
       "type": "assoc",
-      "q": "Associez les sauvegardes du TP à leur périmètre.",
+      "q": "Associez les types de sauvegardes Veeam à leur périmètre.",
       "pairs": [
         [
           "Sauvegarde File Share",
@@ -46,14 +44,13 @@
           "Disques et configuration de la machine virtuelle"
         ]
       ],
-      "explication": "Le job File Share protège des fichiers partagés. La sauvegarde de VM protège la machine au niveau hyperviseur et permet une restauration complète de celle-ci.",
-      "source": "TP Veeam.docx — Questions de synthèse — Fichiers et VM"
+      "explication": "Le job File Share protège des fichiers partagés. La sauvegarde de VM protège la machine au niveau hyperviseur et permet une restauration complète de celle-ci."
     },
     {
       "id": "vbr-004",
       "niveau": 2,
       "type": "qcm",
-      "q": "Dans le TP, qu’est-ce qui différencie le replica de la sauvegarde de VM ?",
+      "q": "Qu’est-ce qui différencie un replica d’une sauvegarde de VM ?",
       "choices": [
         "Le replica est une VM prête à être démarrée sur l’hôte cible",
         "Le replica est uniquement un fichier texte",
@@ -61,8 +58,7 @@
         "La réplication ne copie jamais les disques"
       ],
       "answer": 0,
-      "explication": "Le replica est une copie de VM au format de l’hyperviseur, utilisable pour un basculement. Une sauvegarde fournit des fichiers et des points de restauration depuis un repository.",
-      "source": "TP Veeam.docx — Questions de synthèse — Réplication"
+      "explication": "Le replica est une copie de VM au format de l’hyperviseur, utilisable pour un basculement. Une sauvegarde fournit des fichiers et des points de restauration depuis un repository."
     },
     {
       "id": "vbr-005",
@@ -76,14 +72,13 @@
         "Non, aucun test de restauration n’est possible"
       ],
       "answer": 2,
-      "explication": "Le contrôle d’intégrité de la sauvegarde ne vérifie pas tout le fonctionnement applicatif. Il faut aussi démarrer la VM restaurée et tester le service.",
-      "source": "TP Veeam.docx — Questions de synthèse — Health Check"
+      "explication": "Le contrôle d’intégrité de la sauvegarde ne vérifie pas tout le fonctionnement applicatif. Il faut aussi démarrer la VM restaurée et tester le service."
     },
     {
       "id": "vbr-006",
       "niveau": 2,
       "type": "qcm",
-      "q": "Quel équipement ajoute-t-on à Veeam pour découvrir les VM du TP Hyper-V ?",
+      "q": "Quel équipement ajoute-t-on à Veeam pour découvrir les VM d’un serveur Hyper-V autonome ?",
       "choices": [
         "Le switch du bâtiment",
         "L’hôte Hyper-V qui héberge les VM",
@@ -91,8 +86,7 @@
         "Le navigateur du client"
       ],
       "answer": 1,
-      "explication": "Le TP ajoute l’hôte Hyper-V en mode Standalone avec les droits nécessaires. Veeam peut ensuite découvrir ses VM ; l’IP de la VM Web ne représente pas l’hyperviseur.",
-      "source": "TP Veeam.docx — Sauvegarde d’une machine virtuelle Hyper-V"
+      "explication": "On ajoute l’hôte Hyper-V en mode Standalone avec les droits nécessaires. Veeam peut ensuite découvrir ses VM ; l’IP de la VM Web ne représente pas l’hyperviseur."
     },
     {
       "id": "vbr-007",
@@ -105,8 +99,7 @@
         "Sélectionner le fichier et lancer sa restauration",
         "Vérifier sa présence et son contenu dans le partage"
       ],
-      "explication": "La restauration vise le fichier demandé depuis un point où il existait encore. Le contrôle final dans le partage valide la présence et la lisibilité du résultat.",
-      "source": "TP Veeam.docx — Restauration d’un fichier"
+      "explication": "La restauration vise le fichier demandé depuis un point où il existait encore. Le contrôle final dans le partage valide la présence et la lisibilité du résultat."
     },
     {
       "id": "vbr-008",
@@ -121,14 +114,13 @@
         "Basculer toutes les VM sur un autre réseau"
       ],
       "answer": 2,
-      "explication": "La restauration granulaire du fichier répond au besoin sans remplacer le système ni les autres fichiers. Il faut choisir un point valide et contrôler le résultat.",
-      "source": "TP Veeam.docx — Restauration d’un fichier"
+      "explication": "La restauration granulaire du fichier répond au besoin sans remplacer le système ni les autres fichiers. Il faut choisir un point valide et contrôler le résultat."
     },
     {
       "id": "vbr-009",
       "niveau": 3,
       "type": "multi",
-      "q": "Après restauration de la VM Web, quelles vérifications fonctionnelles complète-t-on dans le TP ?",
+      "q": "Après restauration d’une VM Web, quelles vérifications permettent de valider son fonctionnement ?",
       "choices": [
         "La VM démarre et son système est utilisable",
         "Le nom de la VM commence par une majuscule",
@@ -139,8 +131,7 @@
         0,
         2
       ],
-      "explication": "La recette contrôle le démarrage du système et l’accès réel au service Web. La présence d’un point de restauration ou le nom de la VM ne suffisent pas.",
-      "source": "TP Veeam.docx — Restauration de la machine virtuelle"
+      "explication": "La recette contrôle le démarrage du système et l’accès réel au service Web. La présence d’un point de restauration ou le nom de la VM ne suffisent pas."
     },
     {
       "id": "vbr-010",
@@ -155,8 +146,7 @@
         "Restaurer uniquement le DNS du poste client"
       ],
       "answer": 1,
-      "explication": "Le failback vers la production synchronise les changements du replica vers la VM cible. Après vérification du service et des fichiers, le retour peut être validé avec Commit Failback.",
-      "source": "TP Veeam.docx — Réplication — Retour à la production"
+      "explication": "Le failback vers la production synchronise les changements du replica vers la VM cible. Après vérification du service et des fichiers, le retour peut être validé avec Commit Failback."
     },
     {
       "id": "vbr-011",
@@ -171,8 +161,7 @@
         "Une panne de l’hôte rend les deux VM indisponibles"
       ],
       "answer": 3,
-      "explication": "La réplication de VM sur le même hôte ne protège pas d’une panne physique de cet hôte. Pour couvrir ce risque, la cible doit être sur une infrastructure distincte ; les sauvegardes indépendantes restent nécessaires.",
-      "source": "TP Veeam.docx — Environnement du LAB et réplication"
+      "explication": "La réplication de VM sur le même hôte ne protège pas d’une panne physique de cet hôte. Pour couvrir ce risque, la cible doit être sur une infrastructure distincte ; les sauvegardes indépendantes restent nécessaires."
     },
     {
       "id": "vbr-012",
@@ -186,8 +175,7 @@
         "Faire disparaître la nécessité d’une rétention"
       ],
       "answer": 0,
-      "explication": "Dans ce mode, SureBackup démarre les VM depuis les sauvegardes dans un lab isolé et réalise les tests configurés. Ce test complète le contrôle des fichiers de sauvegarde et dépend des fonctionnalités disponibles dans l’édition utilisée.",
-      "source": "TP Veeam.docx — Questions de synthèse — SureBackup"
+      "explication": "Dans ce mode, SureBackup démarre les VM depuis les sauvegardes dans un lab isolé et réalise les tests configurés. Ce test complète le contrôle des fichiers de sauvegarde et dépend des fonctionnalités disponibles dans l’édition utilisée."
     }
   ]
 }

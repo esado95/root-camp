@@ -28,7 +28,7 @@ Chaque question corrigée affiche une explication. Les nouvelles questions conse
 
 ## 📚 Mise à jour des cours
 
-La banque v8 ajoute **64 questions** issues des cours VPN, HA réseau, Veeam, AWS et NAS Synology,
+La banque v10 ajoute **64 questions** sur VPN, HA réseau, Veeam, AWS et NAS Synology,
 avec quatre niveaux par module. Voir [les sources et le détail des changements](docs/course-refresh-2026-10.md).
 
 ## 📸 Aperçu
@@ -122,8 +122,11 @@ tools/validate_bank.py      validation structurelle de toute la banque
 
 - **Validateur automatique** : `python tools/validate_bank.py` — schéma des 8 types, bornes des
   réponses, unicité des 957 identifiants, cohérence du manifest ;
+- **Tests de régression** : `node tools/test_runtime.cjs` ; les parcours navigateur et leurs prérequis sont décrits dans [le rapport de vérification](docs/course-refresh-2026-10.md#vérification) ;
+- **Énoncés autonomes** : `node tools/test_content.cjs` vérifie les questions, choix, explications et étapes d’exercices ;
+- [**Sauvegardes et Supabase**](docs/saves-and-supabase.md) : stockage des résultats, reprise du projet et limites de synchronisation ;
 - banque **versionnée** : mise à jour des questions sans vider le cache de personne ;
-- nouvelles questions **sourcées** : référence au cours dans le champ `source` et périmètre décrit dans [la mise à jour des cours](docs/course-refresh-2026-10.md).
+- questions **autonomes** : toutes les conditions nécessaires sont dans l’énoncé ; les sources de maintenance sont séparées dans [la documentation](docs/course-refresh-2026-10.md).
 
 ---
 

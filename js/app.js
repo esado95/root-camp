@@ -930,6 +930,12 @@ function normalize(t) {
     .replace(/\s+/g, " ");
 }
 
+/* Les commandes Unix peuvent distinguer -i de -I et la casse des fichiers.
+   Le mode explicite conserve le comportement des exercices IOS existants. */
+function normalizeCommande(t, caseSensitive) {
+  return caseSensitive ? t.trim().replace(/\s+/g, " ") : normalize(t);
+}
+
 function renderLibre(q) {
   const input = $("#libre");
   input.focus();
@@ -966,7 +972,8 @@ function renderLibre(q) {
 /* Autocomplétion Tab : complète le MOT en cours (jamais la commande entière —
    sinon Tab donnerait la réponse). Plusieurs candidats → plus long préfixe
    commun, comme bash/IOS. Retourne null s'il n'y a rien à compléter. */
-function completerCommande(saisie, variantes) {
+function completerCommande(saisie, variantes, caseSensitive = false) {
+  const comparer = t => caseSensitive ? t : t.toLowerCase();
   const m = saisie.match(/^(.*?)(\S*)$/);
   const avant = m[1], partiel = m[2];
   if (!partiel) return null;
@@ -976,15 +983,15 @@ function completerCommande(saisie, variantes) {
   for (const v of variantes) {
     const toks = v.trim().split(/\s+/);
     if (toks.length <= idx) continue;
-    if (!precedents.every((t, i) => toks[i] && toks[i].toLowerCase() === t.toLowerCase())) continue;
-    if (toks[idx].toLowerCase().startsWith(partiel.toLowerCase())) candidats.add(toks[idx]);
+    if (!precedents.every((t, i) => toks[i] && comparer(toks[i]) === comparer(t))) continue;
+    if (comparer(toks[idx]).startsWith(comparer(partiel))) candidats.add(toks[idx]);
   }
   if (!candidats.size) return null;
   const arr = [...candidats];
   let commun = arr[0];
   for (const c of arr.slice(1)) {
     let k = 0;
-    while (k < commun.length && k < c.length && commun[k].toLowerCase() === c[k].toLowerCase()) k++;
+    while (k < commun.length && k < c.length && comparer(commun[k]) === comparer(c[k])) k++;
     commun = commun.slice(0, k);
   }
   if (commun.length <= partiel.length) return null;
@@ -992,11 +999,11 @@ function completerCommande(saisie, variantes) {
   return avant + commun + (motComplet ? " " : "");
 }
 
-function brancheTab(input, getVariantes) {
+function brancheTab(input, getVariantes, caseSensitive = false) {
   input.addEventListener("keydown", e => {
     if (e.key !== "Tab") return;
     e.preventDefault();
-    const r = completerCommande(input.value, getVariantes());
+    const r = completerCommande(input.value, getVariantes(), caseSensitive);
     if (r !== null) {
       input.value = r;
       requestAnimationFrame(() => input.setSelectionRange(r.length, r.length));
@@ -1039,7 +1046,7 @@ function renderTerminal(q) {
   inputLine.appendChild(input);
   body.appendChild(inputLine);
   input.focus();
-  brancheTab(input, () => q.accept);
+  brancheTab(input, () => q.accept, q.caseSensitive === true);
 
   input.addEventListener("keydown", e => {
     if (e.key !== "Enter") return;
@@ -1050,7 +1057,7 @@ function renderTerminal(q) {
     const skt = document.getElementById("skip");
     if (skt) skt.remove();
     addLine(promptTxt + " " + val);
-    const correct = q.accept.map(normalize).includes(normalize(val));
+    const correct = q.accept.some(a => normalizeCommande(a, q.caseSensitive === true) === normalizeCommande(val, q.caseSensitive === true));
     if (session.exam) {
       addLine("# réponse enregistrée", "cmt");
     } else if (correct) {
@@ -1440,13 +1447,13 @@ function timeAgo(iso) {
 
 async function showBoard() {
   setPath("./quiz --classement");
-  screen.innerHTML = `<h1>Classement de la promo</h1><p class="comment"># chargement...</p>`;
+  screen.innerHTML = `<h1>Classement</h1><p class="comment"># chargement...</p>`;
   const tk = navToken;
   const rows = (typeof onlineBoard === "function") ? await onlineBoard() : null;
   if (tk !== navToken) return;
   if (!rows) {
     screen.innerHTML = `
-      <h1>Classement de la promo</h1>
+      <h1>Classement</h1>
       <p class="comment"># classement du groupe</p>
       <div class="feedback">Classement indisponible pour le moment — vérifiez votre connexion Internet.</div>`;
     return;
@@ -1466,7 +1473,7 @@ async function showBoard() {
       </div>`;
   }).join("");
   screen.innerHTML = `
-    <h1>Classement de la promo</h1>
+    <h1>Classement</h1>
     <p class="comment"># ${rows.length} participant(s) · trié par XP</p>
     ${rows.length ? list : '<div class="feedback">Personne au classement pour l\'instant — soyez le premier !</div>'}
     ${me ? "" : `<div class="feedback" style="margin-top:14px"><i class="ti ti-info-circle" style="color:var(--cyan)"></i>
@@ -1607,9 +1614,8 @@ function showProfile() {
       if (lecture.ok) {
         const cloud = lecture.state ? normalizeState(lecture.state) : null;
         const etranger = state.owner && state.owner !== onlineUser.id;
-        const cg = cloud ? cloud.gen : 0, sg = state.gen || 0;
         if (etranger) state = cloud || defaultState();
-        else if (cloud && (cg > sg || (cg === sg && cloud.xp >= state.xp))) state = cloud;
+        else if (cloud && compareProgress(cloud, state) >= 0) state = cloud;
         state.owner = onlineUser.id;
         persist();
         await onlinePushState(state, gradeIndex() + 1);
@@ -1689,19 +1695,17 @@ document.querySelectorAll(".nav button").forEach(b => {
         await onlineRestore();
         if (typeof onlineUser !== "undefined" && onlineUser) {
           const lecture = await onlineFetchState();
-          if (lecture.ok && lecture.state && !session) {
-            const cloud = normalizeState(lecture.state);
+          if (lecture.ok && !session) {
+            const cloud = lecture.state ? normalizeState(lecture.state) : null;
             const etranger = state.owner && state.owner !== onlineUser.id;
-            const cg = cloud.gen || 0, sg = state.gen || 0;
-            if (etranger || cg > sg || (cg === sg && cloud.xp > state.xp)) {
-              state = cloud;
-            }
+            if (etranger) state = cloud || defaultState();
+            else if (cloud && compareProgress(cloud, state) > 0) state = cloud;
             state.owner = onlineUser.id;
             persist();
             if (bootDone && !session) {
               updateNavPill();
               updateOnlineBadge();
-              toast('<i class="ti ti-cloud-download"></i> Progression synchronisée depuis le cloud');
+              if (cloud) toast('<i class="ti ti-cloud-download"></i> Progression synchronisée depuis le cloud');
               nav(currentPage);
             }
           }

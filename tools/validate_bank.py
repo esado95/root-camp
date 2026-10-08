@@ -33,6 +33,8 @@ def check_question(f, q, idx):
     if t not in TYPES:
         err(f, qid, f"type inconnu : {t}")
         return
+    if "caseSensitive" in q and (t != "terminal" or not isinstance(q["caseSensitive"], bool)):
+        err(f, qid, "caseSensitive doit être un booléen réservé aux questions terminal")
     if t in ("qcm", "scenario"):
         ch = q.get("choices")
         if not isinstance(ch, list) or len(ch) < 3:
