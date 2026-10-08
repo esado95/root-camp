@@ -1,0 +1,236 @@
+{
+  "module": "Haute disponibilité réseau — OSPF, LACP & HSRP",
+  "questions": [
+    {
+      "id": "ha-net-001",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "À quelle famille de protocoles de routage appartient OSPF ?",
+      "choices": [
+        "Protocole de transport de fichiers",
+        "Protocole à vecteur de distance comme RIP",
+        "Protocole à état de liens",
+        "Protocole de redondance de passerelle"
+      ],
+      "answer": 2,
+      "explication": "OSPF est un protocole à état de liens. Les routeurs partagent des informations de topologie et calculent les chemins ; son interopérabilité repose sur un standard ouvert."
+    },
+    {
+      "id": "ha-net-002",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Dans une architecture OSPF multi-area, quelle zone forme le backbone ?",
+      "choices": [
+        "Area 0",
+        "La zone ayant le plus grand numéro",
+        "Chaque VLAN est nécessairement le backbone",
+        "La zone du serveur DNS"
+      ],
+      "answer": 0,
+      "explication": "L’area 0 est le backbone OSPF. Les autres zones y sont reliées par des routeurs de bordure de zone (ABR)."
+    },
+    {
+      "id": "ha-net-003",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Que représente un EtherChannel entre deux switches ?",
+      "choices": [
+        "Un tunnel VPN entre utilisateurs",
+        "Un groupe de liens physiques vu comme un lien logique",
+        "Un serveur DHCP redondant",
+        "Une duplication de tous les paquets vers Internet"
+      ],
+      "answer": 1,
+      "explication": "L’agrégation regroupe des interfaces physiques compatibles dans un lien logique. Elle répartit les flux et permet de continuer avec les liens restants lorsqu’un membre tombe."
+    },
+    {
+      "id": "ha-net-004",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quelle adresse les clients doivent-ils utiliser comme passerelle avec HSRP ?",
+      "choices": [
+        "L’adresse du serveur DNS",
+        "L’adresse physique de chaque switch tour à tour",
+        "Une adresse différente après chaque panne",
+        "L’adresse IP virtuelle du groupe HSRP"
+      ],
+      "answer": 3,
+      "explication": "Les clients utilisent l’IP virtuelle du groupe HSRP. Les routeurs peuvent changer de rôle actif sans nécessiter de modifier cette passerelle sur chaque poste."
+    },
+    {
+      "id": "ha-net-005",
+      "niveau": 2,
+      "type": "multi",
+      "q": "Quelles combinaisons de modes LACP permettent une négociation, si les autres paramètres des ports sont compatibles ?",
+      "choices": [
+        "active / active",
+        "passive / passive",
+        "active / passive",
+        "on / passive"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explication": "Au moins une extrémité doit lancer la négociation : active/active et active/passive conviennent. Passive/passive ne l’initie pas ; le mode on impose un canal statique sans LACP."
+    },
+    {
+      "id": "ha-net-006",
+      "niveau": 2,
+      "type": "assoc",
+      "q": "Associez chaque mécanisme à la panne qu’il aide à traiter.",
+      "pairs": [
+        [
+          "LACP",
+          "Perte d’un lien membre entre switches"
+        ],
+        [
+          "HSRP",
+          "Perte du routeur passerelle actif"
+        ],
+        [
+          "OSPF",
+          "Changement de chemin dans la topologie routée"
+        ]
+      ],
+      "explication": "LACP agrège les liens, HSRP protège la passerelle des postes et OSPF recalcule les chemins de routage. Ces mécanismes traitent des éléments différents de la continuité réseau."
+    },
+    {
+      "id": "ha-net-007",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi rendre passive une interface OSPF reliée uniquement à des postes clients ?",
+      "choices": [
+        "Pour arrêter toute communication des postes",
+        "Pour remplacer la passerelle par un DNS",
+        "Pour éviter un voisinage inutile tout en annonçant le réseau",
+        "Pour supprimer obligatoirement ce réseau des annonces"
+      ],
+      "answer": 2,
+      "explication": "Une interface passive n’émet pas de Hello OSPF et ne forme pas de voisinage. Son réseau peut rester annoncé si l’interface participe au processus OSPF."
+    },
+    {
+      "id": "ha-net-008",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Que signifie la convergence OSPF après la rupture d’un lien ?",
+      "choices": [
+        "La copie du fichier de configuration vers un NAS",
+        "L’adaptation des routes à la nouvelle topologie",
+        "La création d’un nouveau domaine Active Directory",
+        "Le chiffrement du paquet par un VPN"
+      ],
+      "answer": 1,
+      "explication": "Après détection du changement, les routeurs mettent à jour leurs informations de topologie et recalculent leurs routes. La convergence désigne ce retour à une vision et à des chemins cohérents."
+    },
+    {
+      "id": "ha-net-009",
+      "niveau": 3,
+      "type": "terminal",
+      "q": "Affichez les voisins OSPF du routeur Cisco IOS.",
+      "prompt": "R1#",
+      "accept": [
+        "show ip ospf neighbor",
+        "sh ip ospf neighbor"
+      ],
+      "output": "Neighbor ID     Pri   State           Dead Time   Address         Interface\n2.2.2.2           1   FULL/DR         00:00:32    10.0.12.2       GigabitEthernet0/0",
+      "explication": "show ip ospf neighbor permet de contrôler les voisinages et leurs états. La sortie simulée ci-dessous représente un voisinage établi."
+    },
+    {
+      "id": "ha-net-010",
+      "niveau": 3,
+      "type": "terminal",
+      "q": "Une route par défaut valide existe déjà dans la table de R1. Annoncez-la dans une zone OSPF normale, sans utiliser always.",
+      "prompt": "R1(config-router)#",
+      "accept": [
+        "default-information originate"
+      ],
+      "output": "",
+      "explication": "default-information originate diffuse la route par défaut existante dans OSPF. Sans always, le routeur ne l’annonce normalement pas si cette route est absente de sa table."
+    },
+    {
+      "id": "ha-net-011",
+      "niveau": 3,
+      "type": "terminal",
+      "q": "Les deux ports sélectionnés ont déjà des paramètres trunk compatibles. Ajoutez-les au groupe EtherChannel 1 en mode LACP actif.",
+      "prompt": "SW1(config-if-range)#",
+      "accept": [
+        "channel-group 1 mode active"
+      ],
+      "output": "",
+      "explication": "channel-group 1 mode active active la négociation LACP sur les interfaces sélectionnées. Les paramètres de vitesse, de duplex et de trunk doivent être compatibles."
+    },
+    {
+      "id": "ha-net-012",
+      "niveau": 3,
+      "type": "terminal",
+      "q": "Configurez l’IP virtuelle 192.168.10.254 pour le groupe HSRP 10 sur l’interface sélectionnée.",
+      "prompt": "R1(config-if)#",
+      "accept": [
+        "standby 10 ip 192.168.10.254"
+      ],
+      "output": "",
+      "explication": "standby 10 ip 192.168.10.254 définit l’adresse virtuelle du groupe 10. Le routeur partenaire doit utiliser la même adresse virtuelle pour ce groupe."
+    },
+    {
+      "id": "ha-net-013",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Pourquoi le canal LACP ne se forme-t-il pas ?",
+      "context": "Les ports sont up et leurs paramètres trunk correspondent. Les deux switches sont configurés avec channel-group 1 mode passive.",
+      "choices": [
+        "Le groupe doit porter le numéro du VLAN natif",
+        "LACP exige obligatoirement un serveur DHCP",
+        "Le mode passive désactive physiquement le câble",
+        "Aucun côté n’initie la négociation LACP"
+      ],
+      "answer": 3,
+      "explication": "Deux côtés passifs attendent chacun une demande de l’autre. Passer au moins un côté en active permet d’initier la négociation, sous réserve des autres paramètres compatibles."
+    },
+    {
+      "id": "ha-net-014",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Quelle incohérence faut-il corriger en premier pour former le voisinage OSPF ?",
+      "context": "R1 et R2 sont sur le même sous-réseau Ethernet. R1 place cette interface dans area 0, R2 dans area 1. Les interfaces, masques et temporisations correspondent.",
+      "choices": [
+        "Les interfaces du même lien ne sont pas dans la même area",
+        "Les noms des routeurs sont différents",
+        "Les routeurs n’ont pas le même mot de passe Wi-Fi",
+        "Le VLAN doit porter le numéro du processus OSPF"
+      ],
+      "answer": 0,
+      "explication": "Sur ce lien, les deux interfaces voisines doivent appartenir à la même area. Des areas différentes empêchent l’établissement du voisinage OSPF."
+    },
+    {
+      "id": "ha-net-015",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Quelle option manque si R1 doit reprendre automatiquement le rôle actif ?",
+      "context": "Dans le groupe HSRP 10, R1 a la priorité 110 et R2 la priorité 100. Après une panne de R1, R2 devient actif. R1 revient, mais reste standby ; la préemption est désactivée.",
+      "choices": [
+        "ip helper-address",
+        "standby 10 preempt sur R1",
+        "channel-group 10 mode passive",
+        "no ip routing"
+      ],
+      "answer": 1,
+      "explication": "standby 10 preempt permet au routeur de priorité supérieure de reprendre le rôle actif. Augmenter la priorité ne suffit pas à déloger un actif déjà en service sans préemption."
+    },
+    {
+      "id": "ha-net-016",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Pourquoi ces postes perdent-ils l’accès malgré un basculement HSRP réussi ?",
+      "context": "R1 utilise 192.168.10.1, R2 192.168.10.2 et l’IP virtuelle est 192.168.10.254. Les postes ont 192.168.10.1 comme passerelle. R1 tombe ; R2 devient actif.",
+      "choices": [
+        "HSRP impose de changer les IP des postes à chaque panne",
+        "L’IP virtuelle doit être l’adresse du serveur DNS",
+        "Les postes utilisent l’IP physique de R1 au lieu de l’IP virtuelle",
+        "R2 doit obligatoirement être serveur DHCP"
+      ],
+      "answer": 2,
+      "explication": "Les postes doivent viser la passerelle virtuelle 192.168.10.254. Une passerelle physique de R1 devient indisponible à sa panne ; HSRP ne réécrit pas la configuration des clients."
+    }
+  ]
+}

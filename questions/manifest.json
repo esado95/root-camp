@@ -1,18 +1,23 @@
 {
-  "version": 7,
-  "updated": "2026-07-30",
+  "version": 10,
+  "updated": "2026-10-08",
   "themes": [
     {
       "id": "materiel",
       "name": "Matériel",
       "icon": "ti ti-cpu",
       "color": "#FB923C",
-      "sub": "CPU · RAM · RAID · assemblage",
+      "sub": "CPU · RAM · RAID · NAS · partages",
       "modules": [
         {
           "id": "hardware",
           "name": "Matériel & RAID",
           "file": "materiel/materiel-raid.json"
+        },
+        {
+          "id": "nas-synology",
+          "name": "NAS Synology — stockage, partages & sauvegarde",
+          "file": "materiel/nas-synology.json"
         }
       ]
     },
@@ -21,7 +26,7 @@
       "name": "Réseaux",
       "icon": "ti ti-topology-star-3",
       "color": "#38BDF8",
-      "sub": "OSI · IPv4 · VLAN · routage",
+      "sub": "OSI · IPv4 · VLAN · OSPF · LACP · HSRP",
       "modules": [
         {
           "id": "osi",
@@ -57,6 +62,11 @@
           "id": "diagnostic",
           "name": "Diagnostic & Wireshark",
           "file": "reseau/diagnostic-wireshark.json"
+        },
+        {
+          "id": "ha-ospf",
+          "name": "Haute disponibilité réseau — OSPF, LACP & HSRP",
+          "file": "reseau/ha-ospf.json"
         }
       ]
     },
@@ -128,7 +138,7 @@
       "name": "Virtualisation",
       "icon": "ti ti-cube-3d-sphere",
       "color": "#A78BFA",
-      "sub": "hyperviseurs · cluster · SAN",
+      "sub": "hyperviseurs · cluster · sauvegarde · AWS",
       "modules": [
         {
           "id": "hyperv",
@@ -139,6 +149,16 @@
           "id": "proxmox",
           "name": "Infrastructure — études de cas",
           "file": "virtualisation/proxmox-ceph.json"
+        },
+        {
+          "id": "backup-veeam",
+          "name": "Sauvegarde, restauration & réplication — Veeam",
+          "file": "virtualisation/backup-veeam.json"
+        },
+        {
+          "id": "cloud-aws",
+          "name": "Cloud AWS — VPC, EC2 & supervision",
+          "file": "virtualisation/cloud-aws.json"
         }
       ]
     },
@@ -147,7 +167,7 @@
       "name": "Sécurité",
       "icon": "ti ti-shield-lock",
       "color": "#F87171",
-      "sub": "ACL · NAT · DMZ · pare-feu",
+      "sub": "ACL · NAT · DMZ · pare-feu · VPN",
       "modules": [
         {
           "id": "nat-pat",
@@ -163,6 +183,11 @@
           "id": "opnsense",
           "name": "OPNsense, pare-feu & DMZ",
           "file": "securite/opnsense-dmz.json"
+        },
+        {
+          "id": "vpn-openvpn",
+          "name": "VPN & OpenVPN sur pfSense",
+          "file": "securite/vpn-openvpn.json"
         }
       ]
     },

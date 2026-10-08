@@ -1,0 +1,239 @@
+{
+  "module": "Cloud AWS — VPC, EC2 & supervision",
+  "questions": [
+    {
+      "id": "aws-001",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quel est le rôle d’Amazon VPC ?",
+      "choices": [
+        "Héberger uniquement les mots de passe utilisateurs",
+        "Créer un réseau virtuel pour les ressources cloud",
+        "Configurer le RAID de la VM locale",
+        "Remplacer le serveur Apache"
+      ],
+      "answer": 1,
+      "explication": "Le VPC définit un réseau virtuel isolé pour les ressources AWS. On y crée les sous-réseaux et les tables de routage ; il ne constitue pas à lui seul une application Web."
+    },
+    {
+      "id": "aws-002",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quel service AWS fournit les machines virtuelles lorsqu’on héberge soi-même un serveur Web et une base de données ?",
+      "choices": [
+        "Amazon S3",
+        "Amazon SNS",
+        "Amazon EC2",
+        "Amazon Route 53 uniquement"
+      ],
+      "answer": 2,
+      "explication": "Amazon EC2 fournit les instances de calcul. Une base peut être installée et administrée sur une instance EC2 ; RDS fournit, lui, un service de base de données géré."
+    },
+    {
+      "id": "aws-003",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Quel type de stockage fournit Amazon S3 ?",
+      "choices": [
+        "Un stockage objet",
+        "Une table de routage de switch",
+        "Un hyperviseur local",
+        "Un moteur SQL installé sur le client"
+      ],
+      "answer": 0,
+      "explication": "S3 est un stockage objet organisé en buckets. Il ne correspond pas directement à un disque système de VM ni à une base de données relationnelle."
+    },
+    {
+      "id": "aws-004",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez les modèles cloud aux exemples de services correspondants.",
+      "pairs": [
+        [
+          "IaaS",
+          "Instance EC2 dont on administre le système"
+        ],
+        [
+          "PaaS",
+          "Plateforme applicative gérée comme AWS Elastic Beanstalk"
+        ],
+        [
+          "SaaS",
+          "Application prête à l’emploi gérée par le fournisseur"
+        ]
+      ],
+      "explication": "En IaaS, le client administre notamment le système invité. En PaaS, le fournisseur gère la plateforme ; en SaaS, il fournit une application prête à utiliser."
+    },
+    {
+      "id": "aws-005",
+      "niveau": 2,
+      "type": "scenario",
+      "q": "Qui doit corriger cette vulnérabilité du système invité ?",
+      "context": "L’entreprise installe Debian sur EC2. Une vulnérabilité touche un paquet installé dans cette Debian.",
+      "choices": [
+        "Uniquement le fournisseur d’accès Internet",
+        "Toujours AWS, car toute VM est un service géré",
+        "Personne tant que la VM est allumée",
+        "L’équipe qui administre le système de l’instance EC2"
+      ],
+      "answer": 3,
+      "explication": "Sur EC2, le client reste responsable du système d’exploitation invité et de ses mises à jour. AWS protège l’infrastructure sous-jacente ; ce partage varie selon le service utilisé."
+    },
+    {
+      "id": "aws-006",
+      "niveau": 2,
+      "type": "multi",
+      "q": "Pour joindre directement en IPv4 une instance Web depuis Internet, quels éléments sont nécessaires en plus d’un service actif et de filtres autorisant le flux ?",
+      "choices": [
+        "Une adresse IPv4 publique pour l’instance",
+        "Une route Internet du sous-réseau via une Internet Gateway",
+        "Un contrôleur de domaine dans chaque subnet",
+        "Un replica Veeam sur le poste du client"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explication": "L’instance doit disposer d’une adresse IPv4 publique et son sous-réseau d’une route vers une Internet Gateway attachée au VPC. Les règles de sécurité restent indispensables."
+    },
+    {
+      "id": "aws-007",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "À quoi sert une NAT Gateway publique pour une instance dans un sous-réseau privé ?",
+      "choices": [
+        "Ouvrir automatiquement MySQL à tous les internautes",
+        "Remplacer toutes les règles de sécurité",
+        "Permettre des connexions sortantes Internet depuis le subnet privé",
+        "Attribuer un domaine Active Directory"
+      ],
+      "answer": 2,
+      "explication": "Elle permet d’initier des connexions IPv4 vers Internet sans attribuer d’IP publique à l’instance privée. Elle ne rend pas cette instance directement joignable depuis Internet."
+    },
+    {
+      "id": "aws-008",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quelle source IPv4 choisir pour limiter l’accès SSH à l’unique IP publique d’un bureau ?",
+      "choices": [
+        "0.0.0.0/0",
+        "L’IP publique autorisée avec un masque /32",
+        "L’adresse MAC de l’ordinateur",
+        "Le nom de l’autorité de certification OpenVPN"
+      ],
+      "answer": 1,
+      "explication": "Une source /32 désigne une seule adresse IPv4, ici l’IP publique autorisée du bureau. Une règle 0.0.0.0/0 autoriserait toute adresse IPv4 et ne respecterait pas ce périmètre."
+    },
+    {
+      "id": "aws-009",
+      "niveau": 3,
+      "type": "libre",
+      "q": "Quel CIDR de destination représente toutes les adresses IPv4 dans la route par défaut du subnet public ?",
+      "accept": [
+        "0.0.0.0/0"
+      ],
+      "explication": "0.0.0.0/0 représente toutes les destinations IPv4. Pour un sous-réseau public connecté à Internet, cette route pointe vers l’Internet Gateway ; la route locale du VPC reste distincte."
+    },
+    {
+      "id": "aws-010",
+      "niveau": 3,
+      "type": "terminal",
+      "caseSensitive": true,
+      "q": "Connectez-vous en SSH à l’instance Debian 198.51.100.10 avec l’utilisateur admin et la clé privée locale lab.pem.",
+      "prompt": "$",
+      "accept": [
+        "ssh -i lab.pem admin@198.51.100.10",
+        "ssh admin@198.51.100.10 -i lab.pem"
+      ],
+      "output": "admin@web:~$",
+      "explication": "L’utilisateur demandé est admin. L’option -i choisit le fichier de clé locale ; -I désigne une bibliothèque PKCS#11 et n’est pas équivalente. La casse de la commande et des noms est conservée. Cet exemple utilise une adresse de documentation et une clé fictive."
+    },
+    {
+      "id": "aws-011",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Quelle configuration limite l’accès MySQL de la base privée aux instances Web associées au groupe SG_WEB ?",
+      "choices": [
+        "Autoriser tous les ports depuis 0.0.0.0/0",
+        "Ajouter une IP publique à la base et ouvrir SSH à tous",
+        "Autoriser TCP 3306 depuis SG_WEB dans le Security Group de la base",
+        "Supprimer le Security Group de la base"
+      ],
+      "answer": 2,
+      "explication": "Le Security Group de la base autorise le port MySQL depuis SG_WEB. Référencer le groupe source limite le flux aux interfaces autorisées ; les groupes doivent aussi permettre les flux sortants nécessaires."
+    },
+    {
+      "id": "aws-012",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Pour déclencher une alarme sur l’utilisation de la RAM d’une instance Debian EC2, quel élément faut-il configurer pour collecter cette métrique ?",
+      "choices": [
+        "L’agent CloudWatch configuré pour collecter la mémoire",
+        "Uniquement une nouvelle Internet Gateway",
+        "Un certificat HSRP",
+        "Une règle entrante sur tous les ports"
+      ],
+      "answer": 0,
+      "explication": "La mémoire utilisée dans le système invité n’est pas une métrique EC2 standard. L’agent CloudWatch doit être installé et configuré pour publier notamment mem_used_percent, avec les permissions nécessaires."
+    },
+    {
+      "id": "aws-013",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Quel défaut du réseau explique ce symptôme ?",
+      "context": "La connexion SSH depuis Internet échoue. Le service SSH est actif et les filtres autorisent l’IP du client. L’instance a une IPv4 publique. La table du subnet ne contient que la route locale 10.0.0.0/16.",
+      "choices": [
+        "Le nom de l’instance est trop court",
+        "Le volume doit obligatoirement être en RAID 1",
+        "Il manque une route Internet via l’Internet Gateway",
+        "EC2 interdit le protocole SSH"
+      ],
+      "answer": 2,
+      "explication": "Une IP publique et un Security Group autorisant SSH ne suffisent pas. La table associée au subnet public doit diriger le trafic Internet vers l’Internet Gateway."
+    },
+    {
+      "id": "aws-014",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Quel contrôle complète la chaîne d’alerte avant de refaire le test ?",
+      "context": "L’alarme CloudWatch passe bien en état ALARM. Elle doit envoyer un email via SNS, mais l’abonnement email du topic reste en attente de confirmation.",
+      "choices": [
+        "Vérifier le topic choisi et confirmer l’abonnement email SNS",
+        "Installer un contrôleur de domaine dans AWS",
+        "Rendre MySQL accessible à Internet",
+        "Supprimer l’agent CloudWatch fonctionnel"
+      ],
+      "answer": 0,
+      "explication": "La notification nécessite que l’alarme utilise le bon topic SNS et que l’abonnement email soit confirmé. Une métrique présente ne valide pas à elle seule l’envoi des messages."
+    },
+    {
+      "id": "aws-015",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Quel contrôle faut-il encore faire lors du nettoyage d’un environnement AWS devenu inutile ?",
+      "context": "Toutes les instances EC2 ont été arrêtées. Une NAT Gateway et son Elastic IP sont encore présentes alors que cet environnement n’est plus utilisé.",
+      "choices": [
+        "Attendre : arrêter EC2 supprime forcément la NAT Gateway",
+        "Inventorier puis supprimer les ressources inutilisées selon la procédure",
+        "Créer une deuxième NAT Gateway pour réduire les coûts",
+        "Ouvrir tous les ports pour accélérer le nettoyage"
+      ],
+      "answer": 1,
+      "explication": "Le nettoyage concerne toutes les ressources créées, notamment la NAT Gateway et les adresses allouées. Arrêter les seules VM ne supprime pas ces ressources ni tous leurs coûts associés."
+    },
+    {
+      "id": "aws-016",
+      "niveau": 4,
+      "type": "qcm",
+      "q": "Quel est l’intérêt de créer une AMI d’un serveur Web configuré ?",
+      "choices": [
+        "Garantir que toutes les données futures seront sauvegardées chaque minute",
+        "Supprimer la responsabilité de mettre à jour Debian",
+        "Sauvegarder automatiquement toutes les règles et tous les services du VPC",
+        "Disposer d’une image pour redéployer une instance du serveur"
+      ],
+      "answer": 3,
+      "explication": "L’AMI permet de lancer une nouvelle instance à partir de cette configuration et des volumes inclus. Elle ne sauvegarde pas automatiquement tout le VPC, les données externes ni tous les changements futurs."
+    }
+  ]
+}

@@ -86,13 +86,13 @@
       "id": "opn-007",
       "niveau": 1,
       "type": "libre",
-      "q": "Quel protocole est classiquement utilisé pour monter un tunnel VPN site-à-site entre deux pare-feux ?",
+      "q": "Quel protocole de sécurité de la suite IP est couramment utilisé pour monter un tunnel VPN site-à-site entre deux pare-feux ?",
       "accept": [
         "IPSec",
         "IP Sec",
         "VPN IPSec"
       ],
-      "explication": "Le VPN site-à-site repose sur IPSec : un tunnel permanent interconnecte deux sites distants, tandis que le VPN nomade utilise plutôt SSL."
+      "explication": "IPsec est couramment utilisé pour relier deux sites par un tunnel sécurisé. OpenVPN peut également réaliser du site-à-site ; l’accès nomade peut utiliser OpenVPN ou IPsec selon la configuration. Le type de connexion ne se déduit donc pas du seul protocole."
     },
     {
       "id": "opn-008",

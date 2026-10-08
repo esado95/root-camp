@@ -1,0 +1,119 @@
+{
+  "module": "NAS Synology — stockage, partages & sauvegarde",
+  "questions": [
+    {
+      "id": "nas-001",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Deux disques de 100 Go sont configurés en RAID 1 dans un NAS Synology. Quelle capacité nominale utile obtient-on avant les réserves et métadonnées ?",
+      "choices": [
+        "200 Go",
+        "50 Go",
+        "100 Go",
+        "400 Go"
+      ],
+      "answer": 2,
+      "explication": "Le RAID 1 conserve la même donnée sur les deux disques : la capacité utile correspond à un disque, ici environ 100 Go. Les deux copies protègent d’une panne de disque, pas de toutes les pertes de données."
+    },
+    {
+      "id": "nas-002",
+      "niveau": 1,
+      "type": "ordre",
+      "q": "Remettez dans l’ordre la préparation du stockage d’un NAS Synology.",
+      "steps": [
+        "Ajouter les deux disques au NAS",
+        "Créer le groupe de stockage RAID 1",
+        "Créer le volume Btrfs sur ce groupe",
+        "Créer un dossier partagé sur le volume"
+      ],
+      "explication": "Le groupe de stockage RAID 1 est créé avant le volume Btrfs. Le dossier partagé est ensuite créé sur le volume disponible."
+    },
+    {
+      "id": "nas-003",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Pourquoi joindre un NAS Synology à un domaine Active Directory pour gérer un serveur de fichiers ?",
+      "choices": [
+        "Pour utiliser les utilisateurs et groupes du domaine dans les permissions",
+        "Pour transformer tous les groupes en administrateurs du NAS",
+        "Pour supprimer le serveur DNS du domaine",
+        "Pour désactiver automatiquement tous les partages"
+      ],
+      "answer": 0,
+      "explication": "Le rattachement au domaine permet d’utiliser les identités et groupes Active Directory pour les droits d’accès. Il évite de recréer indépendamment chaque identité sur le NAS."
+    },
+    {
+      "id": "nas-004",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quel est le rôle de l’énumération basée sur l’accès sur un serveur de fichiers ?",
+      "choices": [
+        "Chiffrer tous les paquets du réseau",
+        "Copier les fichiers vers un cloud public",
+        "Donner la modification à tous les utilisateurs",
+        "Masquer les dossiers et fichiers sans droit de consultation"
+      ],
+      "answer": 3,
+      "explication": "Elle masque les éléments que l’utilisateur n’est pas autorisé à voir. Elle s’appuie sur les permissions et ne remplace pas leur configuration."
+    },
+    {
+      "id": "nas-005",
+      "niveau": 3,
+      "type": "scenario",
+      "q": "Quelle mise en place respecte les droits d’accès demandés ?",
+      "context": "Chaque équipe doit pouvoir modifier uniquement son propre partage. Les responsables ont des droits plus larges sur les partages de leurs équipes.",
+      "choices": [
+        "Donner les droits administrateur du NAS à tous les utilisateurs",
+        "Appliquer les permissions aux groupes concernés et cibler la GPO de mappage",
+        "Partager un compte administrateur commun",
+        "Masquer uniquement le nom du partage sans régler ses permissions"
+      ],
+      "answer": 1,
+      "explication": "Les droits sont attribués aux groupes du domaine et les lecteurs sont mappés par GPO pour les utilisateurs concernés. Les tests se font avec ces comptes ; la visibilité d’un lecteur ne suffit pas à prouver les droits."
+    },
+    {
+      "id": "nas-006",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Pour sauvegarder les VM Hyper-V avec Active Backup for Business, quelle adresse renseigne-t-on lors de l’ajout de l’hyperviseur ?",
+      "choices": [
+        "L’adresse IP de chaque imprimante",
+        "L’adresse DNS publique de Synology",
+        "L’adresse IP du serveur Hyper-V, pas celle de la VM",
+        "L’adresse MAC du NAS uniquement"
+      ],
+      "answer": 2,
+      "explication": "On renseigne l’adresse de l’hôte Hyper-V et ses identifiants autorisés. L’outil découvre ensuite les VM disponibles sur cet hôte."
+    },
+    {
+      "id": "nas-007",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Quelle conclusion tirer de cette rétention ?",
+      "context": "La tâche conserve deux versions. Une suppression de fichier remonte à plusieurs jours et les deux versions conservées ont été créées après la suppression.",
+      "choices": [
+        "Le fichier peut manquer dans tous les points disponibles ; l’historique conservé est trop court pour ce besoin",
+        "Deux versions garantissent un historique illimité",
+        "Changer l’IP du NAS recrée les anciennes sauvegardes",
+        "Un RAID 1 conserve automatiquement tous les fichiers supprimés"
+      ],
+      "answer": 0,
+      "explication": "Deux versions ne couvrent que les deux points encore conservés. Si l’erreur précède ces deux versions, elles peuvent toutes deux contenir l’état incorrect ; la rétention doit être dimensionnée selon le besoin."
+    },
+    {
+      "id": "nas-008",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Quel contrôle permet de valider réellement cette restauration ?",
+      "context": "Active Backup annonce une restauration complète terminée. La VM restaurée n’a pas encore été démarrée ni testée.",
+      "choices": [
+        "Se fier uniquement au nombre de disques du NAS",
+        "Renommer la tâche pour la déclarer validée",
+        "Réduire la rétention à une version",
+        "Démarrer la VM dans un cadre de test adapté et vérifier son système et ses services"
+      ],
+      "answer": 3,
+      "explication": "Après une restauration complète, il faut vérifier le démarrage et les fonctions attendues de la VM dans un environnement de test approprié ; un statut de tâche seul ne constitue pas une recette complète."
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "module": "VPN & OpenVPN sur pfSense",
+  "questions": [
+    {
+      "id": "vpn-001",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Dans un accès distant d’entreprise, à quoi sert un VPN ?",
+      "choices": [
+        "Remplacer les sauvegardes du serveur",
+        "Relier un client distant au réseau de l’entreprise par un tunnel",
+        "Supprimer les droits d’accès aux fichiers",
+        "Garantir l’anonymat de toutes les activités"
+      ],
+      "answer": 1,
+      "explication": "Le VPN établit un tunnel permettant d’accéder à des ressources distantes. Le chiffrement et l’authentification dépendent du protocole et de la configuration ; le VPN ne garantit pas l’anonymat."
+    },
+    {
+      "id": "vpn-002",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Un ordinateur nomade se connecte par VPN au LAN derrière pfSense. Quel type de connexion est mis en place ?",
+      "choices": [
+        "Site-à-site entre deux agences",
+        "Agrégation de liens entre switches",
+        "Accès distant client-à-site",
+        "Réplication de machines virtuelles"
+      ],
+      "answer": 2,
+      "explication": "Un accès distant client-à-site relie un utilisateur au réseau de l’entreprise. Un VPN site-à-site relie deux réseaux par leurs passerelles."
+    },
+    {
+      "id": "vpn-003",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez les éléments de la PKI OpenVPN à leur rôle.",
+      "pairs": [
+        [
+          "Autorité de certification",
+          "Signer les certificats"
+        ],
+        [
+          "Certificat serveur",
+          "Identifier le serveur OpenVPN"
+        ],
+        [
+          "Certificat utilisateur",
+          "Identifier le client VPN"
+        ]
+      ],
+      "explication": "L’autorité signe les certificats. Le certificat serveur identifie le serveur ; le certificat utilisateur participe à l’authentification du client."
+    },
+    {
+      "id": "vpn-004",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "En split tunnel, les routes VPN couvrent uniquement le LAN distant. Où passe la navigation vers un site Internet public ?",
+      "choices": [
+        "Obligatoirement par le LAN distant",
+        "Elle est désactivée",
+        "Par le certificat serveur",
+        "Par la connexion Internet habituelle du client"
+      ],
+      "answer": 3,
+      "explication": "Le trafic vers le LAN distant utilise le VPN. Les autres destinations suivent la connexion Internet habituelle du client, selon sa table de routage."
+    },
+    {
+      "id": "vpn-005",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quels éléments le mode OpenVPN Remote Access (SSL/TLS + User Auth) demande-t-il pour authentifier le client ?",
+      "choices": [
+        "Un certificat client et des identifiants utilisateur",
+        "Uniquement l’adresse MAC du poste",
+        "Uniquement une adresse IP fixe",
+        "Aucun mécanisme d’authentification"
+      ],
+      "answer": 0,
+      "explication": "Ce mode combine des certificats avec une authentification utilisateur. Un mot de passe seul ne remplace pas le certificat client attendu par cette configuration."
+    },
+    {
+      "id": "vpn-006",
+      "niveau": 2,
+      "type": "assoc",
+      "q": "Associez les règles pfSense aux communications qu’elles autorisent.",
+      "pairs": [
+        [
+          "WAN, UDP 1194 vers pfSense",
+          "Établissement du tunnel OpenVPN"
+        ],
+        [
+          "OpenVPN, TCP 3389 vers le poste Windows",
+          "Accès RDP au poste interne"
+        ]
+      ],
+      "explication": "La règle WAN autorise la connexion au serveur VPN. Les règles OpenVPN filtrent ensuite les flux transportés dans le tunnel ; ouvrir le port VPN ne donne pas automatiquement accès au LAN."
+    },
+    {
+      "id": "vpn-007",
+      "niveau": 3,
+      "type": "libre",
+      "q": "Le LAN à joindre est 10.0.0.0/24 et le tunnel est 10.0.8.0/24. Quel CIDR faut-il renseigner dans IPv4 Local Network(s) ?",
+      "accept": [
+        "10.0.0.0/24"
+      ],
+      "explication": "IPv4 Local Network(s) désigne les réseaux accessibles derrière le serveur. Ici, 10.0.0.0/24 est le LAN ; 10.0.8.0/24 sert aux adresses du tunnel."
+    },
+    {
+      "id": "vpn-008",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Remettez dans l’ordre cette procédure de préparation des certificats et du serveur OpenVPN.",
+      "steps": [
+        "Créer l’autorité de certification interne",
+        "Créer l’utilisateur et les certificats serveur et client signés par cette autorité",
+        "Configurer le serveur OpenVPN avec ces certificats",
+        "Exporter le profil pour le client"
+      ],
+      "explication": "L’autorité de certification est créée avant les certificats qu’elle signe. L’utilisateur et les certificats sont préparés avant la configuration du serveur, puis le profil client est exporté."
+    },
+    {
+      "id": "vpn-009",
+      "niveau": 3,
+      "type": "qcm",
+      "q": "Un serveur OpenVPN sur pfSense écoute en UDP sur le port 1194. Quelle règle WAN permet d’établir le tunnel ?",
+      "choices": [
+        "TCP 3389 vers tous les postes du LAN",
+        "UDP 1194 vers l’adresse WAN de pfSense",
+        "UDP 53 vers le serveur DNS",
+        "TCP 443 vers le poste client"
+      ],
+      "answer": 1,
+      "explication": "Le protocole et le port de la règle doivent correspondre au serveur : UDP 1194 vers l’adresse WAN de pfSense. L’accès aux ressources internes est filtré séparément."
+    },
+    {
+      "id": "vpn-010",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Le tunnel fonctionne et le serveur interne répond par son IP. Son nom interne ne se résout pas. Quel contrôle est le plus pertinent ?",
+      "context": "Le client OpenVPN atteint 10.0.0.20 mais échoue avec serveur.intra.example. Les services répondent depuis le LAN.",
+      "choices": [
+        "Recréer immédiatement tous les certificats",
+        "Changer le RAID du serveur",
+        "Vérifier le DNS interne fourni au client et son accessibilité via le VPN",
+        "Ouvrir RDP sur Internet sans passer par le VPN"
+      ],
+      "answer": 2,
+      "explication": "Une communication par IP réussie oriente vers la résolution de noms : DNS transmis au client, domaine de recherche et accès au DNS interne. Le certificat n’explique pas à lui seul un échec limité aux noms."
+    },
+    {
+      "id": "vpn-011",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Pourquoi cette configuration du réseau de tunnel doit-elle être corrigée ?",
+      "context": "Le LAN distant utilise 10.0.0.0/24. L’administrateur attribue aussi 10.0.0.0/24 comme réseau de tunnel OpenVPN.",
+      "choices": [
+        "OpenVPN impose toujours un réseau public",
+        "Le réseau de tunnel chevauche le LAN à joindre",
+        "Un VPN ne peut pas utiliser IPv4",
+        "Un LAN ne peut jamais utiliser un masque /24"
+      ],
+      "answer": 1,
+      "explication": "Le réseau du tunnel doit être distinct des réseaux déjà utilisés. Un chevauchement avec le LAN crée des ambiguïtés de routage ; choisir un CIDR libre puis vérifier les routes corrige la conception."
+    },
+    {
+      "id": "vpn-012",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Le client doit accéder au Web via le VPN. Que faut-il vérifier côté pfSense ?",
+      "context": "Après activation du full tunnel, le client accède au LAN distant mais plus aux sites Internet par IP. La route Internet du client passe bien dans le tunnel.",
+      "choices": [
+        "Le routage Internet, le filtrage et le NAT sortant du réseau VPN",
+        "Uniquement le nom du certificat utilisateur",
+        "Le nom du dossier partagé Windows",
+        "La priorité HSRP du poste client"
+      ],
+      "answer": 0,
+      "explication": "Un full tunnel envoie aussi le trafic Internet au serveur VPN. Le serveur doit disposer du routage, des règles de filtrage et, pour la sortie IPv4 privée, d’un NAT sortant couvrant le réseau du tunnel."
+    }
+  ]
+}

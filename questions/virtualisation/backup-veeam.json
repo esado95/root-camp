@@ -1,0 +1,181 @@
+{
+  "module": "Sauvegarde, restauration & réplication — Veeam",
+  "questions": [
+    {
+      "id": "vbr-001",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "À quoi sert le Backup Repository d’un job Veeam ?",
+      "choices": [
+        "À définir la passerelle réseau de la VM",
+        "À stocker les fichiers de sauvegarde",
+        "À attribuer les licences Windows",
+        "À remplacer le contrôleur de domaine"
+      ],
+      "answer": 1,
+      "explication": "Le repository est le stockage où le job écrit ses sauvegardes. Identifier cet emplacement est nécessaire pour contrôler l’espace disponible et la protection des copies."
+    },
+    {
+      "id": "vbr-002",
+      "niveau": 1,
+      "type": "qcm",
+      "q": "Que définit la rétention d’un job de sauvegarde ?",
+      "choices": [
+        "Uniquement la vitesse du processeur",
+        "La priorité de la VM au démarrage",
+        "Le nombre d’utilisateurs du serveur",
+        "La durée ou le nombre de points de restauration conservés"
+      ],
+      "answer": 3,
+      "explication": "La rétention fixe l’historique conservé, en durée ou en points selon le job. Elle doit correspondre au besoin de restauration et à la capacité du repository."
+    },
+    {
+      "id": "vbr-003",
+      "niveau": 1,
+      "type": "assoc",
+      "q": "Associez les types de sauvegardes Veeam à leur périmètre.",
+      "pairs": [
+        [
+          "Sauvegarde File Share",
+          "Contenu d’un partage de fichiers"
+        ],
+        [
+          "Sauvegarde de VM Hyper-V",
+          "Disques et configuration de la machine virtuelle"
+        ]
+      ],
+      "explication": "Le job File Share protège des fichiers partagés. La sauvegarde de VM protège la machine au niveau hyperviseur et permet une restauration complète de celle-ci."
+    },
+    {
+      "id": "vbr-004",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Qu’est-ce qui différencie un replica d’une sauvegarde de VM ?",
+      "choices": [
+        "Le replica est une VM prête à être démarrée sur l’hôte cible",
+        "Le replica est uniquement un fichier texte",
+        "La sauvegarde oblige à laisser la VM source éteinte",
+        "La réplication ne copie jamais les disques"
+      ],
+      "answer": 0,
+      "explication": "Le replica est une copie de VM au format de l’hyperviseur, utilisable pour un basculement. Une sauvegarde fournit des fichiers et des points de restauration depuis un repository."
+    },
+    {
+      "id": "vbr-005",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Un Health Check réussi prouve-t-il que le service Web de la VM restaurée fonctionnera ?",
+      "choices": [
+        "Oui, il teste systématiquement toutes les pages Web",
+        "Oui, il remplace le DNS du serveur",
+        "Non, il faut également tester le démarrage et l’application",
+        "Non, aucun test de restauration n’est possible"
+      ],
+      "answer": 2,
+      "explication": "Le contrôle d’intégrité de la sauvegarde ne vérifie pas tout le fonctionnement applicatif. Il faut aussi démarrer la VM restaurée et tester le service."
+    },
+    {
+      "id": "vbr-006",
+      "niveau": 2,
+      "type": "qcm",
+      "q": "Quel équipement ajoute-t-on à Veeam pour découvrir les VM d’un serveur Hyper-V autonome ?",
+      "choices": [
+        "Le switch du bâtiment",
+        "L’hôte Hyper-V qui héberge les VM",
+        "Uniquement le serveur DNS public",
+        "Le navigateur du client"
+      ],
+      "answer": 1,
+      "explication": "On ajoute l’hôte Hyper-V en mode Standalone avec les droits nécessaires. Veeam peut ensuite découvrir ses VM ; l’IP de la VM Web ne représente pas l’hyperviseur."
+    },
+    {
+      "id": "vbr-007",
+      "niveau": 3,
+      "type": "ordre",
+      "q": "Un fichier a été supprimé du partage. Remettez dans l’ordre cette procédure de restauration granulaire.",
+      "steps": [
+        "Ouvrir la sauvegarde du partage concerné",
+        "Choisir un point de restauration contenant le fichier",
+        "Sélectionner le fichier et lancer sa restauration",
+        "Vérifier sa présence et son contenu dans le partage"
+      ],
+      "explication": "La restauration vise le fichier demandé depuis un point où il existait encore. Le contrôle final dans le partage valide la présence et la lisibilité du résultat."
+    },
+    {
+      "id": "vbr-008",
+      "niveau": 3,
+      "type": "scenario",
+      "q": "Quelle restauration est la plus adaptée ?",
+      "context": "Le serveur de fichiers fonctionne. Seul rapport.txt a été supprimé, et une sauvegarde File Share contient encore ce fichier.",
+      "choices": [
+        "Restaurer obligatoirement tout le contrôleur de domaine",
+        "Réinstaller Windows avant toute action",
+        "Restaurer uniquement rapport.txt depuis la sauvegarde du partage",
+        "Basculer toutes les VM sur un autre réseau"
+      ],
+      "answer": 2,
+      "explication": "La restauration granulaire du fichier répond au besoin sans remplacer le système ni les autres fichiers. Il faut choisir un point valide et contrôler le résultat."
+    },
+    {
+      "id": "vbr-009",
+      "niveau": 3,
+      "type": "multi",
+      "q": "Après restauration d’une VM Web, quelles vérifications permettent de valider son fonctionnement ?",
+      "choices": [
+        "La VM démarre et son système est utilisable",
+        "Le nom de la VM commence par une majuscule",
+        "Un client atteint le service Web restauré",
+        "Le port du switch porte le numéro du job"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explication": "La recette contrôle le démarrage du système et l’accès réel au service Web. La présence d’un point de restauration ou le nom de la VM ne suffisent pas."
+    },
+    {
+      "id": "vbr-010",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Quelle procédure permet de revenir en production en conservant ces nouvelles données ?",
+      "context": "Le serveur Web fonctionne sur son replica pendant une panne. Un fichier test-replica.txt y a été créé. La VM de production est de nouveau disponible.",
+      "choices": [
+        "Effacer le replica avant de copier son disque",
+        "Utiliser Failback to production, vérifier les données puis valider le failback",
+        "Démarrer les deux VM avec la même IP sans coordination",
+        "Restaurer uniquement le DNS du poste client"
+      ],
+      "answer": 1,
+      "explication": "Le failback vers la production synchronise les changements du replica vers la VM cible. Après vérification du service et des fichiers, le retour peut être validé avec Commit Failback."
+    },
+    {
+      "id": "vbr-011",
+      "niveau": 4,
+      "type": "scenario",
+      "q": "Quelle limite cette implantation du replica conserve-t-elle ?",
+      "context": "La VM de production et sa VM replica se trouvent sur le même serveur physique Hyper-V.",
+      "choices": [
+        "La réplication protège automatiquement d’un incendie du serveur",
+        "La VM replica remplace toutes les sauvegardes historiques",
+        "Il faut uniquement changer le nom du replica",
+        "Une panne de l’hôte rend les deux VM indisponibles"
+      ],
+      "answer": 3,
+      "explication": "La réplication de VM sur le même hôte ne protège pas d’une panne physique de cet hôte. Pour couvrir ce risque, la cible doit être sur une infrastructure distincte ; les sauvegardes indépendantes restent nécessaires."
+    },
+    {
+      "id": "vbr-012",
+      "niveau": 4,
+      "type": "qcm",
+      "q": "En mode de test complet de récupérabilité, quel est le rôle de SureBackup ?",
+      "choices": [
+        "Vérifier le démarrage et les services depuis les sauvegardes dans un environnement isolé",
+        "Publier les sauvegardes sur Internet sans authentification",
+        "Transformer le RAID en sauvegarde",
+        "Faire disparaître la nécessité d’une rétention"
+      ],
+      "answer": 0,
+      "explication": "Dans ce mode, SureBackup démarre les VM depuis les sauvegardes dans un lab isolé et réalise les tests configurés. Ce test complète le contrôle des fichiers de sauvegarde et dépend des fonctionnalités disponibles dans l’édition utilisée."
+    }
+  ]
+}

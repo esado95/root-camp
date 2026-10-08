@@ -4,11 +4,11 @@
 
 # 🏕️ Root Camp
 
-**De stagiaire à `root@tssr` — le jeu de révision de la promo TSSR**
+**De stagiaire à `root@tssr` — le jeu de révision des systèmes et réseaux**
 
 [![Démo en ligne](https://img.shields.io/badge/▶_jouer-esado95.github.io%2Froot--camp-63D471?style=for-the-badge)](https://esado95.github.io/root-camp/)
 
-![Questions](https://img.shields.io/badge/questions-906-38BDF8?style=flat-square)
+![Questions](https://img.shields.io/badge/questions-957-38BDF8?style=flat-square)
 ![Mini-TP](https://img.shields.io/badge/mini--TP_terminal-48-2DD4BF?style=flat-square)
 ![Thèmes](https://img.shields.io/badge/thèmes-10-A78BFA?style=flat-square)
 ![Stack](https://img.shields.io/badge/vanilla_JS-zéro_framework-FBBF24?style=flat-square&logo=javascript&logoColor=black)
@@ -21,10 +21,15 @@
 
 ## ✨ Le concept
 
-Réviser le titre professionnel **TSSR** (Technicien Supérieur Systèmes et Réseaux) en jouant :
-les cours de la promo sont transformés en **906 questions**, un **terminal simulé** fait taper de
-vraies commandes Cisco/Bash/PowerShell, et le **classement de promo** entretient la motivation.
-Chaque question corrigée affiche une explication et sa fiche source — on apprend, on ne devine pas.
+Réviser les systèmes et réseaux avec **957 questions**, des exercices guidés et un **terminal simulé**
+pour pratiquer les commandes Cisco/Bash/PowerShell. Chaque question corrigée affiche une explication.
+Les énoncés sont autonomes ; les références utilisées pour leur maintenance sont conservées séparément
+dans `docs/course-sources.json` et ne sont pas chargées par l'application.
+
+## 📚 Mise à jour de la banque
+
+La banque v10 ajoute **64 questions** sur VPN, HA réseau, Veeam, AWS et NAS Synology,
+avec quatre niveaux par module. Voir [les sources et le détail des changements](docs/course-refresh-2026-10.md).
 
 ## 📸 Aperçu
 
@@ -65,9 +70,9 @@ flowchart LR
 | ⏱️ **Examens blancs** | 4 paliers progressifs, 20 questions / 20 min, aucune fuite d'indice pendant l'épreuve, corrigé complet à la fin |
 | 🔁 **Révision espacée** | chaque erreur part en pile « à revoir », sortie après 2 bonnes réponses d'affilée |
 | 💾 **Checkpoint** | session sauvegardée à chaque question — on reprend plus tard, même sur un autre appareil |
-| 🏆 **Gamification** | XP, 7 grades, 8 badges, classement de promo en temps réel |
+| 🏆 **Gamification** | XP, 7 grades, 8 badges, classement en ligne |
 | ☁️ **Comptes synchronisés** | pseudo + mot de passe, progression PC ↔ téléphone, mode invité 100 % local |
-| ⌨️ **Accessible** | réponses au clavier (1-4 / A-D / Entrée), focus visible, ARIA |
+| ⌨️ **Accessible** | sélection au clavier (1-9 / A-E), validation et suite avec Entrée, focus visible, ARIA |
 
 ## 🏗️ Architecture
 
@@ -108,7 +113,7 @@ js/app.js                   moteur : sessions, examens, XP, badges, checkpoint
 js/online.js                comptes, synchronisation, classement (Supabase)
 questions/
 ├── manifest.json           thèmes + modules + version de la banque
-└── <thème>/<module>.json   906 questions réparties en 28 modules
+└── <thème>/<module>.json   957 questions réparties en 33 modules
 supabase/                   schéma SQL + durcissement (RLS, contraintes)
 tools/validate_bank.py      validation structurelle de toute la banque
 ```
@@ -116,9 +121,12 @@ tools/validate_bank.py      validation structurelle de toute la banque
 ## 🧪 Qualité
 
 - **Validateur automatique** : `python tools/validate_bank.py` — schéma des 8 types, bornes des
-  réponses, unicité des 906 identifiants, cohérence du manifest ;
+  réponses, unicité des 957 identifiants, cohérence du manifest ;
+- **Tests de régression** : `node tools/test_runtime.cjs` ; les parcours navigateur et leurs prérequis sont décrits dans [le rapport de vérification](docs/course-refresh-2026-10.md#vérification) ;
+- **Énoncés autonomes** : `node tools/test_content.cjs` vérifie les questions, choix, explications et étapes d’exercices ;
+- [**Sauvegardes et Supabase**](docs/saves-and-supabase.md) : stockage des résultats, reprise du projet et limites de synchronisation ;
 - banque **versionnée** : mise à jour des questions sans vider le cache de personne ;
-- questions **sourcées** : chaque question est reliée en interne à sa fiche de cours d'origine (traçabilité de la banque).
+- questions **autonomes** : toutes les conditions nécessaires sont dans l’énoncé ; les sources de maintenance sont séparées dans [la documentation](docs/course-refresh-2026-10.md).
 
 ---
 

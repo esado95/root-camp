@@ -7,7 +7,7 @@
    Règles de sûreté (issues de la revue) :
    - une lecture cloud en échec n'est JAMAIS traitée comme « pas de sauvegarde » ;
    - aucun push tant qu'une lecture cloud n'a pas réussi (syncOk) ;
-   - avant chaque push, garde anti-écrasement : génération puis XP ;
+   - avant chaque push, garde anti-écrasement : génération, XP, réponses ;
    - toutes les erreurs { error } de supabase-js sont vérifiées explicitement. */
 
 let sb = null;
@@ -16,6 +16,16 @@ let pushTimer = null;
 let lastPushArgs = null;
 let syncOk = false;
 let syncError = false;
+
+/* Les erreurs aussi sont du progrès : à XP égal, conserver la sauvegarde
+   qui contient le plus de réponses. Une réinitialisation change la génération. */
+function compareProgress(a, b) {
+  for (const field of ["gen", "xp"]) {
+    const delta = (Number(a && a[field]) || 0) - (Number(b && b[field]) || 0);
+    if (delta) return delta;
+  }
+  return (Number(a && a.cnt && a.cnt.total) || 0) - (Number(b && b.cnt && b.cnt.total) || 0);
+}
 
 function onlineInit() {
   if (typeof supabase === "undefined" || !ONLINE_CONFIG.url || !ONLINE_CONFIG.key) return false;
@@ -128,11 +138,14 @@ async function onlineSignOut() {
    à ne jamais confondre avec « pas encore de sauvegarde » (ok=true, state=null). */
 async function onlineFetchState() {
   if (!sb || !onlineUser) return { ok: false, state: null };
+  const uid = onlineUser.id;
   try {
-    const { data, error } = await sb.from("progress").select("state").eq("id", onlineUser.id).maybeSingle();
+    const { data, error } = await sb.from("progress").select("state").eq("id", uid).maybeSingle();
+    if (!onlineUser || onlineUser.id !== uid) return { ok: false, state: null };
     if (error) {
       console.warn("Lecture du cloud impossible :", error);
       syncError = true;
+      syncOk = false;
       return { ok: false, state: null };
     }
     syncOk = true;
@@ -141,31 +154,37 @@ async function onlineFetchState() {
   } catch (e) {
     console.warn("Lecture du cloud impossible :", e);
     syncError = true;
+    syncOk = false;
     return { ok: false, state: null };
   }
 }
 
 async function onlinePushState(st, gradeNum) {
   if (!sb || !onlineUser || !syncOk) return;
+  const uid = onlineUser.id;
+  if (st.owner && st.owner !== uid) return;
   try {
-    const { data: cur, error: re } = await sb.from("progress").select("state").eq("id", onlineUser.id).maybeSingle();
+    const { data: cur, error: re } = await sb.from("progress").select("state").eq("id", uid).maybeSingle();
+    if (!onlineUser || onlineUser.id !== uid || !syncOk) return;
     if (re) { syncError = true; console.warn("Garde de push :", re); return; }
     const cloud = cur ? cur.state : null;
     if (cloud) {
-      const cg = Number(cloud.gen) || 0, sg = Number(st.gen) || 0;
-      if (cg > sg || (cg === sg && (Number(cloud.xp) || 0) > st.xp)) {
+      if (compareProgress(cloud, st) > 0) {
         console.warn("Push ignoré : le cloud est plus avancé (autre appareil).");
+        syncError = true;
+        if (typeof updateOnlineBadge === "function") updateOnlineBadge();
         return "stale";
       }
     }
     const now = new Date().toISOString();
     const payload = {
-      id: onlineUser.id, xp: st.xp, grade: gradeNum,
+      id: uid, xp: st.xp, grade: gradeNum,
       badges: st.badges.length, exam_best: st.cnt.examBest, updated_at: now
     };
     if (onlineUser.pseudoConfirme !== false) payload.pseudo = onlineUser.pseudo;
     const { error: e1 } = await sb.from("profiles").upsert(payload);
-    const { error: e2 } = await sb.from("progress").upsert({ id: onlineUser.id, state: st, updated_at: now });
+    if (!onlineUser || onlineUser.id !== uid) return;
+    const { error: e2 } = await sb.from("progress").upsert({ id: uid, state: st, updated_at: now });
     if (e1 || e2) {
       console.warn("Synchronisation en échec :", e1 || e2);
       syncError = true;
@@ -179,18 +198,10 @@ async function onlinePushState(st, gradeNum) {
   if (typeof updateOnlineBadge === "function") updateOnlineBadge();
 }
 
-/* Push « meilleur effort » à la fermeture de page : pas de lecture de garde
-   (un aller-retour de moins maximise les chances que les upserts partent). */
+/* À la fermeture, conserver la même garde qu'une synchronisation normale.
+   Le navigateur peut interrompre la requête : la copie locale reste disponible. */
 function onlinePushFast(st, gradeNum) {
-  if (!sb || !onlineUser || !syncOk) return;
-  const now = new Date().toISOString();
-  const payload = {
-    id: onlineUser.id, xp: st.xp, grade: gradeNum,
-    badges: st.badges.length, exam_best: st.cnt.examBest, updated_at: now
-  };
-  if (onlineUser.pseudoConfirme !== false) payload.pseudo = onlineUser.pseudo;
-  sb.from("profiles").upsert(payload).then(() => {}, () => {});
-  sb.from("progress").upsert({ id: onlineUser.id, state: st, updated_at: now }).then(() => {}, () => {});
+  return onlinePushState(st, gradeNum);
 }
 
 function onlineCancelPending() {
